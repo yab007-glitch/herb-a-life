@@ -1,0 +1,74 @@
+import type { Metadata } from "next";
+import { DoseCalculatorForm } from "@/components/calculator/dose-calculator-form";
+import { getHerbBySlug } from "@/lib/actions/herbs";
+
+export const metadata: Metadata = {
+  title: "Dose Calculator",
+  description:
+    "Calculate safe herbal dosages for children and infants using medically recognized formulas.",
+};
+
+function parseDosage(dosageStr: string | null): {
+  dose: number | null;
+  unit: "mg" | "ml" | "g" | "drops";
+} {
+  if (!dosageStr) return { dose: null, unit: "mg" };
+  // Match patterns like "500 mg", "500-1000 mg", "1-3 g", "30 drops", "2-4 ml"
+  const match = dosageStr.match(
+    /(\d+(?:\.\d+)?)\s*(?:[-–]\s*\d+(?:\.\d+)?\s*)?(mg|ml|g|drops)/i
+  );
+  if (!match) return { dose: null, unit: "mg" };
+  return {
+    dose: parseFloat(match[1]),
+    unit: match[2].toLowerCase() as "mg" | "ml" | "g" | "drops",
+  };
+}
+
+export default async function CalculatorPage({
+  searchParams,
+}: {
+  searchParams: Promise<{ herb?: string }>;
+}) {
+  const params = await searchParams;
+  const herbSlug = params.herb;
+
+  let prefill: {
+    herbName: string;
+    adultDose: string;
+    doseUnit: "mg" | "ml" | "g" | "drops";
+    dosageAdultRaw: string | null;
+    dosageChildRaw: string | null;
+    dosageForms: string[];
+  } | null = null;
+
+  if (herbSlug) {
+    const result = await getHerbBySlug(herbSlug);
+    if (result.success && result.data) {
+      const herb = result.data;
+      const parsed = parseDosage(herb.dosage_adult);
+      prefill = {
+        herbName: herb.name,
+        adultDose: parsed.dose ? String(parsed.dose) : "",
+        doseUnit: parsed.unit,
+        dosageAdultRaw: herb.dosage_adult,
+        dosageChildRaw: herb.dosage_child,
+        dosageForms: herb.dosage_forms || [],
+      };
+    }
+  }
+
+  return (
+    <div className="space-y-8">
+      <div>
+        <h1 className="text-3xl font-bold tracking-tight text-foreground">
+          Herbal Dose Calculator
+        </h1>
+        <p className="mt-2 text-muted-foreground">
+          Calculate age-appropriate and weight-based dosages for children and
+          infants using medically recognized formulas.
+        </p>
+      </div>
+      <DoseCalculatorForm prefill={prefill} />
+    </div>
+  );
+}

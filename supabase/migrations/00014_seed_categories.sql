@@ -1,0 +1,17 @@
+INSERT INTO public.herb_categories (name, slug, description, icon, sort_order) VALUES
+  ('Adaptogen', 'adaptogen', 'Herbs that help the body resist physical, chemical, and biological stressors', 'Shield', 1),
+  ('Anti-inflammatory', 'anti-inflammatory', 'Herbs that reduce inflammation and swelling', 'Flame', 2),
+  ('Antimicrobial', 'antimicrobial', 'Herbs with antibacterial, antiviral, or antifungal properties', 'Bug', 3),
+  ('Antioxidant', 'antioxidant', 'Herbs rich in compounds that protect cells from oxidative damage', 'Sparkles', 4),
+  ('Cardiovascular', 'cardiovascular', 'Herbs that support heart health and healthy circulation', 'Heart', 5),
+  ('Digestive', 'digestive', 'Herbs that aid digestion, soothe the gut, and support GI health', 'Apple', 6),
+  ('Immune Support', 'immune', 'Herbs that stimulate and support healthy immune function', 'ShieldCheck', 7),
+  ('Nervous System', 'nervous-system', 'Herbs that support brain health, cognitive function, and nerve health', 'Brain', 8),
+  ('Respiratory', 'respiratory', 'Herbs that support lung and respiratory tract health', 'Wind', 9),
+  ('Skin Health', 'skin', 'Herbs used topically or internally for skin conditions', 'Droplets', 10),
+  ('Urinary', 'urinary', 'Herbs that support urinary tract and kidney health', 'Droplet', 11),
+  ('Women''s Health', 'womens-health', 'Herbs traditionally used for women''s health concerns', 'Baby', 12),
+  ('Men''s Health', 'mens-health', 'Herbs traditionally used for men''s health and vitality', 'Dumbbell', 13),
+  ('Pain Relief', 'pain-relief', 'Natural analgesic and pain-relieving herbs', 'Zap', 14),
+  ('Sleep & Relaxation', 'sleep', 'Herbs that promote restful sleep and relaxation', 'Moon', 15),
+  ('Other', 'other', 'Other medicinal herbs and botanicals', 'Leaf', 16);
