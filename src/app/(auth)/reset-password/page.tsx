@@ -13,7 +13,7 @@ import {
 
 export const metadata: Metadata = {
   title: "Reset Password",
-  description: "Set a new password for your HerbWise account.",
+  description: "Set a new password for your Herb-a-Life account.",
 };
 
 export default function ResetPasswordPage() {

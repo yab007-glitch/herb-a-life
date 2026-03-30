@@ -13,7 +13,7 @@ export default function MainError({
   reset: () => void;
 }) {
   useEffect(() => {
-    console.error("[HerbWise Main Error]", error);
+    console.error("[Herb-a-Life Main Error]", error);
   }, [error]);
 
   return (

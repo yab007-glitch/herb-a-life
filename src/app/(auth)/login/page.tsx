@@ -15,7 +15,7 @@ import {
 
 export const metadata: Metadata = {
   title: "Login",
-  description: "Sign in to your HerbWise account.",
+  description: "Sign in to your Herb-a-Life account.",
 };
 
 export default function LoginPage() {
@@ -23,7 +23,7 @@ export default function LoginPage() {
     <Card>
       <CardHeader className="text-center">
         <CardTitle className="text-2xl">Welcome back</CardTitle>
-        <CardDescription>Sign in to your HerbWise account</CardDescription>
+        <CardDescription>Sign in to your Herb-a-Life account</CardDescription>
       </CardHeader>
       <CardContent>
         <form className="space-y-4">

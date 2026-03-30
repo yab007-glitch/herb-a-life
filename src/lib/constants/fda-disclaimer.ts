@@ -2,7 +2,7 @@ export const FDA_DISCLAIMER_FULL = `
 IMPORTANT DISCLAIMER
 
 These statements have not been evaluated by the Food and Drug Administration (FDA).
-The information provided by HerbWise is for educational and informational purposes only
+The information provided by Herb-a-Life is for educational and informational purposes only
 and is not intended to diagnose, treat, cure, or prevent any disease.
 
 The content on this platform should not be considered medical advice and is not a
@@ -19,6 +19,6 @@ your healthcare provider before using any herbal products.
 
 In case of emergency, call your local emergency services or go to your nearest emergency room.
 
-HerbWise does not assume liability for any actions taken based on the information provided
+Herb-a-Life does not assume liability for any actions taken based on the information provided
 on this platform.
 `.trim();

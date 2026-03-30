@@ -11,7 +11,7 @@ export default function AuthLayout({
       <div className="mb-8">
         <Link href="/" className="flex items-center gap-2">
           <Leaf className="size-8 text-primary" />
-          <span className="text-2xl font-bold text-foreground">HerbWise</span>
+          <span className="text-2xl font-bold text-foreground">Herb-a-Life</span>
         </Link>
       </div>
       <div className="w-full max-w-md">{children}</div>

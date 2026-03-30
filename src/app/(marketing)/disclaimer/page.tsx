@@ -5,7 +5,7 @@ import { FDA_DISCLAIMER_FULL } from "@/lib/constants/fda-disclaimer";
 export const metadata: Metadata = {
   title: "Medical Disclaimer",
   description:
-    "Read the full medical and FDA disclaimer for HerbWise.",
+    "Read the full medical and FDA disclaimer for Herb-a-Life.",
 };
 
 export default function DisclaimerPage() {
@@ -19,7 +19,7 @@ export default function DisclaimerPage() {
           Medical Disclaimer
         </h1>
         <p className="mt-2 text-muted-foreground">
-          Please read this disclaimer carefully before using HerbWise.
+          Please read this disclaimer carefully before using Herb-a-Life.
         </p>
       </div>
 
@@ -34,7 +34,7 @@ export default function DisclaimerPage() {
           Limitation of Liability
         </h2>
         <p className="text-muted-foreground leading-relaxed">
-          HerbWise, its owners, operators, and contributors shall not be held
+          Herb-a-Life, its owners, operators, and contributors shall not be held
           liable for any damages, injuries, or health complications arising from
           the use or misuse of information provided on this platform. Users
           acknowledge that they use this platform at their own risk and accept

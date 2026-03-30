@@ -15,7 +15,7 @@ import {
 
 export const metadata: Metadata = {
   title: "Forgot Password",
-  description: "Reset your HerbWise password.",
+  description: "Reset your Herb-a-Life password.",
 };
 
 export default function ForgotPasswordPage() {

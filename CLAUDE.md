@@ -1,6 +1,6 @@
 @AGENTS.md
 
-# HerbWise - Medical Herbs SaaS
+# Herb-a-Life - Medical Herbs SaaS
 
 ## Tech Stack
 - Next.js 16 with App Router

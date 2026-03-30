@@ -18,7 +18,7 @@ import { Button } from "@/components/ui/button";
 
 export const metadata: Metadata = {
   title: "Dashboard",
-  description: "Your personal HerbWise dashboard.",
+  description: "Your personal Herb-a-Life dashboard.",
 };
 
 const dashboardCards = [

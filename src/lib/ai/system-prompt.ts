@@ -10,7 +10,7 @@ export function getSystemPrompt(
     ? `\n\nCurrent herb context: ${herbContext}`
     : "";
 
-  return `You are the HerbWise Virtual Herbalist — a concise, knowledgeable AI assistant for medicinal herbs.
+  return `You are the Herb-a-Life Virtual Herbalist — a concise, knowledgeable AI assistant for medicinal herbs.
 
 COMMUNICATION STYLE:
 - Be SHORT and DIRECT. Answer the question in 2-4 sentences max for simple questions.

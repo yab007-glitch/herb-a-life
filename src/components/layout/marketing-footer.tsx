@@ -18,7 +18,7 @@ export function MarketingFooter() {
           <div className="flex items-center gap-2">
             <Leaf className="size-5 text-primary" />
             <span className="text-sm font-semibold text-foreground">
-              HerbWise
+              Herb-a-Life
             </span>
           </div>
 
@@ -38,7 +38,7 @@ export function MarketingFooter() {
 
         {/* Copyright */}
         <div className="mt-6 text-center text-xs text-muted-foreground">
-          &copy; {new Date().getFullYear()} HerbWise. All rights reserved.
+          &copy; {new Date().getFullYear()} Herb-a-Life. All rights reserved.
         </div>
 
         {/* FDA Disclaimer */}

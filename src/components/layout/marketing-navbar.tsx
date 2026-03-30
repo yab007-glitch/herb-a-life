@@ -28,7 +28,7 @@ export function MarketingNavbar() {
         {/* Logo */}
         <Link href="/" className="flex items-center gap-2">
           <Leaf className="size-6 text-primary" />
-          <span className="text-lg font-bold text-foreground">HerbWise</span>
+          <span className="text-lg font-bold text-foreground">Herb-a-Life</span>
         </Link>
 
         {/* Desktop Nav */}
@@ -66,7 +66,7 @@ export function MarketingNavbar() {
             <SheetHeader>
               <SheetTitle className="flex items-center gap-2">
                 <Leaf className="size-5 text-primary" />
-                HerbWise
+                Herb-a-Life
               </SheetTitle>
             </SheetHeader>
             <nav className="flex flex-col gap-1 px-4 pt-4">
