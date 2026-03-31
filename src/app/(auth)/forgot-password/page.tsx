@@ -1,9 +1,6 @@
 import type { Metadata } from "next";
 import Link from "next/link";
-import { Mail, ArrowLeft } from "lucide-react";
-import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
-import { Label } from "@/components/ui/label";
+import { ArrowLeft } from "lucide-react";
 import {
   Card,
   CardContent,
@@ -12,6 +9,7 @@ import {
   CardDescription,
   CardFooter,
 } from "@/components/ui/card";
+import { ForgotPasswordForm } from "@/components/auth/forgot-password-form";
 
 export const metadata: Metadata = {
   title: "Forgot Password",
@@ -28,21 +26,7 @@ export default function ForgotPasswordPage() {
         </CardDescription>
       </CardHeader>
       <CardContent>
-        <form className="space-y-4">
-          <div className="space-y-2">
-            <Label htmlFor="email">Email</Label>
-            <Input
-              id="email"
-              type="email"
-              placeholder="you@example.com"
-              autoComplete="email"
-            />
-          </div>
-          <Button type="submit" className="w-full" size="lg">
-            <Mail className="size-4" />
-            Send Reset Link
-          </Button>
-        </form>
+        <ForgotPasswordForm />
       </CardContent>
       <CardFooter className="justify-center">
         <Link
