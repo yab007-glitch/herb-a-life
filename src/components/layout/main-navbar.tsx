@@ -31,6 +31,7 @@ import {
 } from "@/components/ui/dropdown-menu";
 import { Avatar, AvatarFallback } from "@/components/ui/avatar";
 import { cn } from "@/lib/utils";
+import { logout } from "@/lib/actions/auth";
 
 const navLinks = [
   { href: "/herbs", label: "Herbs", icon: Leaf },
@@ -39,11 +40,10 @@ const navLinks = [
   { href: "/dashboard", label: "Dashboard", icon: LayoutDashboard },
 ];
 
-export function MainNavbar() {
-  const [open, setOpen] = useState(false);
+type NavUser = { email: string; name: string } | null;
 
-  // Placeholder: no auth yet
-  const user = null as { email?: string; name?: string } | null;
+export function MainNavbar({ user }: { user?: NavUser }) {
+  const [open, setOpen] = useState(false);
 
   return (
     <header className="sticky top-0 z-40 w-full border-b bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60">
@@ -96,10 +96,12 @@ export function MainNavbar() {
                   Settings
                 </DropdownMenuItem>
                 <DropdownMenuSeparator />
-                <DropdownMenuItem>
-                  <LogOut className="size-4" />
-                  Log out
-                </DropdownMenuItem>
+                <form action={logout}>
+                  <DropdownMenuItem render={<button type="submit" className="w-full" />}>
+                    <LogOut className="size-4" />
+                    Log out
+                  </DropdownMenuItem>
+                </form>
               </DropdownMenuContent>
             </DropdownMenu>
           ) : (
@@ -147,10 +149,12 @@ export function MainNavbar() {
                         {user.email}
                       </span>
                     </div>
-                    <Button variant="outline" size="sm">
-                      <LogOut className="size-4" />
-                      Log out
-                    </Button>
+                    <form action={logout}>
+                      <Button variant="outline" size="sm" type="submit" className="w-full">
+                        <LogOut className="size-4" />
+                        Log out
+                      </Button>
+                    </form>
                   </div>
                 ) : (
                   <Button
