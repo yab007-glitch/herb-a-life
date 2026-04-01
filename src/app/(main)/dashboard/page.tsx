@@ -27,7 +27,7 @@ const dashboardCards = [
     description: "Track your current medications for interaction checking",
     icon: Pill,
     count: 0,
-    href: "/dashboard/medications",
+    href: "/pharmacist",
     color: "text-blue-600 bg-blue-100 dark:bg-blue-900/30 dark:text-blue-400",
   },
   {
@@ -35,7 +35,7 @@ const dashboardCards = [
     description: "Review past drug-herb interaction checks",
     icon: AlertTriangle,
     count: 0,
-    href: "/dashboard/interactions",
+    href: "/pharmacist",
     color:
       "text-amber-600 bg-amber-100 dark:bg-amber-900/30 dark:text-amber-400",
   },
@@ -44,7 +44,7 @@ const dashboardCards = [
     description: "View your previous dosage calculations",
     icon: Calculator,
     count: 0,
-    href: "/dashboard/dosages",
+    href: "/calculator",
     color:
       "text-green-600 bg-green-100 dark:bg-green-900/30 dark:text-green-400",
   },
@@ -53,7 +53,7 @@ const dashboardCards = [
     description: "Access your past conversations with the virtual herbalist",
     icon: MessageCircle,
     count: 0,
-    href: "/dashboard/chats",
+    href: "/pharmacist",
     color:
       "text-purple-600 bg-purple-100 dark:bg-purple-900/30 dark:text-purple-400",
   },
