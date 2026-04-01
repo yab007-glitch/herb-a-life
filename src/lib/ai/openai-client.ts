@@ -2,9 +2,9 @@ import OpenAI from "openai";
 
 export const openai = new OpenAI({
   baseURL: "https://openrouter.ai/api/v1",
-  apiKey: process.env.OPENROUTER_API_KEY,
+  apiKey: (process.env.OPENROUTER_API_KEY ?? "").trim(),
   defaultHeaders: {
-    "HTTP-Referer": process.env.NEXT_PUBLIC_APP_URL ?? "",
+    "HTTP-Referer": (process.env.NEXT_PUBLIC_APP_URL ?? "").trim(),
     "X-Title": "Herb-a-Life",
   },
 });
