@@ -345,7 +345,7 @@ export default async function HerbDetailPage({ params }: Props) {
           <Calculator className="size-4" />
           Calculate Dose
         </Button>
-        <Button variant="outline" render={<Link href="/pharmacist" />}>
+        <Button variant="outline" render={<Link href={`/pharmacist?herb=${slug}`} />}>
           <AlertTriangle className="size-4" />
           Check Interactions
         </Button>

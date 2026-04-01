@@ -21,10 +21,17 @@ const INITIAL_MESSAGE: Message = {
   timestamp: new Date().toISOString(),
 };
 
-export function ChatInterface() {
+export function ChatInterface({
+  herbContext,
+  autoQuery,
+}: {
+  herbContext?: string | null;
+  autoQuery?: string | null;
+}) {
   const [messages, setMessages] = useState<Message[]>([INITIAL_MESSAGE]);
   const [input, setInput] = useState("");
   const [isLoading, setIsLoading] = useState(false);
+  const [autoSent, setAutoSent] = useState(false);
   const scrollRef = useRef<HTMLDivElement>(null);
   const textareaRef = useRef<HTMLTextAreaElement>(null);
 
@@ -34,14 +41,21 @@ export function ChatInterface() {
     }
   }, [messages]);
 
-  async function handleSubmit(e?: React.FormEvent) {
-    e?.preventDefault();
-    const trimmed = input.trim();
-    if (!trimmed || isLoading) return;
+  // Auto-send query when coming from herb detail page
+  useEffect(() => {
+    if (autoQuery && !autoSent) {
+      setAutoSent(true);
+      sendMessage(autoQuery);
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [autoQuery, autoSent]);
+
+  async function sendMessage(text: string) {
+    if (!text.trim() || isLoading) return;
 
     const userMessage: Message = {
       role: "user",
-      content: trimmed,
+      content: text.trim(),
       timestamp: new Date().toISOString(),
     };
 
@@ -59,6 +73,7 @@ export function ChatInterface() {
             role: m.role,
             content: m.content,
           })),
+          herbContext: herbContext ?? undefined,
         }),
       });
 
@@ -105,6 +120,11 @@ export function ChatInterface() {
     } finally {
       setIsLoading(false);
     }
+  }
+
+  async function handleSubmit(e?: React.FormEvent) {
+    e?.preventDefault();
+    sendMessage(input);
   }
 
   function handleKeyDown(e: React.KeyboardEvent<HTMLTextAreaElement>) {
