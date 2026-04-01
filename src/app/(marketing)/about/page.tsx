@@ -160,7 +160,36 @@ export default function AboutPage() {
         </div>
       </section>
 
-      {/* Team Section (Placeholder) */}
+      {/* Free & Donation-Supported */}
+      <section className="mb-16">
+        <h2 className="mb-4 text-2xl font-bold text-foreground">
+          Free Forever, Powered by Donations
+        </h2>
+        <div className="space-y-4 text-muted-foreground">
+          <p>
+            Herb-a-Life is completely free to use with no limits, no paywalls,
+            and no advertising. We believe access to herbal medicine knowledge is
+            a right, not a privilege.
+          </p>
+          <p>
+            We sustain our operations entirely through voluntary donations from
+            our community. Your contributions cover server hosting, database
+            costs, AI API usage, and ongoing development.
+          </p>
+          <p>
+            If Herb-a-Life has been helpful to you, please consider{" "}
+            <a
+              href="/donate"
+              className="font-medium text-primary underline hover:no-underline"
+            >
+              making a donation
+            </a>{" "}
+            to help us keep this resource available for everyone.
+          </p>
+        </div>
+      </section>
+
+      {/* Team Section */}
       <section>
         <h2 className="mb-4 text-2xl font-bold text-foreground">Our Team</h2>
         <p className="text-muted-foreground">

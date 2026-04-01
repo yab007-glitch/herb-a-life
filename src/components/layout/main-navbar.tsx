@@ -12,6 +12,7 @@ import {
   LogOut,
   User,
   Settings,
+  Heart,
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import {
@@ -74,6 +75,17 @@ export function MainNavbar({ user }: { user?: NavUser }) {
         </nav>
 
         {/* Right side */}
+        <div className="hidden items-center gap-2 md:flex">
+          <Button
+            variant="ghost"
+            size="sm"
+            className="text-pink-600 hover:text-pink-700 hover:bg-pink-50 dark:hover:bg-pink-950/30"
+            render={<Link href="/donate" />}
+          >
+            <Heart className="size-4" />
+            Donate
+          </Button>
+        </div>
         <div className="hidden items-center gap-2 md:flex">
           {user ? (
             <DropdownMenu>

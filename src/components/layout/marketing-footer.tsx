@@ -4,6 +4,7 @@ import { FDA_DISCLAIMER } from "@/lib/constants";
 
 const footerLinks = [
   { href: "/about", label: "About" },
+  { href: "/donate", label: "Donate" },
   { href: "/disclaimer", label: "Disclaimer" },
   { href: "/privacy", label: "Privacy" },
   { href: "/terms", label: "Terms" },

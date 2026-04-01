@@ -14,6 +14,9 @@ const publicRoutes = [
   "/auth/callback",
   "/herbs",
   "/calculator",
+  "/pharmacist",
+  "/dashboard",
+  "/donate",
 ];
 
 const adminRoutes = ["/admin"];
