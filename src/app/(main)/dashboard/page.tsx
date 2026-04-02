@@ -53,7 +53,7 @@ const dashboardCards = [
     description: "Access your past conversations with the virtual herbalist",
     icon: MessageCircle,
     count: 0,
-    href: "/pharmacist",
+    href: "/dashboard/chats",
     color:
       "text-purple-600 bg-purple-100 dark:bg-purple-900/30 dark:text-purple-400",
   },
