@@ -1,10 +1,9 @@
 import type { Metadata } from "next";
 import Link from "next/link";
-import { Search } from "lucide-react";
-import { Input } from "@/components/ui/input";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { HerbCard } from "@/components/herbs/herb-card";
+import { SmartSearch } from "@/components/herbs/smart-search";
 import { getHerbs, getHerbCategories } from "@/lib/actions/herbs";
 
 export const metadata: Metadata = {
@@ -46,17 +45,8 @@ export default async function HerbsPage({
         </p>
       </div>
 
-      {/* Search */}
-      <form className="relative max-w-lg">
-        <Search className="absolute left-3 top-1/2 size-4 -translate-y-1/2 text-muted-foreground" />
-        <Input
-          name="q"
-          defaultValue={query}
-          placeholder="Search by herb name, symptom, or disease (e.g. headache, anxiety, diabetes)..."
-          className="pl-10"
-        />
-        {category && <input type="hidden" name="category" value={category} />}
-      </form>
+      {/* Smart Search */}
+      <SmartSearch defaultValue={query} category={category} />
 
       {/* Symptom Quick Search */}
       {!query && !category && (
