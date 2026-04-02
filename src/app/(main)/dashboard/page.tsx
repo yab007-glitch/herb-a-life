@@ -24,7 +24,7 @@ export const metadata: Metadata = {
 const dashboardCards = [
   {
     title: "My Medications",
-    description: "Track your current medications for interaction checking",
+    description: "Manage all your medications, supplements, and herbs to check for interactions",
     icon: Pill,
     count: 0,
     href: "/dashboard/medications",

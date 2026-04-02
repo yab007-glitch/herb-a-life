@@ -25,7 +25,8 @@ export default async function MedicationsPage() {
             My Medications
           </h1>
           <p className="text-sm text-muted-foreground">
-            Track your current medications to check for herb-drug interactions.
+            Add all your medications, supplements, and herbs here. We&apos;ll
+            check for interactions between them.
           </p>
         </div>
       </div>

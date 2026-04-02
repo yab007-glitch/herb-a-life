@@ -69,16 +69,16 @@ export function MedicationsList({
       {showForm && (
         <Card>
           <CardHeader>
-            <CardTitle className="text-base">Add a Medication</CardTitle>
+            <CardTitle className="text-base">Add a Medication, Supplement, or Herb</CardTitle>
           </CardHeader>
           <CardContent>
             <form onSubmit={handleAdd} className="space-y-4">
               <div className="space-y-2">
-                <Label htmlFor="drug_name">Medication Name *</Label>
+                <Label htmlFor="drug_name">Name *</Label>
                 <Input
                   id="drug_name"
                   name="drug_name"
-                  placeholder="e.g., Warfarin, Metformin, Lisinopril..."
+                  placeholder="e.g., Warfarin, Turmeric, Vitamin D, St. John's Wort..."
                   required
                 />
               </div>
@@ -188,10 +188,11 @@ export function MedicationsList({
               <AlertTriangle className="size-5 text-amber-600 shrink-0" />
               <div className="flex-1">
                 <p className="text-sm font-medium text-foreground">
-                  Check herb interactions with your medications
+                  Check interactions between all your medications
                 </p>
                 <p className="text-xs text-muted-foreground">
-                  Ask our AI herbalist about potential interactions
+                  Our AI herbalist will analyze your full list for potential
+                  interactions
                 </p>
               </div>
               <Button
@@ -217,7 +218,8 @@ export function MedicationsList({
                 No medications saved yet
               </p>
               <p className="text-sm text-muted-foreground mt-1">
-                Add your current medications to check for herb-drug interactions.
+                Add your prescription drugs, supplements, and herbs to check for
+                interactions between them.
               </p>
             </CardContent>
           </Card>
