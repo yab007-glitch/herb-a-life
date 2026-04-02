@@ -2,8 +2,10 @@ import { NextResponse, type NextRequest } from "next/server";
 import { openai } from "@/lib/ai/openai-client";
 
 export async function POST(request: NextRequest) {
+  let originalQuery = "";
   try {
     const { query } = await request.json();
+    originalQuery = query ?? "";
 
     if (!query || typeof query !== "string" || query.length < 2) {
       return NextResponse.json({ keywords: [query || ""] });
@@ -16,7 +18,7 @@ export async function POST(request: NextRequest) {
     }
 
     const response = await openai.chat.completions.create({
-      model: (process.env.OPENROUTER_MODEL ?? "openrouter/auto").trim(),
+      model: (process.env.OPENROUTER_MODEL ?? "openai/gpt-4o-mini").trim(),
       messages: [
         {
           role: "system",
@@ -58,8 +60,6 @@ Examples:
     // Fallback: use the original query
     return NextResponse.json({ keywords: [query.trim().toLowerCase()] });
   } catch {
-    // On any error, pass through the original query
-    const body = await request.clone().json().catch(() => ({ query: "" }));
-    return NextResponse.json({ keywords: [body.query?.toLowerCase() || ""] });
+    return NextResponse.json({ keywords: [originalQuery.toLowerCase() || ""] });
   }
 }
