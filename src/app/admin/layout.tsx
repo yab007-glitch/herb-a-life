@@ -1,5 +1,5 @@
 import Link from "next/link";
-import { Leaf, LayoutDashboard, Pill, Users, AlertTriangle } from "lucide-react";
+import { Leaf, LayoutDashboard, Users, AlertTriangle } from "lucide-react";
 
 const adminNavItems = [
   { href: "/admin", label: "Dashboard", icon: LayoutDashboard },

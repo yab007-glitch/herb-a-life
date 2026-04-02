@@ -48,10 +48,10 @@ export async function createHerb(
 
     if (error) return { success: false, error: error.message };
     return { success: true, data: data as Herb };
-  } catch (error) {
+  } catch (err) {
     return {
       success: false,
-      error: error instanceof Error ? error.message : "Failed to create herb",
+      error: err instanceof Error ? err.message : "Failed to create herb",
     };
   }
 }
@@ -81,10 +81,10 @@ export async function updateHerb(
 
     if (error) return { success: false, error: error.message };
     return { success: true };
-  } catch (error) {
+  } catch (err) {
     return {
       success: false,
-      error: error instanceof Error ? error.message : "Failed to update herb",
+      error: err instanceof Error ? err.message : "Failed to update herb",
     };
   }
 }
@@ -97,10 +97,10 @@ export async function deleteHerb(id: string): Promise<ActionResponse> {
 
     if (error) return { success: false, error: error.message };
     return { success: true };
-  } catch (error) {
+  } catch (err) {
     return {
       success: false,
-      error: error instanceof Error ? error.message : "Failed to delete herb",
+      error: err instanceof Error ? err.message : "Failed to delete herb",
     };
   }
 }
@@ -119,7 +119,7 @@ export async function toggleHerbPublished(
 
     if (error) return { success: false, error: error.message };
     return { success: true };
-  } catch (error) {
+  } catch {
     return { success: false, error: "Failed to toggle publish status" };
   }
 }
@@ -146,7 +146,7 @@ export async function createInteraction(
 
     if (error) return { success: false, error: error.message };
     return { success: true, data: data as DrugInteraction };
-  } catch (error) {
+  } catch {
     return { success: false, error: "Failed to create interaction" };
   }
 }
@@ -164,7 +164,7 @@ export async function deleteInteraction(
 
     if (error) return { success: false, error: error.message };
     return { success: true };
-  } catch (error) {
+  } catch {
     return { success: false, error: "Failed to delete interaction" };
   }
 }
@@ -196,7 +196,7 @@ export async function getAdminStats(): Promise<
         totalChecks: checks.count || 0,
       },
     };
-  } catch (error) {
+  } catch {
     return { success: false, error: "Failed to fetch admin stats" };
   }
 }

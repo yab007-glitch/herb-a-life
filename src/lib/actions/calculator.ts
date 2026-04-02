@@ -42,7 +42,7 @@ export async function saveDosageCalculation(params: {
     }
 
     return { success: true, data: { id: data.id } };
-  } catch (error) {
+  } catch {
     return { success: false, error: "Failed to save calculation" };
   }
 }

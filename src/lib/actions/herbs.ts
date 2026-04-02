@@ -77,7 +77,7 @@ export async function getHerbs(params: {
         total: count || 0,
       },
     };
-  } catch (error) {
+  } catch {
     return { success: false, error: "Failed to fetch herbs" };
   }
 }
@@ -100,7 +100,7 @@ export async function getHerbBySlug(
     }
 
     return { success: true, data: data as HerbWithInteractions };
-  } catch (error) {
+  } catch {
     return { success: false, error: "Failed to fetch herb" };
   }
 }
@@ -119,7 +119,7 @@ export async function getHerbCategories() {
     }
 
     return { success: true, data: data || [] };
-  } catch (error) {
+  } catch {
     return { success: false, error: "Failed to fetch categories" };
   }
 }
@@ -144,7 +144,7 @@ export async function searchHerbs(
     }
 
     return { success: true, data: (data || []) as Herb[] };
-  } catch (error) {
+  } catch {
     return { success: false, error: "Failed to search herbs" };
   }
 }

@@ -22,7 +22,7 @@ export async function checkInteractions(
     }
 
     return { success: true, data: (data || []) as DrugInteraction[] };
-  } catch (error) {
+  } catch {
     return { success: false, error: "Failed to check interactions" };
   }
 }
@@ -44,7 +44,7 @@ export async function getInteractionsForHerb(
     }
 
     return { success: true, data: (data || []) as DrugInteraction[] };
-  } catch (error) {
+  } catch {
     return { success: false, error: "Failed to fetch interactions" };
   }
 }
@@ -82,7 +82,7 @@ export async function saveInteractionCheck(params: {
     }
 
     return { success: true, data: { id: data.id } };
-  } catch (error) {
+  } catch {
     return { success: false, error: "Failed to save interaction check" };
   }
 }

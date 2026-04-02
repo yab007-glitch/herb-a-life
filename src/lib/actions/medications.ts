@@ -29,7 +29,7 @@ export async function getUserMedications(): Promise<
     }
 
     return { success: true, data: (data || []) as UserMedication[] };
-  } catch (error) {
+  } catch {
     return { success: false, error: "Failed to fetch medications" };
   }
 }
@@ -66,7 +66,7 @@ export async function addMedication(
 
     revalidatePath("/dashboard");
     return { success: true, data: data as UserMedication };
-  } catch (error) {
+  } catch {
     return { success: false, error: "Failed to add medication" };
   }
 }
@@ -96,7 +96,7 @@ export async function removeMedication(
 
     revalidatePath("/dashboard");
     return { success: true };
-  } catch (error) {
+  } catch {
     return { success: false, error: "Failed to remove medication" };
   }
 }

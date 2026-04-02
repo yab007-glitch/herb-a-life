@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect } from "react";
+import Link from "next/link";
 import { AlertTriangle, RotateCcw } from "lucide-react";
 import { Button } from "@/components/ui/button";
 
@@ -32,7 +33,9 @@ export default function GlobalError({
           <RotateCcw className="mr-2 h-4 w-4" />
           Try again
         </Button>
-        <Button render={<a href="/" />}>Go home</Button>
+        <Link href="/">
+          <Button>Go home</Button>
+        </Link>
       </div>
     </div>
   );
