@@ -1,0 +1,29 @@
+services:
+  - type: web
+    name: herb-a-life
+    runtime: docker
+    repo: https://github.com/yab007-glitch/herb-a-life
+    branch: main
+    plan: free
+    dockerfilePath: ./Dockerfile
+    envVars:
+      - key: NEXT_PUBLIC_SUPABASE_URL
+        sync: false
+      - key: NEXT_PUBLIC_SUPABASE_ANON_KEY
+        sync: false
+      - key: SUPABASE_SERVICE_ROLE_KEY
+        sync: false
+      - key: OPENROUTER_API_KEY
+        sync: false
+      - key: OPENROUTER_MODEL
+        value: openai/gpt-4o-mini
+      - key: NEXT_PUBLIC_APP_URL
+        sync: false
+      - key: NEXT_PUBLIC_APP_NAME
+        value: Herb-a-Life
+      - key: RXNORM_BASE_URL
+        value: https://rxnav.nlm.nih.gov/REST
+      - key: OPENFDA_BASE_URL
+        value: https://api.fda.gov/drug
+      - key: NODE_ENV
+        value: production
