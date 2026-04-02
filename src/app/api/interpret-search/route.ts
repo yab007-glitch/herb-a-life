@@ -19,27 +19,23 @@ export async function POST(request: NextRequest) {
 
     const response = await openai.chat.completions.create({
       model: (process.env.OPENROUTER_MODEL ?? "openai/gpt-4o-mini").trim(),
+      stream: false,
       messages: [
         {
           role: "system",
-          content: `You extract search keywords from natural language health queries. Given a user's description of symptoms or conditions, return 1-3 simple medical/herbal search terms that would match herbs in a database.
-
-Rules:
-- Return ONLY a JSON array of lowercase strings, nothing else
-- Use standard medical/herbal terminology
-- Max 3 keywords
-- Each keyword should be 1-2 words
+          content: `Extract 1-3 medical search keywords from the user's description. Return ONLY a JSON array of lowercase strings like ["keyword1","keyword2"]. No other text.`,
+        },
+        {
+          role: "user",
+          content: `Extract search keywords: "${query}"
 
 Examples:
-"my stomach hurts after eating" → ["digestive","stomach pain","bloating"]
-"I can't sleep at night and feel anxious" → ["insomnia","anxiety","sleep"]
-"my joints are swollen and painful" → ["arthritis","inflammation","joint pain"]
-"I have a cold with runny nose" → ["cold","respiratory","congestion"]
-"sugar levels are high" → ["diabetes","blood sugar","metabolic"]`,
+"my stomach hurts after eating" → ["digestive","bloating","stomach pain"]
+"I can't sleep and feel anxious" → ["insomnia","anxiety"]
+"joints are swollen" → ["arthritis","inflammation"]`,
         },
-        { role: "user", content: query },
       ],
-      max_tokens: 60,
+      max_tokens: 50,
       temperature: 0,
     });
 
