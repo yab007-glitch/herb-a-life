@@ -32,10 +32,10 @@ const dashboardCards = [
   },
   {
     title: "Interaction History",
-    description: "Review past drug-herb interaction checks",
+    description: "Known interactions between your medications and herbs",
     icon: AlertTriangle,
     count: 0,
-    href: "/pharmacist",
+    href: "/dashboard/interactions",
     color:
       "text-amber-600 bg-amber-100 dark:bg-amber-900/30 dark:text-amber-400",
   },
