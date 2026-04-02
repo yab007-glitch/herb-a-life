@@ -40,11 +40,11 @@ const dashboardCards = [
       "text-amber-600 bg-amber-100 dark:bg-amber-900/30 dark:text-amber-400",
   },
   {
-    title: "Dosage History",
-    description: "View your previous dosage calculations",
+    title: "Dosage Profiles",
+    description: "Manage profiles for you and your family to calculate dosages",
     icon: Calculator,
     count: 0,
-    href: "/calculator",
+    href: "/dashboard/profiles",
     color:
       "text-green-600 bg-green-100 dark:bg-green-900/30 dark:text-green-400",
   },

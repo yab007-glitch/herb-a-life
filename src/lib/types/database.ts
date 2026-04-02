@@ -324,6 +324,48 @@ export type Database = {
         };
         Relationships: [];
       };
+      patient_profiles: {
+        Row: {
+          id: string;
+          user_id: string;
+          name: string;
+          relationship: string;
+          age_years: number | null;
+          age_months: number | null;
+          weight_kg: number | null;
+          height_cm: number | null;
+          notes: string | null;
+          is_default: boolean;
+          created_at: string;
+          updated_at: string;
+        };
+        Insert: {
+          id?: string;
+          user_id: string;
+          name: string;
+          relationship?: string;
+          age_years?: number | null;
+          age_months?: number | null;
+          weight_kg?: number | null;
+          height_cm?: number | null;
+          notes?: string | null;
+          is_default?: boolean;
+          created_at?: string;
+          updated_at?: string;
+        };
+        Update: {
+          name?: string;
+          relationship?: string;
+          age_years?: number | null;
+          age_months?: number | null;
+          weight_kg?: number | null;
+          height_cm?: number | null;
+          notes?: string | null;
+          is_default?: boolean;
+          updated_at?: string;
+        };
+        Relationships: [];
+      };
     };
     Views: {};
     Functions: {
