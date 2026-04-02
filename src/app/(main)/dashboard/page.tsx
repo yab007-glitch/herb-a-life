@@ -27,7 +27,7 @@ const dashboardCards = [
     description: "Track your current medications for interaction checking",
     icon: Pill,
     count: 0,
-    href: "/pharmacist",
+    href: "/dashboard/medications",
     color: "text-blue-600 bg-blue-100 dark:bg-blue-900/30 dark:text-blue-400",
   },
   {

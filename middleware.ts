@@ -51,7 +51,8 @@ export async function middleware(request: NextRequest) {
     publicRoutes.some((route) => path === route) ||
     path.startsWith("/auth/") ||
     path.startsWith("/herbs/") ||
-    path.startsWith("/api/");
+    path.startsWith("/api/") ||
+    path.startsWith("/dashboard/");
 
   if (isPublic) {
     if (user && (path === "/login" || path === "/register")) {
