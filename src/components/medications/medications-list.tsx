@@ -167,7 +167,8 @@ export function MedicationsList({
                   <Button
                     variant="ghost"
                     size="icon-sm"
-                    className="text-red-500 hover:text-red-700 hover:bg-red-50"
+                    className="text-red-500 hover:text-red-700 hover:bg-red-50 dark:hover:bg-red-950/30"
+                    aria-label="Remove medication"
                     onClick={() => handleRemove(med.id)}
                     disabled={removingId === med.id}
                   >

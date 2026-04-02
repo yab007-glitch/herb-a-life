@@ -2,6 +2,7 @@
 
 import { useState } from "react";
 import { useRouter } from "next/navigation";
+import Link from "next/link";
 import { MessageCircle, Trash2, Loader2, Clock, ArrowRight } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
@@ -64,6 +65,31 @@ export function ChatSessionsList({
     setDeletingId(null);
   }
 
+  if (sessions.length === 0) {
+    return (
+      <Card>
+        <CardContent className="flex flex-col items-center py-12 text-center">
+          <MessageCircle className="size-10 text-muted-foreground/40 mb-3" />
+          <p className="font-medium text-muted-foreground">
+            No chat sessions yet
+          </p>
+          <p className="text-sm text-muted-foreground mt-1">
+            Start a conversation with the virtual herbalist to see your
+            history here.
+          </p>
+          <Button
+            size="sm"
+            className="mt-4"
+            render={<Link href="/pharmacist" />}
+          >
+            <MessageCircle className="size-4" />
+            Start Chat
+          </Button>
+        </CardContent>
+      </Card>
+    );
+  }
+
   return (
     <div className="space-y-3">
       {sessions.map((session) => {
@@ -111,7 +137,8 @@ export function ChatSessionsList({
                 <Button
                   variant="ghost"
                   size="icon-sm"
-                  className="text-red-500 hover:text-red-700 hover:bg-red-50"
+                  className="text-red-500 hover:text-red-700 hover:bg-red-50 dark:hover:bg-red-950/30"
+                    aria-label="Delete chat session"
                   onClick={(e) => {
                     e.stopPropagation();
                     handleDelete(session.id);

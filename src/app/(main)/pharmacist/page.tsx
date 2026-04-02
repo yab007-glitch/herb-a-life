@@ -11,13 +11,17 @@ export const metadata: Metadata = {
 export default async function PharmacistPage({
   searchParams,
 }: {
-  searchParams: Promise<{ herb?: string }>;
+  searchParams: Promise<{ herb?: string; medications?: string }>;
 }) {
   const params = await searchParams;
   let herbContext: string | null = null;
   let autoQuery: string | null = null;
 
-  if (params.herb) {
+  if (params.medications) {
+    const meds = decodeURIComponent(params.medications);
+    herbContext = `The user is currently taking these medications: ${meds}`;
+    autoQuery = `I'm taking: ${meds}. Check for any known interactions between these medications and common herbal supplements. Flag any dangerous combinations.`;
+  } else if (params.herb) {
     const result = await getHerbBySlug(params.herb);
     if (result.success && result.data) {
       const h = result.data;

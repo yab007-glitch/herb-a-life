@@ -11,7 +11,6 @@ import {
   LogIn,
   LogOut,
   User,
-  Settings,
   Heart,
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
@@ -85,8 +84,6 @@ export function MainNavbar({ user }: { user?: NavUser }) {
             <Heart className="size-4" />
             Donate
           </Button>
-        </div>
-        <div className="hidden items-center gap-2 md:flex">
           {user ? (
             <DropdownMenu>
               <DropdownMenuTrigger className="cursor-pointer rounded-full outline-none focus-visible:ring-2 focus-visible:ring-ring">
@@ -102,10 +99,6 @@ export function MainNavbar({ user }: { user?: NavUser }) {
                 <DropdownMenuItem render={<Link href="/dashboard" />}>
                   <LayoutDashboard className="size-4" />
                   Dashboard
-                </DropdownMenuItem>
-                <DropdownMenuItem render={<Link href="/settings" />}>
-                  <Settings className="size-4" />
-                  Settings
                 </DropdownMenuItem>
                 <DropdownMenuSeparator />
                 <form action={logout}>
@@ -152,6 +145,14 @@ export function MainNavbar({ user }: { user?: NavUser }) {
                   </Link>
                 );
               })}
+              <Link
+                href="/donate"
+                onClick={() => setOpen(false)}
+                className="flex items-center gap-2 rounded-md px-3 py-2 text-sm font-medium text-pink-600 transition-colors hover:bg-pink-50 dark:hover:bg-pink-950/30"
+              >
+                <Heart className="size-4" />
+                Donate
+              </Link>
               <div className="mt-4 border-t pt-4">
                 {user ? (
                   <div className="flex flex-col gap-2">

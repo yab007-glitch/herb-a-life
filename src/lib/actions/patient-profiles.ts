@@ -1,5 +1,6 @@
 "use server";
 
+import { revalidatePath } from "next/cache";
 import { createClient } from "@/lib/supabase/server";
 import type { ActionResponse } from "@/lib/types";
 
@@ -85,6 +86,7 @@ export async function addPatientProfile(
       return { success: false, error: error.message };
     }
 
+    revalidatePath("/dashboard");
     return { success: true, data: data as PatientProfile };
   } catch {
     return { success: false, error: "Failed to add profile" };
@@ -114,6 +116,7 @@ export async function removePatientProfile(
       return { success: false, error: error.message };
     }
 
+    revalidatePath("/dashboard");
     return { success: true };
   } catch {
     return { success: false, error: "Failed to remove profile" };

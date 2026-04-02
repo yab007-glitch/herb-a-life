@@ -1,5 +1,6 @@
 "use server";
 
+import { revalidatePath } from "next/cache";
 import { createClient } from "@/lib/supabase/server";
 import type { ActionResponse } from "@/lib/types";
 import type { Json } from "@/lib/types/database";
@@ -73,6 +74,7 @@ export async function saveChatSession(params: {
       return { success: false, error: error.message };
     }
 
+    revalidatePath("/dashboard");
     return { success: true, data: { id: data.id } };
   } catch {
     return { success: false, error: "Failed to save chat session" };
@@ -133,6 +135,7 @@ export async function deleteChatSession(id: string): Promise<ActionResponse> {
       return { success: false, error: error.message };
     }
 
+    revalidatePath("/dashboard");
     return { success: true };
   } catch {
     return { success: false, error: "Failed to delete chat session" };

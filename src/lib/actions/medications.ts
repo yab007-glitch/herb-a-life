@@ -1,5 +1,6 @@
 "use server";
 
+import { revalidatePath } from "next/cache";
 import { createClient } from "@/lib/supabase/server";
 import type { ActionResponse, UserMedication } from "@/lib/types";
 
@@ -63,6 +64,7 @@ export async function addMedication(
       return { success: false, error: error.message };
     }
 
+    revalidatePath("/dashboard");
     return { success: true, data: data as UserMedication };
   } catch (error) {
     return { success: false, error: "Failed to add medication" };
@@ -92,6 +94,7 @@ export async function removeMedication(
       return { success: false, error: error.message };
     }
 
+    revalidatePath("/dashboard");
     return { success: true };
   } catch (error) {
     return { success: false, error: "Failed to remove medication" };

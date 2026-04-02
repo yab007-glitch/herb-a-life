@@ -81,16 +81,20 @@ export default async function InteractionsPage() {
       .eq("user_id", user.id)
       .eq("is_active", true);
 
-    const medNames = (medications ?? []).map((m) => m.drug_name.toLowerCase());
+    const medNames = (medications ?? [])
+      .map((m) => m.drug_name)
+      .filter(Boolean);
     medicationCount = medNames.length;
 
     if (medNames.length > 0) {
-      // Find all known interactions between saved medications and herbs in our database
+      // Find all known interactions — use ilike for case-insensitive matching
+      const orFilter = medNames
+        .map((name) => `drug_name.ilike.${name}`)
+        .join(",");
       const { data: dbInteractions } = await supabase
         .from("drug_interactions")
         .select("id, drug_name, severity, description, mechanism, herb_id, herbs(name, slug)")
-        .in("drug_name", medNames)
-        .order("severity", { ascending: true });
+        .or(orFilter);
 
       interactions = (dbInteractions ?? []).map((i: Record<string, unknown>) => {
         const herb = i.herbs as { name: string; slug: string } | null;

@@ -11,15 +11,21 @@ import { cn } from "@/lib/utils";
 type Message = {
   role: "user" | "assistant";
   content: string;
-  timestamp: string;
+  id: string;
 };
 
-const INITIAL_MESSAGE: Message = {
-  role: "assistant",
-  content:
-    "Hello! I'm your Virtual Herbalist. I can help you with questions about medicinal herbs, potential drug interactions, dosage guidance, and general herbal medicine information.\n\nPlease note that my advice is for educational purposes only and should not replace consultation with a qualified healthcare provider.\n\nHow can I help you today?",
-  timestamp: new Date().toISOString(),
-};
+function makeId() {
+  return Math.random().toString(36).slice(2);
+}
+
+function createInitialMessage(): Message {
+  return {
+    role: "assistant",
+    content:
+      "Hello! I'm your Virtual Herbalist. I can help you with questions about medicinal herbs, potential drug interactions, dosage guidance, and general herbal medicine information.\n\nPlease note that my advice is for educational purposes only and should not replace consultation with a qualified healthcare provider.\n\nHow can I help you today?",
+    id: makeId(),
+  };
+}
 
 export function ChatInterface({
   herbContext,
@@ -28,7 +34,9 @@ export function ChatInterface({
   herbContext?: string | null;
   autoQuery?: string | null;
 }) {
-  const [messages, setMessages] = useState<Message[]>([INITIAL_MESSAGE]);
+  const [messages, setMessages] = useState<Message[]>(() => [
+    createInitialMessage(),
+  ]);
   const [input, setInput] = useState("");
   const [isLoading, setIsLoading] = useState(false);
   const [autoSent, setAutoSent] = useState(false);
@@ -56,7 +64,7 @@ export function ChatInterface({
     const userMessage: Message = {
       role: "user",
       content: text.trim(),
-      timestamp: new Date().toISOString(),
+      id: makeId(),
     };
 
     const allMessages = [...messages, userMessage];
@@ -87,7 +95,7 @@ export function ChatInterface({
       const assistantMessage: Message = {
         role: "assistant",
         content: "",
-        timestamp: new Date().toISOString(),
+        id: makeId(),
       };
 
       setMessages((prev) => [...prev, assistantMessage]);
@@ -114,7 +122,7 @@ export function ChatInterface({
         role: "assistant",
         content:
           "I'm sorry, I encountered an error processing your request. Please try again.",
-        timestamp: new Date().toISOString(),
+        id: makeId(),
       };
       setMessages((prev) => [...prev, errorMessage]);
     } finally {
@@ -143,9 +151,9 @@ export function ChatInterface({
         style={{ maxHeight: "60vh", minHeight: "400px" }}
       >
         <div className="mx-auto max-w-3xl space-y-6">
-          {messages.map((message, i) => (
+          {messages.map((message) => (
             <div
-              key={i}
+              key={message.id}
               className={cn(
                 "flex gap-3",
                 message.role === "user" ? "justify-end" : "justify-start"
@@ -180,7 +188,7 @@ export function ChatInterface({
             </div>
           ))}
 
-          {isLoading && (
+          {isLoading && messages[messages.length - 1]?.role !== "assistant" && (
             <div className="flex gap-3">
               <div className="flex size-8 shrink-0 items-center justify-center rounded-full bg-primary/10 text-primary">
                 <Bot className="size-4" />
