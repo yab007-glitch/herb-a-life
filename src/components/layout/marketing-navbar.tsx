@@ -2,7 +2,7 @@
 
 import Link from "next/link";
 import { useState } from "react";
-import { Leaf, Menu } from "lucide-react";
+import { Leaf, Menu, Heart } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import {
   Sheet,
@@ -19,6 +19,7 @@ const navLinks = [
   { href: "/calculator", label: "Calculator" },
   { href: "/pharmacist", label: "Herbalist" },
   { href: "/about", label: "About" },
+  { href: "/donate", label: "Donate", icon: Heart },
 ];
 
 export function MarketingNavbar() {
@@ -43,8 +44,12 @@ export function MarketingNavbar() {
             <Link
               key={link.href}
               href={link.href}
-              className="rounded-lg px-4 py-2 text-sm font-medium text-muted-foreground transition-colors hover:bg-muted hover:text-foreground"
+              className={cn(
+                "rounded-lg px-4 py-2 text-sm font-medium text-muted-foreground transition-colors hover:bg-muted hover:text-foreground",
+                link.href === "/donate" && "text-pink-600 hover:text-pink-700 hover:bg-pink-50 dark:text-pink-400 dark:hover:bg-pink-950/30"
+              )}
             >
+              {link.icon && <link.icon className="size-4 mr-1.5 inline-block" />}
               {link.label}
             </Link>
           ))}
@@ -83,9 +88,11 @@ export function MarketingNavbar() {
                   href={link.href}
                   onClick={() => setOpen(false)}
                   className={cn(
-                    "rounded-lg px-4 py-3 text-sm font-medium text-muted-foreground transition-colors hover:bg-muted hover:text-foreground"
+                    "rounded-lg px-4 py-3 text-sm font-medium text-muted-foreground transition-colors hover:bg-muted hover:text-foreground",
+                    link.href === "/donate" && "text-pink-600 hover:text-pink-700 hover:bg-pink-50 dark:text-pink-400 dark:hover:bg-pink-950/30"
                   )}
                 >
+                  {link.icon && <link.icon className="size-4 mr-1.5 inline-block" />}
                   {link.label}
                 </Link>
               ))}
