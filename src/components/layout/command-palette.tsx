@@ -23,7 +23,6 @@ import {
   CommandShortcut,
 } from "@/components/ui/command"
 import { cn } from "@/lib/utils"
-import { searchHerbs } from "@/lib/actions/herbs"
 
 type HerbResult = {
   id: string
@@ -64,16 +63,30 @@ export function CommandPalette() {
       return
     }
 
+    const controller = new AbortController()
     const timer = setTimeout(async () => {
       setLoading(true)
-      const result = await searchHerbs(query)
-      if (result.success && result.data) {
-        setHerbs(result.data as HerbResult[])
+      try {
+        const res = await fetch(`/api/herbs/search?q=${encodeURIComponent(query)}`, {
+          signal: controller.signal,
+        })
+        if (res.ok) {
+          const data = await res.json()
+          setHerbs(data)
+        }
+      } catch (err) {
+        if (!(err instanceof Error && err.name === "AbortError")) {
+          console.error("Search error:", err)
+        }
+      } finally {
+        setLoading(false)
       }
-      setLoading(false)
     }, 300)
 
-    return () => clearTimeout(timer)
+    return () => {
+      clearTimeout(timer)
+      controller.abort()
+    }
   }, [query])
 
   const navigate = React.useCallback(
