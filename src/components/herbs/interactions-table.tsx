@@ -1,0 +1,139 @@
+"use client";
+
+import { useState } from "react";
+import { ChevronDown, ChevronUp } from "lucide-react";
+import { Button } from "@/components/ui/button";
+
+type Interaction = {
+  id: string;
+  drug_name: string;
+  severity: "mild" | "moderate" | "severe" | "contraindicated";
+  description: string;
+};
+
+const severityColors: Record<string, string> = {
+  mild: "bg-yellow-100 text-yellow-800 dark:bg-yellow-900/30 dark:text-yellow-300",
+  moderate:
+    "bg-orange-100 text-orange-800 dark:bg-orange-900/30 dark:text-orange-300",
+  severe: "bg-red-100 text-red-800 dark:bg-red-900/30 dark:text-red-300",
+  contraindicated:
+    "bg-red-200 text-red-900 dark:bg-red-900/50 dark:text-red-200",
+};
+
+const INITIAL_COUNT = 5;
+
+export function InteractionsTable({
+  interactions,
+}: {
+  interactions: Interaction[];
+}) {
+  const [expanded, setExpanded] = useState(false);
+
+  if (interactions.length === 0) return null;
+
+  const displayInteractions = expanded
+    ? interactions
+    : interactions.slice(0, INITIAL_COUNT);
+  const hasMore = interactions.length > INITIAL_COUNT;
+
+  // Group by severity for summary
+  const severityCounts = {
+    severe: interactions.filter((i) => i.severity === "severe").length,
+    moderate: interactions.filter((i) => i.severity === "moderate").length,
+    mild: interactions.filter((i) => i.severity === "mild").length,
+    contraindicated: interactions.filter((i) => i.severity === "contraindicated")
+      .length,
+  };
+
+  return (
+    <section>
+      <h2 className="mb-4 text-xl font-semibold text-foreground">
+        Known Drug Interactions ({interactions.length})
+      </h2>
+
+      {/* Severity Summary */}
+      <div className="mb-4 flex flex-wrap gap-2">
+        {severityCounts.contraindicated > 0 && (
+          <span className="inline-flex items-center rounded-full bg-red-100 px-2.5 py-0.5 text-xs font-medium text-red-800 dark:bg-red-900/30 dark:text-red-300">
+            {severityCounts.contraindicated} Contraindicated
+          </span>
+        )}
+        {severityCounts.severe > 0 && (
+          <span className="inline-flex items-center rounded-full bg-red-100 px-2.5 py-0.5 text-xs font-medium text-red-700 dark:bg-red-900/30 dark:text-red-300">
+            {severityCounts.severe} Severe
+          </span>
+        )}
+        {severityCounts.moderate > 0 && (
+          <span className="inline-flex items-center rounded-full bg-orange-100 px-2.5 py-0.5 text-xs font-medium text-orange-800 dark:bg-orange-900/30 dark:text-orange-300">
+            {severityCounts.moderate} Moderate
+          </span>
+        )}
+        {severityCounts.mild > 0 && (
+          <span className="inline-flex items-center rounded-full bg-yellow-100 px-2.5 py-0.5 text-xs font-medium text-yellow-800 dark:bg-yellow-900/30 dark:text-yellow-300">
+            {severityCounts.mild} Mild
+          </span>
+        )}
+      </div>
+
+      <div className="overflow-x-auto rounded-lg border">
+        <table className="w-full text-sm">
+          <thead>
+            <tr className="border-b bg-muted/50">
+              <th className="px-4 py-3 text-left font-medium text-foreground">
+                Drug
+              </th>
+              <th className="px-4 py-3 text-left font-medium text-foreground">
+                Severity
+              </th>
+              <th className="px-4 py-3 text-left font-medium text-foreground">
+                Description
+              </th>
+            </tr>
+          </thead>
+          <tbody>
+            {displayInteractions.map((interaction) => (
+              <tr key={interaction.id} className="border-b last:border-0">
+                <td className="px-4 py-3 font-medium text-foreground">
+                  {interaction.drug_name}
+                </td>
+                <td className="px-4 py-3">
+                  <span
+                    className={`inline-flex rounded-full px-2 py-0.5 text-xs font-medium capitalize ${severityColors[interaction.severity] || ""}`}
+                  >
+                    {interaction.severity}
+                  </span>
+                </td>
+                <td className="px-4 py-3 text-muted-foreground">
+                  {interaction.description}
+                </td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
+      </div>
+
+      {hasMore && (
+        <div className="mt-3 flex justify-center">
+          <Button
+            variant="ghost"
+            size="sm"
+            onClick={() => setExpanded(!expanded)}
+            className="text-muted-foreground"
+          >
+            {expanded ? (
+              <>
+                <ChevronUp className="size-4" />
+                Show Less
+              </>
+            ) : (
+              <>
+                <ChevronDown className="size-4" />
+                Show {interactions.length - INITIAL_COUNT} More
+              </>
+            )}
+          </Button>
+        </div>
+      )}
+    </section>
+  );
+}

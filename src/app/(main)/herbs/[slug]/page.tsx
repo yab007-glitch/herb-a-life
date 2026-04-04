@@ -23,6 +23,7 @@ import {
 } from "@/components/ui/card";
 import { Separator } from "@/components/ui/separator";
 import { HerbSafetyBadges } from "@/components/herbs/herb-safety-badges";
+import { InteractionsTable } from "@/components/herbs/interactions-table";
 import { getHerbBySlug } from "@/lib/actions/herbs";
 
 type Props = { params: Promise<{ slug: string }> };
@@ -39,15 +40,6 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
     description: herb.description?.slice(0, 160),
   };
 }
-
-const severityColors: Record<string, string> = {
-  mild: "bg-yellow-100 text-yellow-800 dark:bg-yellow-900/30 dark:text-yellow-300",
-  moderate:
-    "bg-orange-100 text-orange-800 dark:bg-orange-900/30 dark:text-orange-300",
-  severe: "bg-red-100 text-red-800 dark:bg-red-900/30 dark:text-red-300",
-  contraindicated:
-    "bg-red-200 text-red-900 dark:bg-red-900/50 dark:text-red-200",
-};
 
 export default async function HerbDetailPage({ params }: Props) {
   const { slug } = await params;
@@ -295,49 +287,7 @@ export default async function HerbDetailPage({ params }: Props) {
       </Card>
 
       {/* Drug Interactions */}
-      {interactions.length > 0 && (
-        <section>
-          <h2 className="mb-4 text-xl font-semibold text-foreground">
-            Known Drug Interactions ({interactions.length})
-          </h2>
-          <div className="overflow-x-auto rounded-lg border">
-            <table className="w-full text-sm">
-              <thead>
-                <tr className="border-b bg-muted/50">
-                  <th className="px-4 py-3 text-left font-medium text-foreground">
-                    Drug
-                  </th>
-                  <th className="px-4 py-3 text-left font-medium text-foreground">
-                    Severity
-                  </th>
-                  <th className="px-4 py-3 text-left font-medium text-foreground">
-                    Description
-                  </th>
-                </tr>
-              </thead>
-              <tbody>
-                {interactions.map((interaction: { id: string; drug_name: string; severity: string; description: string }) => (
-                  <tr key={interaction.id} className="border-b last:border-0">
-                    <td className="px-4 py-3 font-medium text-foreground">
-                      {interaction.drug_name}
-                    </td>
-                    <td className="px-4 py-3">
-                      <span
-                        className={`inline-flex rounded-full px-2 py-0.5 text-xs font-medium capitalize ${severityColors[interaction.severity] || ""}`}
-                      >
-                        {interaction.severity}
-                      </span>
-                    </td>
-                    <td className="px-4 py-3 text-muted-foreground">
-                      {interaction.description}
-                    </td>
-                  </tr>
-                ))}
-              </tbody>
-            </table>
-          </div>
-        </section>
-      )}
+      <InteractionsTable interactions={interactions} />
 
       {/* CTA Buttons */}
       <div className="flex flex-wrap gap-3 pt-4">

@@ -1,17 +1,19 @@
 "use client";
 
-import { useState, useRef, useEffect } from "react";
-import { Send, Bot, User, AlertCircle } from "lucide-react";
+import { useState, useRef, useEffect, useCallback } from "react";
+import { Send, Bot, User, AlertCircle, Trash2 } from "lucide-react";
 import ReactMarkdown from "react-markdown";
 import { Button } from "@/components/ui/button";
 import { Textarea } from "@/components/ui/textarea";
 import { cn } from "@/lib/utils";
+import {
+  createChatSession,
+  updateChatSession,
+  getChatSession,
+  type ChatMessage,
+} from "@/lib/actions/chat";
 
-type Message = {
-  role: "user" | "assistant";
-  content: string;
-  id: string;
-};
+type Message = ChatMessage;
 
 function makeId() {
   return Math.random().toString(36).slice(2);
@@ -23,24 +25,44 @@ function createInitialMessage(): Message {
     content:
       "Hello! I'm your Virtual Herbalist. I can help you with questions about medicinal herbs, potential drug interactions, dosage guidance, and general herbal medicine information.\n\nPlease note that my advice is for educational purposes only and should not replace consultation with a qualified healthcare provider.\n\nHow can I help you today?",
     id: makeId(),
+    timestamp: new Date().toISOString(),
   };
 }
 
 export function ChatInterface({
   herbContext,
   autoQuery,
+  sessionId,
 }: {
   herbContext?: string | null;
   autoQuery?: string | null;
+  sessionId?: string | null;
 }) {
-  const [messages, setMessages] = useState<Message[]>(() => [
-    createInitialMessage(),
-  ]);
+  const [messages, setMessages] = useState<Message[]>(() => [createInitialMessage()]);
   const [input, setInput] = useState("");
   const [isLoading, setIsLoading] = useState(false);
   const [autoSent, setAutoSent] = useState(false);
+  const [currentSessionId, setCurrentSessionId] = useState<string | null>(sessionId || null);
+  const [isSaving, setIsSaving] = useState(false);
   const scrollRef = useRef<HTMLDivElement>(null);
   const textareaRef = useRef<HTMLTextAreaElement>(null);
+
+  // Load existing session if sessionId provided
+  useEffect(() => {
+    async function loadSession() {
+      if (sessionId) {
+        const result = await getChatSession(sessionId);
+        if (result.success && result.data) {
+          const loadedMessages = result.data.messages as ChatMessage[];
+          if (loadedMessages && loadedMessages.length > 0) {
+            setMessages(loadedMessages);
+          }
+          setCurrentSessionId(sessionId);
+        }
+      }
+    }
+    loadSession();
+  }, [sessionId]);
 
   useEffect(() => {
     if (scrollRef.current) {
@@ -57,6 +79,32 @@ export function ChatInterface({
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [autoQuery, autoSent]);
 
+  // Save messages to database
+  const saveMessages = useCallback(async (msgs: Message[]) => {
+    // Skip saving if we only have the initial message
+    if (msgs.length <= 1) return;
+
+    try {
+      setIsSaving(true);
+      
+      if (!currentSessionId) {
+        // Create new session
+        const result = await createChatSession(herbContext || undefined);
+        if (result.success && result.data) {
+          setCurrentSessionId(result.data.id);
+        }
+      }
+
+      if (currentSessionId) {
+        await updateChatSession(currentSessionId, msgs);
+      }
+    } catch (error) {
+      console.error("Failed to save chat:", error);
+    } finally {
+      setIsSaving(false);
+    }
+  }, [currentSessionId, herbContext]);
+
   async function sendMessage(text: string) {
     if (!text.trim() || isLoading) return;
 
@@ -64,6 +112,7 @@ export function ChatInterface({
       role: "user",
       content: text.trim(),
       id: makeId(),
+      timestamp: new Date().toISOString(),
     };
 
     const allMessages = [...messages, userMessage];
@@ -95,6 +144,7 @@ export function ChatInterface({
         role: "assistant",
         content: "",
         id: makeId(),
+        timestamp: new Date().toISOString(),
       };
 
       setMessages((prev) => [...prev, assistantMessage]);
@@ -116,12 +166,17 @@ export function ChatInterface({
           )
         );
       }
+
+      // Save messages after response completes
+      const finalMessages = [...allMessages, { ...assistantMessage, content: accumulated }];
+      await saveMessages(finalMessages);
     } catch {
       const errorMessage: Message = {
         role: "assistant",
         content:
           "I'm sorry, I encountered an error processing your request. Please try again.",
         id: makeId(),
+        timestamp: new Date().toISOString(),
       };
       setMessages((prev) => [...prev, errorMessage]);
     } finally {
@@ -139,6 +194,12 @@ export function ChatInterface({
       e.preventDefault();
       handleSubmit();
     }
+  }
+
+  function clearChat() {
+    setMessages([createInitialMessage()]);
+    setCurrentSessionId(null);
+    setAutoSent(false);
   }
 
   return (
@@ -206,11 +267,24 @@ export function ChatInterface({
 
       {/* Disclaimer */}
       <div className="border-t bg-amber-50/50 px-4 py-2 dark:bg-amber-950/10">
-        <p className="flex items-center gap-1.5 text-xs text-amber-700 dark:text-amber-400">
-          <AlertCircle className="size-3 shrink-0" />
-          This AI assistant provides educational information only. Always
-          consult a healthcare provider for medical advice.
-        </p>
+        <div className="flex items-center justify-between">
+          <p className="flex items-center gap-1.5 text-xs text-amber-700 dark:text-amber-400">
+            <AlertCircle className="size-3 shrink-0" />
+            This AI assistant provides educational information only. Always
+            consult a healthcare provider for medical advice.
+          </p>
+          {messages.length > 1 && (
+            <Button
+              variant="ghost"
+              size="sm"
+              onClick={clearChat}
+              className="h-6 px-2 text-xs text-muted-foreground hover:text-foreground"
+            >
+              <Trash2 className="size-3" />
+              Clear
+            </Button>
+          )}
+        </div>
       </div>
 
       {/* Input Area */}
@@ -238,6 +312,9 @@ export function ChatInterface({
             <span className="sr-only">Send</span>
           </Button>
         </form>
+        {isSaving && (
+          <p className="mt-1 text-xs text-muted-foreground">Saving...</p>
+        )}
       </div>
     </div>
   );

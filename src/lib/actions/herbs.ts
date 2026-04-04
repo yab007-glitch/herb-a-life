@@ -26,9 +26,9 @@ export async function getHerbs(params: {
       .range(from, to);
 
     if (params.query) {
-      const q = params.query.replace(/'/g, "''");
+      const q = params.query.trim();
 
-      // First, get IDs from deep symptom search (searches traditional_uses, modern_uses arrays)
+      // Use RPC for deep symptom search (searches traditional_uses, modern_uses arrays)
       const { data: rpcResults } = await supabase.rpc(
         "search_herbs_by_symptom",
         { search_term: q }
@@ -38,9 +38,10 @@ export async function getHerbs(params: {
       if (matchedIds.length > 0) {
         query = query.in("id", matchedIds);
       } else {
-        // Fallback to basic text search if RPC returns nothing
+        // Fallback to safe parameterized search using ilike
+        const pattern = `%${q}%`;
         query = query.or(
-          `name.ilike.%${q}%,scientific_name.ilike.%${q}%,description.ilike.%${q}%`
+          `name.ilike.${pattern},scientific_name.ilike.${pattern},description.ilike.${pattern}`
         );
       }
     }
