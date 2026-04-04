@@ -1,11 +1,11 @@
 "use client";
 
 import { useEffect } from "react";
-import { AlertTriangle, RotateCcw, LogIn } from "lucide-react";
-import { Button } from "@/components/ui/button";
 import Link from "next/link";
+import { AlertCircle, RefreshCw, Home } from "lucide-react";
+import { Button } from "@/components/ui/button";
 
-export default function MainError({
+export default function ErrorBoundary({
   error,
   reset,
 }: {
@@ -13,31 +13,38 @@ export default function MainError({
   reset: () => void;
 }) {
   useEffect(() => {
-    console.error("[Herb-a-Life Main Error]", error);
+    console.error("Error caught by error boundary:", error);
   }, [error]);
 
   return (
-    <div className="flex min-h-[40vh] flex-col items-center justify-center gap-6 px-4 text-center">
-      <div className="flex h-14 w-14 items-center justify-center rounded-full bg-destructive/10">
-        <AlertTriangle className="h-7 w-7 text-destructive" />
+    <div className="flex min-h-[50vh] flex-col items-center justify-center px-4 py-12 text-center">
+      <div className="mb-6 flex size-20 items-center justify-center rounded-full bg-destructive/10">
+        <AlertCircle className="size-10 text-destructive" />
       </div>
-      <div className="space-y-2">
-        <h2 className="text-xl font-semibold">Something went wrong</h2>
-        <p className="text-muted-foreground max-w-md">
-          This might be a temporary issue. Try again or sign in again if the
-          problem persists.
-        </p>
-      </div>
-      <div className="flex gap-3">
-        <Button variant="outline" onClick={() => reset()}>
-          <RotateCcw className="mr-2 h-4 w-4" />
-          Try again
+      <h1 className="mb-2 text-2xl font-bold text-foreground">
+        Something went wrong
+      </h1>
+      <p className="mb-6 max-w-md text-muted-foreground">
+        We encountered an unexpected error. Don&apos;t worry — your data is safe.
+      </p>
+      <div className="flex flex-col gap-3 sm:flex-row">
+        <Button onClick={reset} className="gap-2">
+          <RefreshCw className="size-4" />
+          Try Again
         </Button>
-        <Button variant="outline" render={<Link href="/login" />}>
-          <LogIn className="mr-2 h-4 w-4" />
-          Sign in again
+        <Button variant="outline" render={<Link href="/" />}>
+          <Home className="mr-2 size-4" />
+          Go Home
         </Button>
       </div>
+      {process.env.NODE_ENV === "development" && (
+        <div className="mt-8 max-w-2xl overflow-auto rounded-lg border border-destructive/20 bg-destructive/5 p-4 text-left text-sm">
+          <p className="font-mono text-destructive">{error.message}</p>
+          {error.stack && (
+            <pre className="mt-2 text-xs text-muted-foreground">{error.stack}</pre>
+          )}
+        </div>
+      )}
     </div>
   );
 }

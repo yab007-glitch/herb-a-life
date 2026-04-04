@@ -11,6 +11,7 @@ import {
   SheetHeader,
   SheetTitle,
 } from "@/components/ui/sheet";
+import { ThemeToggle } from "@/components/theme/theme-toggle";
 import { cn } from "@/lib/utils";
 
 const navLinks = [
@@ -49,8 +50,9 @@ export function MarketingNavbar() {
           ))}
         </nav>
 
-        {/* Desktop CTA */}
-        <div className="hidden items-center gap-3 md:flex">
+        {/* Desktop CTA + Theme */}
+        <div className="hidden items-center gap-2 md:flex">
+          <ThemeToggle />
           <Button variant="ghost" size="sm" render={<Link href="/login" />}>
             Sign In
           </Button>

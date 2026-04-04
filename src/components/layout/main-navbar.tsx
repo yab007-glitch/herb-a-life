@@ -29,6 +29,7 @@ import {
   DropdownMenuLabel,
 } from "@/components/ui/dropdown-menu";
 import { Avatar, AvatarFallback } from "@/components/ui/avatar";
+import { ThemeToggle } from "@/components/theme/theme-toggle";
 import { cn } from "@/lib/utils";
 import { logout } from "@/lib/actions/auth";
 
@@ -77,7 +78,8 @@ export function MainNavbar({ user }: { user?: NavUser }) {
         </nav>
 
         {/* Right side */}
-        <div className="hidden items-center gap-3 md:flex">
+        <div className="hidden items-center gap-2 md:flex">
+          <ThemeToggle />
           <Button
             variant="ghost"
             size="sm"

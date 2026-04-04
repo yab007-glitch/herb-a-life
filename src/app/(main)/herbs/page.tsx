@@ -5,12 +5,39 @@ import { Button } from "@/components/ui/button";
 import { HerbCard } from "@/components/herbs/herb-card";
 import { SmartSearch } from "@/components/herbs/smart-search";
 import { getHerbs, getHerbCategories } from "@/lib/actions/herbs";
+import Script from "next/script";
 
 export const metadata: Metadata = {
   title: "Medicinal Herbs Database",
   description:
     "Browse our comprehensive database of 2,700+ medicinal herbs with detailed profiles, active compounds, and drug interactions.",
 };
+
+// JSON-LD structured data for the herbs page
+interface HerbForSchema {
+  name: string;
+  scientific_name: string;
+  description: string;
+  slug: string;
+}
+
+function generateStructuredData(herbs: HerbForSchema[]) {
+  return {
+    "@context": "https://schema.org",
+    "@type": "ItemList",
+    "itemListElement": herbs.map((herb, index) => ({
+      "@type": "ListItem",
+      "position": index + 1,
+      "item": {
+        "@type": "MedicalWebPage",
+        "name": herb.name,
+        "alternateName": herb.scientific_name,
+        "description": herb.description,
+        "url": `https://herb-a-life.app/herbs/${herb.slug || ""}`,
+      },
+    })),
+  };
+}
 
 export default async function HerbsPage({
   searchParams,
@@ -32,8 +59,15 @@ export default async function HerbsPage({
   const categories = categoriesResult.success ? categoriesResult.data! : [];
   const totalPages = Math.ceil(total / 20);
 
+  const structuredData = generateStructuredData(herbs);
+
   return (
     <div className="space-y-8">
+      <Script
+        id="herbs-structured-data"
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(structuredData) }}
+      />
       {/* Header */}
       <div className="text-center sm:text-left">
         <h1 className="text-3xl font-bold tracking-tight text-foreground sm:text-4xl">

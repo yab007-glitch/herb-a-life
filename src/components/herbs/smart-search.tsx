@@ -1,101 +1,116 @@
 "use client";
 
-import { useState, useRef } from "react";
-import { useRouter } from "next/navigation";
-import { Search, Sparkles, Loader2 } from "lucide-react";
+import { useState, useCallback, useRef } from "react";
+import { useRouter, useSearchParams } from "next/navigation";
+import { Search, X } from "lucide-react";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
+import { RecentSearches, useSaveSearch } from "@/components/herbs/recent-searches";
+import { cn } from "@/lib/utils";
 
-export function SmartSearch({
-  defaultValue,
-  category,
-}: {
+interface SmartSearchProps {
   defaultValue?: string;
   category?: string;
-}) {
+}
+
+export function SmartSearch({ defaultValue = "", category }: SmartSearchProps) {
   const router = useRouter();
-  const [query, setQuery] = useState(defaultValue ?? "");
-  const [isInterpreting, setIsInterpreting] = useState(false);
-  const formRef = useRef<HTMLFormElement>(null);
+  const searchParams = useSearchParams();
+  const [query, setQuery] = useState(defaultValue);
+  const [isSearching, setIsSearching] = useState(false);
+  const saveSearch = useSaveSearch();
+  const timeoutRef = useRef<number | null>(null);
 
-  function isNaturalLanguage(text: string): boolean {
-    const words = text.trim().split(/\s+/);
-    // If it's 3+ words or contains common phrase indicators, use AI
-    if (words.length >= 3) return true;
-    if (/\b(my|i have|i feel|i can't|i cannot|after|when|help|cure|treat|remedy|relieve)\b/i.test(text)) return true;
-    return false;
-  }
+  const handleSearch = useCallback(
+    (value: string) => {
+      const params = new URLSearchParams(searchParams.toString());
+      const trimmed = value.trim();
+      
+      if (trimmed) {
+        params.set("q", trimmed);
+        saveSearch(trimmed);
+      } else {
+        params.delete("q");
+      }
+      
+      if (category) {
+        params.set("category", category);
+      }
+      
+      setIsSearching(true);
+      router.push(`/herbs?${params.toString()}`);
+    },
+    [category, router, searchParams, saveSearch]
+  );
 
-  async function handleSubmit(e: React.FormEvent) {
+  const handleChange = useCallback(
+    (e: React.ChangeEvent<HTMLInputElement>) => {
+      const value = e.target.value;
+      setQuery(value);
+      
+      if (timeoutRef.current) {
+        clearTimeout(timeoutRef.current);
+      }
+      
+      timeoutRef.current = window.setTimeout(() => {
+        handleSearch(value);
+      }, 500);
+    },
+    [handleSearch]
+  );
+
+  const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-    const trimmed = query.trim();
-    if (!trimmed) return;
-
-    if (!isNaturalLanguage(trimmed)) {
-      // Simple keyword — search directly
-      const params = new URLSearchParams({ q: trimmed });
-      if (category) params.set("category", category);
-      router.push(`/herbs?${params.toString()}`);
-      return;
+    if (timeoutRef.current) {
+      clearTimeout(timeoutRef.current);
     }
+    handleSearch(query);
+  };
 
-    // Natural language — use AI to interpret
-    setIsInterpreting(true);
-    try {
-      const res = await fetch("/api/interpret-search", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ query: trimmed }),
-      });
-      const data = await res.json();
-      const keywords: string[] = data.keywords ?? [trimmed];
-
-      // Search with the first (most relevant) keyword
-      const params = new URLSearchParams({ q: keywords[0] });
-      if (category) params.set("category", category);
-      router.push(`/herbs?${params.toString()}`);
-    } catch {
-      // Fallback to direct search
-      const params = new URLSearchParams({ q: trimmed });
-      if (category) params.set("category", category);
-      router.push(`/herbs?${params.toString()}`);
-    } finally {
-      setIsInterpreting(false);
+  const handleClear = () => {
+    setQuery("");
+    const params = new URLSearchParams(searchParams.toString());
+    params.delete("q");
+    if (category) {
+      params.set("category", category);
     }
-  }
+    router.push(`/herbs?${params.toString()}`);
+  };
 
   return (
-    <form
-      ref={formRef}
-      onSubmit={handleSubmit}
-      className="relative max-w-lg"
-    >
-      <Search className="absolute left-3 top-1/2 size-4 -translate-y-1/2 text-muted-foreground" />
-      <Input
-        value={query}
-        onChange={(e) => setQuery(e.target.value)}
-        placeholder="Describe what you need help with (e.g. 'my stomach hurts after eating')..."
-        className="pl-10 pr-24"
-        disabled={isInterpreting}
-      />
-      <Button
-        type="submit"
-        size="sm"
-        disabled={!query.trim() || isInterpreting}
-        className="absolute right-1.5 top-1/2 -translate-y-1/2 h-7 gap-1"
-      >
-        {isInterpreting ? (
-          <>
-            <Loader2 className="size-3 animate-spin" />
-            AI
-          </>
-        ) : (
-          <>
-            <Sparkles className="size-3" />
-            Search
-          </>
-        )}
-      </Button>
-    </form>
+    <div className="space-y-4">
+      <form onSubmit={handleSubmit} className="flex flex-col gap-3 sm:flex-row">
+        <div className="relative flex-1">
+          <Search className="absolute left-3 top-1/2 size-4 -translate-y-1/2 text-muted-foreground" />
+          <Input
+            type="text"
+            placeholder="Search herbs by name, symptom, or use..."
+            value={query}
+            onChange={handleChange}
+            className={cn(
+              "h-12 pl-10 pr-10 transition-all",
+              isSearching && "animate-pulse"
+            )}
+          />
+          {query && (
+            <button
+              type="button"
+              onClick={handleClear}
+              className="absolute right-3 top-1/2 -translate-y-1/2 text-muted-foreground hover:text-foreground"
+            >
+              <X className="size-4" />
+            </button>
+          )}
+        </div>
+        <Button 
+          type="submit" 
+          className="h-12"
+          disabled={isSearching}
+        >
+          {isSearching ? "Searching..." : "Search"}
+        </Button>
+      </form>
+      <RecentSearches />
+    </div>
   );
 }

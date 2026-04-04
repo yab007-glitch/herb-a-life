@@ -3,6 +3,7 @@ import { ArrowRight, Leaf } from "lucide-react";
 import { Card, CardContent } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { HerbSafetyBadges } from "@/components/herbs/herb-safety-badges";
+import { HerbImage } from "@/components/herbs/herb-image";
 import { cn } from "@/lib/utils";
 
 interface HerbCardProps {
@@ -32,35 +33,40 @@ export function HerbCard({ herb, className }: HerbCardProps) {
         <div className="absolute inset-x-0 top-0 h-1 bg-gradient-to-r from-primary via-teal-500 to-cyan-500" />
         
         <CardContent className="p-5">
-          {/* Category Badge */}
-          <div className="mb-3">
-            {herb.herb_categories?.name ? (
-              <Badge variant="secondary" className="text-xs font-medium">
-                {herb.herb_categories.name}
-              </Badge>
-            ) : (
-              <Badge variant="outline" className="text-xs">
-                <Leaf className="mr-1 size-3" />
-                Herb
-              </Badge>
-            )}
+          <div className="flex items-start gap-4">
+            <HerbImage name={herb.name} className="size-14 shrink-0 rounded-lg" />
+            <div className="flex-1 min-w-0">
+              {/* Category Badge */}
+              <div className="mb-2">
+                {herb.herb_categories?.name ? (
+                  <Badge variant="secondary" className="text-xs font-medium">
+                    {herb.herb_categories.name}
+                  </Badge>
+                ) : (
+                  <Badge variant="outline" className="text-xs">
+                    <Leaf className="mr-1 size-3" />
+                    Herb
+                  </Badge>
+                )}
+              </div>
+
+              {/* Title */}
+              <h3 className="mb-1 text-lg font-semibold text-foreground group-hover:text-primary transition-colors truncate">
+                {herb.name}
+              </h3>
+              <p className="text-sm italic text-muted-foreground truncate">
+                {herb.scientific_name}
+              </p>
+            </div>
           </div>
 
-          {/* Title */}
-          <h3 className="mb-1 text-lg font-semibold text-foreground group-hover:text-primary transition-colors">
-            {herb.name}
-          </h3>
-          <p className="mb-3 text-sm italic text-muted-foreground">
-            {herb.scientific_name}
-          </p>
-
           {/* Description */}
-          <p className="mb-4 line-clamp-2 text-sm text-muted-foreground">
+          <p className="mt-3 line-clamp-2 text-sm text-muted-foreground">
             {herb.description}
           </p>
 
           {/* Safety Badges */}
-          <div className="flex items-center justify-between">
+          <div className="mt-4 flex items-center justify-between">
             <HerbSafetyBadges
               pregnancySafe={herb.pregnancy_safe}
               nursingSafe={herb.nursing_safe}
