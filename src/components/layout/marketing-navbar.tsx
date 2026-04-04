@@ -3,7 +3,6 @@
 import Link from "next/link";
 import { useState } from "react";
 import { Leaf, Menu, Heart, Sparkles } from "lucide-react";
-import { Button } from "@/components/ui/button";
 import {
   Sheet,
   SheetTrigger,
@@ -55,12 +54,6 @@ export function MarketingNavbar() {
           {/* Desktop CTA + Theme */}
           <div className="hidden items-center gap-3 md:flex">
             <ThemeToggle />
-            <Button variant="ghost" size="sm" render={<Link href="/login" />}>
-              Sign In
-            </Button>
-            <Button size="sm" className="shadow-sm" render={<Link href="/register" />}>
-              Get Started
-            </Button>
             {/* Donate CTA - Prominent */}
             <button
               onClick={() => setShowMission(true)}
@@ -110,23 +103,6 @@ export function MarketingNavbar() {
                     Support Herb-a-Life
                     <Sparkles className="size-3 opacity-70" />
                   </button>
-                </div>
-                <div className="mt-4 flex flex-col gap-2 pt-4">
-                  <Button
-                    variant="outline"
-                    className="w-full"
-                    render={<Link href="/login" />}
-                    onClick={() => setOpen(false)}
-                  >
-                    Sign In
-                  </Button>
-                  <Button
-                    className="w-full"
-                    render={<Link href="/register" />}
-                    onClick={() => setOpen(false)}
-                  >
-                    Get Started
-                  </Button>
                 </div>
               </nav>
             </SheetContent>
