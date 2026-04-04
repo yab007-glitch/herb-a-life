@@ -13,13 +13,6 @@
     "next": "Next",
     "submit": "Submit",
     "clear": "Clear",
-    "filter": "Filter",
-    "sort": "Sort",
-    "viewAll": "View All",
-    "learnMore": "Learn More",
-    "getStarted": "Get Started",
-    "signIn": "Sign In",
-    "signOut": "Sign Out",
     "language": "Language",
     "theme": "Theme",
     "light": "Light",
@@ -40,7 +33,6 @@
       "badge": "Evidence-Based Herbal Medicine Platform",
       "title": "Your Complete Guide to Medicinal Herbs",
       "subtitle": "Explore 2,700+ herbs, calculate precise dosages, check drug interactions, and consult our AI herbalist — all in one place.",
-      "searchPlaceholder": "Search herbs by name, symptom, or use...",
       "searchButton": "Explore Herbs"
     },
     "stats": {
@@ -83,7 +75,7 @@
     "clearAll": "Clear all",
     "categories": "Categories",
     "all": "All",
-    "results": "{count, plural, one {# herb} other {# herbs}}",
+    "results": "{count} herbs",
     "noResults": "No herbs found",
     "tryDifferent": "Try a different search term",
     "safety": {

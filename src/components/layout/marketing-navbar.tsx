@@ -15,17 +15,17 @@ import { MissionModal } from "@/components/donations/mission-modal";
 import { LanguageSelector } from "@/components/i18n/language-selector";
 import { useI18n } from "@/components/i18n/i18n-provider";
 
+const navLinks = [
+  { href: "/herbs", labelKey: "nav.herbs" },
+  { href: "/calculator", labelKey: "nav.calculator" },
+  { href: "/pharmacist", labelKey: "nav.herbalist" },
+  { href: "/about", labelKey: "nav.about" },
+];
+
 export function MarketingNavbar() {
   const [open, setOpen] = useState(false);
   const [showMission, setShowMission] = useState(false);
-  const { locale, setLocale, detectedLocale, t } = useI18n();
-
-  const navLinks = [
-    { href: "/herbs", labelKey: "nav.herbs" },
-    { href: "/calculator", labelKey: "nav.calculator" },
-    { href: "/pharmacist", labelKey: "nav.herbalist" },
-    { href: "/about", labelKey: "nav.about" },
-  ];
+  const { t } = useI18n();
 
   return (
     <>
@@ -56,11 +56,7 @@ export function MarketingNavbar() {
 
           {/* Desktop CTA + Theme */}
           <div className="hidden items-center gap-3 md:flex">
-            <LanguageSelector 
-              currentLocale={locale} 
-              onLocaleChange={setLocale}
-              detectedLocale={detectedLocale}
-            />
+            <LanguageSelector />
             <ThemeToggle />
             {/* Donate CTA - Prominent */}
             <button

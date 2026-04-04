@@ -33,7 +33,7 @@ const navLinks = [
 export function MainNavbar() {
   const [open, setOpen] = useState(false);
   const [showMission, setShowMission] = useState(false);
-  const { locale, setLocale, detectedLocale, t } = useI18n();
+  const { t } = useI18n();
 
   return (
     <>
@@ -70,11 +70,7 @@ export function MainNavbar() {
 
           {/* Right side */}
           <div className="hidden items-center gap-3 md:flex">
-            <LanguageSelector 
-              currentLocale={locale} 
-              onLocaleChange={setLocale}
-              detectedLocale={detectedLocale}
-            />
+            <LanguageSelector />
             <ThemeToggle />
             <button
               onClick={() => setShowMission(true)}

@@ -1,7 +1,7 @@
 "use client";
 
 import { createContext, useContext, useState, useEffect, ReactNode } from "react";
-import { LANGUAGES, DEFAULT_LOCALE, type Locale } from "@/lib/i18n/config";
+import { DEFAULT_LOCALE, type Locale } from "@/lib/i18n/config";
 
 interface I18nContextType {
   locale: Locale;
@@ -21,14 +21,20 @@ export function I18nProvider({ children }: { children: ReactNode }) {
 
   // Initialize locale from localStorage or browser
   useEffect(() => {
+    if (typeof window === "undefined") return;
+    
     const saved = localStorage.getItem("1herb-locale");
-    if (saved && LANGUAGES.find(l => l.code === saved)) {
+    if (saved && (saved === "en" || saved === "fr")) {
       setLocaleState(saved as Locale);
     } else {
       // Try browser language
       const browserLang = navigator.language.split("-")[0];
-      if (LANGUAGES.find(l => l.code === browserLang)) {
-        setDetectedLocale(browserLang as Locale);
+      if (browserLang === "fr" || browserLang === "en") {
+        const detected = browserLang as Locale;
+        setDetectedLocale(detected);
+        // Auto-set detected language
+        setLocaleState(detected);
+        localStorage.setItem("1herb-locale", detected);
       }
     }
   }, []);
