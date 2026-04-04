@@ -1,5 +1,5 @@
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { Leaf, AlertTriangle, Users, ClipboardCheck } from "lucide-react";
+import { Leaf, AlertTriangle, Users, ClipboardCheck, Activity } from "lucide-react";
 import { createClient } from "@/lib/supabase/server";
 
 export const metadata = {
@@ -17,33 +17,93 @@ export default async function AdminDashboardPage() {
   ]);
 
   const stats = [
-    { label: "Total Herbs", value: herbs.count ?? 0, icon: Leaf, color: "text-green-600" },
-    { label: "Drug Interactions", value: interactions.count ?? 0, icon: AlertTriangle, color: "text-amber-600" },
-    { label: "Users", value: users.count ?? 0, icon: Users, color: "text-blue-600" },
-    { label: "Interaction Checks", value: checks.count ?? 0, icon: ClipboardCheck, color: "text-purple-600" },
+    { 
+      label: "Total Herbs", 
+      value: herbs.count ?? 0, 
+      icon: Leaf, 
+      gradient: "from-emerald-500 to-teal-500",
+      description: "Published in database"
+    },
+    { 
+      label: "Drug Interactions", 
+      value: interactions.count ?? 0, 
+      icon: AlertTriangle, 
+      gradient: "from-amber-500 to-orange-500",
+      description: "Known interactions"
+    },
+    { 
+      label: "Registered Users", 
+      value: users.count ?? 0, 
+      icon: Users, 
+      gradient: "from-blue-500 to-cyan-500",
+      description: "Total accounts"
+    },
+    { 
+      label: "Interaction Checks", 
+      value: checks.count ?? 0, 
+      icon: ClipboardCheck, 
+      gradient: "from-purple-500 to-indigo-500",
+      description: "Checks performed"
+    },
   ];
 
   return (
-    <div>
-      <h1 className="text-2xl font-bold mb-6">Admin Dashboard</h1>
-      <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-4">
-        {stats.map((stat) => (
-          <Card key={stat.label}>
-            <CardHeader className="flex flex-row items-center justify-between pb-2">
-              <CardTitle className="text-sm font-medium text-muted-foreground">
-                {stat.label}
-              </CardTitle>
-              <stat.icon className={`h-4 w-4 ${stat.color}`} />
-            </CardHeader>
-            <CardContent>
-              <div className="text-2xl font-bold">{stat.value.toLocaleString()}</div>
-              <p className="text-xs text-muted-foreground mt-1">
-                Updated just now
-              </p>
-            </CardContent>
-          </Card>
-        ))}
+    <div className="space-y-8">
+      {/* Header */}
+      <div className="flex items-center gap-4">
+        <div className="flex size-12 items-center justify-center rounded-lg bg-gradient-to-br from-primary to-teal-600 text-white shadow-lg">
+          <Activity className="size-6" />
+        </div>
+        <div>
+          <h1 className="text-2xl font-bold tracking-tight text-foreground">
+            Admin Dashboard
+          </h1>
+          <p className="text-muted-foreground">
+            Monitor platform activity and statistics
+          </p>
+        </div>
       </div>
+
+      {/* Stats Grid */}
+      <div className="grid gap-5 sm:grid-cols-2 lg:grid-cols-4">
+        {stats.map((stat) => {
+          const Icon = stat.icon;
+          return (
+            <Card key={stat.label} className="relative overflow-hidden border-border/50">
+              <div className={`absolute inset-x-0 top-0 h-1 bg-gradient-to-r ${stat.gradient}`} />
+              <CardHeader className="pb-2">
+                <div className="flex items-center justify-between">
+                  <CardTitle className="text-sm font-medium text-muted-foreground">
+                    {stat.label}
+                  </CardTitle>
+                  <div className={`flex size-8 items-center justify-center rounded-lg bg-gradient-to-br ${stat.gradient} text-white`}>
+                    <Icon className="size-4" />
+                  </div>
+                </div>
+              </CardHeader>
+              <CardContent>
+                <div className="text-3xl font-bold text-foreground">
+                  {stat.value.toLocaleString()}
+                </div>
+                <p className="mt-1 text-xs text-muted-foreground">
+                  {stat.description}
+                </p>
+              </CardContent>
+            </Card>
+          );
+        })}
+      </div>
+
+      {/* Recent Activity Placeholder */}
+      <Card className="border-dashed">
+        <CardContent className="flex flex-col items-center justify-center py-12 text-center">
+          <Activity className="size-10 text-muted-foreground/50" />
+          <p className="mt-4 font-medium text-foreground">Activity Logging Coming Soon</p>
+          <p className="mt-1 text-sm text-muted-foreground">
+            Detailed analytics and activity logs will appear here
+          </p>
+        </CardContent>
+      </Card>
     </div>
   );
 }

@@ -9,7 +9,7 @@ import { getHerbs, getHerbCategories } from "@/lib/actions/herbs";
 export const metadata: Metadata = {
   title: "Medicinal Herbs Database",
   description:
-    "Browse our comprehensive database of 500+ medicinal herbs with detailed profiles, active compounds, and drug interactions.",
+    "Browse our comprehensive database of 2,700+ medicinal herbs with detailed profiles, active compounds, and drug interactions.",
 };
 
 export default async function HerbsPage({
@@ -35,13 +35,12 @@ export default async function HerbsPage({
   return (
     <div className="space-y-8">
       {/* Header */}
-      <div>
-        <h1 className="text-3xl font-bold tracking-tight text-foreground">
+      <div className="text-center sm:text-left">
+        <h1 className="text-3xl font-bold tracking-tight text-foreground sm:text-4xl">
           Medicinal Herbs Database
         </h1>
-        <p className="mt-2 text-muted-foreground">
-          Browse our comprehensive collection of {total} medicinal herbs with
-          detailed profiles, active compounds, and safety information.
+        <p className="mt-2 text-lg text-muted-foreground">
+          Explore <span className="font-semibold text-foreground">{total.toLocaleString()}</span> herbs with detailed profiles, active compounds, and safety information.
         </p>
       </div>
 
@@ -50,9 +49,9 @@ export default async function HerbsPage({
 
       {/* Symptom Quick Search */}
       {!query && !category && (
-        <div className="space-y-2">
+        <div className="space-y-3">
           <p className="text-sm font-medium text-muted-foreground">
-            Common symptoms:
+            Search by symptom:
           </p>
           <div className="flex flex-wrap gap-2">
             {[
@@ -65,14 +64,14 @@ export default async function HerbsPage({
               "pain",
               "cough",
               "fever",
-              "skin conditions",
+              "skin",
               "hypertension",
               "fatigue",
             ].map((symptom) => (
               <Link key={symptom} href={`/herbs?q=${encodeURIComponent(symptom)}`}>
                 <Badge
                   variant="outline"
-                  className="cursor-pointer transition-colors hover:bg-green-50 hover:border-green-300 dark:hover:bg-green-950/30"
+                  className="cursor-pointer border-border/50 bg-muted/30 transition-all hover:border-primary/50 hover:bg-primary/5"
                 >
                   {symptom}
                 </Badge>
@@ -87,7 +86,7 @@ export default async function HerbsPage({
         <Link href="/herbs">
           <Badge
             variant={!category ? "default" : "outline"}
-            className="cursor-pointer"
+            className="cursor-pointer transition-all"
           >
             All
           </Badge>
@@ -99,7 +98,7 @@ export default async function HerbsPage({
           >
             <Badge
               variant={category === cat.slug ? "default" : "outline"}
-              className="cursor-pointer transition-colors hover:bg-muted"
+              className="cursor-pointer transition-all hover:border-primary/50"
             >
               {cat.name}
             </Badge>
@@ -110,30 +109,30 @@ export default async function HerbsPage({
       {/* Search Results Label */}
       {query && herbs.length > 0 && (
         <p className="text-sm text-muted-foreground">
-          Found <span className="font-medium text-foreground">{total}</span> herb{total !== 1 ? "s" : ""} matching &quot;{query}&quot;
+          Found <span className="font-semibold text-foreground">{total}</span> herb{total !== 1 ? "s" : ""} matching &quot;{query}&quot;
         </p>
       )}
 
       {/* Herbs Grid */}
       {herbs.length > 0 ? (
-        <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
+        <div className="grid gap-5 sm:grid-cols-2 lg:grid-cols-3">
           {herbs.map((herb) => (
             <HerbCard key={herb.id} herb={herb} />
           ))}
         </div>
       ) : (
-        <div className="py-12 text-center space-y-4">
-          <p className="text-lg text-muted-foreground">
-            No herbs found{query ? ` for "${query}"` : ""}.
+        <div className="rounded-xl border border-dashed border-border bg-muted/30 py-16 text-center">
+          <p className="text-lg font-medium text-foreground">
+            No herbs found{query ? ` for "${query}"` : ""}
           </p>
-          <p className="text-sm text-muted-foreground">
+          <p className="mt-2 text-sm text-muted-foreground">
             Try searching for a symptom like &quot;headache&quot;, &quot;anxiety&quot;, or &quot;inflammation&quot;
           </p>
-          <div className="flex flex-wrap justify-center gap-2 pt-2">
+          <div className="mt-6 flex flex-wrap justify-center gap-2">
             {["headache", "anxiety", "insomnia", "pain", "cough", "diabetes"].map(
               (s) => (
                 <Link key={s} href={`/herbs?q=${s}`}>
-                  <Badge variant="outline" className="cursor-pointer hover:bg-green-50 hover:border-green-300">
+                  <Badge variant="outline" className="cursor-pointer hover:border-primary/50 hover:bg-primary/5">
                     {s}
                   </Badge>
                 </Link>
@@ -145,7 +144,7 @@ export default async function HerbsPage({
 
       {/* Pagination */}
       {totalPages > 1 && (
-        <div className="flex items-center justify-center gap-2 pt-4">
+        <div className="flex items-center justify-center gap-4 pt-6">
           <Button
             variant="outline"
             size="sm"

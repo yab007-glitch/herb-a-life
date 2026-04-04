@@ -61,16 +61,15 @@ export default async function DashboardPage() {
       icon: Pill,
       count: medCount,
       href: "/dashboard/medications",
-      color:
-        "text-blue-600 bg-blue-100 dark:bg-blue-900/30 dark:text-blue-400",
+      gradient: "from-blue-500 to-cyan-500",
     },
     {
       title: "Interaction History",
       description: "Known interactions between your medications and herbs",
       icon: AlertTriangle,
+      count: null,
       href: "/dashboard/interactions",
-      color:
-        "text-amber-600 bg-amber-100 dark:bg-amber-900/30 dark:text-amber-400",
+      gradient: "from-amber-500 to-orange-500",
     },
     {
       title: "Dosage Profiles",
@@ -79,8 +78,7 @@ export default async function DashboardPage() {
       icon: Calculator,
       count: profileCount,
       href: "/dashboard/profiles",
-      color:
-        "text-green-600 bg-green-100 dark:bg-green-900/30 dark:text-green-400",
+      gradient: "from-emerald-500 to-teal-500",
     },
     {
       title: "Chat Sessions",
@@ -89,39 +87,40 @@ export default async function DashboardPage() {
       icon: MessageCircle,
       count: chatCount,
       href: "/dashboard/chats",
-      color:
-        "text-purple-600 bg-purple-100 dark:bg-purple-900/30 dark:text-purple-400",
+      gradient: "from-purple-500 to-indigo-500",
     },
   ];
 
   return (
     <div className="space-y-8">
+      {/* Header */}
       <div>
-        <h1 className="text-3xl font-bold tracking-tight text-foreground">
-          Welcome to your Dashboard
+        <h1 className="text-2xl font-bold tracking-tight text-foreground sm:text-3xl">
+          Welcome back
         </h1>
-        <p className="mt-2 text-muted-foreground">
-          Manage your medications, review interaction checks, and access your
-          activity history.
+        <p className="mt-1 text-muted-foreground">
+          Manage your medications, review interaction checks, and access your activity history.
         </p>
       </div>
 
-      <div className="grid gap-6 sm:grid-cols-2">
+      {/* Dashboard Cards */}
+      <div className="grid gap-5 sm:grid-cols-2">
         {dashboardCards.map((card) => {
           const Icon = card.icon;
           return (
             <Card
               key={card.title}
-              className="transition-shadow hover:shadow-md"
+              className="group relative overflow-hidden border-border/50 transition-all duration-300 hover:shadow-lg hover:-translate-y-0.5"
             >
+              {/* Gradient accent */}
+              <div className={`absolute inset-x-0 top-0 h-1 bg-gradient-to-r ${card.gradient}`} />
+              
               <CardHeader>
                 <div className="flex items-start justify-between">
-                  <div
-                    className={`inline-flex size-10 items-center justify-center rounded-lg ${card.color}`}
-                  >
-                    <Icon className="size-5" />
+                  <div className="flex size-10 items-center justify-center rounded-lg bg-muted">
+                    <Icon className="size-5 text-muted-foreground" />
                   </div>
-                  {"count" in card && (
+                  {"count" in card && card.count !== null && (
                     <span className="text-2xl font-bold text-foreground">
                       {card.count}
                     </span>
@@ -134,17 +133,38 @@ export default async function DashboardPage() {
                 <Button
                   variant="ghost"
                   size="sm"
-                  className="px-0"
+                  className="gap-2 px-0 text-primary hover:bg-primary/5"
                   render={<Link href={card.href} />}
                 >
                   View Details
-                  <ArrowRight className="size-4" />
+                  <ArrowRight className="size-4 transition-transform group-hover:translate-x-0.5" />
                 </Button>
               </CardContent>
             </Card>
           );
         })}
       </div>
+
+      {/* Quick Actions */}
+      <Card className="border-primary/20">
+        <CardHeader>
+          <CardTitle className="text-lg">Quick Actions</CardTitle>
+        </CardHeader>
+        <CardContent className="flex flex-wrap gap-3">
+          <Button variant="outline" size="sm" render={<Link href="/herbs" />}>
+            <Pill className="mr-2 size-4" />
+            Browse Herbs
+          </Button>
+          <Button variant="outline" size="sm" render={<Link href="/calculator" />}>
+            <Calculator className="mr-2 size-4" />
+            Calculate Dose
+          </Button>
+          <Button variant="outline" size="sm" render={<Link href="/pharmacist" />}>
+            <MessageCircle className="mr-2 size-4" />
+            Ask Herbalist
+          </Button>
+        </CardContent>
+      </Card>
     </div>
   );
 }

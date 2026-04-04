@@ -10,7 +10,6 @@ import {
   LayoutDashboard,
   LogIn,
   LogOut,
-  User,
   Heart,
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
@@ -46,12 +45,16 @@ export function MainNavbar({ user }: { user?: NavUser }) {
   const [open, setOpen] = useState(false);
 
   return (
-    <header className="sticky top-0 z-40 w-full border-b bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60">
-      <div className="mx-auto flex h-14 max-w-7xl items-center justify-between px-4 sm:px-6 lg:px-8">
+    <header className="sticky top-0 z-50 w-full border-b/50 bg-background/80 backdrop-blur-lg">
+      <div className="mx-auto flex h-16 max-w-7xl items-center justify-between px-4 sm:px-6 lg:px-8">
         {/* Logo */}
-        <Link href="/" className="flex items-center gap-2">
-          <Leaf className="size-6 text-primary" />
-          <span className="text-lg font-bold text-foreground">Herb-a-Life</span>
+        <Link href="/" className="flex items-center gap-2.5 group">
+          <div className="flex size-9 items-center justify-center rounded-lg bg-gradient-to-br from-primary to-teal-600 text-white shadow-sm transition-transform group-hover:scale-105">
+            <Leaf className="size-5" />
+          </div>
+          <span className="text-lg font-bold text-foreground">
+            Herb<span className="gradient-text">a</span>Life
+          </span>
         </Link>
 
         {/* Desktop Nav */}
@@ -63,7 +66,7 @@ export function MainNavbar({ user }: { user?: NavUser }) {
                 key={link.href}
                 href={link.href}
                 className={cn(
-                  "flex items-center gap-1.5 rounded-md px-3 py-1.5 text-sm font-medium text-muted-foreground transition-colors hover:bg-muted hover:text-foreground"
+                  "flex items-center gap-2 rounded-lg px-4 py-2 text-sm font-medium text-muted-foreground transition-colors hover:bg-muted hover:text-foreground"
                 )}
               >
                 <Icon className="size-4" />
@@ -74,34 +77,39 @@ export function MainNavbar({ user }: { user?: NavUser }) {
         </nav>
 
         {/* Right side */}
-        <div className="hidden items-center gap-2 md:flex">
+        <div className="hidden items-center gap-3 md:flex">
           <Button
             variant="ghost"
             size="sm"
-            className="text-pink-600 hover:text-pink-700 hover:bg-pink-50 dark:hover:bg-pink-950/30"
+            className="gap-2 text-rose-600 hover:bg-rose-50 hover:text-rose-700 dark:hover:bg-rose-950/30"
             render={<Link href="/donate" />}
           >
             <Heart className="size-4" />
-            Donate
+            <span className="hidden sm:inline">Support</span>
           </Button>
           {user ? (
             <DropdownMenu>
               <DropdownMenuTrigger className="cursor-pointer rounded-full outline-none focus-visible:ring-2 focus-visible:ring-ring">
                 <Avatar size="default">
-                  <AvatarFallback>
+                  <AvatarFallback className="bg-gradient-to-br from-primary to-teal-600 text-white font-medium">
                     {(user.name?.[0] || user.email?.[0] || "U").toUpperCase()}
                   </AvatarFallback>
                 </Avatar>
               </DropdownMenuTrigger>
-              <DropdownMenuContent align="end" sideOffset={8}>
-                <DropdownMenuLabel>My Account</DropdownMenuLabel>
+              <DropdownMenuContent align="end" sideOffset={8} className="w-48">
+                <DropdownMenuLabel className="font-normal">
+                  <div className="flex flex-col space-y-1">
+                    <p className="text-sm font-medium leading-none">{user.name || "User"}</p>
+                    <p className="text-xs leading-none text-muted-foreground">{user.email}</p>
+                  </div>
+                </DropdownMenuLabel>
                 <DropdownMenuSeparator />
-                <DropdownMenuItem render={<Link href="/dashboard" />}>
+                <DropdownMenuItem render={<Link href="/dashboard" />} className="gap-2">
                   <LayoutDashboard className="size-4" />
                   Dashboard
                 </DropdownMenuItem>
                 <DropdownMenuSeparator />
-                <form action={logout}>
+                <form action={logout} className="w-full">
                   <DropdownMenuItem render={<button type="submit" className="w-full" />}>
                     <LogOut className="size-4" />
                     Log out
@@ -110,9 +118,9 @@ export function MainNavbar({ user }: { user?: NavUser }) {
               </DropdownMenuContent>
             </DropdownMenu>
           ) : (
-            <Button size="sm" render={<Link href="/login" />}>
+            <Button size="sm" className="shadow-sm" render={<Link href="/login" />}>
               <LogIn className="size-4" />
-              Login
+              Sign In
             </Button>
           )}
         </div>
@@ -123,14 +131,16 @@ export function MainNavbar({ user }: { user?: NavUser }) {
             <Menu className="size-5" />
             <span className="sr-only">Open menu</span>
           </SheetTrigger>
-          <SheetContent side="right" className="w-72">
+          <SheetContent side="right" className="w-80 border-l border-border/50">
             <SheetHeader>
               <SheetTitle className="flex items-center gap-2">
-                <Leaf className="size-5 text-primary" />
+                <div className="flex size-8 items-center justify-center rounded-lg bg-gradient-to-br from-primary to-teal-600 text-white">
+                  <Leaf className="size-4" />
+                </div>
                 Herb-a-Life
               </SheetTitle>
             </SheetHeader>
-            <nav className="flex flex-col gap-1 px-4 pt-4">
+            <nav className="flex flex-col gap-1 px-4 pt-6">
               {navLinks.map((link) => {
                 const Icon = link.icon;
                 return (
@@ -138,7 +148,7 @@ export function MainNavbar({ user }: { user?: NavUser }) {
                     key={link.href}
                     href={link.href}
                     onClick={() => setOpen(false)}
-                    className="flex items-center gap-2 rounded-md px-3 py-2 text-sm font-medium text-muted-foreground transition-colors hover:bg-muted hover:text-foreground"
+                    className="flex items-center gap-3 rounded-lg px-4 py-3 text-sm font-medium text-muted-foreground transition-colors hover:bg-muted hover:text-foreground"
                   >
                     <Icon className="size-4" />
                     {link.label}
@@ -148,22 +158,27 @@ export function MainNavbar({ user }: { user?: NavUser }) {
               <Link
                 href="/donate"
                 onClick={() => setOpen(false)}
-                className="flex items-center gap-2 rounded-md px-3 py-2 text-sm font-medium text-pink-600 transition-colors hover:bg-pink-50 dark:hover:bg-pink-950/30"
+                className="flex items-center gap-3 rounded-lg px-4 py-3 text-sm font-medium text-rose-600 transition-colors hover:bg-rose-50 dark:hover:bg-rose-950/30"
               >
                 <Heart className="size-4" />
-                Donate
+                Support Us
               </Link>
-              <div className="mt-4 border-t pt-4">
+              <div className="mt-6 border-t pt-6">
                 {user ? (
-                  <div className="flex flex-col gap-2">
-                    <div className="flex items-center gap-2 px-3 py-1">
-                      <User className="size-4 text-muted-foreground" />
-                      <span className="text-sm text-muted-foreground">
-                        {user.email}
-                      </span>
+                  <div className="flex flex-col gap-3">
+                    <div className="flex items-center gap-3 px-4 py-2">
+                      <Avatar size="sm">
+                        <AvatarFallback className="bg-gradient-to-br from-primary to-teal-600 text-white text-xs">
+                          {(user.name?.[0] || user.email?.[0] || "U").toUpperCase()}
+                        </AvatarFallback>
+                      </Avatar>
+                      <div className="flex flex-col">
+                        <span className="text-sm font-medium">{user.name || "User"}</span>
+                        <span className="text-xs text-muted-foreground">{user.email}</span>
+                      </div>
                     </div>
                     <form action={logout}>
-                      <Button variant="outline" size="sm" type="submit" className="w-full">
+                      <Button variant="outline" size="sm" type="submit" className="w-full gap-2">
                         <LogOut className="size-4" />
                         Log out
                       </Button>
@@ -177,7 +192,7 @@ export function MainNavbar({ user }: { user?: NavUser }) {
                     onClick={() => setOpen(false)}
                   >
                     <LogIn className="size-4" />
-                    Login
+                    Sign In
                   </Button>
                 )}
               </div>
