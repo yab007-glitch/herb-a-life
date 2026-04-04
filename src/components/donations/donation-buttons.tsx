@@ -1,7 +1,7 @@
 "use client";
 
 import { useState } from "react";
-import { Heart, Coffee, Database, Loader2 } from "lucide-react";
+import { Heart, Coffee, Gift, Crown, Loader2 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 
@@ -9,20 +9,23 @@ const suggestedAmounts = [
   {
     amount: 5,
     icon: Coffee,
-    label: "Buy us a coffee",
-    description: "Covers a day of API costs",
+    label: "Coffee",
+    description: "One day of API costs",
+    color: "from-amber-500 to-orange-500",
   },
   {
     amount: 15,
-    icon: Database,
-    label: "Feed the database",
-    description: "A week of hosting costs",
+    icon: Gift,
+    label: "Supporter",
+    description: "A week of hosting",
+    color: "from-primary to-teal-600",
   },
   {
     amount: 50,
-    icon: Heart,
-    label: "Champion supporter",
-    description: "A month of full operations",
+    icon: Crown,
+    label: "Champion",
+    description: "Half a month of operations",
+    color: "from-pink-500 to-rose-600",
   },
 ];
 
@@ -57,29 +60,32 @@ export function DonationButtons() {
   return (
     <>
       {/* Preset Amounts */}
-      <div className="grid gap-3 sm:grid-cols-3">
+      <div className="grid gap-4 sm:grid-cols-3">
         {suggestedAmounts.map((tier) => {
           const Icon = tier.icon;
           const isLoading = loading === tier.amount;
           return (
             <Card
               key={tier.amount}
-              className="h-full transition-all hover:border-primary/50 hover:shadow-md cursor-pointer"
+              className="group relative cursor-pointer overflow-hidden transition-all hover:scale-[1.02] hover:shadow-lg"
               onClick={() => handleDonate(tier.amount)}
             >
-              <CardContent className="flex flex-col items-center py-6 text-center">
+              <div className={`absolute inset-0 bg-gradient-to-br ${tier.color} opacity-0 transition-opacity group-hover:opacity-10`} />
+              <CardContent className="flex flex-col items-center py-8 text-center relative">
                 {isLoading ? (
-                  <Loader2 className="h-8 w-8 text-primary mb-2 animate-spin" />
+                  <Loader2 className="h-10 w-10 text-primary mb-3 animate-spin" />
                 ) : (
-                  <Icon className="h-8 w-8 text-primary mb-2" />
+                  <div className={`flex h-12 w-12 items-center justify-center rounded-full bg-gradient-to-br ${tier.color} mb-3 transition-transform group-hover:scale-110`}>
+                    <Icon className="h-6 w-6 text-white" />
+                  </div>
                 )}
-                <p className="text-2xl font-bold text-foreground">
+                <p className="text-3xl font-bold text-foreground">
                   ${tier.amount}
                 </p>
                 <p className="font-medium text-foreground mt-1">
                   {tier.label}
                 </p>
-                <p className="text-xs text-muted-foreground mt-1">
+                <p className="text-sm text-muted-foreground mt-1">
                   {tier.description}
                 </p>
               </CardContent>
@@ -89,11 +95,12 @@ export function DonationButtons() {
       </div>
 
       {/* Custom Amount */}
-      <Card className="border-primary/20">
-        <CardContent className="py-6">
-          <div className="flex flex-col sm:flex-row gap-4 items-center justify-center">
+      <Card className="border-primary/20 bg-gradient-to-br from-muted/50 to-transparent">
+        <CardContent className="py-8">
+          <div className="flex flex-col items-center gap-4 sm:flex-row sm:justify-center">
+            <p className="text-sm text-muted-foreground">Or choose a custom amount:</p>
             <div className="flex items-center gap-2">
-              <span className="text-2xl font-bold text-muted-foreground">$</span>
+              <span className="text-xl font-bold text-muted-foreground">$</span>
               <input
                 type="number"
                 value={customAmount}
@@ -101,25 +108,47 @@ export function DonationButtons() {
                 min={1}
                 max={1000}
                 step={1}
-                className="w-24 rounded-md border border-input bg-background px-3 py-2 text-2xl font-bold text-center focus:outline-none focus:ring-2 focus:ring-primary"
+                className="w-24 rounded-lg border border-input bg-background px-3 py-2 text-xl font-bold text-center focus:outline-none focus:ring-2 focus:ring-primary"
               />
             </div>
             <Button
               size="lg"
-              className="gap-2 bg-gradient-to-r from-primary to-teal-600 hover:opacity-90"
+              className="gap-2 bg-gradient-to-r from-pink-500 to-rose-600 hover:opacity-90 shadow-lg shadow-pink-500/20"
               onClick={() => handleDonate(customAmount)}
               disabled={loading === customAmount}
             >
               {loading === customAmount ? (
                 <Loader2 className="size-5 animate-spin" />
               ) : (
-                <Heart className="size-5" />
+                <Heart className="size-5 fill-white" />
               )}
-              Donate Custom Amount
+              Donate
             </Button>
           </div>
         </CardContent>
       </Card>
+      
+      {/* Trust Indicators */}
+      <div className="flex flex-wrap items-center justify-center gap-6 text-sm text-muted-foreground">
+        <div className="flex items-center gap-2">
+          <svg className="size-5 text-emerald-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z" />
+          </svg>
+          <span>Secure via Stripe</span>
+        </div>
+        <div className="flex items-center gap-2">
+          <svg className="size-5 text-blue-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 10h18M7 15h1m4 0h1m-7 4h12a3 3 0 003-3V8a3 3 0 00-3-3H6a3 3 0 00-3 3v8a3 3 0 003 3z" />
+          </svg>
+          <span>All cards accepted</span>
+        </div>
+        <div className="flex items-center gap-2">
+          <svg className="size-5 text-purple-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z" />
+          </svg>
+          <span>No card data stored</span>
+        </div>
+      </div>
     </>
   );
 }

@@ -2,7 +2,7 @@
 
 import Link from "next/link";
 import { useState } from "react";
-import { Leaf, Menu, Heart } from "lucide-react";
+import { Leaf, Menu, Heart, Sparkles } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import {
   Sheet,
@@ -12,14 +12,13 @@ import {
   SheetTitle,
 } from "@/components/ui/sheet";
 import { ThemeToggle } from "@/components/theme/theme-toggle";
-import { cn } from "@/lib/utils";
+
 
 const navLinks = [
   { href: "/herbs", label: "Herbs" },
   { href: "/calculator", label: "Calculator" },
   { href: "/pharmacist", label: "Herbalist" },
   { href: "/about", label: "About" },
-  { href: "/donate", label: "Donate", icon: Heart },
 ];
 
 export function MarketingNavbar() {
@@ -44,19 +43,15 @@ export function MarketingNavbar() {
             <Link
               key={link.href}
               href={link.href}
-              className={cn(
-                "rounded-lg px-4 py-2 text-sm font-medium text-muted-foreground transition-colors hover:bg-muted hover:text-foreground",
-                link.href === "/donate" && "text-pink-600 hover:text-pink-700 hover:bg-pink-50 dark:text-pink-400 dark:hover:bg-pink-950/30"
-              )}
+              className="rounded-lg px-4 py-2 text-sm font-medium text-muted-foreground transition-colors hover:bg-muted hover:text-foreground"
             >
-              {link.icon && <link.icon className="size-4 mr-1.5 inline-block" />}
               {link.label}
             </Link>
           ))}
         </nav>
 
         {/* Desktop CTA + Theme */}
-        <div className="hidden items-center gap-2 md:flex">
+        <div className="hidden items-center gap-3 md:flex">
           <ThemeToggle />
           <Button variant="ghost" size="sm" render={<Link href="/login" />}>
             Sign In
@@ -64,6 +59,15 @@ export function MarketingNavbar() {
           <Button size="sm" className="shadow-sm" render={<Link href="/register" />}>
             Get Started
           </Button>
+          {/* Donate CTA - Prominent */}
+          <Link
+            href="/donate"
+            className="group relative flex items-center gap-1.5 rounded-full bg-gradient-to-r from-pink-500 via-rose-500 to-pink-600 px-4 py-1.5 text-sm font-semibold text-white shadow-lg shadow-pink-500/25 transition-all hover:shadow-xl hover:shadow-pink-500/30 hover:scale-105"
+          >
+            <Heart className="size-4 fill-white group-hover:animate-pulse" />
+            <span>Support Us</span>
+            <Sparkles className="size-3 opacity-70" />
+          </Link>
         </div>
 
         {/* Mobile menu */}
@@ -87,16 +91,23 @@ export function MarketingNavbar() {
                   key={link.href}
                   href={link.href}
                   onClick={() => setOpen(false)}
-                  className={cn(
-                    "rounded-lg px-4 py-3 text-sm font-medium text-muted-foreground transition-colors hover:bg-muted hover:text-foreground",
-                    link.href === "/donate" && "text-pink-600 hover:text-pink-700 hover:bg-pink-50 dark:text-pink-400 dark:hover:bg-pink-950/30"
-                  )}
+                  className="rounded-lg px-4 py-3 text-sm font-medium text-muted-foreground transition-colors hover:bg-muted hover:text-foreground"
                 >
-                  {link.icon && <link.icon className="size-4 mr-1.5 inline-block" />}
                   {link.label}
                 </Link>
               ))}
-              <div className="mt-6 flex flex-col gap-2 border-t pt-6">
+              <div className="mt-4 flex flex-col gap-2 border-t pt-4">
+                <Link
+                  href="/donate"
+                  onClick={() => setOpen(false)}
+                  className="group flex items-center justify-center gap-2 rounded-lg bg-gradient-to-r from-pink-500 via-rose-500 to-pink-600 px-4 py-3 text-sm font-semibold text-white shadow-lg"
+                >
+                  <Heart className="size-4 fill-white" />
+                  Support Herb-a-Life
+                  <Sparkles className="size-3 opacity-70" />
+                </Link>
+              </div>
+              <div className="mt-4 flex flex-col gap-2 pt-4">
                 <Button
                   variant="outline"
                   className="w-full"
