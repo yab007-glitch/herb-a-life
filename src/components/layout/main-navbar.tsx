@@ -19,6 +19,8 @@ import {
 } from "@/components/ui/sheet";
 import { ThemeToggle } from "@/components/theme/theme-toggle";
 import { MissionModal } from "@/components/donations/mission-modal";
+import { LanguageSelector } from "@/components/i18n/language-selector";
+import { useI18n } from "@/components/i18n/i18n-provider";
 import { cn } from "@/lib/utils";
 
 const navLinks = [
@@ -31,6 +33,7 @@ const navLinks = [
 export function MainNavbar() {
   const [open, setOpen] = useState(false);
   const [showMission, setShowMission] = useState(false);
+  const { locale, setLocale, detectedLocale } = useI18n();
 
   return (
     <>
@@ -67,6 +70,11 @@ export function MainNavbar() {
 
           {/* Right side */}
           <div className="hidden items-center gap-3 md:flex">
+            <LanguageSelector 
+              currentLocale={locale} 
+              onLocaleChange={setLocale}
+              detectedLocale={detectedLocale}
+            />
             <ThemeToggle />
             <button
               onClick={() => setShowMission(true)}

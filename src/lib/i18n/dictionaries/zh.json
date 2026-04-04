@@ -1,0 +1,212 @@
+{
+  "common": {
+    "search": "搜索",
+    "loading": "加载中...",
+    "error": "错误",
+    "retry": "重试",
+    "save": "保存",
+    "cancel": "取消",
+    "delete": "删除",
+    "edit": "编辑",
+    "close": "关闭",
+    "back": "返回",
+    "next": "下一步",
+    "submit": "提交",
+    "clear": "清除",
+    "filter": "筛选",
+    "sort": "排序",
+    "viewAll": "查看全部",
+    "learnMore": "了解更多",
+    "getStarted": "开始使用",
+    "signIn": "登录",
+    "signOut": "退出",
+    "language": "语言",
+    "theme": "主题",
+    "light": "浅色",
+    "dark": "深色",
+    "system": "系统"
+  },
+  "nav": {
+    "herbs": "草药",
+    "calculator": "剂量计算",
+    "herbalist": "AI草药师",
+    "dashboard": "仪表盘",
+    "about": "关于",
+    "support": "支持我们",
+    "donate": "捐赠"
+  },
+  "home": {
+    "hero": {
+      "title": "您值得信赖的草药指南",
+      "subtitle": "基于证据的2700多种草药信息，提供安全剂量计算和药物相互作用检查。",
+      "searchPlaceholder": "按名称、症状或用途搜索草药...",
+      "searchButton": "搜索"
+    },
+    "stats": {
+      "herbs": "种草药",
+      "interactions": "种相互作用",
+      "free": "免费使用"
+    },
+    "features": {
+      "title": "草药医学所需的一切",
+      "subtitle": "安全、明智地使用草药的综合工具",
+      "herbs": {
+        "title": "草药数据库",
+        "description": "搜索2700多种药用草药，获取详细的用途、剂量和安全信息。"
+      },
+      "calculator": {
+        "title": "剂量计算器",
+        "description": "根据年龄、体重和健康状况计算安全剂量。"
+      },
+      "interactions": {
+        "title": "药物相互作用",
+        "description": "检查草药和药物之间的危险相互作用。"
+      },
+      "ai": {
+        "title": "AI草药师",
+        "description": "提出问题并获得个性化的草药建议。"
+      }
+    },
+    "cta": {
+      "title": "开始您的草药之旅",
+      "subtitle": "加入数千人使用1Herb获取安全、基于证据的草药医学知识。",
+      "button": "浏览草药"
+    }
+  },
+  "herbs": {
+    "title": "药用草药数据库",
+    "subtitle": "探索2700多种具有循证信息的草药",
+    "searchPlaceholder": "按名称、症状或用途搜索草药...",
+    "recentSearches": "最近搜索",
+    "clearAll": "清除全部",
+    "categories": "分类",
+    "all": "全部",
+    "results": "{count}种草药",
+    "noResults": "未找到草药",
+    "tryDifferent": "尝试不同的搜索词",
+    "safety": {
+      "safe": "通常安全",
+      "caution": "谨慎使用",
+      "avoid": "避免使用",
+      "unknown": "安全性未知"
+    },
+    "detail": {
+      "uses": "用途与功效",
+      "dosage": "推荐剂量",
+      "safety": "安全信息",
+      "interactions": "药物相互作用",
+      "warnings": "警告",
+      "preparations": "制剂与形式",
+      "research": "研究与参考"
+    }
+  },
+  "calculator": {
+    "title": "剂量计算器",
+    "subtitle": "根据您的个人资料计算安全剂量",
+    "selectProfile": "选择个人资料",
+    "or": "或",
+    "createNew": "创建新个人资料",
+    "profiles": {
+      "title": "您的个人资料",
+      "create": "新建",
+      "edit": "编辑个人资料",
+      "delete": "删除个人资料",
+      "name": "个人资料名称",
+      "age": "年龄",
+      "weight": "体重",
+      "weightUnit": "公斤 / 磅",
+      "conditions": "健康状况",
+      "medications": "当前用药",
+      "pregnancy": "怀孕或哺乳"
+    },
+    "result": {
+      "title": "计算剂量",
+      "adultDose": "成人剂量",
+      "adjustedDose": "您的调整剂量",
+      "warnings": "警告",
+      "consult": "在开始任何草药疗程之前，请务必咨询医疗保健提供者。"
+    }
+  },
+  "pharmacist": {
+    "title": "AI草药师",
+    "subtitle": "提出问题并获得个性化建议",
+    "placeholder": "询问有关草药、剂量、相互作用或健康问题...",
+    "send": "发送",
+    "thinking": "思考中...",
+    "disclaimer": "此AI仅提供教育信息。请务必咨询医疗保健提供者获取医疗建议。"
+  },
+  "donate": {
+    "title": "支持1Herb",
+    "subtitle": "保持草药知识免费",
+    "mission": {
+      "title": "我们的使命",
+      "description": "为每个人提供免费的草药知识。没有广告，没有付费墙，没有高级版本。",
+      "how": "您的捐赠如何帮助",
+      "hosting": "服务器与托管",
+      "ai": "AI成本",
+      "database": "数据库",
+      "features": "新功能",
+      "promise": "我们永远不会向用户收费或出售您的数据。"
+    },
+    "amounts": {
+      "choose": "选择金额",
+      "coffee": "请我们喝杯咖啡",
+      "supporter": "支持者",
+      "champion": "冠军",
+      "custom": "自定义金额",
+      "donate": "捐赠"
+    },
+    "trust": {
+      "secure": "通过Stripe安全支付",
+      "cards": "接受所有卡",
+      "data": "不存储卡数据"
+    },
+    "success": {
+      "title": "感谢您的捐赠！",
+      "message": "您的支持帮助1Herb保持免费。"
+    },
+    "canceled": {
+      "title": "捐赠已取消",
+      "message": "没问题！随时可以重试。"
+    }
+  },
+  "about": {
+    "title": "关于1Herb",
+    "mission": "我们的使命",
+    "missionText": "我们相信每个人都应该获得可靠的、基于证据的草药医学信息。",
+    "team": "我们的团队",
+    "teamText": "由一支热衷于让草药医学普及的小型团队构建。",
+    "sources": "我们的来源",
+    "sourcesText": "信息来源于世界卫生组织专著、德国委员会E和同行评审研究。",
+    "disclaimer": {
+      "title": "医疗免责声明",
+      "text": "1Herb仅提供教育信息。这不是医疗建议。在使用任何草药疗法之前，请务必咨询合格的医疗保健提供者。"
+    }
+  },
+  "footer": {
+    "product": "产品",
+    "resources": "资源",
+    "company": "公司",
+    "legal": "法律",
+    "privacy": "隐私政策",
+    "terms": "服务条款",
+    "disclaimer": "医疗免责声明",
+    "copyright": "仅用于教育目的。不是医疗建议。",
+    "madeWith": "为草药社区用心制作"
+  },
+  "errors": {
+    "404": {
+      "title": "页面未找到",
+      "message": "您寻找的页面不存在。",
+      "home": "返回首页"
+    },
+    "500": {
+      "title": "出错了",
+      "message": "发生了意外错误。请重试。",
+      "retry": "重试"
+    }
+  },
+  "fda": {
+    "disclaimer": "本产品不用于诊断、治疗、治愈或预防任何疾病。这些声明未经美国食品药品监督管理局评估。"
+  }
+}
