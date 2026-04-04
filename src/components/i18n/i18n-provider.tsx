@@ -1,6 +1,6 @@
 "use client";
 
-import { createContext, useContext, useState, ReactNode, useMemo } from "react";
+import { createContext, useContext, useState, useEffect, ReactNode } from "react";
 import { LANGUAGES, DEFAULT_LOCALE, type Locale } from "@/lib/i18n/config";
 
 interface I18nContextType {
@@ -8,62 +8,55 @@ interface I18nContextType {
   setLocale: (locale: Locale) => void;
   t: (key: string, params?: Record<string, string | number>) => string;
   detectedLocale: Locale | null;
+  isLoading: boolean;
 }
 
 const I18nContext = createContext<I18nContextType | null>(null);
 
-// Get initial locale from localStorage or browser (called once on mount)
-function getInitialLocale(): { locale: Locale; detected: Locale | null } {
-  if (typeof window === "undefined") {
-    return { locale: DEFAULT_LOCALE, detected: null };
-  }
-
-  // Check localStorage first
-  const saved = localStorage.getItem("1herb-locale");
-  if (saved && LANGUAGES.find(l => l.code === saved)) {
-    return { locale: saved as Locale, detected: null };
-  }
-
-  // Try browser language
-  const browserLang = navigator.language.split("-")[0];
-  if (LANGUAGES.find(l => l.code === browserLang)) {
-    return { locale: DEFAULT_LOCALE, detected: browserLang as Locale };
-  }
-
-  return { locale: DEFAULT_LOCALE, detected: null };
-}
-
 export function I18nProvider({ children }: { children: ReactNode }) {
-  const initial = useMemo(() => getInitialLocale(), []);
-  const [locale, setLocaleState] = useState<Locale>(initial.locale);
-  const [detectedLocale] = useState<Locale | null>(initial.detected);
+  const [locale, setLocaleState] = useState<Locale>(DEFAULT_LOCALE);
+  const [detectedLocale, setDetectedLocale] = useState<Locale | null>(null);
   const [dict, setDict] = useState<Record<string, unknown>>({});
+  const [isLoading, setIsLoading] = useState(true);
+
+  // Initialize locale from localStorage or browser
+  useEffect(() => {
+    const saved = localStorage.getItem("1herb-locale");
+    if (saved && LANGUAGES.find(l => l.code === saved)) {
+      setLocaleState(saved as Locale);
+    } else {
+      // Try browser language
+      const browserLang = navigator.language.split("-")[0];
+      if (LANGUAGES.find(l => l.code === browserLang)) {
+        setDetectedLocale(browserLang as Locale);
+      }
+    }
+  }, []);
 
   // Load dictionary when locale changes
-  const loadDict = async (loc: Locale) => {
-    try {
-      const res = await fetch(`/api/i18n?locale=${loc}`);
-      if (res.ok) {
-        const data = await res.json();
-        setDict(data);
+  useEffect(() => {
+    const loadDict = async () => {
+      setIsLoading(true);
+      try {
+        const res = await fetch(`/api/i18n?locale=${locale}`);
+        if (res.ok) {
+          const data = await res.json();
+          setDict(data);
+        }
+      } catch (error) {
+        console.error("Failed to load dictionary:", error);
+      } finally {
+        setIsLoading(false);
       }
-    } catch {
-      console.error("Failed to load dictionary");
-    }
-  };
-
-  // Load initial dictionary
-  useMemo(() => {
-    if (typeof window !== "undefined") {
-      loadDict(locale);
-    }
+    };
+    
+    loadDict();
   }, [locale]);
 
   const setLocale = (newLocale: Locale) => {
     setLocaleState(newLocale);
     localStorage.setItem("1herb-locale", newLocale);
     document.cookie = `1herb-locale=${newLocale};path=/;max-age=31536000`;
-    loadDict(newLocale);
   };
 
   // Translation function with nested key support and interpolation
@@ -94,7 +87,7 @@ export function I18nProvider({ children }: { children: ReactNode }) {
   };
 
   return (
-    <I18nContext.Provider value={{ locale, setLocale, t, detectedLocale }}>
+    <I18nContext.Provider value={{ locale, setLocale, t, detectedLocale, isLoading }}>
       {children}
     </I18nContext.Provider>
   );

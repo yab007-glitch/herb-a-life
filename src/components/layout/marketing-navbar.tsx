@@ -15,17 +15,17 @@ import { MissionModal } from "@/components/donations/mission-modal";
 import { LanguageSelector } from "@/components/i18n/language-selector";
 import { useI18n } from "@/components/i18n/i18n-provider";
 
-const navLinks = [
-  { href: "/herbs", label: "Herbs" },
-  { href: "/calculator", label: "Calculator" },
-  { href: "/pharmacist", label: "Herbalist" },
-  { href: "/about", label: "About" },
-];
-
 export function MarketingNavbar() {
   const [open, setOpen] = useState(false);
   const [showMission, setShowMission] = useState(false);
-  const { locale, setLocale, detectedLocale } = useI18n();
+  const { locale, setLocale, detectedLocale, t } = useI18n();
+
+  const navLinks = [
+    { href: "/herbs", labelKey: "nav.herbs" },
+    { href: "/calculator", labelKey: "nav.calculator" },
+    { href: "/pharmacist", labelKey: "nav.herbalist" },
+    { href: "/about", labelKey: "nav.about" },
+  ];
 
   return (
     <>
@@ -49,7 +49,7 @@ export function MarketingNavbar() {
                 href={link.href}
                 className="rounded-lg px-4 py-2 text-sm font-medium text-muted-foreground transition-colors hover:bg-muted hover:text-foreground"
               >
-                {link.label}
+                {t(link.labelKey)}
               </Link>
             ))}
           </nav>
@@ -68,7 +68,7 @@ export function MarketingNavbar() {
               className="group relative flex items-center gap-1.5 rounded-full bg-gradient-to-r from-pink-500 via-rose-500 to-pink-600 px-4 py-1.5 text-sm font-semibold text-white shadow-lg shadow-pink-500/25 transition-all hover:shadow-xl hover:shadow-pink-500/30 hover:scale-105"
             >
               <Heart className="size-4 fill-white group-hover:animate-pulse" />
-              <span>Support Us</span>
+              <span>{t("nav.support")}</span>
               <Sparkles className="size-3 opacity-70" />
             </button>
           </div>
@@ -77,7 +77,7 @@ export function MarketingNavbar() {
           <Sheet open={open} onOpenChange={setOpen}>
             <SheetTrigger className="inline-flex items-center justify-center rounded-lg p-2 text-muted-foreground hover:bg-muted md:hidden">
               <Menu className="size-5" />
-              <span className="sr-only">Open menu</span>
+              <span className="sr-only">{t("common.language")}</span>
             </SheetTrigger>
             <SheetContent side="right" className="w-80 border-l border-border/50">
               <SheetHeader>
@@ -96,7 +96,7 @@ export function MarketingNavbar() {
                     onClick={() => setOpen(false)}
                     className="rounded-lg px-4 py-3 text-sm font-medium text-muted-foreground transition-colors hover:bg-muted hover:text-foreground"
                   >
-                    {link.label}
+                    {t(link.labelKey)}
                   </Link>
                 ))}
                 <div className="mt-4 flex flex-col gap-2 border-t pt-4">
@@ -108,7 +108,7 @@ export function MarketingNavbar() {
                     className="group flex items-center justify-center gap-2 rounded-lg bg-gradient-to-r from-pink-500 via-rose-500 to-pink-600 px-4 py-3 text-sm font-semibold text-white shadow-lg"
                   >
                     <Heart className="size-4 fill-white" />
-                    Support 1Herb
+                    {t("donate.title")}
                     <Sparkles className="size-3 opacity-70" />
                   </button>
                 </div>
