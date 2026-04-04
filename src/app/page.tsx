@@ -16,6 +16,8 @@ import { Card, CardContent } from "@/components/ui/card";
 import { MarketingNavbar } from "@/components/layout/marketing-navbar";
 import { MarketingFooter } from "@/components/layout/marketing-footer";
 import { FDADisclaimerBanner } from "@/components/layout/fda-disclaimer-banner";
+import { FloatingHerbs } from "@/components/shared/floating-herbs";
+import { AnimatedCounter } from "@/components/shared/animated-counter";
 import { useI18n } from "@/components/i18n/i18n-provider";
 
 export default function LandingPage() {
@@ -75,6 +77,7 @@ export default function LandingPage() {
           <div className="absolute inset-0 dot-pattern opacity-50" />
           <div className="absolute -top-40 right-0 size-[600px] rounded-full bg-primary/10 blur-3xl animate-pulse-glow" />
           <div className="absolute -bottom-20 left-0 size-[500px] rounded-full bg-cyan-500/10 blur-3xl animate-pulse-glow" style={{ animationDelay: "2s" }} />
+          <FloatingHerbs />
           
           <div className="relative mx-auto max-w-7xl px-4 py-20 sm:px-6 sm:py-28 lg:px-8">
             <div className="text-center">
@@ -128,7 +131,7 @@ export default function LandingPage() {
                     </div>
                     <div>
                       <div className="text-2xl font-bold text-foreground sm:text-3xl">
-                        {stat.value}
+                        <AnimatedCounter value={stat.value} />
                       </div>
                       <div className="text-sm text-muted-foreground">
                         {t(stat.labelKey)}

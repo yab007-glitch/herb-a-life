@@ -1,7 +1,7 @@
 "use client";
 
 import { useState, useRef, useEffect, useCallback } from "react";
-import { Send, Bot, User, AlertCircle, Trash2 } from "lucide-react";
+import { Send, Bot, User, AlertCircle, Trash2, Mic, MicOff } from "lucide-react";
 import ReactMarkdown from "react-markdown";
 import { Button } from "@/components/ui/button";
 import { Textarea } from "@/components/ui/textarea";
@@ -202,6 +202,92 @@ export function ChatInterface({
     setAutoSent(false);
   }
 
+  const suggestedQuestions = [
+    "What herbs help with sleep?",
+    "Is turmeric safe with blood thinners?",
+    "Best herbs for anxiety relief?",
+    "How to calculate child dosage?",
+  ];
+
+  const showSuggestions = messages.length <= 1 && !isLoading;
+  const lastMessage = messages[messages.length - 1];
+  const showFollowUps = !isLoading && lastMessage?.role === "assistant" && messages.length > 1;
+
+  function getFollowUpQuestions(content: string): string[] {
+    const lower = content.toLowerCase();
+    const questions: string[] = [];
+
+    if (lower.includes("dosage") || lower.includes("dose") || lower.includes("mg") || lower.includes("ml")) {
+      questions.push("Is this dosage safe for children?");
+    } else {
+      questions.push("What's the recommended dosage?");
+    }
+
+    if (lower.includes("interaction") || lower.includes("contraindic")) {
+      questions.push("What are safer alternatives?");
+    } else {
+      questions.push("Any drug interactions I should know about?");
+    }
+
+    if (lower.includes("side effect") || lower.includes("adverse")) {
+      questions.push("How can I minimize these side effects?");
+    } else {
+      questions.push("Tell me more about the side effects");
+    }
+
+    return questions;
+  }
+
+  const followUpQuestions = showFollowUps ? getFollowUpQuestions(lastMessage.content) : [];
+
+  // Voice input
+  const [isListening, setIsListening] = useState(false);
+  const recognitionRef = useRef<ReturnType<typeof createRecognition>>(null);
+
+  function createRecognition() {
+    if (typeof window === "undefined") return null;
+    const SpeechRecognition = (window as unknown as Record<string, unknown>).SpeechRecognition || (window as unknown as Record<string, unknown>).webkitSpeechRecognition;
+    if (!SpeechRecognition) return null;
+    return new (SpeechRecognition as new () => {
+      continuous: boolean;
+      interimResults: boolean;
+      onresult: ((e: { results: { transcript: string }[][] }) => void) | null;
+      onerror: (() => void) | null;
+      onend: (() => void) | null;
+      start: () => void;
+      stop: () => void;
+    })();
+  }
+
+  function toggleVoice() {
+    if (isListening) {
+      recognitionRef.current?.stop();
+      setIsListening(false);
+      return;
+    }
+
+    const recognition = createRecognition();
+    if (!recognition) return;
+
+    recognition.continuous = false;
+    recognition.interimResults = false;
+    recognition.onresult = (e) => {
+      const transcript = e.results[0]?.[0]?.transcript;
+      if (transcript) {
+        setInput((prev) => prev + transcript);
+      }
+    };
+    recognition.onerror = () => setIsListening(false);
+    recognition.onend = () => setIsListening(false);
+    recognitionRef.current = recognition;
+    recognition.start();
+    setIsListening(true);
+  }
+
+  const hasVoiceSupport = typeof window !== "undefined" && (
+    "SpeechRecognition" in window || "webkitSpeechRecognition" in window
+  );
+
   return (
     <div className="flex flex-col overflow-hidden rounded-lg border bg-card">
       {/* Messages Area */}
@@ -209,13 +295,15 @@ export function ChatInterface({
         ref={scrollRef}
         className="flex-1 overflow-y-auto p-4"
         style={{ maxHeight: "60vh", minHeight: "400px" }}
+        role="log"
+        aria-label="Chat messages"
       >
         <div className="mx-auto max-w-3xl space-y-6">
           {messages.map((message) => (
             <div
               key={message.id}
               className={cn(
-                "flex gap-3",
+                "flex gap-3 animate-message-in",
                 message.role === "user" ? "justify-end" : "justify-start"
               )}
             >
@@ -226,7 +314,7 @@ export function ChatInterface({
               )}
               <div
                 className={cn(
-                  "max-w-[80%] rounded-lg px-4 py-3 text-sm leading-relaxed",
+                  "max-w-[80%] rounded-lg px-4 py-3 text-sm leading-relaxed transition-all",
                   message.role === "user"
                     ? "bg-primary text-primary-foreground"
                     : "bg-muted text-foreground"
@@ -248,18 +336,52 @@ export function ChatInterface({
             </div>
           ))}
 
+          {/* Typing indicator */}
           {isLoading && messages[messages.length - 1]?.role !== "assistant" && (
-            <div className="flex gap-3">
+            <div className="flex gap-3 animate-message-in">
               <div className="flex size-8 shrink-0 items-center justify-center rounded-full bg-primary/10 text-primary">
-                <Bot className="size-4" />
+                <Bot className="size-4 animate-pulse" />
               </div>
               <div className="rounded-lg bg-muted px-4 py-3">
-                <div className="flex gap-1">
-                  <span className="size-2 animate-bounce rounded-full bg-muted-foreground/40 [animation-delay:0ms]" />
-                  <span className="size-2 animate-bounce rounded-full bg-muted-foreground/40 [animation-delay:150ms]" />
-                  <span className="size-2 animate-bounce rounded-full bg-muted-foreground/40 [animation-delay:300ms]" />
+                <div className="flex items-center gap-2">
+                  <span className="text-xs font-medium text-muted-foreground">Thinking</span>
+                  <span className="flex items-center gap-1">
+                    <span className="size-2 rounded-full bg-primary/70 animate-typing-dot" />
+                    <span className="size-2 rounded-full bg-primary/70 animate-typing-dot [animation-delay:160ms]" />
+                    <span className="size-2 rounded-full bg-primary/70 animate-typing-dot [animation-delay:320ms]" />
+                  </span>
                 </div>
               </div>
+            </div>
+          )}
+
+          {/* Suggested questions for initial state */}
+          {showSuggestions && (
+            <div className="flex flex-wrap gap-2 pt-2">
+              {suggestedQuestions.map((q) => (
+                <button
+                  key={q}
+                  onClick={() => sendMessage(q)}
+                  className="rounded-lg border border-primary/20 bg-primary/5 px-3 py-1.5 text-xs font-medium text-primary transition-all hover:bg-primary/10 hover:shadow-sm"
+                >
+                  {q}
+                </button>
+              ))}
+            </div>
+          )}
+
+          {/* Follow-up suggestions */}
+          {showFollowUps && (
+            <div className="flex flex-wrap gap-2 pt-1 animate-message-in">
+              {followUpQuestions.map((q) => (
+                <button
+                  key={q}
+                  onClick={() => sendMessage(q)}
+                  className="rounded-full border border-border/60 bg-background px-3 py-1 text-xs text-muted-foreground transition-all hover:border-primary/30 hover:text-primary"
+                >
+                  {q}
+                </button>
+              ))}
             </div>
           )}
         </div>
@@ -279,6 +401,7 @@ export function ChatInterface({
               size="sm"
               onClick={clearChat}
               className="h-6 px-2 text-xs text-muted-foreground hover:text-foreground"
+              aria-label="Clear chat"
             >
               <Trash2 className="size-3" />
               Clear
@@ -299,17 +422,30 @@ export function ChatInterface({
             onChange={(e) => setInput(e.target.value)}
             onKeyDown={handleKeyDown}
             placeholder="Ask about herbs, interactions, dosages..."
-            className="min-h-[44px] max-h-32 resize-none"
+            className="min-h-[44px] max-h-32 resize-none focus-ring-animated"
             rows={1}
             disabled={isLoading}
+            aria-label="Chat message input"
           />
+          {hasVoiceSupport && (
+            <Button
+              type="button"
+              size="icon"
+              variant={isListening ? "destructive" : "outline"}
+              onClick={toggleVoice}
+              className="shrink-0 md:hidden"
+              aria-label={isListening ? "Stop voice input" : "Start voice input"}
+            >
+              {isListening ? <MicOff className="size-4" /> : <Mic className="size-4" />}
+            </Button>
+          )}
           <Button
             type="submit"
             size="icon"
             disabled={!input.trim() || isLoading}
+            aria-label="Send message"
           >
             <Send className="size-4" />
-            <span className="sr-only">Send</span>
           </Button>
         </form>
         {isSaving && (

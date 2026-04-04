@@ -20,6 +20,7 @@ import {
 import { ThemeToggle } from "@/components/theme/theme-toggle";
 import { MissionModal } from "@/components/donations/mission-modal";
 import { LanguageSelector } from "@/components/i18n/language-selector";
+import { CommandPaletteTrigger } from "@/components/layout/command-palette";
 import { useI18n } from "@/components/i18n/i18n-provider";
 import { cn } from "@/lib/utils";
 
@@ -70,6 +71,7 @@ export function MainNavbar() {
 
           {/* Right side */}
           <div className="hidden items-center gap-3 md:flex">
+            <CommandPaletteTrigger />
             <LanguageSelector />
             <ThemeToggle />
             <button

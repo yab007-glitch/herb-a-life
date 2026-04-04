@@ -125,6 +125,32 @@ export async function getHerbCategories() {
   }
 }
 
+export async function getSymptomCounts(
+  symptoms: string[]
+): Promise<ActionResponse<Record<string, number>>> {
+  try {
+    const supabase = await createClient();
+    const counts: Record<string, number> = {};
+
+    await Promise.all(
+      symptoms.map(async (symptom) => {
+        const { count } = await supabase
+          .from("herbs")
+          .select("id", { count: "exact", head: true })
+          .eq("is_published", true)
+          .or(
+            `name.ilike.%${symptom}%,description.ilike.%${symptom}%`
+          );
+        counts[symptom] = count ?? 0;
+      })
+    );
+
+    return { success: true, data: counts };
+  } catch {
+    return { success: false, error: "Failed to fetch symptom counts" };
+  }
+}
+
 export async function searchHerbs(
   term: string
 ): Promise<ActionResponse<Herb[]>> {

@@ -332,13 +332,13 @@ export function DoseCalculatorForm({ prefill }: { prefill?: PrefillData }) {
       {/* Results Panel */}
       <div className="space-y-6">
         {result ? (
-          <Card className="border-primary/20 bg-gradient-to-br from-primary/5 to-green-50 dark:to-green-950/20">
+          <Card className="border-primary/20 bg-gradient-to-br from-primary/5 to-green-50 dark:to-green-950/20 animate-message-in">
             <CardHeader>
               <CardTitle className="text-primary">Calculated Dose</CardTitle>
             </CardHeader>
             <CardContent className="space-y-4">
               <div className="text-center">
-                <div className="text-4xl font-bold text-primary">
+                <div className="text-4xl font-bold text-primary animate-count-up">
                   {result.dose}
                   <span className="ml-1 text-lg font-normal text-muted-foreground">
                     {result.unit}
@@ -350,6 +350,41 @@ export function DoseCalculatorForm({ prefill }: { prefill?: PrefillData }) {
                   </p>
                 )}
               </div>
+
+              {/* Visual comparison bar */}
+              {adultDose && (
+                <div className="space-y-2 rounded-lg bg-background/80 p-4">
+                  <p className="text-xs font-medium uppercase tracking-wide text-muted-foreground">
+                    Dose Comparison
+                  </p>
+                  <div className="space-y-2">
+                    <div className="space-y-1">
+                      <div className="flex justify-between text-xs">
+                        <span className="text-muted-foreground">Adult Dose</span>
+                        <span className="font-medium">{adultDose} {doseUnit}</span>
+                      </div>
+                      <div className="h-3 w-full overflow-hidden rounded-full bg-muted">
+                        <div className="h-full rounded-full bg-primary/30 animate-grow-bar" style={{ width: "100%" }} />
+                      </div>
+                    </div>
+                    <div className="space-y-1">
+                      <div className="flex justify-between text-xs">
+                        <span className="text-muted-foreground">Calculated Dose</span>
+                        <span className="font-medium text-primary">{result.dose} {result.unit}</span>
+                      </div>
+                      <div className="h-3 w-full overflow-hidden rounded-full bg-muted">
+                        <div
+                          className="h-full rounded-full bg-primary animate-grow-bar"
+                          style={{
+                            width: `${Math.min((parseFloat(String(result.dose)) / parseFloat(adultDose)) * 100, 100)}%`,
+                            animationDelay: "0.2s",
+                          }}
+                        />
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              )}
 
               <div className="space-y-3 rounded-lg bg-background/80 p-4">
                 <div>

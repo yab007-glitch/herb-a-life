@@ -2,7 +2,7 @@
 
 import { useState, useCallback, useRef } from "react";
 import { useRouter, useSearchParams } from "next/navigation";
-import { Search, X } from "lucide-react";
+import { Search, X, Shuffle } from "lucide-react";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { RecentSearches, useSaveSearch } from "@/components/herbs/recent-searches";
@@ -102,12 +102,34 @@ export function SmartSearch({ defaultValue = "", category }: SmartSearchProps) {
             </button>
           )}
         </div>
-        <Button 
-          type="submit" 
+        <Button
+          type="submit"
           className="h-12"
           disabled={isSearching}
         >
           {isSearching ? "Searching..." : "Search"}
+        </Button>
+        <Button
+          type="button"
+          variant="outline"
+          className="h-12 gap-2"
+          onClick={async () => {
+            try {
+              const res = await fetch("/api/herbs/random");
+              if (res.ok) {
+                const data = await res.json();
+                if (data?.slug) {
+                  router.push(`/herbs/${data.slug}`);
+                }
+              }
+            } catch {
+              // Fallback: just go to herbs page
+              router.push("/herbs");
+            }
+          }}
+        >
+          <Shuffle className="size-4" />
+          Surprise Me
         </Button>
       </form>
       <RecentSearches />

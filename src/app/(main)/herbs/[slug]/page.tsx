@@ -11,6 +11,7 @@ import {
   BookOpen,
   Stethoscope,
   Pill,
+  Clock,
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
@@ -24,6 +25,7 @@ import {
 import { Separator } from "@/components/ui/separator";
 import { HerbSafetyBadges } from "@/components/herbs/herb-safety-badges";
 import { InteractionsTable } from "@/components/herbs/interactions-table";
+import { CopyLinkButton } from "@/components/herbs/copy-link-button";
 import { getHerbBySlug } from "@/lib/actions/herbs";
 
 type Props = { params: Promise<{ slug: string }> };
@@ -68,15 +70,22 @@ export default async function HerbDetailPage({ params }: Props) {
             {herb.name}
           </h1>
           <Badge variant="secondary">{category}</Badge>
+          <CopyLinkButton />
         </div>
         <p className="mt-1 text-lg italic text-muted-foreground">
           {herb.scientific_name}
         </p>
-        <div className="mt-3">
+        <div className="mt-3 flex flex-wrap items-center gap-4">
           <HerbSafetyBadges
             pregnancySafe={herb.pregnancy_safe}
             nursingSafe={herb.nursing_safe}
           />
+          {herb.updated_at && (
+            <span className="flex items-center gap-1.5 text-xs text-muted-foreground">
+              <Clock className="size-3" />
+              Last updated {new Date(herb.updated_at).toLocaleDateString("en-US", { month: "short", day: "numeric", year: "numeric" })}
+            </span>
+          )}
         </div>
       </div>
 

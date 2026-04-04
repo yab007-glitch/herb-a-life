@@ -4,7 +4,10 @@ import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { HerbCard } from "@/components/herbs/herb-card";
 import { SmartSearch } from "@/components/herbs/smart-search";
-import { getHerbs, getHerbCategories } from "@/lib/actions/herbs";
+import { SurpriseMeButton } from "@/components/herbs/surprise-me-button";
+import { EmptyState } from "@/components/shared/empty-state";
+import { getHerbs, getHerbCategories, getSymptomCounts } from "@/lib/actions/herbs";
+import { Flame } from "lucide-react";
 import Script from "next/script";
 
 export const metadata: Metadata = {
@@ -49,14 +52,21 @@ export default async function HerbsPage({
   const category = params.category || "";
   const page = parseInt(params.page || "1", 10);
 
-  const [herbsResult, categoriesResult] = await Promise.all([
+  const symptoms = [
+    "headache", "anxiety", "insomnia", "inflammation", "digestive",
+    "diabetes", "pain", "cough", "fever", "skin", "hypertension", "fatigue",
+  ];
+
+  const [herbsResult, categoriesResult, countsResult] = await Promise.all([
     getHerbs({ query, category, page }),
     getHerbCategories(),
+    !query && !category ? getSymptomCounts(symptoms) : Promise.resolve({ success: false as const, data: undefined }),
   ]);
 
   const herbs = herbsResult.success ? herbsResult.data!.herbs : [];
   const total = herbsResult.success ? herbsResult.data!.total : 0;
   const categories = categoriesResult.success ? categoriesResult.data! : [];
+  const symptomCounts = countsResult.success && countsResult.data ? countsResult.data : {} as Record<string, number>;
   const totalPages = Math.ceil(total / 20);
 
   const structuredData = generateStructuredData(herbs);
@@ -81,36 +91,64 @@ export default async function HerbsPage({
       {/* Smart Search */}
       <SmartSearch defaultValue={query} category={category} />
 
-      {/* Symptom Quick Search */}
+      {/* Popular Searches & Symptom Tags */}
       {!query && !category && (
-        <div className="space-y-3">
-          <p className="text-sm font-medium text-muted-foreground">
-            Search by symptom:
-          </p>
-          <div className="flex flex-wrap gap-2">
-            {[
-              "headache",
-              "anxiety",
-              "insomnia",
-              "inflammation",
-              "digestive",
-              "diabetes",
-              "pain",
-              "cough",
-              "fever",
-              "skin",
-              "hypertension",
-              "fatigue",
-            ].map((symptom) => (
-              <Link key={symptom} href={`/herbs?q=${encodeURIComponent(symptom)}`}>
-                <Badge
-                  variant="outline"
-                  className="cursor-pointer border-border/50 bg-muted/30 transition-all hover:border-primary/50 hover:bg-primary/5"
-                >
-                  {symptom}
-                </Badge>
-              </Link>
-            ))}
+        <div className="space-y-5">
+          {/* Popular searches */}
+          <div className="space-y-3">
+            <div className="flex items-center gap-2">
+              <Flame className="size-4 text-orange-500" />
+              <p className="text-sm font-medium text-foreground">Popular Searches</p>
+            </div>
+            <div className="flex flex-wrap gap-2">
+              {[
+                { term: "turmeric", label: "Turmeric" },
+                { term: "chamomile", label: "Chamomile" },
+                { term: "ginger", label: "Ginger" },
+                { term: "lavender", label: "Lavender" },
+                { term: "echinacea", label: "Echinacea" },
+              ].map((item) => (
+                <Link key={item.term} href={`/herbs?q=${encodeURIComponent(item.term)}`}>
+                  <Badge
+                    variant="secondary"
+                    className="cursor-pointer gap-1 transition-all hover:bg-primary/10 hover:text-primary"
+                  >
+                    <Flame className="size-3 text-orange-400" />
+                    {item.label}
+                  </Badge>
+                </Link>
+              ))}
+              <SurpriseMeButton totalHerbs={total} />
+            </div>
+          </div>
+
+          {/* Symptom tags */}
+          <div className="space-y-3">
+            <p className="text-sm font-medium text-muted-foreground">
+              Search by symptom:
+            </p>
+            <div className="flex flex-wrap gap-2">
+              {symptoms.map((symptom) => {
+                const count = symptomCounts[symptom];
+                return (
+                  <Link
+                    key={symptom}
+                    href={`/herbs?q=${encodeURIComponent(symptom)}`}
+                    title={count != null ? `~${count} herb${count !== 1 ? "s" : ""} match "${symptom}"` : undefined}
+                  >
+                    <Badge
+                      variant="outline"
+                      className="cursor-pointer border-border/50 bg-muted/30 transition-all hover:border-primary/50 hover:bg-primary/5"
+                    >
+                      {symptom}
+                      {count != null && count > 0 && (
+                        <span className="ml-1 text-[10px] text-muted-foreground/70">{count}</span>
+                      )}
+                    </Badge>
+                  </Link>
+                );
+              })}
+            </div>
           </div>
         </div>
       )}
@@ -155,14 +193,14 @@ export default async function HerbsPage({
           ))}
         </div>
       ) : (
-        <div className="rounded-xl border border-dashed border-border bg-muted/30 py-16 text-center">
-          <p className="text-lg font-medium text-foreground">
-            No herbs found{query ? ` for "${query}"` : ""}
-          </p>
-          <p className="mt-2 text-sm text-muted-foreground">
-            Try searching for a symptom like &quot;headache&quot;, &quot;anxiety&quot;, or &quot;inflammation&quot;
-          </p>
-          <div className="mt-6 flex flex-wrap justify-center gap-2">
+        <div className="space-y-6">
+          <EmptyState
+            variant="search"
+            title={query ? `No herbs found for "${query}"` : "No herbs found"}
+            description="Try searching for a symptom like headache, anxiety, or inflammation. You can also browse by category."
+            action={{ label: "Browse All Herbs", href: "/herbs" }}
+          />
+          <div className="flex flex-wrap justify-center gap-2">
             {["headache", "anxiety", "insomnia", "pain", "cough", "diabetes"].map(
               (s) => (
                 <Link key={s} href={`/herbs?q=${s}`}>
