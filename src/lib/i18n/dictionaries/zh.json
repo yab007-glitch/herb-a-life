@@ -37,41 +37,43 @@
   },
   "home": {
     "hero": {
-      "title": "您值得信赖的草药指南",
-      "subtitle": "基于证据的2700多种草药信息，提供安全剂量计算和药物相互作用检查。",
+      "badge": "基于证据的草药医学平台",
+      "title": "您完整的草药指南",
+      "subtitle": "探索2700多种草药，计算精确剂量，检查药物相互作用，咨询我们的AI草药师——一站式服务。",
       "searchPlaceholder": "按名称、症状或用途搜索草药...",
-      "searchButton": "搜索"
+      "searchButton": "探索草药"
     },
     "stats": {
-      "herbs": "种草药",
-      "interactions": "种相互作用",
+      "herbs": "草药记录",
+      "interactions": "药物相互作用",
       "free": "免费使用"
     },
     "features": {
-      "title": "草药医学所需的一切",
-      "subtitle": "安全、明智地使用草药的综合工具",
+      "title": "草药健康所需的一切",
+      "subtitle": "基于科学研究和传统知识的专业级工具。",
       "herbs": {
-        "title": "草药数据库",
-        "description": "搜索2700多种药用草药，获取详细的用途、剂量和安全信息。"
+        "title": "2700+种药用草药",
+        "description": "最全面的草药数据库。详细的成分档案、传统用途和现代应用。"
       },
       "calculator": {
-        "title": "剂量计算器",
-        "description": "根据年龄、体重和健康状况计算安全剂量。"
+        "title": "精准剂量计算器",
+        "description": "使用克拉克规则、杨氏规则、体表面积和弗里德规则计算安全剂量。根据年龄和体重获得个性化建议。"
       },
       "interactions": {
-        "title": "药物相互作用",
-        "description": "检查草药和药物之间的危险相互作用。"
+        "title": "药物相互作用检查",
+        "description": "将您的药物与我们的数据库交叉参考。识别轻度、中度、严重和禁忌组合。"
       },
       "ai": {
-        "title": "AI草药师",
-        "description": "提出问题并获得个性化的草药建议。"
+        "title": "AI虚拟草药师",
+        "description": "询问关于草药、剂量和安全的问题。基于世界卫生组织专著和PubMed研究等循证来源。"
       }
     },
     "cta": {
-      "title": "开始您的草药之旅",
-      "subtitle": "加入数千人使用1Herb获取安全、基于证据的草药医学知识。",
+      "title": "立即开始您的草药之旅",
+      "subtitle": "免费浏览我们全面的数据库。无需账户。",
       "button": "浏览草药"
-    }
+    },
+    "trustBadges": "数据来源"
   },
   "herbs": {
     "title": "药用草药数据库",

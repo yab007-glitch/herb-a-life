@@ -37,41 +37,43 @@
   },
   "home": {
     "hero": {
-      "title": "Tu Guía Confiable de Hierbas Medicinales",
-      "subtitle": "Información basada en evidencia sobre más de 2,700 hierbas con cálculos de dosificación seguros y verificación de interacciones.",
+      "badge": "Plataforma de Medicina Herbal Basada en Evidencia",
+      "title": "Tu Guía Completa de Hierbas Medicinales",
+      "subtitle": "Explora más de 2,700 hierbas, calcula dosis precisas, verifica interacciones de medicamentos y consulta a nuestro herbolario IA — todo en un solo lugar.",
       "searchPlaceholder": "Buscar hierbas por nombre, síntoma o uso...",
-      "searchButton": "Buscar"
+      "searchButton": "Explorar Hierbas"
     },
     "stats": {
-      "herbs": "Hierbas",
+      "herbs": "Hierbas Documentadas",
       "interactions": "Interacciones",
       "free": "Gratis"
     },
     "features": {
-      "title": "Todo lo que Necesitas para Medicina Herbal",
-      "subtitle": "Herramientas completas para un uso seguro e informado de hierbas",
+      "title": "Todo lo que Necesitas para Bienestar Herbal",
+      "subtitle": "Herramientas profesionales basadas en investigación científica y conocimiento tradicional.",
       "herbs": {
-        "title": "Base de Datos de Hierbas",
-        "description": "Busca entre más de 2,700 hierbas medicinales con información detallada sobre usos, dosis y seguridad."
+        "title": "2,700+ Hierbas Medicinales",
+        "description": "La base de datos herbal más completa disponible. Perfiles detallados con compuestos activos, usos tradicionales y aplicaciones modernas."
       },
       "calculator": {
-        "title": "Calculadora de Dosificación",
-        "description": "Calcula dosis seguras basadas en edad, peso y condiciones de salud."
+        "title": "Calculadora de Dosificación Precisa",
+        "description": "Calcula dosis seguras usando la Regla de Clark, Regla de Young, BSA y Regla de Fried. Obtén recomendaciones personalizadas según edad y peso."
       },
       "interactions": {
-        "title": "Interacciones de Medicamentos",
-        "description": "Verifica interacciones peligrosas entre hierbas y medicamentos."
+        "title": "Verificador de Interacciones",
+        "description": "Referencia cruzada de tus medicamentos con nuestra base de datos. Identifica combinaciones leves, moderadas, severas y contraindicadas."
       },
       "ai": {
-        "title": "Herbolario IA",
-        "description": "Haz preguntas y obtén recomendaciones herbales personalizadas."
+        "title": "Herbolario IA Virtual",
+        "description": "Haz preguntas sobre hierbas, dosis y seguridad. Impulsado por fuentes basadas en evidencia incluyendo monografías de la OMS e investigaciones de PubMed."
       }
     },
     "cta": {
-      "title": "Comienza Tu Viaje Herbal",
-      "subtitle": "Únete a miles que usan 1Herb para medicina herbal segura y basada en evidencia.",
+      "title": "Comienza Tu Viaje Herbal Hoy",
+      "subtitle": "Navega nuestra base de datos completa gratis. No se requiere cuenta.",
       "button": "Explorar Hierbas"
-    }
+    },
+    "trustBadges": "Impulsado por"
   },
   "herbs": {
     "title": "Base de Datos de Hierbas Medicinales",

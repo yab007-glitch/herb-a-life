@@ -37,41 +37,43 @@
   },
   "home": {
     "hero": {
-      "title": "Your Trusted Guide to Medicinal Herbs",
-      "subtitle": "Evidence-based information on 2,700+ herbs with safe dosage calculations and drug interaction checking.",
+      "badge": "Evidence-Based Herbal Medicine Platform",
+      "title": "Your Complete Guide to Medicinal Herbs",
+      "subtitle": "Explore 2,700+ herbs, calculate precise dosages, check drug interactions, and consult our AI herbalist — all in one place.",
       "searchPlaceholder": "Search herbs by name, symptom, or use...",
-      "searchButton": "Search"
+      "searchButton": "Explore Herbs"
     },
     "stats": {
-      "herbs": "Herbs",
-      "interactions": "Interactions",
-      "free": "Free To Use"
+      "herbs": "Herbs Documented",
+      "interactions": "Drug Interactions",
+      "free": "Free to Use"
     },
     "features": {
-      "title": "Everything You Need for Herbal Medicine",
-      "subtitle": "Comprehensive tools for safe and informed herbal use",
+      "title": "Everything You Need for Herbal Wellness",
+      "subtitle": "Professional-grade tools built on scientific research and traditional knowledge.",
       "herbs": {
-        "title": "Herb Database",
-        "description": "Search 2,700+ medicinal herbs with detailed information on uses, dosages, and safety."
+        "title": "2,700+ Medicinal Herbs",
+        "description": "The most comprehensive herbal database available. Detailed profiles with active compounds, traditional uses, and modern applications."
       },
       "calculator": {
-        "title": "Dosage Calculator",
-        "description": "Calculate safe dosages based on age, weight, and health conditions."
+        "title": "Precision Dosage Calculator",
+        "description": "Calculate safe dosages using Clark's Rule, Young's Rule, BSA, and Fried's Rule. Get personalized recommendations based on age and weight."
       },
       "interactions": {
-        "title": "Drug Interactions",
-        "description": "Check for dangerous interactions between herbs and medications."
+        "title": "Drug Interaction Checker",
+        "description": "Cross-reference your medications with our database. Identify mild, moderate, severe, and contraindicated combinations."
       },
       "ai": {
-        "title": "AI Herbalist",
-        "description": "Ask questions and get personalized herbal recommendations."
+        "title": "AI Virtual Herbalist",
+        "description": "Ask questions about herbs, dosages, and safety. Powered by evidence-based sources including WHO monographs and PubMed research."
       }
     },
     "cta": {
-      "title": "Start Your Herbal Journey",
-      "subtitle": "Join thousands using 1Herb for safe, evidence-based herbal medicine.",
+      "title": "Start Your Herbal Journey Today",
+      "subtitle": "Browse our comprehensive database for free. No account required.",
       "button": "Browse Herbs"
-    }
+    },
+    "trustBadges": "Powered by"
   },
   "herbs": {
     "title": "Medicinal Herbs Database",
