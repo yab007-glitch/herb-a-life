@@ -6,18 +6,12 @@ import {
   Database,
   Bot,
   Globe,
-  Coffee,
-  ArrowRight,
   Leaf,
+  CheckCircle,
+  XCircle,
 } from "lucide-react";
-import { Button } from "@/components/ui/button";
-import {
-  Card,
-  CardContent,
-  CardHeader,
-  CardTitle,
-  CardDescription,
-} from "@/components/ui/card";
+import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card";
+import { DonationButtons } from "@/components/donations/donation-buttons";
 
 export const metadata: Metadata = {
   title: "Donate",
@@ -48,11 +42,48 @@ const costs = [
   },
 ];
 
-const PAYPAL_LINK = "https://www.paypal.com/paypalme/yab007";
-
-export default function DonatePage() {
+export default async function DonatePage({
+  searchParams,
+}: {
+  searchParams: Promise<{ success?: string; canceled?: string }>;
+}) {
+  const params = await searchParams;
+  
   return (
     <div className="mx-auto max-w-3xl space-y-12 py-8">
+      {/* Success/Canceled Messages */}
+      {params.success === "true" && (
+        <Card className="border-emerald-200 bg-emerald-50 dark:border-emerald-800 dark:bg-emerald-900/20">
+          <CardContent className="flex items-center gap-4 py-6">
+            <CheckCircle className="size-8 text-emerald-600" />
+            <div>
+              <h2 className="text-lg font-semibold text-emerald-900 dark:text-emerald-100">
+                Thank you for your donation!
+              </h2>
+              <p className="text-sm text-emerald-700 dark:text-emerald-300">
+                Your support helps keep Herb-a-Life free for everyone.
+              </p>
+            </div>
+          </CardContent>
+        </Card>
+      )}
+      
+      {params.canceled === "true" && (
+        <Card className="border-amber-200 bg-amber-50 dark:border-amber-800 dark:bg-amber-900/20">
+          <CardContent className="flex items-center gap-4 py-6">
+            <XCircle className="size-8 text-amber-600" />
+            <div>
+              <h2 className="text-lg font-semibold text-amber-900 dark:text-amber-100">
+                Donation canceled
+              </h2>
+              <p className="text-sm text-amber-700 dark:text-amber-300">
+                No worries! Feel free to try again whenever you&apos;re ready.
+              </p>
+            </div>
+          </CardContent>
+        </Card>
+      )}
+
       {/* Hero */}
       <div className="text-center space-y-4">
         <div className="mx-auto flex h-16 w-16 items-center justify-center rounded-full bg-pink-100 dark:bg-pink-900/30">
@@ -67,26 +98,12 @@ export default function DonatePage() {
         </p>
       </div>
 
-      {/* Donate Button */}
-      <div className="text-center">
-        <Button
-          size="lg"
-          className="h-14 px-8 text-lg bg-[#0070ba] hover:bg-[#005ea6]"
-          render={
-            <a
-              href={PAYPAL_LINK}
-              target="_blank"
-              rel="noopener noreferrer"
-            />
-          }
-        >
-          <Heart className="size-5" />
-          Donate via PayPal
-          <ArrowRight className="size-5" />
-        </Button>
-        <p className="mt-3 text-sm text-muted-foreground">
-          Any amount helps. Even a coffee keeps us going.
-        </p>
+      {/* Donation Buttons */}
+      <div className="space-y-4">
+        <h2 className="text-xl font-semibold text-center">
+          Choose an Amount
+        </h2>
+        <DonationButtons />
       </div>
 
       {/* How We Operate */}
@@ -107,9 +124,9 @@ export default function DonatePage() {
             ability to pay. We believe health knowledge should be free.
           </p>
           <p>
-            We have <strong>no premium tiers</strong>,{" "}
-            <strong>no subscription fees</strong>, and{" "}
-            <strong>no advertising</strong>. Every feature — the herb database,
+            We have <strong className="text-foreground">no premium tiers</strong>,{" "}
+            <strong className="text-foreground">no subscription fees</strong>, and{" "}
+            <strong className="text-foreground">no advertising</strong>. Every feature — the herb database,
             the dosage calculator, and the AI herbalist chatbot — is completely
             free to use with no limits.
           </p>
@@ -117,12 +134,6 @@ export default function DonatePage() {
             Running this platform costs money. Hosting, database storage, AI API
             calls, and domain registration all have real costs. We cover these
             entirely through voluntary donations from our community.
-          </p>
-          <p>
-            Your donation directly funds the infrastructure that keeps
-            Herb-a-Life running and helps us continue adding new herbs,
-            improving the AI herbalist, and maintaining the platform for
-            everyone.
           </p>
         </CardContent>
       </Card>
@@ -154,77 +165,8 @@ export default function DonatePage() {
         </div>
       </div>
 
-      {/* Suggested Amounts */}
-      <div className="space-y-4">
-        <h2 className="text-xl font-semibold text-center">
-          Every Bit Helps
-        </h2>
-        <div className="grid gap-3 sm:grid-cols-3">
-          {[
-            {
-              amount: "$5",
-              icon: Coffee,
-              label: "Buy us a coffee",
-              description: "Covers a day of API costs",
-            },
-            {
-              amount: "$15",
-              icon: Database,
-              label: "Feed the database",
-              description: "A week of hosting costs",
-            },
-            {
-              amount: "$50",
-              icon: Heart,
-              label: "Champion supporter",
-              description: "A month of full operations",
-            },
-          ].map((tier) => {
-            const Icon = tier.icon;
-            return (
-              <a
-                key={tier.amount}
-                href={PAYPAL_LINK}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="group block"
-              >
-                <Card className="h-full transition-all hover:border-primary/50 hover:shadow-md">
-                  <CardContent className="flex flex-col items-center py-6 text-center">
-                    <Icon className="h-8 w-8 text-primary mb-2 group-hover:scale-110 transition-transform" />
-                    <p className="text-2xl font-bold text-foreground">
-                      {tier.amount}
-                    </p>
-                    <p className="font-medium text-foreground mt-1">
-                      {tier.label}
-                    </p>
-                    <p className="text-xs text-muted-foreground mt-1">
-                      {tier.description}
-                    </p>
-                  </CardContent>
-                </Card>
-              </a>
-            );
-          })}
-        </div>
-      </div>
-
-      {/* Bottom CTA */}
+      {/* Bottom */}
       <div className="text-center space-y-4 pb-8">
-        <Button
-          size="lg"
-          className="bg-[#0070ba] hover:bg-[#005ea6]"
-          render={
-            <a
-              href={PAYPAL_LINK}
-              target="_blank"
-              rel="noopener noreferrer"
-            />
-          }
-        >
-          <Heart className="size-4" />
-          Donate Now
-        </Button>
         <p className="text-sm text-muted-foreground">
           Thank you for supporting free herbal medicine education.
         </p>
