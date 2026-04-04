@@ -28,7 +28,7 @@ export function MarketingFooter() {
                 <Leaf className="size-5" />
               </div>
               <span className="text-lg font-bold text-foreground">
-                Herb<span className="gradient-text">a</span>Life
+                <span className="gradient-text">1</span>Herb
               </span>
             </Link>
             <p className="mt-4 max-w-sm text-sm text-muted-foreground">
@@ -75,7 +75,7 @@ export function MarketingFooter() {
         {/* Bottom */}
         <div className="mt-12 flex flex-col items-center justify-between gap-4 border-t pt-8 sm:flex-row">
           <p className="text-sm text-muted-foreground">
-            © {new Date().getFullYear()} Herb-a-Life. Educational purposes only. Not medical advice.
+            © {new Date().getFullYear()} 1Herb. Educational purposes only. Not medical advice.
           </p>
           <p className="text-xs text-muted-foreground">
             Built with Next.js, Supabase, and OpenRouter

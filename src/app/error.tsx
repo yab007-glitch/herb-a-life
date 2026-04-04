@@ -13,7 +13,7 @@ export default function GlobalError({
   reset: () => void;
 }) {
   useEffect(() => {
-    console.error("[Herb-a-Life Error]", error);
+    console.error("[1Herb Error]", error);
   }, [error]);
 
   return (

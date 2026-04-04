@@ -19,7 +19,7 @@ import { createClient } from "@/lib/supabase/server";
 
 export const metadata: Metadata = {
   title: "Dashboard",
-  description: "Your personal Herb-a-Life dashboard.",
+  description: "Your personal 1Herb dashboard.",
 };
 
 export default async function DashboardPage() {

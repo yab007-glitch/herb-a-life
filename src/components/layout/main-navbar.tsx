@@ -42,7 +42,7 @@ export function MainNavbar() {
               <Leaf className="size-5" />
             </div>
             <span className="text-lg font-bold text-foreground">
-              Herb<span className="gradient-text">a</span>Life
+              <span className="gradient-text">1</span>Herb
             </span>
           </Link>
 
@@ -89,7 +89,7 @@ export function MainNavbar() {
                   <div className="flex size-8 items-center justify-center rounded-lg bg-gradient-to-br from-primary to-teal-600 text-white">
                     <Leaf className="size-4" />
                   </div>
-                  Herb-a-Life
+                  1Herb
                 </SheetTitle>
               </SheetHeader>
               <nav className="flex flex-col gap-1 px-4 pt-6">
@@ -116,7 +116,7 @@ export function MainNavbar() {
                     className="group flex items-center justify-center gap-2 rounded-lg bg-gradient-to-r from-pink-500 via-rose-500 to-pink-600 px-4 py-3 text-sm font-semibold text-white shadow-lg"
                   >
                     <Heart className="size-4 fill-white" />
-                    Support Herb-a-Life
+                    Support 1Herb
                   </button>
                 </div>
               </nav>

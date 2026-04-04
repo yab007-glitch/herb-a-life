@@ -2,7 +2,7 @@ import type { Metadata } from "next";
 
 export const metadata: Metadata = {
   title: "Privacy Policy",
-  description: "Herb-a-Life privacy policy - how we collect, use, and protect your data.",
+  description: "1Herb privacy policy - how we collect, use, and protect your data.",
 };
 
 export default function PrivacyPage() {
@@ -99,7 +99,7 @@ export default function PrivacyPage() {
           </h2>
           <p>
             If you have any questions about this Privacy Policy, please contact
-            us at privacy@herbwise.app.
+            us at privacy@1herb.app.
           </p>
         </section>
       </div>

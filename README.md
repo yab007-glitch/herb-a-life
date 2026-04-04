@@ -1,4 +1,4 @@
-# Herb-a-Life
+# 1Herb
 
 A medical herbs SaaS application featuring a searchable database of 2,700+ medicinal herbs, age/weight-based dosage calculator, and an AI-powered virtual pharmacist for herb-drug interaction checking.
 
@@ -74,6 +74,6 @@ src/
 
 ## Disclaimer
 
-Herb-a-Life is for educational purposes only. It is not intended to diagnose, treat, cure, or prevent any disease. Always consult a qualified healthcare provider before using herbal supplements, especially if you are pregnant, nursing, taking medications, or have a medical condition.
+1Herb is for educational purposes only. It is not intended to diagnose, treat, cure, or prevent any disease. Always consult a qualified healthcare provider before using herbal supplements, especially if you are pregnant, nursing, taking medications, or have a medical condition.
 
 This application complies with FDA guidelines regarding dietary supplement information.

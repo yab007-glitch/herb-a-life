@@ -33,7 +33,7 @@ function generateStructuredData(herbs: HerbForSchema[]) {
         "name": herb.name,
         "alternateName": herb.scientific_name,
         "description": herb.description,
-        "url": `https://herb-a-life.app/herbs/${herb.slug || ""}`,
+        "url": `https://1herb.app/herbs/${herb.slug || ""}`,
       },
     })),
   };

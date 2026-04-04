@@ -19,9 +19,9 @@ export async function POST(req: NextRequest) {
           price_data: {
             currency: "usd",
             product_data: {
-              name: "Support Herb-a-Life",
+              name: "Support 1Herb",
               description: "Help keep herbal medicine information free for everyone",
-              images: ["https://herb-a-life.app/leaf-icon.png"],
+              images: ["https://1herb.app/leaf-icon.png"],
             },
             unit_amount: donationAmount,
           },
@@ -29,8 +29,8 @@ export async function POST(req: NextRequest) {
         },
       ],
       mode: "payment",
-      success_url: `${process.env.NEXT_PUBLIC_APP_URL || "https://herb-a-life.app"}/donate?success=true`,
-      cancel_url: `${process.env.NEXT_PUBLIC_APP_URL || "https://herb-a-life.app"}/donate?canceled=true`,
+      success_url: `${process.env.NEXT_PUBLIC_APP_URL || "https://1herb.app"}/donate?success=true`,
+      cancel_url: `${process.env.NEXT_PUBLIC_APP_URL || "https://1herb.app"}/donate?canceled=true`,
       metadata: {
         type: "donation",
       },

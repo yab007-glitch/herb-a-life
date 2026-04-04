@@ -5,6 +5,6 @@ export const openai = new OpenAI({
   apiKey: (process.env.OPENROUTER_API_KEY ?? "").trim(),
   defaultHeaders: {
     "HTTP-Referer": (process.env.NEXT_PUBLIC_APP_URL ?? "").trim(),
-    "X-Title": "Herb-a-Life",
+    "X-Title": "1Herb",
   },
 });

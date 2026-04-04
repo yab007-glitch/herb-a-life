@@ -18,7 +18,7 @@ export default function AdminLayout({
       <aside className="w-64 border-r bg-card p-4 hidden md:block">
         <div className="flex items-center gap-2 mb-8 px-2">
           <Leaf className="h-6 w-6 text-primary" />
-          <span className="font-bold text-lg">Herb-a-Life Admin</span>
+          <span className="font-bold text-lg">1Herb Admin</span>
         </div>
         <nav className="space-y-1">
           {adminNavItems.map((item) => (

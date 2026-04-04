@@ -13,7 +13,7 @@ import { ForgotPasswordForm } from "@/components/auth/forgot-password-form";
 
 export const metadata: Metadata = {
   title: "Forgot Password",
-  description: "Reset your Herb-a-Life password.",
+  description: "Reset your 1Herb password.",
 };
 
 export default function ForgotPasswordPage() {

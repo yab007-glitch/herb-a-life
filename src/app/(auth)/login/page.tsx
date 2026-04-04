@@ -10,7 +10,7 @@ import { LoginForm } from "@/components/auth/login-form";
 
 export const metadata: Metadata = {
   title: "Login",
-  description: "Sign in to your Herb-a-Life account.",
+  description: "Sign in to your 1Herb account.",
 };
 
 export default function LoginPage() {
@@ -18,7 +18,7 @@ export default function LoginPage() {
     <Card>
       <CardHeader className="text-center">
         <CardTitle className="text-2xl">Welcome back</CardTitle>
-        <CardDescription>Sign in to your Herb-a-Life account</CardDescription>
+        <CardDescription>Sign in to your 1Herb account</CardDescription>
       </CardHeader>
       <CardContent>
         <LoginForm />

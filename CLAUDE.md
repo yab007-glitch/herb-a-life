@@ -1,6 +1,6 @@
 @AGENTS.md
 
-# Herb-a-Life - Medical Herbs SaaS
+# 1Herb - Medical Herbs SaaS
 
 ## Tech Stack
 - Next.js 16 with App Router
