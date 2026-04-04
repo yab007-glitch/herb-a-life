@@ -2,6 +2,7 @@
 
 import Link from "next/link";
 import { useState } from "react";
+import { useRouter } from "next/navigation";
 import {
   Leaf,
   Menu,
@@ -44,6 +45,13 @@ type NavUser = { email: string; name: string } | null;
 
 export function MainNavbar({ user }: { user?: NavUser }) {
   const [open, setOpen] = useState(false);
+  const router = useRouter();
+
+  async function handleLogout() {
+    await logout();
+    router.push("/");
+    router.refresh();
+  }
 
   return (
     <header className="sticky top-0 z-50 w-full border-b/50 bg-background/80 backdrop-blur-lg">
@@ -111,12 +119,13 @@ export function MainNavbar({ user }: { user?: NavUser }) {
                   Dashboard
                 </DropdownMenuItem>
                 <DropdownMenuSeparator />
-                <form action={logout} className="w-full">
-                  <DropdownMenuItem render={<button type="submit" className="w-full" />}>
-                    <LogOut className="size-4" />
-                    Log out
-                  </DropdownMenuItem>
-                </form>
+                <DropdownMenuItem
+                  onClick={handleLogout}
+                  className="gap-2 cursor-pointer text-rose-600 focus:text-rose-700 focus:bg-rose-50 dark:focus:bg-rose-950/30"
+                >
+                  <LogOut className="size-4" />
+                  Log out
+                </DropdownMenuItem>
               </DropdownMenuContent>
             </DropdownMenu>
           ) : (
@@ -179,12 +188,10 @@ export function MainNavbar({ user }: { user?: NavUser }) {
                         <span className="text-xs text-muted-foreground">{user.email}</span>
                       </div>
                     </div>
-                    <form action={logout}>
-                      <Button variant="outline" size="sm" type="submit" className="w-full gap-2">
-                        <LogOut className="size-4" />
-                        Log out
-                      </Button>
-                    </form>
+                    <Button variant="outline" size="sm" onClick={handleLogout} className="w-full gap-2">
+                      <LogOut className="size-4" />
+                      Log out
+                    </Button>
                   </div>
                 ) : (
                   <Button
