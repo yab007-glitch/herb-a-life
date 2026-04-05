@@ -27,12 +27,26 @@ import { HerbSafetyBadges } from "@/components/herbs/herb-safety-badges";
 import { InteractionsTable } from "@/components/herbs/interactions-table";
 import { CopyLinkButton } from "@/components/herbs/copy-link-button";
 import { getHerbBySlug } from "@/lib/actions/herbs";
-import { createClient } from "@/lib/supabase/server";
+import { createClient } from "@supabase/supabase-js";
+
+// Use anon client for static generation (no cookies)
+function getAnonClient() {
+  const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL;
+  const supabaseKey = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY;
+  
+  if (!supabaseUrl || !supabaseKey) {
+    return null;
+  }
+  
+  return createClient(supabaseUrl, supabaseKey);
+}
 
 // Generate static pages for popular herbs (first 100 alphabetically)
 export async function generateStaticParams() {
   try {
-    const supabase = await createClient();
+    const supabase = getAnonClient();
+    if (!supabase) return [];
+
     const { data: herbs } = await supabase
       .from("herbs")
       .select("slug")
