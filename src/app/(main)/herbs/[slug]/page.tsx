@@ -27,6 +27,27 @@ import { HerbSafetyBadges } from "@/components/herbs/herb-safety-badges";
 import { InteractionsTable } from "@/components/herbs/interactions-table";
 import { CopyLinkButton } from "@/components/herbs/copy-link-button";
 import { getHerbBySlug } from "@/lib/actions/herbs";
+import { createClient } from "@/lib/supabase/server";
+
+// Generate static pages for popular herbs (first 100 alphabetically)
+export async function generateStaticParams() {
+  try {
+    const supabase = await createClient();
+    const { data: herbs } = await supabase
+      .from("herbs")
+      .select("slug")
+      .eq("is_published", true)
+      .order("name", { ascending: true })
+      .limit(100);
+
+    return (herbs ?? []).map((herb) => ({ slug: herb.slug }));
+  } catch {
+    return [];
+  }
+}
+
+// Revalidate every hour
+export const revalidate = 3600;
 
 type Props = { params: Promise<{ slug: string }> };
 

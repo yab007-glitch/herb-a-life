@@ -1,38 +1,121 @@
 import type { MetadataRoute } from "next";
-import { createClient } from "@supabase/supabase-js";
+import { createClient } from "@/lib/supabase/server";
 
 export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   const baseUrl = process.env.NEXT_PUBLIC_APP_URL ?? "https://1herb.app";
 
+  // Static pages
   const staticPages: MetadataRoute.Sitemap = [
-    { url: baseUrl, changeFrequency: "weekly", priority: 1.0 },
-    { url: `${baseUrl}/herbs`, changeFrequency: "daily", priority: 0.9 },
-    { url: `${baseUrl}/calculator`, changeFrequency: "monthly", priority: 0.8 },
-    { url: `${baseUrl}/about`, changeFrequency: "monthly", priority: 0.5 },
-    { url: `${baseUrl}/disclaimer`, changeFrequency: "yearly", priority: 0.3 },
-    { url: `${baseUrl}/privacy`, changeFrequency: "yearly", priority: 0.3 },
-    { url: `${baseUrl}/terms`, changeFrequency: "yearly", priority: 0.3 },
+    { 
+      url: baseUrl, 
+      lastModified: new Date(),
+      changeFrequency: "daily", 
+      priority: 1.0 
+    },
+    { 
+      url: `${baseUrl}/herbs`, 
+      lastModified: new Date(),
+      changeFrequency: "daily", 
+      priority: 0.9 
+    },
+    { 
+      url: `${baseUrl}/calculator`, 
+      lastModified: new Date(),
+      changeFrequency: "weekly", 
+      priority: 0.8 
+    },
+    { 
+      url: `${baseUrl}/pharmacist`, 
+      lastModified: new Date(),
+      changeFrequency: "weekly", 
+      priority: 0.8 
+    },
+    { 
+      url: `${baseUrl}/about`, 
+      lastModified: new Date(),
+      changeFrequency: "monthly", 
+      priority: 0.5 
+    },
+    { 
+      url: `${baseUrl}/donate`, 
+      lastModified: new Date(),
+      changeFrequency: "monthly", 
+      priority: 0.4 
+    },
+    { 
+      url: `${baseUrl}/disclaimer`, 
+      lastModified: new Date(),
+      changeFrequency: "yearly", 
+      priority: 0.3 
+    },
+    { 
+      url: `${baseUrl}/privacy`, 
+      lastModified: new Date(),
+      changeFrequency: "yearly", 
+      priority: 0.3 
+    },
+    { 
+      url: `${baseUrl}/terms`, 
+      lastModified: new Date(),
+      changeFrequency: "yearly", 
+      priority: 0.3 
+    },
+    { 
+      url: `${baseUrl}/login`, 
+      lastModified: new Date(),
+      changeFrequency: "monthly", 
+      priority: 0.4 
+    },
+    { 
+      url: `${baseUrl}/register`, 
+      lastModified: new Date(),
+      changeFrequency: "monthly", 
+      priority: 0.4 
+    },
+    { 
+      url: `${baseUrl}/dashboard`, 
+      lastModified: new Date(),
+      changeFrequency: "weekly", 
+      priority: 0.6 
+    },
   ];
 
   try {
-    const supabase = createClient(
-      process.env.NEXT_PUBLIC_SUPABASE_URL!,
-      process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!
-    );
+    const supabase = await createClient();
+
+    // Get all published herbs with slugs
     const { data: herbs } = await supabase
       .from("herbs")
       .select("slug, updated_at")
-      .eq("is_published", true);
+      .eq("is_published", true)
+      .order("name", { ascending: true });
 
     const herbPages: MetadataRoute.Sitemap = (herbs ?? []).map((herb) => ({
       url: `${baseUrl}/herbs/${herb.slug}`,
-      lastModified: herb.updated_at,
+      lastModified: herb.updated_at ? new Date(herb.updated_at) : new Date(),
       changeFrequency: "weekly" as const,
       priority: 0.7,
     }));
 
-    return [...staticPages, ...herbPages];
-  } catch {
+    // Get categories for category pages
+    const { data: categories } = await supabase
+      .from("herb_categories")
+      .select("slug");
+
+    const categoryPages: MetadataRoute.Sitemap = (categories ?? []).map((cat) => ({
+      url: `${baseUrl}/herbs?category=${cat.slug}`,
+      lastModified: new Date(),
+      changeFrequency: "weekly" as const,
+      priority: 0.6,
+    }));
+
+    return [...staticPages, ...categoryPages, ...herbPages];
+  } catch (error) {
+    console.error("Error generating sitemap:", error);
+    // Return static pages only on error
     return staticPages;
   }
 }
+
+// Revalidate every hour
+export const revalidate = 3600;

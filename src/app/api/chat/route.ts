@@ -1,10 +1,18 @@
 import { NextResponse, type NextRequest } from "next/server";
-import { openai } from "@/lib/ai/openai-client";
+import { openai, isOpenAIConfigured } from "@/lib/ai/openai-client";
 import { getSystemPrompt } from "@/lib/ai/system-prompt";
 import { rateLimit } from "@/lib/rate-limit";
 
 export async function POST(request: NextRequest) {
   try {
+    // Check if OpenRouter API key is configured
+    if (!isOpenAIConfigured()) {
+      return NextResponse.json(
+        { error: "AI service is not configured. Please contact support." },
+        { status: 503 }
+      );
+    }
+
     const ip = request.headers.get("x-forwarded-for")?.split(",")[0]?.trim() ?? "unknown";
     const { success } = await rateLimit(ip, 20, 60_000);
     if (!success) {

@@ -29,6 +29,15 @@ const securityHeaders = {
   "Referrer-Policy": "strict-origin-when-cross-origin",
   "X-DNS-Prefetch-Control": "on",
   "Permissions-Policy": "camera=(), microphone=(), geolocation=()",
+  "Content-Security-Policy": [
+    "default-src 'self'",
+    "script-src 'self' 'unsafe-inline' 'unsafe-eval' *.stripe.com",
+    "connect-src 'self' *.supabase.co *.openrouter.ai *.stripe.com",
+    "img-src 'self' data: blob: https:",
+    "style-src 'self' 'unsafe-inline'",
+    "font-src 'self' data:",
+    "frame-src *.stripe.com",
+  ].join("; "),
 };
 
 function applySecurityHeaders(response: NextResponse): NextResponse {

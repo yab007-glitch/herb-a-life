@@ -5,7 +5,21 @@ const nextConfig: NextConfig = {
   typescript: {
     ignoreBuildErrors: !!process.env.RENDER,
   },
-  // eslint ignore is handled via eslint config, not NextConfig in Next.js 16
+  // Enable standalone output for Docker deployment
+  output: "standalone",
+  // Optimize bundle size
+  experimental: {
+    optimizePackageImports: ["lucide-react", "react-markdown", "date-fns"],
+  },
+  // Image optimization domains
+  images: {
+    remotePatterns: [
+      {
+        protocol: "https",
+        hostname: "*.supabase.co",
+      },
+    ],
+  },
 };
 
 // Cast to bypass NextConfig type restriction for eslint option
