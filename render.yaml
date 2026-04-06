@@ -15,8 +15,12 @@ services:
         sync: false
       - key: OPENROUTER_API_KEY
         sync: false
-      - key: OPENROUTER_MODEL
-        value: qwen/qwen3.6-plus:free
+      - key: OLLAMA_API_KEY
+        sync: false
+      - key: OLLAMA_MODEL
+        value: gemma3:12b
+      - key: OLLAMA_BASE_URL
+        value: https://ollama.com/api
       - key: NEXT_PUBLIC_APP_URL
         value: https://1herb.vercel.app
       - key: NEXT_PUBLIC_APP_NAME

@@ -38,10 +38,10 @@ export async function GET() {
     error: missingEnvVars.length > 0 ? `Missing: ${missingEnvVars.join(", ")}` : undefined,
   };
 
-  // Check OpenRouter API key configuration
-  checks.openai = {
-    status: process.env.OPENROUTER_API_KEY ? "healthy" : "unconfigured",
-    error: !process.env.OPENROUTER_API_KEY ? "OPENROUTER_API_KEY not set" : undefined,
+  // Check Ollama/OpenRouter API key configuration
+  checks.ai = {
+    status: (process.env.OLLAMA_API_KEY || process.env.OPENROUTER_API_KEY) ? "healthy" : "unconfigured",
+    error: !(process.env.OLLAMA_API_KEY || process.env.OPENROUTER_API_KEY) ? "OLLAMA_API_KEY or OPENROUTER_API_KEY not set" : undefined,
   };
 
   // Check Stripe configuration

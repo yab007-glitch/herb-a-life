@@ -1,11 +1,16 @@
 import { NextResponse, type NextRequest } from "next/server";
-import { openai, isOpenAIConfigured } from "@/lib/ai/openai-client";
+import { isOpenAIConfigured } from "@/lib/ai/openai-client";
 import { getSystemPrompt } from "@/lib/ai/system-prompt";
 import { rateLimit } from "@/lib/rate-limit";
 
+// Ollama Cloud API configuration
+const OLLAMA_BASE_URL = process.env.OLLAMA_BASE_URL || "https://ollama.com/api";
+const OLLAMA_API_KEY = process.env.OLLAMA_API_KEY || process.env.OPENROUTER_API_KEY;
+const DEFAULT_MODEL = process.env.OLLAMA_MODEL || "gemma3:12b";
+
 export async function POST(request: NextRequest) {
   try {
-    // Check if OpenRouter API key is configured
+    // Check if API key is configured
     if (!isOpenAIConfigured()) {
       return NextResponse.json(
         { error: "AI service is not configured. Please contact support." },
@@ -33,35 +38,77 @@ export async function POST(request: NextRequest) {
     }
 
     const systemPrompt = getSystemPrompt(herbContext, medications);
+    const model = process.env.OLLAMA_MODEL || DEFAULT_MODEL;
 
-    // Use free tier model by default (no credits required)
-    // Can override with OPENROUTER_MODEL env var for paid models
-    const model = process.env.OPENROUTER_MODEL || "qwen/qwen3.6-plus:free";
+    // Format messages for Ollama API
+    const ollamaMessages = [
+      { role: "system", content: systemPrompt },
+      ...messages.map((m: { role: string; content: string }) => ({
+        role: m.role,
+        content: m.content,
+      })),
+    ];
 
-    const response = await openai.chat.completions.create({
-      model,
-      stream: true,
-      messages: [
-        { role: "system" as const, content: systemPrompt },
-        ...messages.map((m: { role: string; content: string }) => ({
-          role: m.role as "user" | "assistant",
-          content: m.content,
-        })),
-      ],
+    // Call Ollama Cloud API
+    const response = await fetch(`${OLLAMA_BASE_URL}/chat`, {
+      method: "POST",
+      headers: {
+        "Authorization": `Bearer ${OLLAMA_API_KEY}`,
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        model,
+        messages: ollamaMessages,
+        stream: true,
+      }),
     });
 
+    if (!response.ok) {
+      const errorText = await response.text().catch(() => "Unknown error");
+      console.error("Ollama API error:", response.status, errorText);
+      return NextResponse.json(
+        { error: "Failed to connect to AI service" },
+        { status: response.status === 429 ? 429 : 500 }
+      );
+    }
+
+    // Stream the response
     const encoder = new TextEncoder();
     const stream = new ReadableStream({
       async start(controller) {
         try {
-          for await (const chunk of response) {
-            const text = chunk.choices[0]?.delta?.content;
-            if (text) {
-              controller.enqueue(encoder.encode(text));
+          const reader = response.body?.getReader();
+          if (!reader) {
+            controller.close();
+            return;
+          }
+
+          const decoder = new TextDecoder();
+          let buffer = "";
+
+          while (true) {
+            const { done, value } = await reader.read();
+            if (done) break;
+
+            buffer += decoder.decode(value, { stream: true });
+            const lines = buffer.split("\n");
+            buffer = lines.pop() || "";
+
+            for (const line of lines) {
+              if (!line.trim()) continue;
+              try {
+                const data = JSON.parse(line);
+                if (data.message?.content) {
+                  controller.enqueue(encoder.encode(data.message.content));
+                }
+              } catch {
+                // Skip invalid JSON lines
+              }
             }
           }
           controller.close();
-        } catch {
+        } catch (error) {
+          console.error("Stream error:", error);
           controller.close();
         }
       },
