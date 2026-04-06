@@ -33,18 +33,18 @@ npm run dev
 
 ## Scripts
 
-| Script | Description |
-|--------|-------------|
-| `npm run dev` | Start dev server (Turbopack) |
-| `npm run build` | Production build |
-| `npm run start` | Start production server |
-| `npm run lint` | Run ESLint |
-| `npm run typecheck` | TypeScript type checking |
-| `npm run test` | Run tests (watch mode) |
-| `npm run test:run` | Run tests (single run) |
-| `npm run test:coverage` | Run tests with coverage |
-| `npm run format` | Format code with Prettier |
-| `npm run format:check` | Check formatting |
+| Script                  | Description                  |
+| ----------------------- | ---------------------------- |
+| `npm run dev`           | Start dev server (Turbopack) |
+| `npm run build`         | Production build             |
+| `npm run start`         | Start production server      |
+| `npm run lint`          | Run ESLint                   |
+| `npm run typecheck`     | TypeScript type checking     |
+| `npm run test`          | Run tests (watch mode)       |
+| `npm run test:run`      | Run tests (single run)       |
+| `npm run test:coverage` | Run tests with coverage      |
+| `npm run format`        | Format code with Prettier    |
+| `npm run format:check`  | Check formatting             |
 
 ## Project Structure
 

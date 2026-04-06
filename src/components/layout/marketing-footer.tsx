@@ -32,14 +32,17 @@ export function MarketingFooter() {
               </span>
             </Link>
             <p className="mt-4 max-w-sm text-sm text-muted-foreground">
-              Your trusted guide to medicinal herbs. Evidence-based information 
-              powered by WHO monographs, German Commission E, and PubMed research.
+              Your trusted guide to medicinal herbs. Evidence-based information
+              powered by WHO monographs, German Commission E, and PubMed
+              research.
             </p>
           </div>
 
           {/* Product Links */}
           <div>
-            <h3 className="mb-3 text-sm font-semibold text-foreground">Product</h3>
+            <h3 className="mb-3 text-sm font-semibold text-foreground">
+              Product
+            </h3>
             <ul className="space-y-2">
               {footerLinks.product.map((link) => (
                 <li key={link.href}>
@@ -56,7 +59,9 @@ export function MarketingFooter() {
 
           {/* Resources Links */}
           <div>
-            <h3 className="mb-3 text-sm font-semibold text-foreground">Resources</h3>
+            <h3 className="mb-3 text-sm font-semibold text-foreground">
+              Resources
+            </h3>
             <ul className="space-y-2">
               {footerLinks.resources.map((link) => (
                 <li key={link.href}>
@@ -75,7 +80,8 @@ export function MarketingFooter() {
         {/* Bottom */}
         <div className="mt-12 flex flex-col items-center justify-between gap-4 border-t pt-8 sm:flex-row">
           <p className="text-sm text-muted-foreground">
-            © {new Date().getFullYear()} HerbWise. Educational purposes only. Not medical advice.
+            © {new Date().getFullYear()} HerbWise. Educational purposes only.
+            Not medical advice.
           </p>
           <p className="text-xs text-muted-foreground">
             Built with Next.js, Supabase, and OpenRouter

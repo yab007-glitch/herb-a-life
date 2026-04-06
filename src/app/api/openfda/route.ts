@@ -7,7 +7,10 @@ export async function GET(request: Request) {
   const term = searchParams.get("term");
 
   if (!term) {
-    return NextResponse.json({ error: "Missing term parameter" }, { status: 400 });
+    return NextResponse.json(
+      { error: "Missing term parameter" },
+      { status: 400 }
+    );
   }
 
   try {

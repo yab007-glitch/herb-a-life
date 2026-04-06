@@ -6,7 +6,11 @@ import { HerbCard } from "@/components/herbs/herb-card";
 import { SmartSearch } from "@/components/herbs/smart-search";
 import { SurpriseMeButton } from "@/components/herbs/surprise-me-button";
 import { EmptyState } from "@/components/shared/empty-state";
-import { getHerbs, getHerbCategories, getSymptomCounts } from "@/lib/actions/herbs";
+import {
+  getHerbs,
+  getHerbCategories,
+  getSymptomCounts,
+} from "@/lib/actions/herbs";
 import { Flame } from "lucide-react";
 import Script from "next/script";
 
@@ -28,15 +32,15 @@ function generateStructuredData(herbs: HerbForSchema[]) {
   return {
     "@context": "https://schema.org",
     "@type": "ItemList",
-    "itemListElement": herbs.map((herb, index) => ({
+    itemListElement: herbs.map((herb, index) => ({
       "@type": "ListItem",
-      "position": index + 1,
-      "item": {
+      position: index + 1,
+      item: {
         "@type": "MedicalWebPage",
-        "name": herb.name,
-        "alternateName": herb.scientific_name,
-        "description": herb.description,
-        "url": `https://herbwise.app/herbs/${herb.slug || ""}`,
+        name: herb.name,
+        alternateName: herb.scientific_name,
+        description: herb.description,
+        url: `https://herbwise.app/herbs/${herb.slug || ""}`,
       },
     })),
   };
@@ -53,20 +57,35 @@ export default async function HerbsPage({
   const page = parseInt(params.page || "1", 10);
 
   const symptoms = [
-    "headache", "anxiety", "insomnia", "inflammation", "digestive",
-    "diabetes", "pain", "cough", "fever", "skin", "hypertension", "fatigue",
+    "headache",
+    "anxiety",
+    "insomnia",
+    "inflammation",
+    "digestive",
+    "diabetes",
+    "pain",
+    "cough",
+    "fever",
+    "skin",
+    "hypertension",
+    "fatigue",
   ];
 
   const [herbsResult, categoriesResult, countsResult] = await Promise.all([
     getHerbs({ query, category, page }),
     getHerbCategories(),
-    !query && !category ? getSymptomCounts(symptoms) : Promise.resolve({ success: false as const, data: undefined }),
+    !query && !category
+      ? getSymptomCounts(symptoms)
+      : Promise.resolve({ success: false as const, data: undefined }),
   ]);
 
   const herbs = herbsResult.success ? herbsResult.data!.herbs : [];
   const total = herbsResult.success ? herbsResult.data!.total : 0;
   const categories = categoriesResult.success ? categoriesResult.data! : [];
-  const symptomCounts = countsResult.success && countsResult.data ? countsResult.data : {} as Record<string, number>;
+  const symptomCounts =
+    countsResult.success && countsResult.data
+      ? countsResult.data
+      : ({} as Record<string, number>);
   const totalPages = Math.ceil(total / 20);
 
   const structuredData = generateStructuredData(herbs);
@@ -84,7 +103,12 @@ export default async function HerbsPage({
           Medicinal Herbs Database
         </h1>
         <p className="mt-2 text-lg text-muted-foreground">
-          Explore <span className="font-semibold text-foreground">{total.toLocaleString()}</span> herbs with detailed profiles, active compounds, and safety information.
+          Explore{" "}
+          <span className="font-semibold text-foreground">
+            {total.toLocaleString()}
+          </span>{" "}
+          herbs with detailed profiles, active compounds, and safety
+          information.
         </p>
       </div>
 
@@ -98,7 +122,9 @@ export default async function HerbsPage({
           <div className="space-y-3">
             <div className="flex items-center gap-2">
               <Flame className="size-4 text-orange-500" />
-              <p className="text-sm font-medium text-foreground">Popular Searches</p>
+              <p className="text-sm font-medium text-foreground">
+                Popular Searches
+              </p>
             </div>
             <div className="flex flex-wrap gap-2">
               {[
@@ -108,7 +134,10 @@ export default async function HerbsPage({
                 { term: "lavender", label: "Lavender" },
                 { term: "echinacea", label: "Echinacea" },
               ].map((item) => (
-                <Link key={item.term} href={`/herbs?q=${encodeURIComponent(item.term)}`}>
+                <Link
+                  key={item.term}
+                  href={`/herbs?q=${encodeURIComponent(item.term)}`}
+                >
                   <Badge
                     variant="secondary"
                     className="cursor-pointer gap-1 transition-all hover:bg-primary/10 hover:text-primary"
@@ -134,7 +163,11 @@ export default async function HerbsPage({
                   <Link
                     key={symptom}
                     href={`/herbs?q=${encodeURIComponent(symptom)}`}
-                    title={count != null ? `~${count} herb${count !== 1 ? "s" : ""} match "${symptom}"` : undefined}
+                    title={
+                      count != null
+                        ? `~${count} herb${count !== 1 ? "s" : ""} match "${symptom}"`
+                        : undefined
+                    }
                   >
                     <Badge
                       variant="outline"
@@ -142,7 +175,9 @@ export default async function HerbsPage({
                     >
                       {symptom}
                       {count != null && count > 0 && (
-                        <span className="ml-1 text-[10px] text-muted-foreground/70">{count}</span>
+                        <span className="ml-1 text-[10px] text-muted-foreground/70">
+                          {count}
+                        </span>
                       )}
                     </Badge>
                   </Link>
@@ -181,7 +216,8 @@ export default async function HerbsPage({
       {/* Search Results Label */}
       {query && herbs.length > 0 && (
         <p className="text-sm text-muted-foreground">
-          Found <span className="font-semibold text-foreground">{total}</span> herb{total !== 1 ? "s" : ""} matching &quot;{query}&quot;
+          Found <span className="font-semibold text-foreground">{total}</span>{" "}
+          herb{total !== 1 ? "s" : ""} matching &quot;{query}&quot;
         </p>
       )}
 
@@ -201,15 +237,23 @@ export default async function HerbsPage({
             action={{ label: "Browse All Herbs", href: "/herbs" }}
           />
           <div className="flex flex-wrap justify-center gap-2">
-            {["headache", "anxiety", "insomnia", "pain", "cough", "diabetes"].map(
-              (s) => (
-                <Link key={s} href={`/herbs?q=${s}`}>
-                  <Badge variant="outline" className="cursor-pointer hover:border-primary/50 hover:bg-primary/5">
-                    {s}
-                  </Badge>
-                </Link>
-              )
-            )}
+            {[
+              "headache",
+              "anxiety",
+              "insomnia",
+              "pain",
+              "cough",
+              "diabetes",
+            ].map((s) => (
+              <Link key={s} href={`/herbs?q=${s}`}>
+                <Badge
+                  variant="outline"
+                  className="cursor-pointer hover:border-primary/50 hover:bg-primary/5"
+                >
+                  {s}
+                </Badge>
+              </Link>
+            ))}
           </div>
         </div>
       )}

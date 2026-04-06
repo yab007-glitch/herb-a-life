@@ -1,6 +1,6 @@
 /**
  * Rate limiting with configurable backend.
- * 
+ *
  * Backends:
  * - memory: Default, works locally but doesn't scale (per-instance)
  * - upstash: Production-ready, requires UPSTASH_REDIS_REST_URL and UPSTASH_REDIS_REST_TOKEN
@@ -56,7 +56,9 @@ async function upstashRateLimit(
   const token = process.env.UPSTASH_REDIS_REST_TOKEN;
 
   if (!url || !token) {
-    console.warn("Upstash credentials not configured, falling back to memory rate limit");
+    console.warn(
+      "Upstash credentials not configured, falling back to memory rate limit"
+    );
     return memoryRateLimit(key, limit, windowMs);
   }
 
@@ -75,7 +77,12 @@ async function upstashRateLimit(
       body: JSON.stringify([
         ["ZREMRANGEBYSCORE", redisKey, "-inf", windowStart.toString()],
         ["ZCARD", redisKey],
-        ["ZADD", redisKey, now.toString(), `${now}-${Math.random().toString(36).slice(2)}`],
+        [
+          "ZADD",
+          redisKey,
+          now.toString(),
+          `${now}-${Math.random().toString(36).slice(2)}`,
+        ],
         ["PEXPIRE", redisKey, windowMs.toString()],
       ]),
     });
@@ -85,7 +92,7 @@ async function upstashRateLimit(
       return memoryRateLimit(key, limit, windowMs);
     }
 
-    const results = await response.json() as [null, number, null, null][];
+    const results = (await response.json()) as [null, number, null, null][];
     const count = results[1]?.[1] ?? 0;
 
     if (count >= limit) {
@@ -101,7 +108,7 @@ async function upstashRateLimit(
 
 /**
  * Rate limit by key (IP, user ID, etc.)
- * 
+ *
  * @param key - Unique identifier (IP address, user ID, etc.)
  * @param limit - Maximum requests per window
  * @param windowMs - Time window in milliseconds

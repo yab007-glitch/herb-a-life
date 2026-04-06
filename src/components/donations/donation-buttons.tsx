@@ -41,9 +41,9 @@ export function DonationButtons() {
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ amount: amount * 100 }), // Convert to cents
       });
-      
+
       const data = await res.json();
-      
+
       if (data.url) {
         window.location.href = data.url;
       } else {
@@ -70,21 +70,23 @@ export function DonationButtons() {
               className="group relative cursor-pointer overflow-hidden transition-all hover:scale-[1.02] hover:shadow-lg"
               onClick={() => handleDonate(tier.amount)}
             >
-              <div className={`absolute inset-0 bg-gradient-to-br ${tier.color} opacity-0 transition-opacity group-hover:opacity-10`} />
+              <div
+                className={`absolute inset-0 bg-gradient-to-br ${tier.color} opacity-0 transition-opacity group-hover:opacity-10`}
+              />
               <CardContent className="flex flex-col items-center py-8 text-center relative">
                 {isLoading ? (
                   <Loader2 className="h-10 w-10 text-primary mb-3 animate-spin" />
                 ) : (
-                  <div className={`flex h-12 w-12 items-center justify-center rounded-full bg-gradient-to-br ${tier.color} mb-3 transition-transform group-hover:scale-110`}>
+                  <div
+                    className={`flex h-12 w-12 items-center justify-center rounded-full bg-gradient-to-br ${tier.color} mb-3 transition-transform group-hover:scale-110`}
+                  >
                     <Icon className="h-6 w-6 text-white" />
                   </div>
                 )}
                 <p className="text-3xl font-bold text-foreground">
                   ${tier.amount}
                 </p>
-                <p className="font-medium text-foreground mt-1">
-                  {tier.label}
-                </p>
+                <p className="font-medium text-foreground mt-1">{tier.label}</p>
                 <p className="text-sm text-muted-foreground mt-1">
                   {tier.description}
                 </p>
@@ -98,13 +100,19 @@ export function DonationButtons() {
       <Card className="border-primary/20 bg-gradient-to-br from-muted/50 to-transparent">
         <CardContent className="py-8">
           <div className="flex flex-col items-center gap-4 sm:flex-row sm:justify-center">
-            <p className="text-sm text-muted-foreground">Or choose a custom amount:</p>
+            <p className="text-sm text-muted-foreground">
+              Or choose a custom amount:
+            </p>
             <div className="flex items-center gap-2">
               <span className="text-xl font-bold text-muted-foreground">$</span>
               <input
                 type="number"
                 value={customAmount}
-                onChange={(e) => setCustomAmount(Math.max(1, Math.min(1000, Number(e.target.value))))}
+                onChange={(e) =>
+                  setCustomAmount(
+                    Math.max(1, Math.min(1000, Number(e.target.value)))
+                  )
+                }
                 min={1}
                 max={1000}
                 step={1}
@@ -127,24 +135,54 @@ export function DonationButtons() {
           </div>
         </CardContent>
       </Card>
-      
+
       {/* Trust Indicators */}
       <div className="flex flex-wrap items-center justify-center gap-6 text-sm text-muted-foreground">
         <div className="flex items-center gap-2">
-          <svg className="size-5 text-emerald-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z" />
+          <svg
+            className="size-5 text-emerald-600"
+            fill="none"
+            viewBox="0 0 24 24"
+            stroke="currentColor"
+          >
+            <path
+              strokeLinecap="round"
+              strokeLinejoin="round"
+              strokeWidth={2}
+              d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z"
+            />
           </svg>
           <span>Secure via Stripe</span>
         </div>
         <div className="flex items-center gap-2">
-          <svg className="size-5 text-blue-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 10h18M7 15h1m4 0h1m-7 4h12a3 3 0 003-3V8a3 3 0 00-3-3H6a3 3 0 00-3 3v8a3 3 0 003 3z" />
+          <svg
+            className="size-5 text-blue-600"
+            fill="none"
+            viewBox="0 0 24 24"
+            stroke="currentColor"
+          >
+            <path
+              strokeLinecap="round"
+              strokeLinejoin="round"
+              strokeWidth={2}
+              d="M3 10h18M7 15h1m4 0h1m-7 4h12a3 3 0 003-3V8a3 3 0 00-3-3H6a3 3 0 00-3 3v8a3 3 0 003 3z"
+            />
           </svg>
           <span>All cards accepted</span>
         </div>
         <div className="flex items-center gap-2">
-          <svg className="size-5 text-purple-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z" />
+          <svg
+            className="size-5 text-purple-600"
+            fill="none"
+            viewBox="0 0 24 24"
+            stroke="currentColor"
+          >
+            <path
+              strokeLinecap="round"
+              strokeLinejoin="round"
+              strokeWidth={2}
+              d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z"
+            />
           </svg>
           <span>No card data stored</span>
         </div>

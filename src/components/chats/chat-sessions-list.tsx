@@ -3,11 +3,20 @@
 import { useState } from "react";
 import { useRouter } from "next/navigation";
 import Link from "next/link";
-import { MessageCircle, Trash2, Loader2, Clock, ArrowRight } from "lucide-react";
+import {
+  MessageCircle,
+  Trash2,
+  Loader2,
+  Clock,
+  ArrowRight,
+} from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
-import { deleteChatSession, type ChatSession } from "@/lib/actions/chat-sessions";
+import {
+  deleteChatSession,
+  type ChatSession,
+} from "@/lib/actions/chat-sessions";
 import { toast } from "sonner";
 
 function formatDate(dateStr: string) {
@@ -74,8 +83,8 @@ export function ChatSessionsList({
             No chat sessions yet
           </p>
           <p className="text-sm text-muted-foreground mt-1">
-            Start a conversation with the virtual herbalist to see your
-            history here.
+            Start a conversation with the virtual herbalist to see your history
+            here.
           </p>
           <Button
             size="sm"
@@ -138,7 +147,7 @@ export function ChatSessionsList({
                   variant="ghost"
                   size="icon-sm"
                   className="text-red-500 hover:text-red-700 hover:bg-red-50 dark:hover:bg-red-950/30"
-                    aria-label="Delete chat session"
+                  aria-label="Delete chat session"
                   onClick={(e) => {
                     e.stopPropagation();
                     handleDelete(session.id);

@@ -13,8 +13,21 @@ export type DosageCalculation = Tables<"dosage_calculations">;
 export type ChatSession = Tables<"chat_sessions">;
 
 export type UserRole = "user" | "admin";
-export type InteractionSeverity = "mild" | "moderate" | "severe" | "contraindicated";
-export type DosageForm = "capsule" | "tablet" | "tincture" | "tea" | "powder" | "essential_oil" | "extract" | "topical" | "other";
+export type InteractionSeverity =
+  | "mild"
+  | "moderate"
+  | "severe"
+  | "contraindicated";
+export type DosageForm =
+  | "capsule"
+  | "tablet"
+  | "tincture"
+  | "tea"
+  | "powder"
+  | "essential_oil"
+  | "extract"
+  | "topical"
+  | "other";
 export type FormulaType = "clarks_rule" | "youngs_rule" | "bsa" | "fried_rule";
 
 // Extended types with joins

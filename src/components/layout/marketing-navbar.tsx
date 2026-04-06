@@ -75,7 +75,10 @@ export function MarketingNavbar() {
               <Menu className="size-5" />
               <span className="sr-only">{t("common.language")}</span>
             </SheetTrigger>
-            <SheetContent side="right" className="w-80 border-l border-border/50">
+            <SheetContent
+              side="right"
+              className="w-80 border-l border-border/50"
+            >
               <SheetHeader>
                 <SheetTitle className="flex items-center gap-2">
                   <div className="flex size-8 items-center justify-center rounded-lg bg-gradient-to-br from-primary to-teal-600 text-white">

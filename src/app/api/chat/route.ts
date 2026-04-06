@@ -11,7 +11,7 @@ export async function POST(request: NextRequest) {
   try {
     // Get API key at runtime (not at module load time)
     const apiKey = process.env.OLLAMA_API_KEY || process.env.OPENROUTER_API_KEY;
-    
+
     // Check if API key is configured
     if (!apiKey) {
       console.error("AI API key not configured");
@@ -21,12 +21,17 @@ export async function POST(request: NextRequest) {
       );
     }
 
-    const ip = request.headers.get("x-forwarded-for")?.split(",")[0]?.trim() ?? "unknown";
+    const ip =
+      request.headers.get("x-forwarded-for")?.split(",")[0]?.trim() ??
+      "unknown";
     const { success } = await rateLimit(ip, 20, 60_000);
     if (!success) {
       return NextResponse.json(
         { error: "Too many requests. Please try again later." },
-        { status: 429, headers: { "Retry-After": "60", "X-RateLimit-Remaining": "0" } }
+        {
+          status: 429,
+          headers: { "Retry-After": "60", "X-RateLimit-Remaining": "0" },
+        }
       );
     }
 
@@ -52,13 +57,17 @@ export async function POST(request: NextRequest) {
       })),
     ];
 
-    console.log("Calling Ollama API:", { model, baseUrl: OLLAMA_BASE_URL, messageCount: ollamaMessages.length });
+    console.log("Calling Ollama API:", {
+      model,
+      baseUrl: OLLAMA_BASE_URL,
+      messageCount: ollamaMessages.length,
+    });
 
     // Call Ollama Cloud API
     const response = await fetch(`${OLLAMA_BASE_URL}/chat`, {
       method: "POST",
       headers: {
-        "Authorization": `Bearer ${apiKey}`,
+        Authorization: `Bearer ${apiKey}`,
         "Content-Type": "application/json",
       },
       body: JSON.stringify({

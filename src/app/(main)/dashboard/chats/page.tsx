@@ -12,7 +12,7 @@ export const metadata: Metadata = {
 
 export default async function ChatsPage() {
   const result = await getChatSessions();
-  const sessions = result.success ? result.data ?? [] : [];
+  const sessions = result.success ? (result.data ?? []) : [];
 
   return (
     <div className="space-y-6">

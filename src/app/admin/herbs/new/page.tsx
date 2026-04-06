@@ -22,7 +22,12 @@ export default function NewHerbPage() {
             <div className="grid gap-4 md:grid-cols-2">
               <div className="space-y-2">
                 <Label htmlFor="name">Common Name</Label>
-                <Input id="name" name="name" placeholder="e.g. Turmeric" required />
+                <Input
+                  id="name"
+                  name="name"
+                  placeholder="e.g. Turmeric"
+                  required
+                />
               </div>
               <div className="space-y-2">
                 <Label htmlFor="scientific_name">Scientific Name</Label>

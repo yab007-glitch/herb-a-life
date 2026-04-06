@@ -1,6 +1,12 @@
 "use client";
 
-import { createContext, useContext, useState, useEffect, ReactNode } from "react";
+import {
+  createContext,
+  useContext,
+  useState,
+  useEffect,
+  ReactNode,
+} from "react";
 import { DEFAULT_LOCALE, type Locale } from "@/lib/i18n/config";
 
 interface I18nContextType {
@@ -22,7 +28,7 @@ export function I18nProvider({ children }: { children: ReactNode }) {
   // Initialize locale from localStorage or browser
   useEffect(() => {
     if (typeof window === "undefined") return;
-    
+
     const saved = localStorage.getItem("herbwise-locale");
     if (saved && (saved === "en" || saved === "fr")) {
       setLocaleState(saved as Locale);
@@ -55,7 +61,7 @@ export function I18nProvider({ children }: { children: ReactNode }) {
         setIsLoading(false);
       }
     };
-    
+
     loadDict();
   }, [locale]);
 
@@ -70,7 +76,7 @@ export function I18nProvider({ children }: { children: ReactNode }) {
     const keys = key.split(".");
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
     let value: any = dict;
-    
+
     for (const k of keys) {
       if (value && typeof value === "object" && k in value) {
         value = value[k];
@@ -78,22 +84,24 @@ export function I18nProvider({ children }: { children: ReactNode }) {
         return key;
       }
     }
-    
+
     if (typeof value !== "string") {
       return key;
     }
-    
+
     if (params) {
       return value.replace(/{(\w+)}/g, (_, param) => {
         return String(params[param] ?? `{${param}}`);
       });
     }
-    
+
     return value;
   };
 
   return (
-    <I18nContext.Provider value={{ locale, setLocale, t, detectedLocale, isLoading }}>
+    <I18nContext.Provider
+      value={{ locale, setLocale, t, detectedLocale, isLoading }}
+    >
       {children}
     </I18nContext.Provider>
   );

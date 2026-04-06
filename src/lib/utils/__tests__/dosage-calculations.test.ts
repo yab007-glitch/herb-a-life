@@ -116,15 +116,13 @@ describe("recommendFormula", () => {
   });
 
   it("recommends BSA when both height and weight available", () => {
-    expect(
-      recommendFormula({ ageYears: 8, weightKg: 30, heightCm: 120 })
-    ).toBe("bsa");
+    expect(recommendFormula({ ageYears: 8, weightKg: 30, heightCm: 120 })).toBe(
+      "bsa"
+    );
   });
 
   it("recommends Clark's rule when only weight available", () => {
-    expect(recommendFormula({ ageYears: 8, weightKg: 30 })).toBe(
-      "clarks_rule"
-    );
+    expect(recommendFormula({ ageYears: 8, weightKg: 30 })).toBe("clarks_rule");
   });
 
   it("recommends Young's rule as fallback (age only)", () => {

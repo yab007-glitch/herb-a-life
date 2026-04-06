@@ -7,12 +7,8 @@ const serverSchema = z.object({
   OPENROUTER_API_KEY: z.string().min(1),
   OPENROUTER_MODEL: z.string().default("openai/gpt-4o-mini"),
   NEXT_PUBLIC_APP_URL: z.url().optional(),
-  OPENFDA_BASE_URL: z
-    .url()
-    .default("https://api.fda.gov/drug"),
-  RXNORM_BASE_URL: z
-    .url()
-    .default("https://rxnav.nlm.nih.gov/REST"),
+  OPENFDA_BASE_URL: z.url().default("https://api.fda.gov/drug"),
+  RXNORM_BASE_URL: z.url().default("https://rxnav.nlm.nih.gov/REST"),
 });
 
 const clientSchema = z.object({

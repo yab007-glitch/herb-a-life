@@ -12,7 +12,7 @@ export const metadata: Metadata = {
 
 export default async function MedicationsPage() {
   const result = await getUserMedications();
-  const medications = result.success ? result.data ?? [] : [];
+  const medications = result.success ? (result.data ?? []) : [];
 
   return (
     <div className="space-y-6">

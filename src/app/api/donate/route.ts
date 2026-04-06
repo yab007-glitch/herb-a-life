@@ -7,7 +7,7 @@ if (!stripeSecretKey && process.env.NODE_ENV === "production") {
   console.error("STRIPE_SECRET_KEY is not configured");
 }
 
-const stripe = stripeSecretKey 
+const stripe = stripeSecretKey
   ? new Stripe(stripeSecretKey, { apiVersion: "2024-12-18.acacia" })
   : null;
 
@@ -15,7 +15,9 @@ export async function POST(req: NextRequest) {
   // Check if Stripe is configured
   if (!stripe) {
     return NextResponse.json(
-      { error: "Donations are not currently available. Please try again later." },
+      {
+        error: "Donations are not currently available. Please try again later.",
+      },
       { status: 503 }
     );
   }
@@ -24,7 +26,10 @@ export async function POST(req: NextRequest) {
     const { amount } = await req.json();
 
     // Validate amount (min $1, max $1000)
-    const donationAmount = Math.max(100, Math.min(100000, Number(amount) || 1000)); // in cents
+    const donationAmount = Math.max(
+      100,
+      Math.min(100000, Number(amount) || 1000)
+    ); // in cents
 
     const appUrl = process.env.NEXT_PUBLIC_APP_URL || "https://herbwise.app";
 
@@ -36,7 +41,8 @@ export async function POST(req: NextRequest) {
             currency: "usd",
             product_data: {
               name: "Support HerbWise",
-              description: "Help keep herbal medicine information free for everyone",
+              description:
+                "Help keep herbal medicine information free for everyone",
               // Remove images field - Stripe requires publicly accessible URLs
               // If you want an image, upload to public/ and use appUrl + "/leaf-icon.png"
             },

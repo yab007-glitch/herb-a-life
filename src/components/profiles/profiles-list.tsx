@@ -15,12 +15,7 @@ import {
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import {
-  Card,
-  CardContent,
-  CardHeader,
-  CardTitle,
-} from "@/components/ui/card";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import {
   addPatientProfile,
@@ -110,9 +105,7 @@ export function ProfilesList({
       {showForm && (
         <Card>
           <CardHeader>
-            <CardTitle className="text-base">
-              Add a Person
-            </CardTitle>
+            <CardTitle className="text-base">Add a Person</CardTitle>
           </CardHeader>
           <CardContent>
             <form onSubmit={handleAdd} className="space-y-4">
@@ -227,8 +220,7 @@ export function ProfilesList({
       {profiles.length > 0 ? (
         <div className="grid gap-4 sm:grid-cols-2">
           {profiles.map((profile) => {
-            const RelIcon =
-              relationshipIcons[profile.relationship] ?? Users;
+            const RelIcon = relationshipIcons[profile.relationship] ?? Users;
             return (
               <Card key={profile.id}>
                 <CardContent className="py-4">

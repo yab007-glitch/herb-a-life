@@ -244,7 +244,12 @@ export type Database = {
           herb_id: string | null;
           medications_checked: Json;
           results: Json;
-          severity_summary: "mild" | "moderate" | "severe" | "contraindicated" | null;
+          severity_summary:
+            | "mild"
+            | "moderate"
+            | "severe"
+            | "contraindicated"
+            | null;
           created_at: string;
         };
         Insert: {
@@ -253,13 +258,23 @@ export type Database = {
           herb_id?: string | null;
           medications_checked?: Json;
           results?: Json;
-          severity_summary?: "mild" | "moderate" | "severe" | "contraindicated" | null;
+          severity_summary?:
+            | "mild"
+            | "moderate"
+            | "severe"
+            | "contraindicated"
+            | null;
           created_at?: string;
         };
         Update: {
           medications_checked?: Json;
           results?: Json;
-          severity_summary?: "mild" | "moderate" | "severe" | "contraindicated" | null;
+          severity_summary?:
+            | "mild"
+            | "moderate"
+            | "severe"
+            | "contraindicated"
+            | null;
         };
         Relationships: [];
       };
@@ -401,7 +416,16 @@ export type Database = {
     Enums: {
       user_role: "user" | "admin";
       interaction_severity: "mild" | "moderate" | "severe" | "contraindicated";
-      dosage_form: "capsule" | "tablet" | "tincture" | "tea" | "powder" | "essential_oil" | "extract" | "topical" | "other";
+      dosage_form:
+        | "capsule"
+        | "tablet"
+        | "tincture"
+        | "tea"
+        | "powder"
+        | "essential_oil"
+        | "extract"
+        | "topical"
+        | "other";
       formula_type: "clarks_rule" | "youngs_rule" | "bsa" | "fried_rule";
     };
   };

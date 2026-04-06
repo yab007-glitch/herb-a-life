@@ -58,7 +58,7 @@ function formatRelativeTime(dateStr: string | null): string | null {
 }
 
 function isWithin24Hours(dateStr: string): boolean {
-  return (Date.now() - new Date(dateStr).getTime()) < (24 * 60 * 60 * 1000);
+  return Date.now() - new Date(dateStr).getTime() < 24 * 60 * 60 * 1000;
 }
 
 export default async function DashboardPage() {
@@ -76,7 +76,15 @@ export default async function DashboardPage() {
   let lastChatActivity: string | null = null;
 
   if (user) {
-    const [meds, profiles, chats, latestCheck, latestMed, latestProfile, latestChat] = await Promise.all([
+    const [
+      meds,
+      profiles,
+      chats,
+      latestCheck,
+      latestMed,
+      latestProfile,
+      latestChat,
+    ] = await Promise.all([
       supabase
         .from("user_medications")
         .select("id", { count: "exact", head: true })
@@ -129,7 +137,9 @@ export default async function DashboardPage() {
   }
 
   // Check if interaction was within last 24 hours (server component)
-  const hasNewInteractions = recentInteraction ? isWithin24Hours(recentInteraction) : false;
+  const hasNewInteractions = recentInteraction
+    ? isWithin24Hours(recentInteraction)
+    : false;
 
   const dashboardCards = [
     {
@@ -169,8 +179,7 @@ export default async function DashboardPage() {
     },
     {
       title: "Chat Sessions",
-      description:
-        "Access your past conversations with the virtual herbalist",
+      description: "Access your past conversations with the virtual herbalist",
       icon: MessageCircle,
       count: chatCount,
       href: "/dashboard/chats",
@@ -182,10 +191,30 @@ export default async function DashboardPage() {
   ];
 
   const quickActions = [
-    { href: "/herbs", icon: Leaf, label: "Browse Herbs", description: "Explore the database" },
-    { href: "/herbs?q=", icon: Search, label: "Search Herbs", description: "Find by symptom" },
-    { href: "/calculator", icon: Calculator, label: "Calculate Dose", description: "Dosage formula" },
-    { href: "/pharmacist", icon: MessageCircle, label: "Ask Herbalist", description: "AI chat assistant" },
+    {
+      href: "/herbs",
+      icon: Leaf,
+      label: "Browse Herbs",
+      description: "Explore the database",
+    },
+    {
+      href: "/herbs?q=",
+      icon: Search,
+      label: "Search Herbs",
+      description: "Find by symptom",
+    },
+    {
+      href: "/calculator",
+      icon: Calculator,
+      label: "Calculate Dose",
+      description: "Dosage formula",
+    },
+    {
+      href: "/pharmacist",
+      icon: MessageCircle,
+      label: "Ask Herbalist",
+      description: "AI chat assistant",
+    },
   ];
 
   return (
@@ -196,7 +225,8 @@ export default async function DashboardPage() {
           Welcome back
         </h1>
         <p className="mt-1 text-muted-foreground">
-          Manage your medications, review interaction checks, and access your activity history.
+          Manage your medications, review interaction checks, and access your
+          activity history.
         </p>
       </div>
 
@@ -210,11 +240,15 @@ export default async function DashboardPage() {
               className={`card-press group relative overflow-hidden border-border/50 transition-all duration-300 hover:shadow-lg hover:-translate-y-0.5 ${card.needsAttention ? "animate-pulse-attention" : ""}`}
             >
               {/* Gradient accent */}
-              <div className={`absolute inset-x-0 top-0 h-1 bg-gradient-to-r ${card.gradient}`} />
+              <div
+                className={`absolute inset-x-0 top-0 h-1 bg-gradient-to-r ${card.gradient}`}
+              />
 
               <CardHeader>
                 <div className="flex items-start justify-between">
-                  <div className={`flex size-10 items-center justify-center rounded-lg bg-gradient-to-br ${card.gradient} text-white shadow-sm`}>
+                  <div
+                    className={`flex size-10 items-center justify-center rounded-lg bg-gradient-to-br ${card.gradient} text-white shadow-sm`}
+                  >
                     <Icon className="size-5" />
                   </div>
                   <div className="flex items-center gap-3">
@@ -272,8 +306,12 @@ export default async function DashboardPage() {
                     <Icon className="size-5" />
                   </div>
                   <div>
-                    <p className="text-sm font-medium text-foreground">{action.label}</p>
-                    <p className="text-xs text-muted-foreground">{action.description}</p>
+                    <p className="text-sm font-medium text-foreground">
+                      {action.label}
+                    </p>
+                    <p className="text-xs text-muted-foreground">
+                      {action.description}
+                    </p>
                   </div>
                 </Link>
               );

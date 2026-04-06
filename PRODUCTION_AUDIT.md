@@ -9,6 +9,7 @@
 ## ✅ Completed Fixes
 
 ### Security
+
 - ✅ OpenRouter API key validation added
 - ✅ Content Security Policy headers configured
 - ✅ Stripe webhook signature verification implemented
@@ -16,12 +17,14 @@
 - ✅ Removed image reference from Stripe checkout (was 404)
 
 ### Performance
+
 - ✅ ISR enabled for herb pages (`generateStaticParams` for top 100)
 - ✅ Sitemap includes all 2,700+ herbs dynamically
 - ✅ Bundle optimization configured (`optimizePackageImports`)
 - ✅ Standalone output enabled for Docker deployment
 
 ### Infrastructure
+
 - ✅ Health check endpoint created (`/api/health`)
 - ✅ Stripe webhook handler created (`/api/webhooks/stripe`)
 - ✅ `.env.example` documentation added
@@ -29,6 +32,7 @@
 - ✅ Production build successful
 
 ### Code Quality
+
 - ✅ OpenRouter API key validation with graceful fallback
 - ✅ Donations endpoint checks if Stripe is configured
 - ✅ Proper error handling in health endpoint
@@ -38,11 +42,13 @@
 ## 📋 Remaining Tasks (Before Launch)
 
 ### Critical
+
 - [ ] **Rotate Stripe Keys** - Go to Stripe Dashboard and create new keys
 - [ ] **Configure Upstash Redis** - Required for rate limiting on serverless
 - [ ] **Set Stripe Webhook Secret** - Add `STRIPE_WEBHOOK_SECRET` from Stripe Dashboard
 
 ### Environment Variables (Set in Vercel/Render)
+
 ```
 NEXT_PUBLIC_APP_URL=https://your-domain.com
 NEXT_PUBLIC_SUPABASE_URL=https://xxx.supabase.co
@@ -58,6 +64,7 @@ UPSTASH_REDIS_REST_TOKEN=xxx
 ```
 
 ### Recommended (Post-Launch)
+
 - [ ] Add Sentry for error tracking
 - [ ] Add Vercel Analytics or Plausible
 - [ ] Create donations database table for tracking
@@ -69,17 +76,20 @@ UPSTASH_REDIS_REST_TOKEN=xxx
 ## 🚀 Deployment Steps
 
 ### 1. Stripe Setup
+
 1. Go to Stripe Dashboard → API Keys
 2. Create new restricted keys (live mode for production)
 3. Go to Webhooks → Add endpoint: `https://your-domain.com/api/webhooks/stripe`
 4. Copy the webhook signing secret to `STRIPE_WEBHOOK_SECRET`
 
 ### 2. Upstash Redis (Rate Limiting)
+
 1. Create Upstash account
 2. Create a Redis database
 3. Copy REST URL and token to environment variables
 
 ### 3. Deploy to Vercel
+
 ```bash
 # Install Vercel CLI
 npm i -g vercel
@@ -91,6 +101,7 @@ vercel --prod
 ```
 
 ### 4. Verify Deployment
+
 - [ ] Visit `/api/health` - should return `{"status":"healthy"...}`
 - [ ] Test donation flow with test card: `4242 4242 4242 4242`
 - [ ] Test chat API with a question
@@ -102,7 +113,7 @@ vercel --prod
 
 ```
 ✅ TypeScript: Clean
-✅ ESLint: Clean  
+✅ ESLint: Clean
 ✅ Production Build: Successful
 ✅ Static Pages: 17
 ✅ Dynamic Routes: 26
@@ -113,15 +124,15 @@ vercel --prod
 
 ## 🏗️ Architecture Summary
 
-| Component | Technology | Notes |
-|-----------|------------|-------|
-| Framework | Next.js 16 | App Router, React 19 |
-| Database | Supabase | PostgreSQL + Auth |
-| AI | OpenRouter | gpt-4o-mini default |
-| Payments | Stripe | Checkout + Webhooks |
-| Rate Limiting | Upstash Redis | Required for serverless |
-| Deployment | Vercel/Render | Docker ready |
-| Styles | Tailwind CSS 4 | shadcn/ui components |
+| Component     | Technology     | Notes                   |
+| ------------- | -------------- | ----------------------- |
+| Framework     | Next.js 16     | App Router, React 19    |
+| Database      | Supabase       | PostgreSQL + Auth       |
+| AI            | OpenRouter     | gpt-4o-mini default     |
+| Payments      | Stripe         | Checkout + Webhooks     |
+| Rate Limiting | Upstash Redis  | Required for serverless |
+| Deployment    | Vercel/Render  | Docker ready            |
+| Styles        | Tailwind CSS 4 | shadcn/ui components    |
 
 ---
 

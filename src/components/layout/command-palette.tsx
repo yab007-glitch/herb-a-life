@@ -1,7 +1,7 @@
-"use client"
+"use client";
 
-import * as React from "react"
-import { useRouter } from "next/navigation"
+import * as React from "react";
+import { useRouter } from "next/navigation";
 import {
   Leaf,
   Calculator,
@@ -11,7 +11,7 @@ import {
   AlertTriangle,
   ArrowRight,
   Loader2,
-} from "lucide-react"
+} from "lucide-react";
 import {
   CommandDialog,
   CommandEmpty,
@@ -21,81 +21,84 @@ import {
   CommandList,
   CommandSeparator,
   CommandShortcut,
-} from "@/components/ui/command"
-import { cn } from "@/lib/utils"
+} from "@/components/ui/command";
+import { cn } from "@/lib/utils";
 
 type HerbResult = {
-  id: string
-  name: string
-  slug: string
-  scientific_name: string
-}
+  id: string;
+  name: string;
+  slug: string;
+  scientific_name: string;
+};
 
 export function CommandPalette() {
-  const [open, setOpen] = React.useState(false)
-  const [query, setQuery] = React.useState("")
-  const [herbs, setHerbs] = React.useState<HerbResult[]>([])
-  const [loading, setLoading] = React.useState(false)
-  const router = useRouter()
+  const [open, setOpen] = React.useState(false);
+  const [query, setQuery] = React.useState("");
+  const [herbs, setHerbs] = React.useState<HerbResult[]>([]);
+  const [loading, setLoading] = React.useState(false);
+  const router = useRouter();
 
   React.useEffect(() => {
     function handleKeyDown(e: KeyboardEvent) {
       if ((e.metaKey || e.ctrlKey) && e.key === "k") {
-        e.preventDefault()
-        setOpen((prev) => !prev)
+        e.preventDefault();
+        setOpen((prev) => !prev);
       }
     }
 
-    document.addEventListener("keydown", handleKeyDown)
-    return () => document.removeEventListener("keydown", handleKeyDown)
-  }, [])
+    document.addEventListener("keydown", handleKeyDown);
+    return () => document.removeEventListener("keydown", handleKeyDown);
+  }, []);
 
   React.useEffect(() => {
     if (!open) {
-      setQuery("")
-      setHerbs([])
+      setQuery("");
+      setHerbs([]);
     }
-  }, [open])
+  }, [open]);
 
   React.useEffect(() => {
     if (query.length < 2) {
-      setHerbs([])
-      return
+      setHerbs([]);
+      return;
     }
 
-    const controller = new AbortController()
+    const controller = new AbortController();
     const timer = setTimeout(async () => {
-      setLoading(true)
+      setLoading(true);
       try {
-        const res = await fetch(`/api/herbs/search?q=${encodeURIComponent(query)}`, {
-          signal: controller.signal,
-        })
+        const res = await fetch(
+          `/api/herbs/search?q=${encodeURIComponent(query)}`,
+          {
+            signal: controller.signal,
+          }
+        );
         if (res.ok) {
-          const data = await res.json()
-          setHerbs(data)
+          const data = await res.json();
+          setHerbs(data);
         }
       } catch (err) {
         if (!(err instanceof Error && err.name === "AbortError")) {
-          console.error("Search error:", err)
+          console.error("Search error:", err);
         }
       } finally {
-        setLoading(false)
+        setLoading(false);
       }
-    }, 300)
+    }, 300);
 
     return () => {
-      clearTimeout(timer)
-      controller.abort()
-    }
-  }, [query])
+      clearTimeout(timer);
+      controller.abort();
+    };
+  }, [query]);
 
   const navigate = React.useCallback(
     (path: string) => {
-      setOpen(false)
-      router.push(path)
+      setOpen(false);
+      router.push(path);
     },
     [router]
-  )
+  );
 
   return (
     <CommandDialog open={open} onOpenChange={setOpen}>
@@ -171,9 +174,7 @@ export function CommandPalette() {
             <span>Search Herbs</span>
             <CommandShortcut>S H</CommandShortcut>
           </CommandItem>
-          <CommandItem
-            onSelect={() => navigate("/dashboard/interactions")}
-          >
+          <CommandItem onSelect={() => navigate("/dashboard/interactions")}>
             <AlertTriangle />
             <span>Check Interactions</span>
             <CommandShortcut>C I</CommandShortcut>
@@ -186,7 +187,7 @@ export function CommandPalette() {
         </CommandGroup>
       </CommandList>
     </CommandDialog>
-  )
+  );
 }
 
 export function CommandPaletteTrigger() {
@@ -212,5 +213,5 @@ export function CommandPaletteTrigger() {
         <span className="text-xs">&#8984;</span>K
       </kbd>
     </button>
-  )
+  );
 }

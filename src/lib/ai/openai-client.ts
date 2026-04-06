@@ -4,13 +4,16 @@ import OpenAI from "openai";
 // Base URL: https://ollama.com/api for cloud models
 // Local: http://localhost:11434/api for local Ollama
 
-const getApiKey = () => process.env.OLLAMA_API_KEY || process.env.OPENROUTER_API_KEY?.trim();
+const getApiKey = () =>
+  process.env.OLLAMA_API_KEY || process.env.OPENROUTER_API_KEY?.trim();
 
 if (typeof window === "undefined" && process.env.NODE_ENV === "production") {
   // Only log in production server-side
   const key = getApiKey();
   if (!key) {
-    console.error("OLLAMA_API_KEY or OPENROUTER_API_KEY is required in production");
+    console.error(
+      "OLLAMA_API_KEY or OPENROUTER_API_KEY is required in production"
+    );
   }
 }
 

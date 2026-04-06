@@ -8,7 +8,8 @@ export function SurpriseMeButton({ totalHerbs }: { totalHerbs: number }) {
   const router = useRouter();
 
   function handleSurprise() {
-    const randomPage = Math.floor(Math.random() * Math.ceil(totalHerbs / 20)) + 1;
+    const randomPage =
+      Math.floor(Math.random() * Math.ceil(totalHerbs / 20)) + 1;
     router.push(`/herbs?page=${randomPage}`);
   }
 

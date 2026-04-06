@@ -5,7 +5,10 @@ import { useRouter, useSearchParams } from "next/navigation";
 import { Search, X, Shuffle } from "lucide-react";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
-import { RecentSearches, useSaveSearch } from "@/components/herbs/recent-searches";
+import {
+  RecentSearches,
+  useSaveSearch,
+} from "@/components/herbs/recent-searches";
 import { cn } from "@/lib/utils";
 
 interface SmartSearchProps {
@@ -25,18 +28,18 @@ export function SmartSearch({ defaultValue = "", category }: SmartSearchProps) {
     (value: string) => {
       const params = new URLSearchParams(searchParams.toString());
       const trimmed = value.trim();
-      
+
       if (trimmed) {
         params.set("q", trimmed);
         saveSearch(trimmed);
       } else {
         params.delete("q");
       }
-      
+
       if (category) {
         params.set("category", category);
       }
-      
+
       setIsSearching(true);
       router.push(`/herbs?${params.toString()}`);
     },
@@ -47,11 +50,11 @@ export function SmartSearch({ defaultValue = "", category }: SmartSearchProps) {
     (e: React.ChangeEvent<HTMLInputElement>) => {
       const value = e.target.value;
       setQuery(value);
-      
+
       if (timeoutRef.current) {
         clearTimeout(timeoutRef.current);
       }
-      
+
       timeoutRef.current = window.setTimeout(() => {
         handleSearch(value);
       }, 500);
@@ -102,11 +105,7 @@ export function SmartSearch({ defaultValue = "", category }: SmartSearchProps) {
             </button>
           )}
         </div>
-        <Button
-          type="submit"
-          className="h-12"
-          disabled={isSearching}
-        >
+        <Button type="submit" className="h-12" disabled={isSearching}>
           {isSearching ? "Searching..." : "Search"}
         </Button>
         <Button

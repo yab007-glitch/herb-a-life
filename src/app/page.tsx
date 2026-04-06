@@ -29,7 +29,8 @@ export default function LandingPage() {
       titleKey: "home.features.herbs.title",
       titleFallback: "2,700+ Medicinal Herbs",
       descriptionKey: "home.features.herbs.description",
-      descriptionFallback: "The most comprehensive herbal database available. Detailed profiles with active compounds, traditional uses, and modern applications.",
+      descriptionFallback:
+        "The most comprehensive herbal database available. Detailed profiles with active compounds, traditional uses, and modern applications.",
       gradient: "from-emerald-500 to-teal-600",
     },
     {
@@ -37,7 +38,8 @@ export default function LandingPage() {
       titleKey: "home.features.calculator.title",
       titleFallback: "Precision Dosage Calculator",
       descriptionKey: "home.features.calculator.description",
-      descriptionFallback: "Calculate safe dosages using Clark's Rule, Young's Rule, BSA, and Fried's Rule. Get personalized recommendations based on age and weight.",
+      descriptionFallback:
+        "Calculate safe dosages using Clark's Rule, Young's Rule, BSA, and Fried's Rule. Get personalized recommendations based on age and weight.",
       gradient: "from-teal-500 to-cyan-600",
     },
     {
@@ -45,7 +47,8 @@ export default function LandingPage() {
       titleKey: "home.features.interactions.title",
       titleFallback: "Drug Interaction Checker",
       descriptionKey: "home.features.interactions.description",
-      descriptionFallback: "Cross-reference your medications with our database. Identify mild, moderate, severe, and contraindicated combinations.",
+      descriptionFallback:
+        "Cross-reference your medications with our database. Identify mild, moderate, severe, and contraindicated combinations.",
       gradient: "from-cyan-500 to-blue-600",
     },
     {
@@ -53,7 +56,8 @@ export default function LandingPage() {
       titleKey: "home.features.ai.title",
       titleFallback: "AI Virtual Herbalist",
       descriptionKey: "home.features.ai.description",
-      descriptionFallback: "Ask questions about herbs, dosages, and safety. Powered by evidence-based sources including WHO monographs and PubMed research.",
+      descriptionFallback:
+        "Ask questions about herbs, dosages, and safety. Powered by evidence-based sources including WHO monographs and PubMed research.",
       gradient: "from-blue-500 to-indigo-600",
     },
   ];
@@ -64,7 +68,12 @@ export default function LandingPage() {
     { value: "100%", labelKey: "home.stats.free", icon: TrendingUp },
   ];
 
-  const trustBadges = ["WHO Monographs", "German Commission E", "PubMed Research", "FDA Compliant"];
+  const trustBadges = [
+    "WHO Monographs",
+    "German Commission E",
+    "PubMed Research",
+    "FDA Compliant",
+  ];
 
   return (
     <div className="flex min-h-screen flex-col">
@@ -76,9 +85,12 @@ export default function LandingPage() {
         <section className="relative min-h-[90vh] overflow-hidden hero-gradient">
           <div className="absolute inset-0 dot-pattern opacity-50" />
           <div className="absolute -top-40 right-0 size-[600px] rounded-full bg-primary/10 blur-3xl animate-pulse-glow" />
-          <div className="absolute -bottom-20 left-0 size-[500px] rounded-full bg-cyan-500/10 blur-3xl animate-pulse-glow" style={{ animationDelay: "2s" }} />
+          <div
+            className="absolute -bottom-20 left-0 size-[500px] rounded-full bg-cyan-500/10 blur-3xl animate-pulse-glow"
+            style={{ animationDelay: "2s" }}
+          />
           <FloatingHerbs />
-          
+
           <div className="relative mx-auto max-w-7xl px-4 py-20 sm:px-6 sm:py-28 lg:px-8">
             <div className="text-center">
               <div className="mb-8 inline-flex items-center gap-2 rounded-full border border-primary/20 bg-primary/5 px-4 py-2 text-sm font-medium text-primary backdrop-blur-sm">
@@ -95,12 +107,21 @@ export default function LandingPage() {
               </p>
 
               <div className="mt-10 flex flex-col items-center justify-center gap-4 sm:flex-row">
-                <Button size="lg" className="gap-2 px-8 py-6 text-base shadow-lg shadow-primary/25 transition-all hover:shadow-xl hover:shadow-primary/30" render={<Link href="/herbs" />}>
+                <Button
+                  size="lg"
+                  className="gap-2 px-8 py-6 text-base shadow-lg shadow-primary/25 transition-all hover:shadow-xl hover:shadow-primary/30"
+                  render={<Link href="/herbs" />}
+                >
                   <Leaf className="size-5" />
                   {t("home.hero.searchButton")}
                   <ArrowRight className="size-4" />
                 </Button>
-                <Button variant="outline" size="lg" className="gap-2 px-8 py-6 text-base" render={<Link href="/pharmacist" />}>
+                <Button
+                  variant="outline"
+                  size="lg"
+                  className="gap-2 px-8 py-6 text-base"
+                  render={<Link href="/pharmacist" />}
+                >
                   <MessageCircle className="size-5" />
                   {t("home.cta.button")}
                 </Button>
@@ -109,7 +130,10 @@ export default function LandingPage() {
               <div className="mt-12 flex flex-wrap items-center justify-center gap-4 text-xs text-muted-foreground">
                 <span className="font-medium">{t("home.trustBadges")}:</span>
                 {trustBadges.map((badge) => (
-                  <span key={badge} className="rounded-full border bg-muted/50 px-3 py-1">
+                  <span
+                    key={badge}
+                    className="rounded-full border bg-muted/50 px-3 py-1"
+                  >
                     {badge}
                   </span>
                 ))}
@@ -125,7 +149,10 @@ export default function LandingPage() {
               {stats.map((stat) => {
                 const Icon = stat.icon;
                 return (
-                  <div key={stat.labelKey} className="flex items-center justify-center gap-4 sm:flex-col sm:text-center">
+                  <div
+                    key={stat.labelKey}
+                    className="flex items-center justify-center gap-4 sm:flex-col sm:text-center"
+                  >
                     <div className="flex size-12 items-center justify-center rounded-full bg-primary/10 text-primary">
                       <Icon className="size-6" />
                     </div>
@@ -166,7 +193,9 @@ export default function LandingPage() {
                   >
                     <CardContent className="p-6">
                       <div className="mb-4 flex items-start justify-between">
-                        <div className={`inline-flex size-12 items-center justify-center rounded-xl bg-gradient-to-br ${feature.gradient} text-white shadow-lg`}>
+                        <div
+                          className={`inline-flex size-12 items-center justify-center rounded-xl bg-gradient-to-br ${feature.gradient} text-white shadow-lg`}
+                        >
                           <Icon className="size-6" />
                         </div>
                         <ArrowRight className="size-5 text-muted-foreground/50 transition-transform group-hover:translate-x-1 group-hover:text-primary" />
@@ -192,7 +221,7 @@ export default function LandingPage() {
               <div className="absolute inset-0 bg-gradient-to-br from-primary/5 via-transparent to-cyan-500/5" />
               <div className="absolute -right-20 -top-20 size-64 rounded-full bg-primary/10 blur-3xl" />
               <div className="absolute -bottom-20 -left-20 size-64 rounded-full bg-cyan-500/10 blur-3xl" />
-              
+
               <CardContent className="relative p-8 text-center sm:p-12">
                 <div className="mb-4 inline-flex size-16 items-center justify-center rounded-full bg-primary/10 text-primary">
                   <Leaf className="size-8" />
@@ -204,7 +233,11 @@ export default function LandingPage() {
                   {t("home.cta.subtitle")}
                 </p>
                 <div className="flex flex-col items-center justify-center gap-4 sm:flex-row">
-                  <Button size="lg" className="gap-2 px-8" render={<Link href="/herbs" />}>
+                  <Button
+                    size="lg"
+                    className="gap-2 px-8"
+                    render={<Link href="/herbs" />}
+                  >
                     {t("home.cta.button")}
                     <ArrowRight className="size-4" />
                   </Button>

@@ -22,7 +22,9 @@ export type ChatSession = {
 /**
  * Get all chat sessions for the current user
  */
-export async function getChatSessions(): Promise<ActionResponse<ChatSession[]>> {
+export async function getChatSessions(): Promise<
+  ActionResponse<ChatSession[]>
+> {
   try {
     const supabase = await createClient();
     const {
@@ -143,7 +145,9 @@ export async function updateChatSession(
     if (!sessionTitle && messages.length > 0) {
       const firstUserMsg = messages.find((m) => m.role === "user");
       if (firstUserMsg) {
-        sessionTitle = firstUserMsg.content.slice(0, 50) + (firstUserMsg.content.length > 50 ? "..." : "");
+        sessionTitle =
+          firstUserMsg.content.slice(0, 50) +
+          (firstUserMsg.content.length > 50 ? "..." : "");
       }
     }
 

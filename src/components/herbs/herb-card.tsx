@@ -25,7 +25,9 @@ const categoryIconMap: Record<string, keyof typeof IconComponents> = {
   oil: "Droplets",
 };
 
-function getCategoryIconKey(category?: string | null): keyof typeof IconComponents {
+function getCategoryIconKey(
+  category?: string | null
+): keyof typeof IconComponents {
   if (!category) return "Leaf";
   const lower = category.toLowerCase();
   for (const [key, iconKey] of Object.entries(categoryIconMap)) {
@@ -45,7 +47,10 @@ const IconComponents = {
   Droplets,
 } as const;
 
-function getSafetyLevel(pregnancySafe: boolean, nursingSafe: boolean): "safe" | "caution" | "unsafe" {
+function getSafetyLevel(
+  pregnancySafe: boolean,
+  nursingSafe: boolean
+): "safe" | "caution" | "unsafe" {
   if (pregnancySafe && nursingSafe) return "safe";
   if (!pregnancySafe && !nursingSafe) return "unsafe";
   return "caution";
@@ -76,11 +81,16 @@ const safetyColorMap = {
 
 export function HerbCard({ herb, className }: HerbCardProps) {
   const safetyLevel = getSafetyLevel(herb.pregnancy_safe, herb.nursing_safe);
-  const CategoryIcon = IconComponents[getCategoryIconKey(herb.herb_categories?.name)];
+  const CategoryIcon =
+    IconComponents[getCategoryIconKey(herb.herb_categories?.name)];
   const primaryBenefit = herb.traditional_uses?.[0];
 
   return (
-    <Link href={`/herbs/${herb.slug}`} className="group" aria-label={`View details for ${herb.name}`}>
+    <Link
+      href={`/herbs/${herb.slug}`}
+      className="group"
+      aria-label={`View details for ${herb.name}`}
+    >
       <Card
         className={cn(
           "card-press relative h-full overflow-hidden transition-all duration-300 hover:shadow-xl hover:-translate-y-1.5 border-border/50",
@@ -91,10 +101,12 @@ export function HerbCard({ herb, className }: HerbCardProps) {
         )}
       >
         {/* Top gradient accent with safety-aware color */}
-        <div className={cn(
-          "absolute inset-x-0 top-0 h-1 bg-gradient-to-r opacity-80 transition-opacity group-hover:opacity-100",
-          safetyColorMap[safetyLevel]
-        )} />
+        <div
+          className={cn(
+            "absolute inset-x-0 top-0 h-1 bg-gradient-to-r opacity-80 transition-opacity group-hover:opacity-100",
+            safetyColorMap[safetyLevel]
+          )}
+        />
 
         {/* Hover gradient reveal */}
         <div className="pointer-events-none absolute inset-0 bg-gradient-to-br from-primary/[0.03] to-transparent opacity-0 transition-opacity duration-300 group-hover:opacity-100" />
@@ -109,7 +121,10 @@ export function HerbCard({ herb, className }: HerbCardProps) {
               {/* Category Badge */}
               <div className="mb-2">
                 {herb.herb_categories?.name ? (
-                  <Badge variant="secondary" className="text-xs font-medium gap-1">
+                  <Badge
+                    variant="secondary"
+                    className="text-xs font-medium gap-1"
+                  >
                     <CategoryIcon className="size-3" />
                     {herb.herb_categories.name}
                   </Badge>

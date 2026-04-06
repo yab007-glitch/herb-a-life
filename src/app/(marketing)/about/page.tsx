@@ -82,9 +82,7 @@ export default function AboutPage() {
 
       {/* Our Mission */}
       <section className="mb-16">
-        <h2 className="mb-4 text-2xl font-bold text-foreground">
-          Our Mission
-        </h2>
+        <h2 className="mb-4 text-2xl font-bold text-foreground">Our Mission</h2>
         <div className="grid gap-6 sm:grid-cols-3">
           <Card>
             <CardContent className="pt-2 text-center">
@@ -167,9 +165,9 @@ export default function AboutPage() {
         </h2>
         <div className="space-y-4 text-muted-foreground">
           <p>
-            HerbWise is completely free to use with no limits, no paywalls,
-            and no advertising. We believe access to herbal medicine knowledge is
-            a right, not a privilege.
+            HerbWise is completely free to use with no limits, no paywalls, and
+            no advertising. We believe access to herbal medicine knowledge is a
+            right, not a privilege.
           </p>
           <p>
             We sustain our operations entirely through voluntary donations from
@@ -194,9 +192,10 @@ export default function AboutPage() {
         <h2 className="mb-4 text-2xl font-bold text-foreground">Our Team</h2>
         <p className="text-muted-foreground">
           HerbWise is developed by a dedicated team of software engineers,
-          herbalists, and healthcare professionals passionate about making herbal
-          medicine information accessible and safe. Our content is reviewed by
-          qualified practitioners to ensure accuracy and reliability.
+          herbalists, and healthcare professionals passionate about making
+          herbal medicine information accessible and safe. Our content is
+          reviewed by qualified practitioners to ensure accuracy and
+          reliability.
         </p>
       </section>
     </div>

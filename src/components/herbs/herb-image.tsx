@@ -17,8 +17,10 @@ function getHerbGradient(name: string): string {
     "from-rose-500 to-pink-600",
     "from-violet-500 to-purple-600",
   ];
-  
-  const hash = name.split("").reduce((acc, char) => acc + char.charCodeAt(0), 0);
+
+  const hash = name
+    .split("")
+    .reduce((acc, char) => acc + char.charCodeAt(0), 0);
   return gradients[hash % gradients.length];
 }
 
@@ -34,7 +36,7 @@ function getInitials(name: string): string {
 export function HerbImage({ name, className }: HerbImageProps) {
   const gradient = getHerbGradient(name);
   const initials = getInitials(name);
-  
+
   return (
     <div
       className={cn(

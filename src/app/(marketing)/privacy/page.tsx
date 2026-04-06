@@ -2,7 +2,8 @@ import type { Metadata } from "next";
 
 export const metadata: Metadata = {
   title: "Privacy Policy",
-  description: "HerbWise privacy policy - how we collect, use, and protect your data.",
+  description:
+    "HerbWise privacy policy - how we collect, use, and protect your data.",
 };
 
 export default function PrivacyPage() {
@@ -22,8 +23,8 @@ export default function PrivacyPage() {
           </h2>
           <p>
             When you create an account, we collect your name, email address, and
-            password (stored securely via hashing). When you use the platform, we
-            may collect usage data such as herbs viewed, dosage calculations
+            password (stored securely via hashing). When you use the platform,
+            we may collect usage data such as herbs viewed, dosage calculations
             performed, and chat session data to improve our services.
           </p>
         </section>

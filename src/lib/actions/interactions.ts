@@ -15,7 +15,10 @@ export async function checkInteractions(
       .from("drug_interactions")
       .select("*")
       .eq("herb_id", herbId)
-      .in("drug_name", drugNames.map((d) => d.toLowerCase()));
+      .in(
+        "drug_name",
+        drugNames.map((d) => d.toLowerCase())
+      );
 
     if (error) {
       return { success: false, error: error.message };
@@ -72,7 +75,12 @@ export async function saveInteractionCheck(params: {
         herb_id: params.herbId,
         medications_checked: params.medicationsChecked as unknown as Json,
         results: params.results as unknown as Json,
-        severity_summary: params.severitySummary as "mild" | "moderate" | "severe" | "contraindicated" | null,
+        severity_summary: params.severitySummary as
+          | "mild"
+          | "moderate"
+          | "severe"
+          | "contraindicated"
+          | null,
       })
       .select("id")
       .single();

@@ -24,7 +24,7 @@ export function RecentSearches() {
       }
       setMounted(true);
     };
-    
+
     // Defer to avoid sync setState in effect
     const timer = setTimeout(loadSearches, 0);
     return () => clearTimeout(timer);
@@ -87,12 +87,15 @@ export function RecentSearches() {
 export function useSaveSearch() {
   return (query: string) => {
     if (!query.trim()) return;
-    
+
     const saved = localStorage.getItem(STORAGE_KEY);
     const existing: string[] = saved ? JSON.parse(saved) : [];
-    
-    const updated = [query.trim(), ...existing.filter((s) => s !== query.trim())].slice(0, MAX_RECENT);
-    
+
+    const updated = [
+      query.trim(),
+      ...existing.filter((s) => s !== query.trim()),
+    ].slice(0, MAX_RECENT);
+
     localStorage.setItem(STORAGE_KEY, JSON.stringify(updated));
   };
 }

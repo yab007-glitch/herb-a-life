@@ -6,12 +6,7 @@ import { Pill, Plus, Trash2, Loader2, AlertTriangle } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import {
-  Card,
-  CardContent,
-  CardHeader,
-  CardTitle,
-} from "@/components/ui/card";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { addMedication, removeMedication } from "@/lib/actions/medications";
 import { toast } from "sonner";
@@ -69,7 +64,9 @@ export function MedicationsList({
       {showForm && (
         <Card>
           <CardHeader>
-            <CardTitle className="text-base">Add a Medication, Supplement, or Herb</CardTitle>
+            <CardTitle className="text-base">
+              Add a Medication, Supplement, or Herb
+            </CardTitle>
           </CardHeader>
           <CardContent>
             <form onSubmit={handleAdd} className="space-y-4">

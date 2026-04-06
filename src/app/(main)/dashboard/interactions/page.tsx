@@ -12,10 +12,7 @@ import {
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
-import {
-  Card,
-  CardContent,
-} from "@/components/ui/card";
+import { Card, CardContent } from "@/components/ui/card";
 import { createClient } from "@/lib/supabase/server";
 
 export const metadata: Metadata = {
@@ -90,21 +87,25 @@ export default async function InteractionsPage() {
         .join(",");
       const { data: dbInteractions } = await supabase
         .from("drug_interactions")
-        .select("id, drug_name, severity, description, mechanism, herb_id, herbs(name, slug)")
+        .select(
+          "id, drug_name, severity, description, mechanism, herb_id, herbs(name, slug)"
+        )
         .or(orFilter);
 
-      interactions = (dbInteractions ?? []).map((i: Record<string, unknown>) => {
-        const herb = i.herbs as { name: string; slug: string } | null;
-        return {
-          id: i.id as string,
-          herb_name: herb?.name ?? "Unknown",
-          herb_slug: herb?.slug ?? "",
-          drug_name: i.drug_name as string,
-          severity: i.severity as Interaction["severity"],
-          description: i.description as string,
-          mechanism: i.mechanism as string | null,
-        };
-      });
+      interactions = (dbInteractions ?? []).map(
+        (i: Record<string, unknown>) => {
+          const herb = i.herbs as { name: string; slug: string } | null;
+          return {
+            id: i.id as string,
+            herb_name: herb?.name ?? "Unknown",
+            herb_slug: herb?.slug ?? "",
+            drug_name: i.drug_name as string,
+            severity: i.severity as Interaction["severity"],
+            description: i.description as string,
+            mechanism: i.mechanism as string | null,
+          };
+        }
+      );
     }
   }
 
@@ -249,9 +250,7 @@ export default async function InteractionsPage() {
                           <Pill className="size-3.5 text-blue-500" />
                           {interaction.drug_name}
                         </span>
-                        <Badge className={config.color}>
-                          {config.label}
-                        </Badge>
+                        <Badge className={config.color}>{config.label}</Badge>
                       </div>
                       <p className="text-sm text-muted-foreground mt-1">
                         {interaction.description}

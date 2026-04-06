@@ -33,11 +33,11 @@ import { createClient } from "@supabase/supabase-js";
 function getAnonClient() {
   const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL;
   const supabaseKey = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY;
-  
+
   if (!supabaseUrl || !supabaseKey) {
     return null;
   }
-  
+
   return createClient(supabaseUrl, supabaseKey);
 }
 
@@ -118,7 +118,12 @@ export default async function HerbDetailPage({ params }: Props) {
           {herb.updated_at && (
             <span className="flex items-center gap-1.5 text-xs text-muted-foreground">
               <Clock className="size-3" />
-              Last updated {new Date(herb.updated_at).toLocaleDateString("en-US", { month: "short", day: "numeric", year: "numeric" })}
+              Last updated{" "}
+              {new Date(herb.updated_at).toLocaleDateString("en-US", {
+                month: "short",
+                day: "numeric",
+                year: "numeric",
+              })}
             </span>
           )}
         </div>
@@ -304,7 +309,10 @@ export default async function HerbDetailPage({ params }: Props) {
               </h3>
               <ul className="space-y-1">
                 {herb.contraindications.map((c: string, i: number) => (
-                  <li key={i} className="flex items-start gap-2 text-sm text-muted-foreground">
+                  <li
+                    key={i}
+                    className="flex items-start gap-2 text-sm text-muted-foreground"
+                  >
                     <span className="mt-1.5 size-1.5 shrink-0 rounded-full bg-red-500" />
                     {c}
                   </li>
@@ -319,7 +327,10 @@ export default async function HerbDetailPage({ params }: Props) {
               </h3>
               <ul className="space-y-1">
                 {herb.side_effects.map((s: string, i: number) => (
-                  <li key={i} className="flex items-start gap-2 text-sm text-muted-foreground">
+                  <li
+                    key={i}
+                    className="flex items-start gap-2 text-sm text-muted-foreground"
+                  >
                     <span className="mt-1.5 size-1.5 shrink-0 rounded-full bg-amber-500" />
                     {s}
                   </li>
@@ -339,7 +350,10 @@ export default async function HerbDetailPage({ params }: Props) {
           <Calculator className="size-4" />
           Calculate Dose
         </Button>
-        <Button variant="outline" render={<Link href={`/pharmacist?herb=${slug}`} />}>
+        <Button
+          variant="outline"
+          render={<Link href={`/pharmacist?herb=${slug}`} />}
+        >
           <AlertTriangle className="size-4" />
           Check Interactions
         </Button>

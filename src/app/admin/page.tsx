@@ -1,5 +1,11 @@
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { Leaf, AlertTriangle, Users, ClipboardCheck, Activity } from "lucide-react";
+import {
+  Leaf,
+  AlertTriangle,
+  Users,
+  ClipboardCheck,
+  Activity,
+} from "lucide-react";
 import { createClient } from "@/lib/supabase/server";
 
 export const metadata = {
@@ -11,39 +17,43 @@ export default async function AdminDashboardPage() {
 
   const [herbs, interactions, users, checks] = await Promise.all([
     supabase.from("herbs").select("id", { count: "exact", head: true }),
-    supabase.from("drug_interactions").select("id", { count: "exact", head: true }),
+    supabase
+      .from("drug_interactions")
+      .select("id", { count: "exact", head: true }),
     supabase.from("profiles").select("id", { count: "exact", head: true }),
-    supabase.from("interaction_checks").select("id", { count: "exact", head: true }),
+    supabase
+      .from("interaction_checks")
+      .select("id", { count: "exact", head: true }),
   ]);
 
   const stats = [
-    { 
-      label: "Total Herbs", 
-      value: herbs.count ?? 0, 
-      icon: Leaf, 
+    {
+      label: "Total Herbs",
+      value: herbs.count ?? 0,
+      icon: Leaf,
       gradient: "from-emerald-500 to-teal-500",
-      description: "Published in database"
+      description: "Published in database",
     },
-    { 
-      label: "Drug Interactions", 
-      value: interactions.count ?? 0, 
-      icon: AlertTriangle, 
+    {
+      label: "Drug Interactions",
+      value: interactions.count ?? 0,
+      icon: AlertTriangle,
       gradient: "from-amber-500 to-orange-500",
-      description: "Known interactions"
+      description: "Known interactions",
     },
-    { 
-      label: "Registered Users", 
-      value: users.count ?? 0, 
-      icon: Users, 
+    {
+      label: "Registered Users",
+      value: users.count ?? 0,
+      icon: Users,
       gradient: "from-blue-500 to-cyan-500",
-      description: "Total accounts"
+      description: "Total accounts",
     },
-    { 
-      label: "Interaction Checks", 
-      value: checks.count ?? 0, 
-      icon: ClipboardCheck, 
+    {
+      label: "Interaction Checks",
+      value: checks.count ?? 0,
+      icon: ClipboardCheck,
       gradient: "from-purple-500 to-indigo-500",
-      description: "Checks performed"
+      description: "Checks performed",
     },
   ];
 
@@ -69,14 +79,21 @@ export default async function AdminDashboardPage() {
         {stats.map((stat) => {
           const Icon = stat.icon;
           return (
-            <Card key={stat.label} className="relative overflow-hidden border-border/50">
-              <div className={`absolute inset-x-0 top-0 h-1 bg-gradient-to-r ${stat.gradient}`} />
+            <Card
+              key={stat.label}
+              className="relative overflow-hidden border-border/50"
+            >
+              <div
+                className={`absolute inset-x-0 top-0 h-1 bg-gradient-to-r ${stat.gradient}`}
+              />
               <CardHeader className="pb-2">
                 <div className="flex items-center justify-between">
                   <CardTitle className="text-sm font-medium text-muted-foreground">
                     {stat.label}
                   </CardTitle>
-                  <div className={`flex size-8 items-center justify-center rounded-lg bg-gradient-to-br ${stat.gradient} text-white`}>
+                  <div
+                    className={`flex size-8 items-center justify-center rounded-lg bg-gradient-to-br ${stat.gradient} text-white`}
+                  >
                     <Icon className="size-4" />
                   </div>
                 </div>
@@ -98,7 +115,9 @@ export default async function AdminDashboardPage() {
       <Card className="border-dashed">
         <CardContent className="flex flex-col items-center justify-center py-12 text-center">
           <Activity className="size-10 text-muted-foreground/50" />
-          <p className="mt-4 font-medium text-foreground">Activity Logging Coming Soon</p>
+          <p className="mt-4 font-medium text-foreground">
+            Activity Logging Coming Soon
+          </p>
           <p className="mt-1 text-sm text-muted-foreground">
             Detailed analytics and activity logs will appear here
           </p>

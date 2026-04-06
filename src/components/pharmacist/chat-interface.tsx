@@ -1,7 +1,15 @@
 "use client";
 
 import { useState, useRef, useEffect, useCallback } from "react";
-import { Send, Bot, User, AlertCircle, Trash2, Mic, MicOff } from "lucide-react";
+import {
+  Send,
+  Bot,
+  User,
+  AlertCircle,
+  Trash2,
+  Mic,
+  MicOff,
+} from "lucide-react";
 import ReactMarkdown from "react-markdown";
 import { Button } from "@/components/ui/button";
 import { Textarea } from "@/components/ui/textarea";
@@ -38,11 +46,15 @@ export function ChatInterface({
   autoQuery?: string | null;
   sessionId?: string | null;
 }) {
-  const [messages, setMessages] = useState<Message[]>(() => [createInitialMessage()]);
+  const [messages, setMessages] = useState<Message[]>(() => [
+    createInitialMessage(),
+  ]);
   const [input, setInput] = useState("");
   const [isLoading, setIsLoading] = useState(false);
   const [autoSent, setAutoSent] = useState(false);
-  const [currentSessionId, setCurrentSessionId] = useState<string | null>(sessionId || null);
+  const [currentSessionId, setCurrentSessionId] = useState<string | null>(
+    sessionId || null
+  );
   const [isSaving, setIsSaving] = useState(false);
   const scrollRef = useRef<HTMLDivElement>(null);
   const textareaRef = useRef<HTMLTextAreaElement>(null);
@@ -80,30 +92,33 @@ export function ChatInterface({
   }, [autoQuery, autoSent]);
 
   // Save messages to database
-  const saveMessages = useCallback(async (msgs: Message[]) => {
-    // Skip saving if we only have the initial message
-    if (msgs.length <= 1) return;
+  const saveMessages = useCallback(
+    async (msgs: Message[]) => {
+      // Skip saving if we only have the initial message
+      if (msgs.length <= 1) return;
 
-    try {
-      setIsSaving(true);
-      
-      if (!currentSessionId) {
-        // Create new session
-        const result = await createChatSession(herbContext || undefined);
-        if (result.success && result.data) {
-          setCurrentSessionId(result.data.id);
+      try {
+        setIsSaving(true);
+
+        if (!currentSessionId) {
+          // Create new session
+          const result = await createChatSession(herbContext || undefined);
+          if (result.success && result.data) {
+            setCurrentSessionId(result.data.id);
+          }
         }
-      }
 
-      if (currentSessionId) {
-        await updateChatSession(currentSessionId, msgs);
+        if (currentSessionId) {
+          await updateChatSession(currentSessionId, msgs);
+        }
+      } catch (error) {
+        console.error("Failed to save chat:", error);
+      } finally {
+        setIsSaving(false);
       }
-    } catch (error) {
-      console.error("Failed to save chat:", error);
-    } finally {
-      setIsSaving(false);
-    }
-  }, [currentSessionId, herbContext]);
+    },
+    [currentSessionId, herbContext]
+  );
 
   async function sendMessage(text: string) {
     if (!text.trim() || isLoading) return;
@@ -160,15 +175,16 @@ export function ChatInterface({
 
         setMessages((prev) =>
           prev.map((msg, idx) =>
-            idx === prev.length - 1
-              ? { ...msg, content: current }
-              : msg
+            idx === prev.length - 1 ? { ...msg, content: current } : msg
           )
         );
       }
 
       // Save messages after response completes
-      const finalMessages = [...allMessages, { ...assistantMessage, content: accumulated }];
+      const finalMessages = [
+        ...allMessages,
+        { ...assistantMessage, content: accumulated },
+      ];
       await saveMessages(finalMessages);
     } catch {
       const errorMessage: Message = {
@@ -211,13 +227,19 @@ export function ChatInterface({
 
   const showSuggestions = messages.length <= 1 && !isLoading;
   const lastMessage = messages[messages.length - 1];
-  const showFollowUps = !isLoading && lastMessage?.role === "assistant" && messages.length > 1;
+  const showFollowUps =
+    !isLoading && lastMessage?.role === "assistant" && messages.length > 1;
 
   function getFollowUpQuestions(content: string): string[] {
     const lower = content.toLowerCase();
     const questions: string[] = [];
 
-    if (lower.includes("dosage") || lower.includes("dose") || lower.includes("mg") || lower.includes("ml")) {
+    if (
+      lower.includes("dosage") ||
+      lower.includes("dose") ||
+      lower.includes("mg") ||
+      lower.includes("ml")
+    ) {
       questions.push("Is this dosage safe for children?");
     } else {
       questions.push("What's the recommended dosage?");
@@ -238,7 +260,9 @@ export function ChatInterface({
     return questions;
   }
 
-  const followUpQuestions = showFollowUps ? getFollowUpQuestions(lastMessage.content) : [];
+  const followUpQuestions = showFollowUps
+    ? getFollowUpQuestions(lastMessage.content)
+    : [];
 
   // Voice input
   const [isListening, setIsListening] = useState(false);
@@ -246,7 +270,9 @@ export function ChatInterface({
 
   function createRecognition() {
     if (typeof window === "undefined") return null;
-    const SpeechRecognition = (window as unknown as Record<string, unknown>).SpeechRecognition || (window as unknown as Record<string, unknown>).webkitSpeechRecognition;
+    const SpeechRecognition =
+      (window as unknown as Record<string, unknown>).SpeechRecognition ||
+      (window as unknown as Record<string, unknown>).webkitSpeechRecognition;
     if (!SpeechRecognition) return null;
     return new (SpeechRecognition as new () => {
       continuous: boolean;
@@ -284,9 +310,9 @@ export function ChatInterface({
     setIsListening(true);
   }
 
-  const hasVoiceSupport = typeof window !== "undefined" && (
-    "SpeechRecognition" in window || "webkitSpeechRecognition" in window
-  );
+  const hasVoiceSupport =
+    typeof window !== "undefined" &&
+    ("SpeechRecognition" in window || "webkitSpeechRecognition" in window);
 
   return (
     <div className="flex flex-col overflow-hidden rounded-lg border bg-card">
@@ -344,7 +370,9 @@ export function ChatInterface({
               </div>
               <div className="rounded-lg bg-muted px-4 py-3">
                 <div className="flex items-center gap-2">
-                  <span className="text-xs font-medium text-muted-foreground">Thinking</span>
+                  <span className="text-xs font-medium text-muted-foreground">
+                    Thinking
+                  </span>
                   <span className="flex items-center gap-1">
                     <span className="size-2 rounded-full bg-primary/70 animate-typing-dot" />
                     <span className="size-2 rounded-full bg-primary/70 animate-typing-dot [animation-delay:160ms]" />
@@ -434,9 +462,15 @@ export function ChatInterface({
               variant={isListening ? "destructive" : "outline"}
               onClick={toggleVoice}
               className="shrink-0 md:hidden"
-              aria-label={isListening ? "Stop voice input" : "Start voice input"}
+              aria-label={
+                isListening ? "Stop voice input" : "Start voice input"
+              }
             >
-              {isListening ? <MicOff className="size-4" /> : <Mic className="size-4" />}
+              {isListening ? (
+                <MicOff className="size-4" />
+              ) : (
+                <Mic className="size-4" />
+              )}
             </Button>
           )}
           <Button

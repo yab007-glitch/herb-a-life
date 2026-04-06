@@ -3,6 +3,7 @@
 # HerbWise - Medical Herbs SaaS
 
 ## Tech Stack
+
 - Next.js 16 with App Router
 - React 19
 - Supabase (PostgreSQL + Auth + Storage)
@@ -11,6 +12,7 @@
 - External APIs: RxNorm, OpenFDA, PubChem
 
 ## Project Structure
+
 - `src/app/` - Next.js pages and routes
 - `src/components/` - React components (ui/, herbs/, calculator/, pharmacist/, layout/, shared/, auth/)
 - `src/lib/actions/` - Server actions with ActionResponse<T> pattern
@@ -22,6 +24,7 @@
 - `supabase/migrations/` - SQL migrations
 
 ## Key Patterns
+
 - Server actions return `ActionResponse<T>` = `{ success: boolean; data?: T; error?: string }`
 - Supabase server client via `createClient()` from `@/lib/supabase/server`
 - RLS on all tables
@@ -30,5 +33,6 @@
 - Brand color: green (oklch 0.44 0.16 150)
 
 ## Commands
+
 - `npm run dev` - Start development server
 - `npm run build` - Build for production

@@ -42,17 +42,14 @@ export async function POST(request: NextRequest) {
     event = stripe.webhooks.constructEvent(body, signature, webhookSecret);
   } catch (err) {
     console.error("Webhook signature verification failed:", err);
-    return NextResponse.json(
-      { error: "Invalid signature" },
-      { status: 400 }
-    );
+    return NextResponse.json({ error: "Invalid signature" }, { status: 400 });
   }
 
   try {
     switch (event.type) {
       case "checkout.session.completed": {
         const session = event.data.object as Stripe.Checkout.Session;
-        
+
         // Extract donation details
         const donationId = session.id;
         const amount = session.amount_total || 0;
@@ -80,7 +77,7 @@ export async function POST(request: NextRequest) {
         // 1. Insert into donations table
         // 2. Send thank you email
         // 3. Update analytics
-        
+
         break;
       }
 

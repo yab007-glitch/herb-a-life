@@ -135,7 +135,11 @@ export async function createInteraction(
       .insert({
         herb_id: formData.get("herb_id") as string,
         drug_name: formData.get("drug_name") as string,
-        severity: formData.get("severity") as "mild" | "moderate" | "severe" | "contraindicated",
+        severity: formData.get("severity") as
+          | "mild"
+          | "moderate"
+          | "severe"
+          | "contraindicated",
         description: formData.get("description") as string,
         mechanism: (formData.get("mechanism") as string) || null,
         evidence_level: (formData.get("evidence_level") as string) || null,
@@ -151,9 +155,7 @@ export async function createInteraction(
   }
 }
 
-export async function deleteInteraction(
-  id: string
-): Promise<ActionResponse> {
+export async function deleteInteraction(id: string): Promise<ActionResponse> {
   try {
     const supabase = await requireAdmin();
 
@@ -182,9 +184,13 @@ export async function getAdminStats(): Promise<
 
     const [herbs, interactions, users, checks] = await Promise.all([
       supabase.from("herbs").select("id", { count: "exact", head: true }),
-      supabase.from("drug_interactions").select("id", { count: "exact", head: true }),
+      supabase
+        .from("drug_interactions")
+        .select("id", { count: "exact", head: true }),
       supabase.from("profiles").select("id", { count: "exact", head: true }),
-      supabase.from("interaction_checks").select("id", { count: "exact", head: true }),
+      supabase
+        .from("interaction_checks")
+        .select("id", { count: "exact", head: true }),
     ]);
 
     return {

@@ -46,7 +46,9 @@ Examples:
       const parsed = JSON.parse(text);
       if (Array.isArray(parsed) && parsed.length > 0) {
         return NextResponse.json({
-          keywords: parsed.slice(0, 3).map((k: string) => String(k).toLowerCase()),
+          keywords: parsed
+            .slice(0, 3)
+            .map((k: string) => String(k).toLowerCase()),
         });
       }
     } catch {

@@ -9,13 +9,7 @@ import {
   DialogDescription,
 } from "@/components/ui/dialog";
 import { Button } from "@/components/ui/button";
-import {
-  Heart,
-  Leaf,
-  Sparkles,
-  Globe,
-  CheckCircle,
-} from "lucide-react";
+import { Heart, Leaf, Sparkles, Globe, CheckCircle } from "lucide-react";
 
 interface MissionModalProps {
   open: boolean;
@@ -41,19 +35,22 @@ export function MissionModal({ open, onOpenChange }: MissionModalProps) {
             Our Mission
           </DialogTitle>
           <DialogDescription className="sr-only">
-            Learn about HerbWise&apos;s mission and how your donations help keep herbal medicine information free for everyone.
+            Learn about HerbWise&apos;s mission and how your donations help keep
+            herbal medicine information free for everyone.
           </DialogDescription>
         </DialogHeader>
-        
+
         <div className="space-y-6 pt-4">
           {/* Mission Statement */}
           <div className="text-center space-y-2">
             <p className="text-lg font-medium text-foreground">
-              Free herbal knowledge for <span className="text-primary">everyone</span>.
+              Free herbal knowledge for{" "}
+              <span className="text-primary">everyone</span>.
             </p>
             <p className="text-sm text-muted-foreground">
-              We believe access to health information shouldn&apos;t depend on your wallet.
-              HerbWise provides comprehensive herbal medicine data at no cost — no ads, no paywalls, no premium tiers.
+              We believe access to health information shouldn&apos;t depend on
+              your wallet. HerbWise provides comprehensive herbal medicine data
+              at no cost — no ads, no paywalls, no premium tiers.
             </p>
           </div>
 
@@ -75,23 +72,37 @@ export function MissionModal({ open, onOpenChange }: MissionModalProps) {
 
           {/* How Donations Help */}
           <div className="space-y-3">
-            <h4 className="font-semibold text-foreground">How Your Donation Helps</h4>
+            <h4 className="font-semibold text-foreground">
+              How Your Donation Helps
+            </h4>
             <ul className="space-y-2 text-sm text-muted-foreground">
               <li className="flex items-start gap-2">
                 <CheckCircle className="h-4 w-4 text-emerald-600 shrink-0 mt-0.5" />
-                <span><strong className="text-foreground">Hosting & Servers</strong> — Keep the app fast and available 24/7</span>
+                <span>
+                  <strong className="text-foreground">Hosting & Servers</strong>{" "}
+                  — Keep the app fast and available 24/7
+                </span>
               </li>
               <li className="flex items-start gap-2">
                 <CheckCircle className="h-4 w-4 text-emerald-600 shrink-0 mt-0.5" />
-                <span><strong className="text-foreground">AI Costs</strong> — Power the virtual herbalist chatbot</span>
+                <span>
+                  <strong className="text-foreground">AI Costs</strong> — Power
+                  the virtual herbalist chatbot
+                </span>
               </li>
               <li className="flex items-start gap-2">
                 <CheckCircle className="h-4 w-4 text-emerald-600 shrink-0 mt-0.5" />
-                <span><strong className="text-foreground">Database</strong> — Store and serve 2,700+ herb profiles</span>
+                <span>
+                  <strong className="text-foreground">Database</strong> — Store
+                  and serve 2,700+ herb profiles
+                </span>
               </li>
               <li className="flex items-start gap-2">
                 <CheckCircle className="h-4 w-4 text-emerald-600 shrink-0 mt-0.5" />
-                <span><strong className="text-foreground">New Features</strong> — Add more herbs, interactions, and tools</span>
+                <span>
+                  <strong className="text-foreground">New Features</strong> —
+                  Add more herbs, interactions, and tools
+                </span>
               </li>
             </ul>
           </div>

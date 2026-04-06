@@ -25,7 +25,10 @@ export async function GET() {
     .single();
 
   if (error || !data) {
-    return NextResponse.json({ error: "Failed to get random herb" }, { status: 500 });
+    return NextResponse.json(
+      { error: "Failed to get random herb" },
+      { status: 500 }
+    );
   }
 
   return NextResponse.json({ slug: data.slug });

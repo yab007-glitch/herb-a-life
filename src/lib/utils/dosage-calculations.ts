@@ -57,10 +57,7 @@ export function bsaMethod(
  * Fried's Rule: (age_months / 150) x adult_dose
  * For infants under 2 years
  */
-export function friedsRule(
-  ageMonths: number,
-  adultDoseMg: number
-): DoseResult {
+export function friedsRule(ageMonths: number, adultDoseMg: number): DoseResult {
   const dose = (ageMonths / 150) * adultDoseMg;
   return {
     dose: Math.round(dose * 10) / 10,

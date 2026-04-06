@@ -1,4 +1,5 @@
-const RXNORM_BASE = process.env.RXNORM_BASE_URL || "https://rxnav.nlm.nih.gov/REST";
+const RXNORM_BASE =
+  process.env.RXNORM_BASE_URL || "https://rxnav.nlm.nih.gov/REST";
 
 export type RxNormDrug = {
   rxcui: string;
@@ -18,11 +19,13 @@ export async function searchDrugs(term: string): Promise<RxNormDrug[]> {
     const data = await res.json();
     const candidates = data?.approximateGroup?.candidate || [];
 
-    return candidates.map((c: { rxcui: string; name: string; score: string }) => ({
-      rxcui: c.rxcui,
-      name: c.name,
-      synonym: c.name,
-    }));
+    return candidates.map(
+      (c: { rxcui: string; name: string; score: string }) => ({
+        rxcui: c.rxcui,
+        name: c.name,
+        synonym: c.name,
+      })
+    );
   } catch {
     return [];
   }
@@ -30,10 +33,9 @@ export async function searchDrugs(term: string): Promise<RxNormDrug[]> {
 
 export async function getDrugByRxcui(rxcui: string): Promise<string | null> {
   try {
-    const res = await fetch(
-      `${RXNORM_BASE}/rxcui/${rxcui}/properties.json`,
-      { next: { revalidate: 86400 } }
-    );
+    const res = await fetch(`${RXNORM_BASE}/rxcui/${rxcui}/properties.json`, {
+      next: { revalidate: 86400 },
+    });
 
     if (!res.ok) return null;
 

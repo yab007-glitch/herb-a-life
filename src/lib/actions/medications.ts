@@ -71,9 +71,7 @@ export async function addMedication(
   }
 }
 
-export async function removeMedication(
-  id: string
-): Promise<ActionResponse> {
+export async function removeMedication(id: string): Promise<ActionResponse> {
   try {
     const supabase = await createClient();
     const {

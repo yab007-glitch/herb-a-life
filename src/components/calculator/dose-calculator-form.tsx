@@ -15,7 +15,10 @@ import {
 import { Badge } from "@/components/ui/badge";
 import { Switch } from "@/components/ui/switch";
 import { cn } from "@/lib/utils";
-import { DOSAGE_FORMULAS, type FormulaKey } from "@/lib/constants/dosage-formulas";
+import {
+  DOSAGE_FORMULAS,
+  type FormulaKey,
+} from "@/lib/constants/dosage-formulas";
 import {
   clarksRule,
   youngsRule,
@@ -48,7 +51,8 @@ export function DoseCalculatorForm({ prefill }: { prefill?: PrefillData }) {
   const [weightValue, setWeightValue] = useState("");
   const [useLbs, setUseLbs] = useState(false);
   const [heightCm, setHeightCm] = useState("");
-  const [selectedFormula, setSelectedFormula] = useState<FormulaKey>("clarks_rule");
+  const [selectedFormula, setSelectedFormula] =
+    useState<FormulaKey>("clarks_rule");
   const [result, setResult] = useState<DoseResult | null>(null);
   const [error, setError] = useState<string | null>(null);
 
@@ -102,7 +106,9 @@ export function DoseCalculatorForm({ prefill }: { prefill?: PrefillData }) {
           } else {
             const months = parseFloat(ageYears) * 12;
             if (!months || months <= 0) {
-              setError("Fried's Rule requires age. Toggle to months for infants.");
+              setError(
+                "Fried's Rule requires age. Toggle to months for infants."
+              );
               return;
             }
             calcResult = friedsRule(months, dose);
@@ -116,7 +122,9 @@ export function DoseCalculatorForm({ prefill }: { prefill?: PrefillData }) {
       calcResult.unit = doseUnit;
       setResult(calcResult);
     } catch {
-      setError("An error occurred during calculation. Please check your inputs.");
+      setError(
+        "An error occurred during calculation. Please check your inputs."
+      );
     }
   }
 
@@ -157,7 +165,11 @@ export function DoseCalculatorForm({ prefill }: { prefill?: PrefillData }) {
                   {prefill.dosageForms.length > 0 && (
                     <div className="flex flex-wrap gap-1 pt-1">
                       {prefill.dosageForms.map((form) => (
-                        <Badge key={form} variant="secondary" className="text-xs">
+                        <Badge
+                          key={form}
+                          variant="secondary"
+                          className="text-xs"
+                        >
                           {form.replace("_", " ")}
                         </Badge>
                       ))}
@@ -223,10 +235,7 @@ export function DoseCalculatorForm({ prefill }: { prefill?: PrefillData }) {
               </Label>
               <div className="flex items-center gap-2 text-sm">
                 <span className="text-muted-foreground">Years</span>
-                <Switch
-                  checked={useMonths}
-                  onCheckedChange={setUseMonths}
-                />
+                <Switch checked={useMonths} onCheckedChange={setUseMonths} />
                 <span className="text-muted-foreground">Months</span>
               </div>
             </div>
@@ -289,28 +298,31 @@ export function DoseCalculatorForm({ prefill }: { prefill?: PrefillData }) {
           <div className="space-y-3">
             <Label>Calculation Formula</Label>
             <div className="grid gap-3 sm:grid-cols-2">
-              {(Object.entries(DOSAGE_FORMULAS) as [FormulaKey, (typeof DOSAGE_FORMULAS)[FormulaKey]][]).map(
-                ([key, formula]) => (
-                  <button
-                    key={key}
-                    type="button"
-                    onClick={() => setSelectedFormula(key)}
-                    className={cn(
-                      "rounded-lg border p-3 text-left transition-all",
-                      selectedFormula === key
-                        ? "border-primary bg-primary/5 ring-1 ring-primary"
-                        : "border-border hover:border-primary/50 hover:bg-muted/50"
-                    )}
-                  >
-                    <div className="text-sm font-medium text-foreground">
-                      {formula.name}
-                    </div>
-                    <div className="mt-1 text-xs text-muted-foreground">
-                      {formula.bestFor}
-                    </div>
-                  </button>
-                )
-              )}
+              {(
+                Object.entries(DOSAGE_FORMULAS) as [
+                  FormulaKey,
+                  (typeof DOSAGE_FORMULAS)[FormulaKey],
+                ][]
+              ).map(([key, formula]) => (
+                <button
+                  key={key}
+                  type="button"
+                  onClick={() => setSelectedFormula(key)}
+                  className={cn(
+                    "rounded-lg border p-3 text-left transition-all",
+                    selectedFormula === key
+                      ? "border-primary bg-primary/5 ring-1 ring-primary"
+                      : "border-border hover:border-primary/50 hover:bg-muted/50"
+                  )}
+                >
+                  <div className="text-sm font-medium text-foreground">
+                    {formula.name}
+                  </div>
+                  <div className="mt-1 text-xs text-muted-foreground">
+                    {formula.bestFor}
+                  </div>
+                </button>
+              ))}
             </div>
           </div>
 
@@ -360,17 +372,28 @@ export function DoseCalculatorForm({ prefill }: { prefill?: PrefillData }) {
                   <div className="space-y-2">
                     <div className="space-y-1">
                       <div className="flex justify-between text-xs">
-                        <span className="text-muted-foreground">Adult Dose</span>
-                        <span className="font-medium">{adultDose} {doseUnit}</span>
+                        <span className="text-muted-foreground">
+                          Adult Dose
+                        </span>
+                        <span className="font-medium">
+                          {adultDose} {doseUnit}
+                        </span>
                       </div>
                       <div className="h-3 w-full overflow-hidden rounded-full bg-muted">
-                        <div className="h-full rounded-full bg-primary/30 animate-grow-bar" style={{ width: "100%" }} />
+                        <div
+                          className="h-full rounded-full bg-primary/30 animate-grow-bar"
+                          style={{ width: "100%" }}
+                        />
                       </div>
                     </div>
                     <div className="space-y-1">
                       <div className="flex justify-between text-xs">
-                        <span className="text-muted-foreground">Calculated Dose</span>
-                        <span className="font-medium text-primary">{result.dose} {result.unit}</span>
+                        <span className="text-muted-foreground">
+                          Calculated Dose
+                        </span>
+                        <span className="font-medium text-primary">
+                          {result.dose} {result.unit}
+                        </span>
                       </div>
                       <div className="h-3 w-full overflow-hidden rounded-full bg-muted">
                         <div

@@ -41,8 +41,9 @@ export function InteractionsTable({
     severe: interactions.filter((i) => i.severity === "severe").length,
     moderate: interactions.filter((i) => i.severity === "moderate").length,
     mild: interactions.filter((i) => i.severity === "mild").length,
-    contraindicated: interactions.filter((i) => i.severity === "contraindicated")
-      .length,
+    contraindicated: interactions.filter(
+      (i) => i.severity === "contraindicated"
+    ).length,
   };
 
   return (

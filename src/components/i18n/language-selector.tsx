@@ -31,7 +31,7 @@ export function LanguageSelector() {
               onClick={() => setLocale(detectedLocale)}
               className="text-primary hover:underline font-medium"
             >
-              {LANGUAGES.find(l => l.code === detectedLocale)?.nativeName}
+              {LANGUAGES.find((l) => l.code === detectedLocale)?.nativeName}
             </button>
           </div>
         )}

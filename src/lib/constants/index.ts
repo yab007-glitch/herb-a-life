@@ -1,6 +1,8 @@
 export const APP_NAME = "HerbWise";
-export const APP_DESCRIPTION = "Your trusted guide to medicinal herbs. Search herbs, calculate doses, and check drug interactions.";
-export const APP_URL = process.env.NEXT_PUBLIC_APP_URL || "http://localhost:3000";
+export const APP_DESCRIPTION =
+  "Your trusted guide to medicinal herbs. Search herbs, calculate doses, and check drug interactions.";
+export const APP_URL =
+  process.env.NEXT_PUBLIC_APP_URL || "http://localhost:3000";
 
 export const FDA_DISCLAIMER =
   "These statements have not been evaluated by the Food and Drug Administration. This product is not intended to diagnose, treat, cure, or prevent any disease. Always consult your healthcare provider before starting any supplement or herbal regimen.";

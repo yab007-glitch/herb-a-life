@@ -4,8 +4,7 @@ import { FDA_DISCLAIMER_FULL } from "@/lib/constants/fda-disclaimer";
 
 export const metadata: Metadata = {
   title: "Medical Disclaimer",
-  description:
-    "Read the full medical and FDA disclaimer for HerbWise.",
+  description: "Read the full medical and FDA disclaimer for HerbWise.",
 };
 
 export default function DisclaimerPage() {

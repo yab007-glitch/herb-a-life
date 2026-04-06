@@ -1,7 +1,12 @@
 "use server";
 
 import { createClient } from "@/lib/supabase/server";
-import type { ActionResponse, Herb, HerbWithCategory, HerbWithInteractions } from "@/lib/types";
+import type {
+  ActionResponse,
+  Herb,
+  HerbWithCategory,
+  HerbWithInteractions,
+} from "@/lib/types";
 
 const ITEMS_PER_PAGE = 20;
 
@@ -138,9 +143,7 @@ export async function getSymptomCounts(
           .from("herbs")
           .select("id", { count: "exact", head: true })
           .eq("is_published", true)
-          .or(
-            `name.ilike.%${symptom}%,description.ilike.%${symptom}%`
-          );
+          .or(`name.ilike.%${symptom}%,description.ilike.%${symptom}%`);
         counts[symptom] = count ?? 0;
       })
     );

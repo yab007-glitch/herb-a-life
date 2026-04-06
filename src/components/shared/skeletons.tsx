@@ -41,7 +41,10 @@ export function ChatSkeleton({ messages = 3 }: { messages?: number }) {
         {Array.from({ length: messages }).map((_, i) => (
           <div
             key={i}
-            className={cn("flex", i % 2 === 0 ? "justify-start" : "justify-end")}
+            className={cn(
+              "flex",
+              i % 2 === 0 ? "justify-start" : "justify-end"
+            )}
           >
             <div className={cn("space-y-2", i % 2 === 0 ? "w-3/4" : "w-1/2")}>
               <Skeleton className="h-4 w-full" />

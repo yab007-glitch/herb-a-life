@@ -5,11 +5,11 @@ import { createClient } from "@supabase/supabase-js";
 function getAnonClient() {
   const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL;
   const supabaseKey = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY;
-  
+
   if (!supabaseUrl || !supabaseKey) {
     return null;
   }
-  
+
   return createClient(supabaseUrl, supabaseKey);
 }
 
@@ -18,83 +18,83 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
 
   // Static pages
   const staticPages: MetadataRoute.Sitemap = [
-    { 
-      url: baseUrl, 
+    {
+      url: baseUrl,
       lastModified: new Date(),
-      changeFrequency: "daily", 
-      priority: 1.0 
+      changeFrequency: "daily",
+      priority: 1.0,
     },
-    { 
-      url: `${baseUrl}/herbs`, 
+    {
+      url: `${baseUrl}/herbs`,
       lastModified: new Date(),
-      changeFrequency: "daily", 
-      priority: 0.9 
+      changeFrequency: "daily",
+      priority: 0.9,
     },
-    { 
-      url: `${baseUrl}/calculator`, 
+    {
+      url: `${baseUrl}/calculator`,
       lastModified: new Date(),
-      changeFrequency: "weekly", 
-      priority: 0.8 
+      changeFrequency: "weekly",
+      priority: 0.8,
     },
-    { 
-      url: `${baseUrl}/pharmacist`, 
+    {
+      url: `${baseUrl}/pharmacist`,
       lastModified: new Date(),
-      changeFrequency: "weekly", 
-      priority: 0.8 
+      changeFrequency: "weekly",
+      priority: 0.8,
     },
-    { 
-      url: `${baseUrl}/about`, 
+    {
+      url: `${baseUrl}/about`,
       lastModified: new Date(),
-      changeFrequency: "monthly", 
-      priority: 0.5 
+      changeFrequency: "monthly",
+      priority: 0.5,
     },
-    { 
-      url: `${baseUrl}/donate`, 
+    {
+      url: `${baseUrl}/donate`,
       lastModified: new Date(),
-      changeFrequency: "monthly", 
-      priority: 0.4 
+      changeFrequency: "monthly",
+      priority: 0.4,
     },
-    { 
-      url: `${baseUrl}/disclaimer`, 
+    {
+      url: `${baseUrl}/disclaimer`,
       lastModified: new Date(),
-      changeFrequency: "yearly", 
-      priority: 0.3 
+      changeFrequency: "yearly",
+      priority: 0.3,
     },
-    { 
-      url: `${baseUrl}/privacy`, 
+    {
+      url: `${baseUrl}/privacy`,
       lastModified: new Date(),
-      changeFrequency: "yearly", 
-      priority: 0.3 
+      changeFrequency: "yearly",
+      priority: 0.3,
     },
-    { 
-      url: `${baseUrl}/terms`, 
+    {
+      url: `${baseUrl}/terms`,
       lastModified: new Date(),
-      changeFrequency: "yearly", 
-      priority: 0.3 
+      changeFrequency: "yearly",
+      priority: 0.3,
     },
-    { 
-      url: `${baseUrl}/login`, 
+    {
+      url: `${baseUrl}/login`,
       lastModified: new Date(),
-      changeFrequency: "monthly", 
-      priority: 0.4 
+      changeFrequency: "monthly",
+      priority: 0.4,
     },
-    { 
-      url: `${baseUrl}/register`, 
+    {
+      url: `${baseUrl}/register`,
       lastModified: new Date(),
-      changeFrequency: "monthly", 
-      priority: 0.4 
+      changeFrequency: "monthly",
+      priority: 0.4,
     },
-    { 
-      url: `${baseUrl}/dashboard`, 
+    {
+      url: `${baseUrl}/dashboard`,
       lastModified: new Date(),
-      changeFrequency: "weekly", 
-      priority: 0.6 
+      changeFrequency: "weekly",
+      priority: 0.6,
     },
   ];
 
   try {
     const supabase = getAnonClient();
-    
+
     if (!supabase) {
       console.error("Supabase client not configured for sitemap");
       return staticPages;
@@ -119,12 +119,14 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
       .from("herb_categories")
       .select("slug");
 
-    const categoryPages: MetadataRoute.Sitemap = (categories ?? []).map((cat) => ({
-      url: `${baseUrl}/herbs?category=${cat.slug}`,
-      lastModified: new Date(),
-      changeFrequency: "weekly" as const,
-      priority: 0.6,
-    }));
+    const categoryPages: MetadataRoute.Sitemap = (categories ?? []).map(
+      (cat) => ({
+        url: `${baseUrl}/herbs?category=${cat.slug}`,
+        lastModified: new Date(),
+        changeFrequency: "weekly" as const,
+        priority: 0.6,
+      })
+    );
 
     return [...staticPages, ...categoryPages, ...herbPages];
   } catch (error) {

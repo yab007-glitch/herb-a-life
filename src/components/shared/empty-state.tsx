@@ -4,12 +4,23 @@ import type { LucideIcon } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
 
-type IllustrationVariant = "herbs" | "search" | "chat" | "medications" | "default";
+type IllustrationVariant =
+  | "herbs"
+  | "search"
+  | "chat"
+  | "medications"
+  | "default";
 
-const illustrationConfig: Record<IllustrationVariant, { icon: LucideIcon; gradient: string }> = {
+const illustrationConfig: Record<
+  IllustrationVariant,
+  { icon: LucideIcon; gradient: string }
+> = {
   herbs: { icon: Leaf, gradient: "from-emerald-500/20 to-teal-500/20" },
   search: { icon: Search, gradient: "from-blue-500/20 to-cyan-500/20" },
-  chat: { icon: MessageCircle, gradient: "from-purple-500/20 to-indigo-500/20" },
+  chat: {
+    icon: MessageCircle,
+    gradient: "from-purple-500/20 to-indigo-500/20",
+  },
   medications: { icon: Pill, gradient: "from-amber-500/20 to-orange-500/20" },
   default: { icon: Leaf, gradient: "from-muted to-muted" },
 };
@@ -47,7 +58,12 @@ export function EmptyState({
     >
       {/* Illustration */}
       <div className="relative mb-6">
-        <div className={cn("absolute -inset-4 rounded-full bg-gradient-to-br blur-xl opacity-60", config.gradient)} />
+        <div
+          className={cn(
+            "absolute -inset-4 rounded-full bg-gradient-to-br blur-xl opacity-60",
+            config.gradient
+          )}
+        />
         <div className="relative flex size-16 items-center justify-center rounded-full bg-muted/80 text-muted-foreground ring-1 ring-border/50">
           <Icon className="size-7" />
         </div>
@@ -58,17 +74,20 @@ export function EmptyState({
         {description}
       </p>
 
-      {action && (
-        action.href ? (
-          <Button className="mt-5" size="sm" render={<Link href={action.href} />}>
+      {action &&
+        (action.href ? (
+          <Button
+            className="mt-5"
+            size="sm"
+            render={<Link href={action.href} />}
+          >
             {action.label}
           </Button>
         ) : (
           <Button onClick={action.onClick} className="mt-5" size="sm">
             {action.label}
           </Button>
-        )
-      )}
+        ))}
     </div>
   );
 }
