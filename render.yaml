@@ -2,7 +2,7 @@ services:
   - type: web
     name: herb-a-life
     runtime: docker
-    repo: https://github.com/yab007-glitch/herb-a-life
+    repo: https://github.com/yab007-glitch/herbwise
     branch: main
     plan: free
     dockerfilePath: ./Dockerfile
