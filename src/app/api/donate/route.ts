@@ -1,17 +1,29 @@
 import { NextRequest, NextResponse } from "next/server";
 import Stripe from "stripe";
 
-// Validate Stripe key is configured
-const stripeSecretKey = process.env.STRIPE_SECRET_KEY;
-if (!stripeSecretKey && process.env.NODE_ENV === "production") {
-  console.error("STRIPE_SECRET_KEY is not configured");
+let stripeInstance: Stripe | null = null;
+
+function getStripe(): Stripe | null {
+  if (stripeInstance) return stripeInstance;
+  
+  const key = process.env.STRIPE_SECRET_KEY;
+  if (!key) {
+    console.error("STRIPE_SECRET_KEY is not configured");
+    return null;
+  }
+  
+  try {
+    stripeInstance = new Stripe(key);
+    return stripeInstance;
+  } catch (e) {
+    console.error("Failed to initialize Stripe:", e);
+    return null;
+  }
 }
 
-const stripe = stripeSecretKey
-  ? new Stripe(stripeSecretKey, { apiVersion: "2024-12-18.acacia" })
-  : null;
-
 export async function POST(req: NextRequest) {
+  const stripe = getStripe();
+  
   // Check if Stripe is configured
   if (!stripe) {
     return NextResponse.json(
@@ -61,9 +73,17 @@ export async function POST(req: NextRequest) {
 
     return NextResponse.json({ url: session.url });
   } catch (error) {
-    console.error("Stripe checkout error:", error);
+    const err = error as Error & { type?: string; code?: string };
+    console.error("Stripe checkout error:", {
+      message: err.message || "Unknown error",
+      type: err.type,
+      code: err.code,
+    });
     return NextResponse.json(
-      { error: "Failed to create checkout session" },
+      {
+        error: "Failed to create checkout session",
+        details: err.message || "Unknown error",
+      },
       { status: 500 }
     );
   }

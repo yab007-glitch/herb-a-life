@@ -1,20 +1,21 @@
 import { NextRequest, NextResponse } from "next/server";
 import Stripe from "stripe";
 
-// Lazy-initialize Stripe to avoid build-time errors when STRIPE_SECRET_KEY is not set
-let stripe: Stripe | null = null;
+let stripeInstance: Stripe | null = null;
 
 function getStripe(): Stripe | null {
+  if (stripeInstance) return stripeInstance;
+  
   const key = process.env.STRIPE_SECRET_KEY;
-  if (!key) {
+  if (!key) return null;
+  
+  try {
+    stripeInstance = new Stripe(key);
+    return stripeInstance;
+  } catch (e) {
+    console.error("Failed to initialize Stripe:", e);
     return null;
   }
-  if (!stripe) {
-    stripe = new Stripe(key, {
-      apiVersion: "2024-12-18.acacia",
-    });
-  }
-  return stripe;
 }
 
 // This is a placeholder for donation tracking
