@@ -11,7 +11,13 @@ import {
   XCircle,
   Sparkles,
 } from "lucide-react";
-import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card";
+import {
+  Card,
+  CardContent,
+  CardHeader,
+  CardTitle,
+  CardDescription,
+} from "@/components/ui/card";
 import { DonationButtons } from "@/components/donations/donation-buttons";
 
 export const metadata: Metadata = {
@@ -24,7 +30,8 @@ const costs = [
   {
     icon: Server,
     label: "Hosting & Infrastructure",
-    description: "Servers, CDN, and deployment to keep the app fast and reliable",
+    description:
+      "Servers, CDN, and deployment to keep the app fast and reliable",
     monthly: "$20",
   },
   {
@@ -71,7 +78,7 @@ export default async function DonatePage({
   searchParams: Promise<{ success?: string; canceled?: string }>;
 }) {
   const params = await searchParams;
-  
+
   return (
     <div className="mx-auto max-w-4xl space-y-12 py-8">
       {/* Success/Canceled Messages */}
@@ -84,13 +91,14 @@ export default async function DonatePage({
                 Thank you for your donation! 💚
               </h2>
               <p className="text-sm text-emerald-700 dark:text-emerald-300">
-                Your support helps keep HerbWise free for everyone. You&#39;re amazing!
+                Your support helps keep HerbWise free for everyone. You&#39;re
+                amazing!
               </p>
             </div>
           </CardContent>
         </Card>
       )}
-      
+
       {params.canceled === "true" && (
         <Card className="border-amber-200 bg-amber-50 dark:border-amber-800 dark:bg-amber-900/20">
           <CardContent className="flex items-center gap-4 py-6">
@@ -116,15 +124,17 @@ export default async function DonatePage({
           Keep HerbWise <span className="text-pink-600">100% Free</span>
         </h1>
         <p className="mx-auto max-w-2xl text-lg text-muted-foreground">
-          No ads. No paywalls. No premium tiers. Just free herbal knowledge for everyone — 
-          powered by people like you.
+          No ads. No paywalls. No premium tiers. Just free herbal knowledge for
+          everyone — powered by people like you.
         </p>
-        
+
         {/* Quick Stats */}
         <div className="flex flex-wrap justify-center gap-6 pt-4">
           <div className="flex items-center gap-2 rounded-full bg-muted px-4 py-2 text-sm">
             <Leaf className="size-4 text-primary" />
-            <span><strong>2,700+</strong> herbs</span>
+            <span>
+              <strong>2,700+</strong> herbs
+            </span>
           </div>
           <div className="flex items-center gap-2 rounded-full bg-muted px-4 py-2 text-sm">
             <Sparkles className="size-4 text-primary" />
@@ -141,7 +151,9 @@ export default async function DonatePage({
       <div className="space-y-4">
         <div className="text-center">
           <h2 className="text-2xl font-bold">Choose Your Impact</h2>
-          <p className="text-muted-foreground mt-1">Every donation helps keep us running</p>
+          <p className="text-muted-foreground mt-1">
+            Every donation helps keep us running
+          </p>
         </div>
         <DonationButtons />
       </div>
@@ -171,8 +183,12 @@ export default async function DonatePage({
                   </div>
                   <div className="flex-1">
                     <div className="flex items-center justify-between">
-                      <p className="font-medium text-foreground">{cost.label}</p>
-                      <span className="text-sm font-semibold text-primary">{cost.monthly}/mo</span>
+                      <p className="font-medium text-foreground">
+                        {cost.label}
+                      </p>
+                      <span className="text-sm font-semibold text-primary">
+                        {cost.monthly}/mo
+                      </span>
                     </div>
                     <p className="text-sm text-muted-foreground">
                       {cost.description}
@@ -198,7 +214,9 @@ export default async function DonatePage({
           {testimonials.map((t, i) => (
             <Card key={i} className="border-border/50">
               <CardContent className="pt-6">
-                <p className="text-sm italic text-muted-foreground">&ldquo;{t.quote}&rdquo;</p>
+                <p className="text-sm italic text-muted-foreground">
+                  &ldquo;{t.quote}&rdquo;
+                </p>
                 <p className="mt-3 text-sm font-medium">— {t.author}</p>
                 <p className="text-xs text-muted-foreground">{t.location}</p>
               </CardContent>
@@ -219,25 +237,29 @@ export default async function DonatePage({
           <div className="flex items-start gap-3">
             <CheckCircle className="size-5 text-emerald-600 shrink-0 mt-0.5" />
             <p>
-              <strong className="text-foreground">No ads ever.</strong> We don&apos;t sell your attention to advertisers.
+              <strong className="text-foreground">No ads ever.</strong> We
+              don&apos;t sell your attention to advertisers.
             </p>
           </div>
           <div className="flex items-start gap-3">
             <CheckCircle className="size-5 text-emerald-600 shrink-0 mt-0.5" />
             <p>
-              <strong className="text-foreground">No premium tiers.</strong> Every feature is free for everyone.
+              <strong className="text-foreground">No premium tiers.</strong>{" "}
+              Every feature is free for everyone.
             </p>
           </div>
           <div className="flex items-start gap-3">
             <CheckCircle className="size-5 text-emerald-600 shrink-0 mt-0.5" />
             <p>
-              <strong className="text-foreground">No data selling.</strong> Your data stays yours.
+              <strong className="text-foreground">No data selling.</strong> Your
+              data stays yours.
             </p>
           </div>
           <div className="flex items-start gap-3">
             <CheckCircle className="size-5 text-emerald-600 shrink-0 mt-0.5" />
             <p>
-              <strong className="text-foreground">Open about costs.</strong> We show you exactly where donations go.
+              <strong className="text-foreground">Open about costs.</strong> We
+              show you exactly where donations go.
             </p>
           </div>
         </CardContent>
@@ -246,11 +268,12 @@ export default async function DonatePage({
       {/* Bottom CTA */}
       <div className="text-center space-y-4 pb-8">
         <p className="text-sm text-muted-foreground">
-          Questions? <Link href="/about" className="underline hover:text-foreground">Learn more about HerbWise</Link>
+          Questions?{" "}
+          <Link href="/about" className="underline hover:text-foreground">
+            Learn more about HerbWise
+          </Link>
         </p>
       </div>
     </div>
   );
-};
-};
 }

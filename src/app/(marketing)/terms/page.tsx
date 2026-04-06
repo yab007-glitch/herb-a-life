@@ -32,15 +32,22 @@ export default function TermsPage() {
           <h2 className="mb-3 text-lg font-semibold text-foreground">
             2. Use of Service
           </h2>
-          <p>HerbWise provides educational information about medicinal herbs,
-            dosage calculations, and AI-powered herbalist guidance. You agree
-            to use the service only for lawful purposes and in accordance with
-            these Terms.</p>
+          <p>
+            HerbWise provides educational information about medicinal herbs,
+            dosage calculations, and AI-powered herbalist guidance. You agree to
+            use the service only for lawful purposes and in accordance with
+            these Terms.
+          </p>
           <ul className="mt-2 list-inside list-disc space-y-1">
             <li>You must be at least 18 years old to create an account</li>
-            <li>You are responsible for maintaining the security of your account</li>
+            <li>
+              You are responsible for maintaining the security of your account
+            </li>
             <li>You must not misuse or attempt to exploit the platform</li>
-            <li>You must not use the service for commercial purposes without permission</li>
+            <li>
+              You must not use the service for commercial purposes without
+              permission
+            </li>
           </ul>
         </section>
 
@@ -76,9 +83,9 @@ export default function TermsPage() {
           </h2>
           <p>
             HerbWise shall not be liable for any direct, indirect, incidental,
-            special, or consequential damages resulting from the use or inability
-            to use our service, including but not limited to damages for loss of
-            profits, data, or other intangible losses.
+            special, or consequential damages resulting from the use or
+            inability to use our service, including but not limited to damages
+            for loss of profits, data, or other intangible losses.
           </p>
         </section>
 
@@ -129,8 +136,4 @@ export default function TermsPage() {
       </div>
     </div>
   );
-}
-
-}
-
 }

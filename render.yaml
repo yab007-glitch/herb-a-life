@@ -31,4 +31,3 @@ services:
         value: https://api.fda.gov/drug
       - key: NODE_ENV
         value: production
-uction

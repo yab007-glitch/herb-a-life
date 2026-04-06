@@ -8,7 +8,7 @@
 - React 19
 - Supabase (PostgreSQL + Auth + Storage)
 - Tailwind CSS 4 + shadcn/ui (base-nova style)
-- OpenRouter API (openai/gpt-4o-mini) for Virtual Herbalist
+- Ollama Cloud API (glm5:cloud) for Virtual Herbalist
 - External APIs: RxNorm, OpenFDA, PubChem
 
 ## Project Structure

@@ -7,14 +7,14 @@ A medical herbs SaaS application featuring a searchable database of 2,700+ medic
 - **Framework**: Next.js 16 (App Router) + React 19
 - **Database**: Supabase (PostgreSQL + Auth)
 - **Styling**: Tailwind CSS 4 + shadcn/ui (base-nova)
-- **AI**: OpenRouter API for virtual herbalist chat
+- **AI**: Ollama Cloud API (glm5:cloud) for virtual herbalist chat
 - **APIs**: RxNorm (drug lookup), OpenFDA (adverse events)
 
 ## Prerequisites
 
 - Node.js 20+
 - Supabase project
-- OpenRouter API key
+- Ollama Cloud API key (or OpenRouter as alternative)
 
 ## Setup
 

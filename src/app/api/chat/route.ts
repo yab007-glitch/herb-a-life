@@ -5,7 +5,7 @@ import { rateLimit } from "@/lib/rate-limit";
 
 // Ollama Cloud API configuration
 const OLLAMA_BASE_URL = process.env.OLLAMA_BASE_URL || "https://ollama.com/api";
-const DEFAULT_MODEL = "gemma3:12b";
+const DEFAULT_MODEL = "glm5:cloud";
 
 export async function POST(request: NextRequest) {
   try {
