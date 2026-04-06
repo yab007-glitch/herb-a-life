@@ -18,7 +18,7 @@ services:
       - key: OLLAMA_API_KEY
         sync: false
       - key: OLLAMA_MODEL
-        value: gemma3:12b
+        value: glm5:cloud
       - key: OLLAMA_BASE_URL
         value: https://ollama.com/api
       - key: NEXT_PUBLIC_APP_URL
