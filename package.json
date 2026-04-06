@@ -12,7 +12,8 @@
     "test:run": "vitest run",
     "test:coverage": "vitest run --coverage",
     "format": "prettier --write .",
-    "format:check": "prettier --check ."
+    "format:check": "prettier --check .",
+    "redis:usage": "./scripts/check-redis-usage.sh"
   },
   "dependencies": {
     "@base-ui/react": "^1.3.0",
