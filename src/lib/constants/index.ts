@@ -1,4 +1,4 @@
-export const APP_NAME = "1Herb";
+export const APP_NAME = "HerbWise";
 export const APP_DESCRIPTION = "Your trusted guide to medicinal herbs. Search herbs, calculate doses, and check drug interactions.";
 export const APP_URL = process.env.NEXT_PUBLIC_APP_URL || "http://localhost:3000";
 
@@ -6,6 +6,6 @@ export const FDA_DISCLAIMER =
   "These statements have not been evaluated by the Food and Drug Administration. This product is not intended to diagnose, treat, cure, or prevent any disease. Always consult your healthcare provider before starting any supplement or herbal regimen.";
 
 export const MEDICAL_DISCLAIMER =
-  "1Herb provides information for educational purposes only. The content is not intended to be a substitute for professional medical advice, diagnosis, or treatment. Always seek the advice of your physician or other qualified health provider with any questions you may have regarding a medical condition.";
+  "HerbWise provides information for educational purposes only. The content is not intended to be a substitute for professional medical advice, diagnosis, or treatment. Always seek the advice of your physician or other qualified health provider with any questions you may have regarding a medical condition.";
 
 export const ITEMS_PER_PAGE = 20;

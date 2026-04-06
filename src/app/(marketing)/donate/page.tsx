@@ -15,9 +15,9 @@ import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/com
 import { DonationButtons } from "@/components/donations/donation-buttons";
 
 export const metadata: Metadata = {
-  title: "Support 1Herb - Keep Herbal Medicine Free",
+  title: "Support HerbWise - Keep Herbal Medicine Free",
   description:
-    "Help us keep 1Herb 100% free. Your donation supports hosting, AI costs, and free access for everyone.",
+    "Help us keep HerbWise 100% free. Your donation supports hosting, AI costs, and free access for everyone.",
 };
 
 const costs = [
@@ -84,7 +84,7 @@ export default async function DonatePage({
                 Thank you for your donation! 💚
               </h2>
               <p className="text-sm text-emerald-700 dark:text-emerald-300">
-                Your support helps keep 1Herb free for everyone. You&#39;re amazing!
+                Your support helps keep HerbWise free for everyone. You&#39;re amazing!
               </p>
             </div>
           </CardContent>
@@ -113,7 +113,7 @@ export default async function DonatePage({
           <Heart className="h-10 w-10 text-white fill-white" />
         </div>
         <h1 className="text-4xl font-bold tracking-tight sm:text-5xl">
-          Keep 1Herb <span className="text-pink-600">100% Free</span>
+          Keep HerbWise <span className="text-pink-600">100% Free</span>
         </h1>
         <p className="mx-auto max-w-2xl text-lg text-muted-foreground">
           No ads. No paywalls. No premium tiers. Just free herbal knowledge for everyone — 
@@ -192,7 +192,7 @@ export default async function DonatePage({
       {/* Testimonials */}
       <div className="space-y-4">
         <h2 className="text-xl font-semibold text-center">
-          Why People Love 1Herb
+          Why People Love HerbWise
         </h2>
         <div className="grid gap-4 sm:grid-cols-3">
           {testimonials.map((t, i) => (
@@ -246,9 +246,11 @@ export default async function DonatePage({
       {/* Bottom CTA */}
       <div className="text-center space-y-4 pb-8">
         <p className="text-sm text-muted-foreground">
-          Questions? <Link href="/about" className="underline hover:text-foreground">Learn more about 1Herb</Link>
+          Questions? <Link href="/about" className="underline hover:text-foreground">Learn more about HerbWise</Link>
         </p>
       </div>
     </div>
   );
+};
+};
 }

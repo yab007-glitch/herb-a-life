@@ -19,7 +19,7 @@ export const openai = new OpenAI({
   apiKey: getApiKey() || "sk-dummy-key-for-build",
   defaultHeaders: {
     "HTTP-Referer": (process.env.NEXT_PUBLIC_APP_URL ?? "").trim(),
-    "X-Title": "1Herb",
+    "X-Title": "HerbWise",
   },
   dangerouslyAllowBrowser: false,
 });

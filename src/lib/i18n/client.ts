@@ -3,7 +3,7 @@
 import { useState, useCallback, useEffect } from "react";
 import { LANGUAGES, DEFAULT_LOCALE, COUNTRY_TO_LANG, type Locale } from "@/lib/i18n/config";
 
-const LOCALE_STORAGE_KEY = "1herb-locale";
+const LOCALE_STORAGE_KEY = "herbwise-locale";
 
 // Type for language array (mutable)
 type LanguageArray = typeof LANGUAGES[number][];

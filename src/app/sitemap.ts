@@ -14,7 +14,7 @@ function getAnonClient() {
 }
 
 export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
-  const baseUrl = process.env.NEXT_PUBLIC_APP_URL ?? "https://1herb.app";
+  const baseUrl = process.env.NEXT_PUBLIC_APP_URL ?? "https://herbwise.app";
 
   // Static pages
   const staticPages: MetadataRoute.Sitemap = [

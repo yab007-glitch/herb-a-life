@@ -1,7 +1,7 @@
 import { ImageResponse } from "next/og";
 
 export const runtime = "edge";
-export const alt = "1Herb - Your Trusted Guide to Medicinal Herbs";
+export const alt = "HerbWise - Your Trusted Guide to Medicinal Herbs";
 export const size = {
   width: 1200,
   height: 630,
@@ -78,7 +78,7 @@ export default async function OgImage() {
             marginBottom: 16,
           }}
         >
-          1Herb
+          HerbWise
         </div>
 
         {/* Subtitle */}
@@ -144,7 +144,7 @@ export default async function OgImage() {
             color: "#475569",
           }}
         >
-          1herb.app
+          herbwise.app
         </div>
       </div>
     ),

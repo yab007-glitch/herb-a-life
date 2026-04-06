@@ -41,7 +41,7 @@ export function MissionModal({ open, onOpenChange }: MissionModalProps) {
             Our Mission
           </DialogTitle>
           <DialogDescription className="sr-only">
-            Learn about 1Herb&apos;s mission and how your donations help keep herbal medicine information free for everyone.
+            Learn about HerbWise&apos;s mission and how your donations help keep herbal medicine information free for everyone.
           </DialogDescription>
         </DialogHeader>
         
@@ -53,7 +53,7 @@ export function MissionModal({ open, onOpenChange }: MissionModalProps) {
             </p>
             <p className="text-sm text-muted-foreground">
               We believe access to health information shouldn&apos;t depend on your wallet.
-              1Herb provides comprehensive herbal medicine data at no cost — no ads, no paywalls, no premium tiers.
+              HerbWise provides comprehensive herbal medicine data at no cost — no ads, no paywalls, no premium tiers.
             </p>
           </div>
 
@@ -102,7 +102,7 @@ export function MissionModal({ open, onOpenChange }: MissionModalProps) {
               We&apos;ll never charge users or sell your data.
             </p>
             <p className="text-xs text-muted-foreground mt-1">
-              1Herb is sustained entirely by voluntary donations.
+              HerbWise is sustained entirely by voluntary donations.
             </p>
           </div>
 

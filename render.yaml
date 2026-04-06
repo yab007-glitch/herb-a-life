@@ -22,12 +22,13 @@ services:
       - key: OLLAMA_BASE_URL
         value: https://ollama.com/api
       - key: NEXT_PUBLIC_APP_URL
-        value: https://1herb.vercel.app
+        value: https://herbwise.app
       - key: NEXT_PUBLIC_APP_NAME
-        value: 1Herb
+        value: HerbWise
       - key: RXNORM_BASE_URL
         value: https://rxnav.nlm.nih.gov/REST
       - key: OPENFDA_BASE_URL
         value: https://api.fda.gov/drug
       - key: NODE_ENV
         value: production
+uction

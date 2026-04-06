@@ -2,7 +2,7 @@ import type { Metadata } from "next";
 
 export const metadata: Metadata = {
   title: "Terms of Service",
-  description: "1Herb terms of service and conditions of use.",
+  description: "HerbWise terms of service and conditions of use.",
 };
 
 export default function TermsPage() {
@@ -21,7 +21,7 @@ export default function TermsPage() {
             1. Acceptance of Terms
           </h2>
           <p>
-            By accessing or using 1Herb, you agree to be bound by these Terms
+            By accessing or using HerbWise, you agree to be bound by these Terms
             of Service and all applicable laws and regulations. If you do not
             agree with any of these terms, you are prohibited from using this
             platform.
@@ -32,7 +32,7 @@ export default function TermsPage() {
           <h2 className="mb-3 text-lg font-semibold text-foreground">
             2. Use of Service
           </h2>
-          <p>1Herb provides educational information about medicinal herbs,
+          <p>HerbWise provides educational information about medicinal herbs,
             dosage calculations, and AI-powered herbalist guidance. You agree
             to use the service only for lawful purposes and in accordance with
             these Terms.</p>
@@ -49,7 +49,7 @@ export default function TermsPage() {
             3. Medical Disclaimer
           </h2>
           <p>
-            The information provided on 1Herb is for educational purposes
+            The information provided on HerbWise is for educational purposes
             only. It is not intended to diagnose, treat, cure, or prevent any
             disease. Always consult a qualified healthcare professional before
             making any health-related decisions based on information found on
@@ -62,8 +62,8 @@ export default function TermsPage() {
             4. Intellectual Property
           </h2>
           <p>
-            All content on 1Herb, including text, graphics, logos, and
-            software, is the property of 1Herb or its content suppliers and
+            All content on HerbWise, including text, graphics, logos, and
+            software, is the property of HerbWise or its content suppliers and
             is protected by intellectual property laws. You may not reproduce,
             distribute, or create derivative works without our express written
             permission.
@@ -75,7 +75,7 @@ export default function TermsPage() {
             5. Limitation of Liability
           </h2>
           <p>
-            1Herb shall not be liable for any direct, indirect, incidental,
+            HerbWise shall not be liable for any direct, indirect, incidental,
             special, or consequential damages resulting from the use or inability
             to use our service, including but not limited to damages for loss of
             profits, data, or other intangible losses.
@@ -123,10 +123,14 @@ export default function TermsPage() {
           </h2>
           <p>
             If you have questions about these Terms, please contact us at
-            legal@1herb.app.
+            legal@herbwise.app.
           </p>
         </section>
       </div>
     </div>
   );
+}
+
+}
+
 }

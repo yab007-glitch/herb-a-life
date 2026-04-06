@@ -13,7 +13,7 @@ import { ForgotPasswordForm } from "@/components/auth/forgot-password-form";
 
 export const metadata: Metadata = {
   title: "Forgot Password",
-  description: "Reset your 1Herb password.",
+  description: "Reset your HerbWise password.",
 };
 
 export default function ForgotPasswordPage() {

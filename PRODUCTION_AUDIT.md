@@ -1,4 +1,4 @@
-# 1Herb Production Readiness Audit
+# HerbWise Production Readiness Audit
 
 **Generated:** April 5, 2026  
 **Version:** 0.1.0  

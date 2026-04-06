@@ -130,7 +130,7 @@
     "disclaimer": "Cette IA fournit des informations éducatives uniquement. Consultez toujours un professionnel de santé pour des conseils médicaux."
   },
   "donate": {
-    "title": "Soutenir 1Herb",
+    "title": "Soutenir HerbWise",
     "subtitle": "Garder le Savoir Herbal Gratuit",
     "mission": {
       "title": "Notre Mission",
@@ -157,7 +157,7 @@
     },
     "success": {
       "title": "Merci pour votre don !",
-      "message": "Votre soutien aide à garder 1Herb gratuit pour tous."
+      "message": "Votre soutien aide à garder HerbWise gratuit pour tous."
     },
     "canceled": {
       "title": "Don annulé",
@@ -165,7 +165,7 @@
     }
   },
   "about": {
-    "title": "À propos de 1Herb",
+    "title": "À propos de HerbWise",
     "mission": "Notre Mission",
     "missionText": "Nous croyons que tout le monde mérite un accès à des informations fiables et basées sur des preuves sur la médecine herbal.",
     "team": "Notre Équipe",
@@ -174,7 +174,7 @@
     "sourcesText": "Informations provenant des monographies de l'OMS, de la Commission E allemande et de la recherche évaluée par les pairs.",
     "disclaimer": {
       "title": "Avertissement Médical",
-      "text": "1Herb fournit des informations éducatives uniquement. Ce n'est pas un avis médical. Consultez toujours un professionnel de santé qualifié avant d'utiliser tout remède herbal."
+      "text": "HerbWise fournit des informations éducatives uniquement. Ce n'est pas un avis médical. Consultez toujours un professionnel de santé qualifié avant d'utiliser tout remède herbal."
     }
   },
   "footer": {

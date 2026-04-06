@@ -75,7 +75,7 @@ export function MarketingFooter() {
         {/* Bottom */}
         <div className="mt-12 flex flex-col items-center justify-between gap-4 border-t pt-8 sm:flex-row">
           <p className="text-sm text-muted-foreground">
-            © {new Date().getFullYear()} 1Herb. Educational purposes only. Not medical advice.
+            © {new Date().getFullYear()} HerbWise. Educational purposes only. Not medical advice.
           </p>
           <p className="text-xs text-muted-foreground">
             Built with Next.js, Supabase, and OpenRouter

@@ -10,7 +10,7 @@ import { ResetPasswordForm } from "@/components/auth/reset-password-form";
 
 export const metadata: Metadata = {
   title: "Reset Password",
-  description: "Set a new password for your 1Herb account.",
+  description: "Set a new password for your HerbWise account.",
 };
 
 export default function ResetPasswordPage() {

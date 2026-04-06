@@ -6,7 +6,7 @@ import { Clock, X } from "lucide-react";
 import { Badge } from "@/components/ui/badge";
 
 const MAX_RECENT = 5;
-const STORAGE_KEY = "1herb-recent-searches";
+const STORAGE_KEY = "herbwise-recent-searches";
 
 export function RecentSearches() {
   const [searches, setSearches] = useState<string[]>([]);

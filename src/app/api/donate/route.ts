@@ -26,7 +26,7 @@ export async function POST(req: NextRequest) {
     // Validate amount (min $1, max $1000)
     const donationAmount = Math.max(100, Math.min(100000, Number(amount) || 1000)); // in cents
 
-    const appUrl = process.env.NEXT_PUBLIC_APP_URL || "https://1herb.app";
+    const appUrl = process.env.NEXT_PUBLIC_APP_URL || "https://herbwise.app";
 
     const session = await stripe.checkout.sessions.create({
       payment_method_types: ["card"],
@@ -35,7 +35,7 @@ export async function POST(req: NextRequest) {
           price_data: {
             currency: "usd",
             product_data: {
-              name: "Support 1Herb",
+              name: "Support HerbWise",
               description: "Help keep herbal medicine information free for everyone",
               // Remove images field - Stripe requires publicly accessible URLs
               // If you want an image, upload to public/ and use appUrl + "/leaf-icon.png"
