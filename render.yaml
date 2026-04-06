@@ -16,7 +16,7 @@ services:
       - key: OPENROUTER_API_KEY
         sync: false
       - key: OPENROUTER_MODEL
-        value: openai/gpt-4o-mini
+        value: qwen/qwen3.6-plus:free
       - key: NEXT_PUBLIC_APP_URL
         value: https://1herb.vercel.app
       - key: NEXT_PUBLIC_APP_NAME
