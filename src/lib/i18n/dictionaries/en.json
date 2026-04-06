@@ -130,7 +130,7 @@
     "disclaimer": "This AI provides educational information only. Always consult a healthcare provider for medical advice."
   },
   "donate": {
-    "title": "Support HerbWise",
+    "title": "Support HerbAlly",
     "subtitle": "Keep Herbal Knowledge Free",
     "mission": {
       "title": "Our Mission",
@@ -157,7 +157,7 @@
     },
     "success": {
       "title": "Thank you for your donation!",
-      "message": "Your support helps keep HerbWise free for everyone."
+      "message": "Your support helps keep HerbAlly free for everyone."
     },
     "canceled": {
       "title": "Donation canceled",
@@ -165,7 +165,7 @@
     }
   },
   "about": {
-    "title": "About HerbWise",
+    "title": "About HerbAlly",
     "mission": "Our Mission",
     "missionText": "We believe everyone deserves access to reliable, evidence-based herbal medicine information.",
     "team": "Our Team",
@@ -174,7 +174,7 @@
     "sourcesText": "Information sourced from WHO monographs, German Commission E, and peer-reviewed research.",
     "disclaimer": {
       "title": "Medical Disclaimer",
-      "text": "HerbWise provides educational information only. This is not medical advice. Always consult a qualified healthcare provider before using any herbal remedy."
+      "text": "HerbAlly provides educational information only. This is not medical advice. Always consult a qualified healthcare provider before using any herbal remedy."
     }
   },
   "footer": {

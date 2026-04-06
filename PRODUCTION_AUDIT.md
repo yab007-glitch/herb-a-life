@@ -1,4 +1,4 @@
-# HerbWise Production Readiness Audit
+# HerbAlly Production Readiness Audit
 
 **Generated:** April 5, 2026  
 **Version:** 0.1.0  

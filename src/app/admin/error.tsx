@@ -13,7 +13,7 @@ export default function AdminError({
   reset: () => void;
 }) {
   useEffect(() => {
-    console.error("[HerbWise Admin Error]", error);
+    console.error("[HerbAlly Admin Error]", error);
   }, [error]);
 
   return (

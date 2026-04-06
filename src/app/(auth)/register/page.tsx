@@ -10,7 +10,7 @@ import { RegisterForm } from "@/components/auth/register-form";
 
 export const metadata: Metadata = {
   title: "Register",
-  description: "Create your HerbWise account.",
+  description: "Create your HerbAlly account.",
 };
 
 export default function RegisterPage() {
@@ -19,7 +19,7 @@ export default function RegisterPage() {
       <CardHeader className="text-center">
         <CardTitle className="text-2xl">Create an account</CardTitle>
         <CardDescription>
-          Join HerbWise to save your data and get personalized guidance
+          Join HerbAlly to save your data and get personalized guidance
         </CardDescription>
       </CardHeader>
       <CardContent>

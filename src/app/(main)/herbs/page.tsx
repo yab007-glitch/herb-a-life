@@ -40,7 +40,7 @@ function generateStructuredData(herbs: HerbForSchema[]) {
         name: herb.name,
         alternateName: herb.scientific_name,
         description: herb.description,
-        url: `https://herbwise.app/herbs/${herb.slug || ""}`,
+        url: `https://herbally.app/herbs/${herb.slug || ""}`,
       },
     })),
   };

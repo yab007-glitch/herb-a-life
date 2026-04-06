@@ -22,7 +22,7 @@ import { createClient } from "@/lib/supabase/server";
 
 export const metadata: Metadata = {
   title: "Dashboard",
-  description: "Your personal HerbWise dashboard.",
+  description: "Your personal HerbAlly dashboard.",
 };
 
 function MiniSparkline({ values }: { values: number[] }) {

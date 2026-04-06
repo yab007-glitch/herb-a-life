@@ -1,7 +1,7 @@
 import { ImageResponse } from "next/og";
 
 export const runtime = "edge";
-export const alt = "HerbWise - Your Trusted Guide to Medicinal Herbs";
+export const alt = "HerbAlly - Your Trusted Guide to Medicinal Herbs";
 export const size = {
   width: 1200,
   height: 630,
@@ -78,7 +78,7 @@ export default async function TwitterImage() {
           marginBottom: 16,
         }}
       >
-        HerbWise
+        HerbAlly
       </div>
 
       {/* Subtitle */}
@@ -144,7 +144,7 @@ export default async function TwitterImage() {
           color: "#475569",
         }}
       >
-        herbwise.app
+        herbally.app
       </div>
     </div>,
     { ...size }

@@ -11,9 +11,9 @@ import {
 import { Card, CardContent } from "@/components/ui/card";
 
 export const metadata: Metadata = {
-  title: "About HerbWise",
+  title: "About HerbAlly",
   description:
-    "Learn about HerbWise, our mission, and how we help you make informed decisions about medicinal herbs.",
+    "Learn about HerbAlly, our mission, and how we help you make informed decisions about medicinal herbs.",
 };
 
 const howItWorks = [
@@ -49,7 +49,7 @@ export default function AboutPage() {
           <Leaf className="size-8" />
         </div>
         <h1 className="text-4xl font-bold tracking-tight text-foreground">
-          About HerbWise
+          About HerbAlly
         </h1>
         <p className="mx-auto mt-4 max-w-2xl text-lg text-muted-foreground">
           Your trusted, evidence-based resource for medicinal herbs and natural
@@ -57,14 +57,14 @@ export default function AboutPage() {
         </p>
       </div>
 
-      {/* What is HerbWise */}
+      {/* What is HerbAlly */}
       <section className="mb-16">
         <h2 className="mb-4 text-2xl font-bold text-foreground">
-          What is HerbWise?
+          What is HerbAlly?
         </h2>
         <div className="space-y-4 text-muted-foreground">
           <p>
-            HerbWise is a comprehensive digital platform designed to provide
+            HerbAlly is a comprehensive digital platform designed to provide
             reliable, evidence-based information about medicinal herbs and
             natural remedies. We combine a vast herb database, scientifically
             grounded dosage calculators, and AI-powered guidance to help
@@ -74,7 +74,7 @@ export default function AboutPage() {
           <p>
             Whether you are a healthcare professional looking for quick
             reference material, a herbalist seeking interaction data, or an
-            individual exploring natural wellness options, HerbWise provides the
+            individual exploring natural wellness options, HerbAlly provides the
             tools and information you need in one accessible platform.
           </p>
         </div>
@@ -165,7 +165,7 @@ export default function AboutPage() {
         </h2>
         <div className="space-y-4 text-muted-foreground">
           <p>
-            HerbWise is completely free to use with no limits, no paywalls, and
+            HerbAlly is completely free to use with no limits, no paywalls, and
             no advertising. We believe access to herbal medicine knowledge is a
             right, not a privilege.
           </p>
@@ -175,7 +175,7 @@ export default function AboutPage() {
             costs, AI API usage, and ongoing development.
           </p>
           <p>
-            If HerbWise has been helpful to you, please consider{" "}
+            If HerbAlly has been helpful to you, please consider{" "}
             <a
               href="/donate"
               className="font-medium text-primary underline hover:no-underline"
@@ -191,7 +191,7 @@ export default function AboutPage() {
       <section>
         <h2 className="mb-4 text-2xl font-bold text-foreground">Our Team</h2>
         <p className="text-muted-foreground">
-          HerbWise is developed by a dedicated team of software engineers,
+          HerbAlly is developed by a dedicated team of software engineers,
           herbalists, and healthcare professionals passionate about making
           herbal medicine information accessible and safe. Our content is
           reviewed by qualified practitioners to ensure accuracy and

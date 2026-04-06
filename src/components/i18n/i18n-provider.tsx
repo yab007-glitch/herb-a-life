@@ -29,7 +29,7 @@ export function I18nProvider({ children }: { children: ReactNode }) {
   useEffect(() => {
     if (typeof window === "undefined") return;
 
-    const saved = localStorage.getItem("herbwise-locale");
+    const saved = localStorage.getItem("herbally-locale");
     if (saved && (saved === "en" || saved === "fr")) {
       setLocaleState(saved as Locale);
     } else {
@@ -40,7 +40,7 @@ export function I18nProvider({ children }: { children: ReactNode }) {
         setDetectedLocale(detected);
         // Auto-set detected language
         setLocaleState(detected);
-        localStorage.setItem("herbwise-locale", detected);
+        localStorage.setItem("herbally-locale", detected);
       }
     }
   }, []);
@@ -67,8 +67,8 @@ export function I18nProvider({ children }: { children: ReactNode }) {
 
   const setLocale = (newLocale: Locale) => {
     setLocaleState(newLocale);
-    localStorage.setItem("herbwise-locale", newLocale);
-    document.cookie = `herbwise-locale=${newLocale};path=/;max-age=31536000`;
+    localStorage.setItem("herbally-locale", newLocale);
+    document.cookie = `herbally-locale=${newLocale};path=/;max-age=31536000`;
   };
 
   // Translation function with nested key support and interpolation

@@ -1,6 +1,6 @@
 @AGENTS.md
 
-# HerbWise - Medical Herbs SaaS
+# HerbAlly - Medical Herbs SaaS
 
 ## Tech Stack
 

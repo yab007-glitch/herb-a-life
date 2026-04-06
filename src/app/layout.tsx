@@ -17,11 +17,11 @@ const geistMono = Geist_Mono({
 
 export const metadata: Metadata = {
   metadataBase: new URL(
-    process.env.NEXT_PUBLIC_APP_URL ?? "https://herbwise.app"
+    process.env.NEXT_PUBLIC_APP_URL ?? "https://herbally.app"
   ),
   title: {
-    default: "HerbWise - Your Trusted Guide to Medicinal Herbs",
-    template: "%s | HerbWise",
+    default: "HerbAlly - Your Trusted Guide to Medicinal Herbs",
+    template: "%s | HerbAlly",
   },
   description:
     "Explore the world's largest medicinal herb database with 2,700+ herbs. Calculate safe dosages and check drug interactions with our AI-powered virtual herbalist.",
@@ -37,14 +37,14 @@ export const metadata: Metadata = {
   ],
   openGraph: {
     type: "website",
-    siteName: "HerbWise",
-    title: "HerbWise - Your Trusted Guide to Medicinal Herbs",
+    siteName: "HerbAlly",
+    title: "HerbAlly - Your Trusted Guide to Medicinal Herbs",
     description:
       "Explore 2,700+ medicinal herbs, calculate dosages, and check drug interactions.",
   },
   twitter: {
     card: "summary_large_image",
-    title: "HerbWise - Medicinal Herbs Database",
+    title: "HerbAlly - Medicinal Herbs Database",
     description:
       "Explore 2,700+ medicinal herbs, calculate dosages, and check drug interactions.",
   },

@@ -37,7 +37,7 @@ export function MarketingNavbar() {
               <Leaf className="size-5" />
             </div>
             <span className="text-lg font-bold text-foreground">
-              Herb<span className="gradient-text">Wise</span>
+              Herb<span className="gradient-text">Ally</span>
             </span>
           </Link>
 
@@ -84,7 +84,7 @@ export function MarketingNavbar() {
                   <div className="flex size-8 items-center justify-center rounded-lg bg-gradient-to-br from-primary to-teal-600 text-white">
                     <Leaf className="size-4" />
                   </div>
-                  HerbWise
+                  HerbAlly
                 </SheetTitle>
               </SheetHeader>
               <nav className="flex flex-col gap-1 px-4 pt-6">

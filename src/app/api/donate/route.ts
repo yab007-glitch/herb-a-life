@@ -31,7 +31,7 @@ export async function POST(req: NextRequest) {
       Math.min(100000, Number(amount) || 1000)
     ); // in cents
 
-    const appUrl = process.env.NEXT_PUBLIC_APP_URL || "https://herbwise.app";
+    const appUrl = process.env.NEXT_PUBLIC_APP_URL || "https://herbally.app";
 
     const session = await stripe.checkout.sessions.create({
       payment_method_types: ["card"],
@@ -40,7 +40,7 @@ export async function POST(req: NextRequest) {
           price_data: {
             currency: "usd",
             product_data: {
-              name: "Support HerbWise",
+              name: "Support HerbAlly",
               description:
                 "Help keep herbal medicine information free for everyone",
               // Remove images field - Stripe requires publicly accessible URLs
