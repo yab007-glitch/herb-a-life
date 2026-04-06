@@ -5,13 +5,16 @@ import { rateLimit } from "@/lib/rate-limit";
 
 // Ollama Cloud API configuration
 const OLLAMA_BASE_URL = process.env.OLLAMA_BASE_URL || "https://ollama.com/api";
-const OLLAMA_API_KEY = process.env.OLLAMA_API_KEY || process.env.OPENROUTER_API_KEY;
-const DEFAULT_MODEL = process.env.OLLAMA_MODEL || "gemma3:12b";
+const DEFAULT_MODEL = "gemma3:12b";
 
 export async function POST(request: NextRequest) {
   try {
+    // Get API key at runtime (not at module load time)
+    const apiKey = process.env.OLLAMA_API_KEY || process.env.OPENROUTER_API_KEY;
+    
     // Check if API key is configured
-    if (!isOpenAIConfigured()) {
+    if (!apiKey) {
+      console.error("AI API key not configured");
       return NextResponse.json(
         { error: "AI service is not configured. Please contact support." },
         { status: 503 }
@@ -49,11 +52,13 @@ export async function POST(request: NextRequest) {
       })),
     ];
 
+    console.log("Calling Ollama API:", { model, baseUrl: OLLAMA_BASE_URL, messageCount: ollamaMessages.length });
+
     // Call Ollama Cloud API
     const response = await fetch(`${OLLAMA_BASE_URL}/chat`, {
       method: "POST",
       headers: {
-        "Authorization": `Bearer ${OLLAMA_API_KEY}`,
+        "Authorization": `Bearer ${apiKey}`,
         "Content-Type": "application/json",
       },
       body: JSON.stringify({
@@ -67,7 +72,7 @@ export async function POST(request: NextRequest) {
       const errorText = await response.text().catch(() => "Unknown error");
       console.error("Ollama API error:", response.status, errorText);
       return NextResponse.json(
-        { error: "Failed to connect to AI service" },
+        { error: `AI service error: ${response.status}` },
         { status: response.status === 429 ? 429 : 500 }
       );
     }
