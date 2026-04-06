@@ -44,6 +44,12 @@ export async function POST(req: NextRequest) {
     ); // in cents
 
     const appUrl = process.env.NEXT_PUBLIC_APP_URL || "https://herbally.app";
+    
+    console.log("Creating Stripe checkout session:", {
+      appUrl,
+      successUrl: `${appUrl}/donate?success=true`,
+      cancelUrl: `${appUrl}/donate?canceled=true`,
+    });
 
     const session = await stripe.checkout.sessions.create({
       payment_method_types: ["card"],
