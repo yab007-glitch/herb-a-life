@@ -1,5 +1,4 @@
 import { NextResponse, type NextRequest } from "next/server";
-import { isOpenAIConfigured } from "@/lib/ai/openai-client";
 import { getSystemPrompt } from "@/lib/ai/system-prompt";
 import { rateLimit } from "@/lib/rate-limit";
 
