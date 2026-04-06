@@ -34,8 +34,11 @@ export async function POST(request: NextRequest) {
 
     const systemPrompt = getSystemPrompt(herbContext, medications);
 
+    // Use a valid default model - free tier available on OpenRouter
+    const model = process.env.OPENROUTER_MODEL || "openai/gpt-4o-mini";
+
     const response = await openai.chat.completions.create({
-      model: process.env.OPENROUTER_MODEL || "openrouter/free",
+      model,
       stream: true,
       messages: [
         { role: "system" as const, content: systemPrompt },

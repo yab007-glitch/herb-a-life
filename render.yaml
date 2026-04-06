@@ -18,9 +18,9 @@ services:
       - key: OPENROUTER_MODEL
         value: openai/gpt-4o-mini
       - key: NEXT_PUBLIC_APP_URL
-        sync: false
+        value: https://1herb.vercel.app
       - key: NEXT_PUBLIC_APP_NAME
-        value: Herb-a-Life
+        value: 1Herb
       - key: RXNORM_BASE_URL
         value: https://rxnav.nlm.nih.gov/REST
       - key: OPENFDA_BASE_URL

@@ -3,7 +3,7 @@ import { createClient } from "@/lib/supabase/server";
 
 export async function GET() {
   const startTime = Date.now();
-  const checks: Record<string, { status: string; latency?: number; error?: string }> = {};
+  const checks: Record<string, { status: string; latency?: number; error?: string; backend?: string; configured?: boolean }> = {};
 
   // Check database connection
   try {
@@ -42,6 +42,22 @@ export async function GET() {
   checks.openai = {
     status: process.env.OPENROUTER_API_KEY ? "healthy" : "unconfigured",
     error: !process.env.OPENROUTER_API_KEY ? "OPENROUTER_API_KEY not set" : undefined,
+  };
+
+  // Check Stripe configuration
+  checks.stripe = {
+    status: process.env.STRIPE_SECRET_KEY ? "healthy" : "unconfigured",
+    error: !process.env.STRIPE_SECRET_KEY ? "STRIPE_SECRET_KEY not set" : undefined,
+  };
+
+  // Check rate limiting backend
+  const rateLimitBackend = process.env.RATE_LIMIT_BACKEND || "memory";
+  checks.rateLimit = {
+    status: "healthy",
+    backend: rateLimitBackend,
+    configured: rateLimitBackend === "upstash" 
+      ? !!(process.env.UPSTASH_REDIS_REST_URL && process.env.UPSTASH_REDIS_REST_TOKEN)
+      : true,
   };
 
   // Overall status
