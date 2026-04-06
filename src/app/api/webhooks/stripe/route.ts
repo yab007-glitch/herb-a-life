@@ -1,11 +1,21 @@
 import { NextRequest, NextResponse } from "next/server";
 import Stripe from "stripe";
 
-const stripe = new Stripe(process.env.STRIPE_SECRET_KEY!, {
-  apiVersion: "2024-12-18.acacia",
-});
+// Lazy-initialize Stripe to avoid build-time errors when STRIPE_SECRET_KEY is not set
+let stripe: Stripe | null = null;
 
-const webhookSecret = process.env.STRIPE_WEBHOOK_SECRET;
+function getStripe(): Stripe | null {
+  const key = process.env.STRIPE_SECRET_KEY;
+  if (!key) {
+    return null;
+  }
+  if (!stripe) {
+    stripe = new Stripe(key, {
+      apiVersion: "2024-12-18.acacia",
+    });
+  }
+  return stripe;
+}
 
 // This is a placeholder for donation tracking
 // In production, you would store this in a database
@@ -18,6 +28,18 @@ const donationLog: Array<{
 }> = [];
 
 export async function POST(request: NextRequest) {
+  const stripeClient = getStripe();
+
+  if (!stripeClient) {
+    console.error("STRIPE_SECRET_KEY is not configured");
+    return NextResponse.json(
+      { error: "Stripe not configured" },
+      { status: 500 }
+    );
+  }
+
+  const webhookSecret = process.env.STRIPE_WEBHOOK_SECRET;
+
   const body = await request.text();
   const signature = request.headers.get("stripe-signature");
 
@@ -39,7 +61,7 @@ export async function POST(request: NextRequest) {
   let event: Stripe.Event;
 
   try {
-    event = stripe.webhooks.constructEvent(body, signature, webhookSecret);
+    event = stripeClient.webhooks.constructEvent(body, signature, webhookSecret);
   } catch (err) {
     console.error("Webhook signature verification failed:", err);
     return NextResponse.json({ error: "Invalid signature" }, { status: 400 });
