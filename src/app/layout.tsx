@@ -3,6 +3,7 @@ import { Geist, Geist_Mono } from "next/font/google";
 import { Toaster } from "@/components/ui/sonner";
 import { TooltipProvider } from "@/components/ui/tooltip";
 import { I18nProvider } from "@/components/i18n/i18n-provider";
+import { OrganizationSchema } from "@/components/seo/organization-schema";
 import "./globals.css";
 
 const geistSans = Geist({
@@ -34,19 +35,43 @@ export const metadata: Metadata = {
     "natural medicine",
     "herb database",
     "virtual herbalist",
+    "herb-drug interactions",
+    "herbal supplements",
+    "alternative medicine",
+    "holistic health",
+    "plant medicine",
+    "phytotherapy",
   ],
+  authors: [{ name: "HerbAlly Team" }],
+  creator: "HerbAlly",
+  publisher: "HerbAlly",
+  robots: {
+    index: true,
+    follow: true,
+    googleBot: {
+      index: true,
+      follow: true,
+      "max-video-preview": -1,
+      "max-image-preview": "large",
+      "max-snippet": -1,
+    },
+  },
   openGraph: {
     type: "website",
     siteName: "HerbAlly",
     title: "HerbAlly - Your Trusted Guide to Medicinal Herbs",
     description:
       "Explore 2,700+ medicinal herbs, calculate dosages, and check drug interactions.",
+    url: "https://herbally.app",
   },
   twitter: {
     card: "summary_large_image",
     title: "HerbAlly - Medicinal Herbs Database",
     description:
       "Explore 2,700+ medicinal herbs, calculate dosages, and check drug interactions.",
+  },
+  verification: {
+    google: "google-site-verification=YOUR_CODE_HERE",
   },
 };
 
@@ -64,6 +89,7 @@ export default function RootLayout({
         <a href="#main-content" className="skip-to-content">
           Skip to content
         </a>
+        <OrganizationSchema />
         <I18nProvider>
           <TooltipProvider>
             {children}

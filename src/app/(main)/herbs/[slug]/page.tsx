@@ -26,6 +26,7 @@ import { Separator } from "@/components/ui/separator";
 import { HerbSafetyBadges } from "@/components/herbs/herb-safety-badges";
 import { InteractionsTable } from "@/components/herbs/interactions-table";
 import { CopyLinkButton } from "@/components/herbs/copy-link-button";
+import { HerbSchema } from "@/components/seo/herb-schema";
 import { getHerbBySlug } from "@/lib/actions/herbs";
 import { createClient } from "@supabase/supabase-js";
 
@@ -72,9 +73,52 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
     return { title: "Herb Not Found" };
   }
   const herb = result.data;
+  const baseUrl = process.env.NEXT_PUBLIC_APP_URL ?? "https://herbally.app";
+  
+  // Build keywords from herb data
+  const keywords = [
+    herb.name,
+    herb.scientific_name,
+    ...(herb.common_names || []),
+    ...(herb.traditional_uses || []).slice(0, 5),
+    ...(herb.active_compounds || []).slice(0, 5),
+    "medicinal herb",
+    "herbal remedy",
+    "natural medicine",
+  ].filter(Boolean);
+
   return {
-    title: `${herb.name} (${herb.scientific_name})`,
-    description: herb.description?.slice(0, 160),
+    title: `${herb.name} (${herb.scientific_name}) - Medicinal Herb Guide`,
+    description: herb.description
+      ? `${herb.description.slice(0, 155)}${herb.description.length > 155 ? "..." : ""}`
+      : `Learn about ${herb.name} (${herb.scientific_name}) - uses, dosage, safety, and drug interactions.`,
+    keywords,
+    alternates: {
+      canonical: `${baseUrl}/herbs/${slug}`,
+    },
+    openGraph: {
+      title: `${herb.name} (${herb.scientific_name})`,
+      description: herb.description?.slice(0, 160) || undefined,
+      url: `${baseUrl}/herbs/${slug}`,
+      type: "article",
+      siteName: "HerbAlly",
+    },
+    twitter: {
+      card: "summary_large_image",
+      title: `${herb.name} - Medicinal Herb`,
+      description: herb.description?.slice(0, 160) || undefined,
+    },
+    robots: {
+      index: true,
+      follow: true,
+      googleBot: {
+        index: true,
+        follow: true,
+        "max-video-preview": -1,
+        "max-image-preview": "large",
+        "max-snippet": -1,
+      },
+    },
   };
 }
 
@@ -92,6 +136,7 @@ export default async function HerbDetailPage({ params }: Props) {
 
   return (
     <div className="space-y-8">
+      <HerbSchema herb={herb as any} />
       {/* Back Button */}
       <Button variant="ghost" size="sm" render={<Link href="/herbs" />}>
         <ArrowLeft className="size-4" />
