@@ -73,6 +73,9 @@ export const metadata: Metadata = {
   verification: {
     google: "google-site-verification=YOUR_CODE_HERE",
   },
+  other: {
+    "msvalidate.01": "YOUR_BING_CODE_HERE",
+  },
 };
 
 export default function RootLayout({
