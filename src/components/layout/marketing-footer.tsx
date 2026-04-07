@@ -1,21 +1,26 @@
+"use client";
+
 import Link from "next/link";
 import { Leaf } from "lucide-react";
-
-const footerLinks = {
-  product: [
-    { href: "/herbs", label: "Herb Database" },
-    { href: "/calculator", label: "Dose Calculator" },
-    { href: "/pharmacist", label: "Virtual Herbalist" },
-  ],
-  resources: [
-    { href: "/about", label: "About Us" },
-    { href: "/disclaimer", label: "Disclaimer" },
-    { href: "/privacy", label: "Privacy Policy" },
-    { href: "/terms", label: "Terms of Service" },
-  ],
-};
+import { useI18n } from "@/components/i18n/i18n-provider";
 
 export function MarketingFooter() {
+  const { t } = useI18n();
+  
+  const footerLinks = {
+    product: [
+      { href: "/herbs", label: t("nav.herbs") },
+      { href: "/calculator", label: t("nav.calculator") },
+      { href: "/pharmacist", label: t("nav.herbalist") },
+    ],
+    resources: [
+      { href: "/about", label: t("nav.about") },
+      { href: "/disclaimer", label: t("footer.disclaimer") },
+      { href: "/privacy", label: t("footer.privacy") },
+      { href: "/terms", label: t("footer.terms") },
+    ],
+  };
+
   return (
     <footer className="border-t bg-muted/30">
       <div className="mx-auto max-w-7xl px-4 py-12 sm:px-6 lg:px-8">
@@ -31,16 +36,14 @@ export function MarketingFooter() {
               </span>
             </Link>
             <p className="mt-4 max-w-sm text-sm text-muted-foreground">
-              Your trusted guide to medicinal herbs. Evidence-based information
-              powered by WHO monographs, German Commission E, and PubMed
-              research.
+              {t("footer.madeWith")}
             </p>
           </div>
 
           {/* Product Links */}
           <div>
             <h3 className="mb-3 text-sm font-semibold text-foreground">
-              Product
+              {t("footer.product")}
             </h3>
             <ul className="space-y-2">
               {footerLinks.product.map((link) => (
@@ -59,7 +62,7 @@ export function MarketingFooter() {
           {/* Resources Links */}
           <div>
             <h3 className="mb-3 text-sm font-semibold text-foreground">
-              Resources
+              {t("footer.resources")}
             </h3>
             <ul className="space-y-2">
               {footerLinks.resources.map((link) => (
@@ -79,11 +82,7 @@ export function MarketingFooter() {
         {/* Bottom */}
         <div className="mt-12 flex flex-col items-center justify-between gap-4 border-t pt-8 sm:flex-row">
           <p className="text-sm text-muted-foreground">
-            © {new Date().getFullYear()} HerbAlly. Educational purposes only.
-            Not medical advice.
-          </p>
-          <p className="text-xs text-muted-foreground">
-            Built with Next.js, Supabase, and OpenRouter
+            {t("footer.copyright")}
           </p>
         </div>
       </div>

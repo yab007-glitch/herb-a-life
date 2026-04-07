@@ -1,8 +1,13 @@
+"use client";
+
 import Link from "next/link";
 import { AlertCircle, Home, ArrowLeft } from "lucide-react";
 import { Button } from "@/components/ui/button";
+import { useI18n } from "@/components/i18n/i18n-provider";
 
 export default function NotFound() {
+  const { t } = useI18n();
+  
   return (
     <div className="flex min-h-[60vh] flex-col items-center justify-center px-4 py-12 text-center">
       <div className="mb-6 flex size-20 items-center justify-center rounded-full bg-muted">
@@ -10,19 +15,19 @@ export default function NotFound() {
       </div>
       <h1 className="mb-2 text-4xl font-bold text-foreground">404</h1>
       <h2 className="mb-2 text-xl font-semibold text-foreground">
-        Page Not Found
+        {t("errors.404.title")}
       </h2>
       <p className="mb-8 max-w-md text-muted-foreground">
-        The page you&apos;re looking for doesn&apos;t exist or has been moved.
+        {t("errors.404.message")}
       </p>
       <div className="flex flex-col gap-3 sm:flex-row">
         <Button render={<Link href="/" />}>
           <Home className="mr-2 size-4" />
-          Go Home
+          {t("errors.404.home")}
         </Button>
         <Button variant="outline" render={<Link href="/herbs" />}>
           <ArrowLeft className="mr-2 size-4" />
-          Browse Herbs
+          {t("herbs.browseAll")}
         </Button>
       </div>
     </div>

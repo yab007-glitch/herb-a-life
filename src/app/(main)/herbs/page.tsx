@@ -13,6 +13,8 @@ import {
 } from "@/lib/actions/herbs";
 import { Flame } from "lucide-react";
 import Script from "next/script";
+import { getServerTranslation, type Locale } from "@/lib/i18n/server";
+import { cookies } from "next/headers";
 
 export const metadata: Metadata = {
   title: "Medicinal Herbs Database",
@@ -46,6 +48,12 @@ function generateStructuredData(herbs: HerbForSchema[]) {
   };
 }
 
+async function getLocale(): Promise<Locale> {
+  const cookieStore = await cookies();
+  const savedLocale = cookieStore.get("herbally-locale")?.value;
+  return (savedLocale === "fr" ? "fr" : "en") as Locale;
+}
+
 export default async function HerbsPage({
   searchParams,
 }: {
@@ -55,6 +63,9 @@ export default async function HerbsPage({
   const query = params.q || "";
   const category = params.category || "";
   const page = parseInt(params.page || "1", 10);
+  const locale = await getLocale();
+  const t = (key: string, params?: Record<string, string | number>) => 
+    getServerTranslation(locale, key, params);
 
   const symptoms = [
     "headache",
@@ -100,15 +111,10 @@ export default async function HerbsPage({
       {/* Header */}
       <div className="text-center sm:text-left">
         <h1 className="text-3xl font-bold tracking-tight text-foreground sm:text-4xl">
-          Medicinal Herbs Database
+          {t("herbs.title")}
         </h1>
         <p className="mt-2 text-lg text-muted-foreground">
-          Explore{" "}
-          <span className="font-semibold text-foreground">
-            {total.toLocaleString()}
-          </span>{" "}
-          herbs with detailed profiles, active compounds, and safety
-          information.
+          {t("herbs.subtitle")}
         </p>
       </div>
 
@@ -123,7 +129,7 @@ export default async function HerbsPage({
             <div className="flex items-center gap-2">
               <Flame className="size-4 text-orange-500" />
               <p className="text-sm font-medium text-foreground">
-                Popular Searches
+                {t("herbs.popularSearches")}
               </p>
             </div>
             <div className="flex flex-wrap gap-2">
@@ -150,41 +156,6 @@ export default async function HerbsPage({
               <SurpriseMeButton totalHerbs={total} />
             </div>
           </div>
-
-          {/* Symptom tags */}
-          <div className="space-y-3">
-            <p className="text-sm font-medium text-muted-foreground">
-              Search by symptom:
-            </p>
-            <div className="flex flex-wrap gap-2">
-              {symptoms.map((symptom) => {
-                const count = symptomCounts[symptom];
-                return (
-                  <Link
-                    key={symptom}
-                    href={`/herbs?q=${encodeURIComponent(symptom)}`}
-                    title={
-                      count != null
-                        ? `~${count} herb${count !== 1 ? "s" : ""} match "${symptom}"`
-                        : undefined
-                    }
-                  >
-                    <Badge
-                      variant="outline"
-                      className="cursor-pointer border-border/50 bg-muted/30 transition-all hover:border-primary/50 hover:bg-primary/5"
-                    >
-                      {symptom}
-                      {count != null && count > 0 && (
-                        <span className="ml-1 text-[10px] text-muted-foreground/70">
-                          {count}
-                        </span>
-                      )}
-                    </Badge>
-                  </Link>
-                );
-              })}
-            </div>
-          </div>
         </div>
       )}
 
@@ -195,7 +166,7 @@ export default async function HerbsPage({
             variant={!category ? "default" : "outline"}
             className="cursor-pointer transition-all"
           >
-            All
+            {t("herbs.all")}
           </Badge>
         </Link>
         {categories.map((cat: { slug: string; name: string }) => (
@@ -216,8 +187,11 @@ export default async function HerbsPage({
       {/* Search Results Label */}
       {query && herbs.length > 0 && (
         <p className="text-sm text-muted-foreground">
-          Found <span className="font-semibold text-foreground">{total}</span>{" "}
-          herb{total !== 1 ? "s" : ""} matching &quot;{query}&quot;
+          {t("herbs.resultsFound", { 
+            count: total, 
+            noun: total !== 1 ? t("herbs.herbPlural") : t("herbs.herbSingular"),
+            query 
+          })}
         </p>
       )}
 
@@ -232,29 +206,10 @@ export default async function HerbsPage({
         <div className="space-y-6">
           <EmptyState
             variant="search"
-            title={query ? `No herbs found for "${query}"` : "No herbs found"}
-            description="Try searching for a symptom like headache, anxiety, or inflammation. You can also browse by category."
-            action={{ label: "Browse All Herbs", href: "/herbs" }}
+            title={query ? t("herbs.noHerbsQuery", { query }) : t("herbs.noResults")}
+            description={t("herbs.trySearching")}
+            action={{ label: t("herbs.browseAll"), href: "/herbs" }}
           />
-          <div className="flex flex-wrap justify-center gap-2">
-            {[
-              "headache",
-              "anxiety",
-              "insomnia",
-              "pain",
-              "cough",
-              "diabetes",
-            ].map((s) => (
-              <Link key={s} href={`/herbs?q=${s}`}>
-                <Badge
-                  variant="outline"
-                  className="cursor-pointer hover:border-primary/50 hover:bg-primary/5"
-                >
-                  {s}
-                </Badge>
-              </Link>
-            ))}
-          </div>
         </div>
       )}
 
@@ -273,10 +228,10 @@ export default async function HerbsPage({
               ) : undefined
             }
           >
-            Previous
+            {t("herbs.pagination.previous")}
           </Button>
           <span className="text-sm text-muted-foreground">
-            Page {page} of {totalPages}
+            {t("herbs.pagination.page")} {page} {t("herbs.pagination.of")} {totalPages}
           </span>
           <Button
             variant="outline"
@@ -290,7 +245,7 @@ export default async function HerbsPage({
               ) : undefined
             }
           >
-            Next
+            {t("herbs.pagination.next")}
           </Button>
         </div>
       )}

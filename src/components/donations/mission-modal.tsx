@@ -10,6 +10,7 @@ import {
 } from "@/components/ui/dialog";
 import { Button } from "@/components/ui/button";
 import { Heart, Leaf, Sparkles, Globe, CheckCircle } from "lucide-react";
+import { useI18n } from "@/components/i18n/i18n-provider";
 
 interface MissionModalProps {
   open: boolean;
@@ -17,6 +18,7 @@ interface MissionModalProps {
 }
 
 export function MissionModal({ open, onOpenChange }: MissionModalProps) {
+  const { t } = useI18n();
   const router = useRouter();
 
   const handleDonate = () => {
@@ -32,11 +34,10 @@ export function MissionModal({ open, onOpenChange }: MissionModalProps) {
             <div className="flex h-10 w-10 items-center justify-center rounded-full bg-gradient-to-br from-pink-500 to-rose-600">
               <Heart className="h-5 w-5 text-white fill-white" />
             </div>
-            Our Mission
+            {t("mission.title")}
           </DialogTitle>
           <DialogDescription className="sr-only">
-            Learn about HerbAlly&apos;s mission and how your donations help keep
-            herbal medicine information free for everyone.
+            {t("mission.description")}
           </DialogDescription>
         </DialogHeader>
 
@@ -44,13 +45,10 @@ export function MissionModal({ open, onOpenChange }: MissionModalProps) {
           {/* Mission Statement */}
           <div className="text-center space-y-2">
             <p className="text-lg font-medium text-foreground">
-              Free herbal knowledge for{" "}
-              <span className="text-primary">everyone</span>.
+              {t("mission.description")}
             </p>
             <p className="text-sm text-muted-foreground">
-              We believe access to health information shouldn&apos;t depend on
-              your wallet. HerbAlly provides comprehensive herbal medicine data
-              at no cost — no ads, no paywalls, no premium tiers.
+              {t("mission.freeAccess")}
             </p>
           </div>
 
@@ -58,51 +56,39 @@ export function MissionModal({ open, onOpenChange }: MissionModalProps) {
           <div className="grid grid-cols-3 gap-3">
             <div className="flex flex-col items-center gap-1.5 rounded-lg bg-muted/50 p-3 text-center">
               <Leaf className="h-5 w-5 text-primary" />
-              <span className="text-xs font-medium">2,700+ Herbs</span>
+              <span className="text-xs font-medium">{t("mission.herbsCount")}</span>
             </div>
             <div className="flex flex-col items-center gap-1.5 rounded-lg bg-muted/50 p-3 text-center">
               <Sparkles className="h-5 w-5 text-primary" />
-              <span className="text-xs font-medium">AI Herbalist</span>
+              <span className="text-xs font-medium">{t("mission.aiHerbalist")}</span>
             </div>
             <div className="flex flex-col items-center gap-1.5 rounded-lg bg-muted/50 p-3 text-center">
               <Globe className="h-5 w-5 text-primary" />
-              <span className="text-xs font-medium">100% Free</span>
+              <span className="text-xs font-medium">{t("mission.freeForever")}</span>
             </div>
           </div>
 
           {/* How Donations Help */}
           <div className="space-y-3">
             <h4 className="font-semibold text-foreground">
-              How Your Donation Helps
+              {t("mission.howDonationsHelp")}
             </h4>
             <ul className="space-y-2 text-sm text-muted-foreground">
               <li className="flex items-start gap-2">
                 <CheckCircle className="h-4 w-4 text-emerald-600 shrink-0 mt-0.5" />
-                <span>
-                  <strong className="text-foreground">Hosting & Servers</strong>{" "}
-                  — Keep the app fast and available 24/7
-                </span>
+                <span>{t("mission.donationHostings")}</span>
               </li>
               <li className="flex items-start gap-2">
                 <CheckCircle className="h-4 w-4 text-emerald-600 shrink-0 mt-0.5" />
-                <span>
-                  <strong className="text-foreground">AI Costs</strong> — Power
-                  the virtual herbalist chatbot
-                </span>
+                <span>{t("mission.donationAi")}</span>
               </li>
               <li className="flex items-start gap-2">
                 <CheckCircle className="h-4 w-4 text-emerald-600 shrink-0 mt-0.5" />
-                <span>
-                  <strong className="text-foreground">Database</strong> — Store
-                  and serve 2,700+ herb profiles
-                </span>
+                <span>{t("mission.donationDb")}</span>
               </li>
               <li className="flex items-start gap-2">
                 <CheckCircle className="h-4 w-4 text-emerald-600 shrink-0 mt-0.5" />
-                <span>
-                  <strong className="text-foreground">New Features</strong> —
-                  Add more herbs, interactions, and tools
-                </span>
+                <span>{t("mission.donationFeatures")}</span>
               </li>
             </ul>
           </div>
@@ -110,10 +96,10 @@ export function MissionModal({ open, onOpenChange }: MissionModalProps) {
           {/* Promise */}
           <div className="rounded-lg bg-gradient-to-br from-primary/10 to-transparent p-4 text-center">
             <p className="text-sm font-medium text-foreground">
-              We&apos;ll never charge users or sell your data.
+              {t("mission.promise")}
             </p>
             <p className="text-xs text-muted-foreground mt-1">
-              HerbAlly is sustained entirely by voluntary donations.
+              {t("mission.sustained")}
             </p>
           </div>
 
@@ -123,7 +109,7 @@ export function MissionModal({ open, onOpenChange }: MissionModalProps) {
             className="w-full bg-gradient-to-r from-pink-500 to-rose-600 hover:opacity-90"
           >
             <Heart className="h-4 w-4 mr-2 fill-white" />
-            Make a Donation
+            {t("mission.cta")}
           </Button>
         </div>
       </DialogContent>

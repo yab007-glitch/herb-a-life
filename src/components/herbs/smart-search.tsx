@@ -10,6 +10,7 @@ import {
   useSaveSearch,
 } from "@/components/herbs/recent-searches";
 import { cn } from "@/lib/utils";
+import { useI18n } from "@/components/i18n/i18n-provider";
 
 interface SmartSearchProps {
   defaultValue?: string;
@@ -17,6 +18,7 @@ interface SmartSearchProps {
 }
 
 export function SmartSearch({ defaultValue = "", category }: SmartSearchProps) {
+  const { t } = useI18n();
   const router = useRouter();
   const searchParams = useSearchParams();
   const [query, setQuery] = useState(defaultValue);
@@ -87,7 +89,7 @@ export function SmartSearch({ defaultValue = "", category }: SmartSearchProps) {
           <Search className="absolute left-3 top-1/2 size-4 -translate-y-1/2 text-muted-foreground" />
           <Input
             type="text"
-            placeholder="Search herbs by name, symptom, or use..."
+            placeholder={t("search.placeholder")}
             value={query}
             onChange={handleChange}
             className={cn(
@@ -106,7 +108,7 @@ export function SmartSearch({ defaultValue = "", category }: SmartSearchProps) {
           )}
         </div>
         <Button type="submit" className="h-12" disabled={isSearching}>
-          {isSearching ? "Searching..." : "Search"}
+          {isSearching ? t("search.searching") : t("search.search")}
         </Button>
         <Button
           type="button"
@@ -122,13 +124,12 @@ export function SmartSearch({ defaultValue = "", category }: SmartSearchProps) {
                 }
               }
             } catch {
-              // Fallback: just go to herbs page
               router.push("/herbs");
             }
           }}
         >
           <Shuffle className="size-4" />
-          Surprise Me
+          {t("search.surpriseMe")}
         </Button>
       </form>
       <RecentSearches />

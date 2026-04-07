@@ -78,6 +78,19 @@
     "results": "{count} herbs",
     "noResults": "No herbs found",
     "tryDifferent": "Try a different search term",
+    "popularSearches": "Popular Searches",
+    "resultsFound": "Found {count} {noun} matching \"{query}\"",
+    "herbSingular": "herb",
+    "herbPlural": "herbs",
+    "noHerbsQuery": "No herbs found for \"{query}\"",
+    "trySearching": "Try searching for a symptom like headache, anxiety, or inflammation.",
+    "browseAll": "Browse All Herbs",
+    "pagination": {
+      "previous": "Previous",
+      "next": "Next",
+      "page": "Page",
+      "of": "of"
+    },
     "safety": {
       "safe": "Generally Safe",
       "caution": "Use with Caution",
@@ -100,6 +113,51 @@
     "selectProfile": "Select Profile",
     "or": "or",
     "createNew": "Create New Profile",
+    "herbName": "Herb Name",
+    "adultDose": "Adult Dose",
+    "unit": "Unit",
+    "patientAge": "Patient Age",
+    "years": "Years",
+    "months": "Months",
+    "patientWeight": "Patient Weight",
+    "patientHeight": "Patient Height (cm)",
+    "optionalForBsa": "optional, for BSA",
+    "calculationFormula": "Calculation Formula",
+    "calculateDose": "Calculate Dose",
+    "calculating": "Calculating...",
+    "formulas": {
+      "clarks": "Clark's Rule",
+      "clarksDesc": "Weight-based calculation for children",
+      "youngs": "Young's Rule",
+      "youngsDesc": "Age-based calculation for children",
+      "bsa": "Body Surface Area",
+      "bsaDesc": "Most accurate weight/height method",
+      "frieds": "Fried's Rule",
+      "friedsDesc": "For infants under 2 years"
+    },
+    "errors": {
+      "invalidDose": "Please enter a valid adult dose.",
+      "weightRequired": "Clark's Rule requires patient weight.",
+      "ageRequired": "Young's Rule requires patient age in years.",
+      "bsaRequired": "BSA method requires both weight and height.",
+      "infantAge": "Fried's Rule requires age in months.",
+      "calculationError": "An error occurred during calculation. Please check your inputs."
+    },
+    "results": {
+      "calculatedDose": "Calculated Dose",
+      "doseComparison": "Dose Comparison",
+      "adultDose": "Adult Dose",
+      "formulaUsed": "Formula Used",
+      "explanation": "Explanation",
+      "disclaimer": "This calculation is for reference only. Always verify dosages with a qualified healthcare provider."
+    },
+    "placeholders": {
+      "herb": "e.g., Turmeric, Echinacea...",
+      "dose": "e.g., 500",
+      "age": "e.g., 8",
+      "weight": "e.g., 30",
+      "height": "e.g., 130"
+    },
     "profiles": {
       "title": "Your Profiles",
       "create": "Create New",
@@ -127,7 +185,27 @@
     "placeholder": "Ask about herbs, dosages, interactions, or health concerns...",
     "send": "Send",
     "thinking": "Thinking...",
-    "disclaimer": "This AI provides educational information only. Always consult a healthcare provider for medical advice."
+    "disclaimer": "This AI provides educational information only. Always consult a healthcare provider for medical advice.",
+    "initialMessage": "Hello! I'm your Virtual Herbalist. I can help you with questions about medicinal herbs, their uses, safety, and proper dosages. What would you like to know?",
+    "error": "I'm sorry, I encountered an error processing your request. Please try again.",
+    "clear": "Clear",
+    "saving": "Saving...",
+    "voiceStart": "Start voice input",
+    "voiceStop": "Stop voice input",
+    "suggestedQuestions": [
+      "What herbs help with sleep?",
+      "Is turmeric safe with blood thinners?",
+      "Best herbs for anxiety relief?",
+      "How to calculate child dosage?"
+    ],
+    "followUp": {
+      "childDosage": "Is this dosage safe for children?",
+      "recommendedDosage": "What's the recommended dosage?",
+      "saferAlternatives": "What are safer alternatives?",
+      "interactions": "Any drug interactions I should know about?",
+      "sideEffects": "How can I minimize these side effects?",
+      "sideEffectsInfo": "Tell me more about the side effects"
+    }
   },
   "donate": {
     "title": "Support HerbAlly",
@@ -227,6 +305,60 @@
     "commonNames": "Common Names",
     "lastUpdated": "Last updated"
   },
+  "search": {
+    "placeholder": "Search herbs by name, symptom, or use...",
+    "searching": "Searching...",
+    "search": "Search",
+    "surpriseMe": "Surprise Me"
+  },
+  "interactions": {
+    "title": "Known Drug Interactions",
+    "showMore": "Show {count} More",
+    "showLess": "Show Less",
+    "severity": {
+      "contraindicated": "Contraindicated",
+      "severe": "Severe",
+      "moderate": "Moderate",
+      "mild": "Mild"
+    },
+    "headers": {
+      "drug": "Drug",
+      "severity": "Severity",
+      "description": "Description"
+    }
+  },
+  "auth": {
+    "login": {
+      "email": "Email",
+      "password": "Password",
+      "emailPlaceholder": "you@example.com",
+      "passwordPlaceholder": "Your password",
+      "submit": "Sign In",
+      "submitting": "Signing in...",
+      "forgotPassword": "Forgot your password?",
+      "noAccount": "Don't have an account?",
+      "register": "Register"
+    }
+  },
+  "mission": {
+    "title": "Our Mission",
+    "description": "Free herbal knowledge for everyone. We believe access to health information is a fundamental right, not a privilege. HerbAlly is built to democratize access to evidence-based herbal medicine knowledge.",
+    "freeAccess": "No ads, no paywalls, no premium tiers. All 2,700+ herbs are available to everyone, completely free.",
+    "herbsCount": "2,700+ Herbs",
+    "herbsDesc": "Comprehensive database with detailed profiles",
+    "aiHerbalist": "AI Herbalist",
+    "aiHerbalistDesc": "Get instant answers to your questions",
+    "freeForever": "100% Free",
+    "freeForeverDesc": "No account required to access",
+    "howDonationsHelp": "How Your Donation Helps",
+    "donationHostings": "Hosting & Servers — Keep the app fast and available 24/7",
+    "donationAi": "AI Costs — Power the virtual herbalist chatbot",
+    "donationDb": "Database — Store and serve 2,700+ herb profiles",
+    "donationFeatures": "New Features — Add more herbs, interactions, and tools",
+    "promise": "We'll never charge users or sell your data.",
+    "sustained": "HerbAlly is sustained entirely by voluntary donations.",
+    "cta": "Make a Donation"
+  },
   "admin": {
     "title": "Admin Dashboard",
     "herbs": {
@@ -252,14 +384,5 @@
       "interactionChecks": "Interaction Checks",
       "checksDescription": "Checks performed"
     }
-  },
-  "about": {
-    "title": "About HerbAlly",
-    "searchDatabase": "Search Our Database",
-    "searchDescription": "Access over 2,700 medicinal herbs with detailed information on traditional uses, active compounds, and safety.",
-    "calculateDoses": "Calculate Safe Doses",
-    "calculateDescription": "Use our calculator to determine appropriate dosages based on age, weight, and health conditions.",
-    "consultHerbalist": "Consult the Virtual Herbalist",
-    "consultDescription": "Get personalized answers to your herb questions from our AI trained on evidence-based sources."
   }
 }

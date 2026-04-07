@@ -20,21 +20,12 @@ import {
   getChatSession,
   type ChatMessage,
 } from "@/lib/actions/chat";
+import { useI18n } from "@/components/i18n/i18n-provider";
 
 type Message = ChatMessage;
 
 function makeId() {
   return Math.random().toString(36).slice(2);
-}
-
-function createInitialMessage(): Message {
-  return {
-    role: "assistant",
-    content:
-      "Hello! I'm your Virtual Herbalist. I can help you with questions about medicinal herbs, potential drug interactions, dosage guidance, and general herbal medicine information.\n\nPlease note that my advice is for educational purposes only and should not replace consultation with a qualified healthcare provider.\n\nHow can I help you today?",
-    id: makeId(),
-    timestamp: new Date().toISOString(),
-  };
 }
 
 export function ChatInterface({
@@ -46,6 +37,17 @@ export function ChatInterface({
   autoQuery?: string | null;
   sessionId?: string | null;
 }) {
+  const { locale, t } = useI18n();
+  
+  function createInitialMessage(): Message {
+    return {
+      role: "assistant",
+      content: t("pharmacist.initialMessage"),
+      id: makeId(),
+      timestamp: new Date().toISOString(),
+    };
+  }
+  
   const [messages, setMessages] = useState<Message[]>(() => [
     createInitialMessage(),
   ]);
@@ -145,6 +147,7 @@ export function ChatInterface({
             content: m.content,
           })),
           herbContext: herbContext ?? undefined,
+          locale,
         }),
       });
 
@@ -189,8 +192,7 @@ export function ChatInterface({
     } catch {
       const errorMessage: Message = {
         role: "assistant",
-        content:
-          "I'm sorry, I encountered an error processing your request. Please try again.",
+        content: t("pharmacist.error"),
         id: makeId(),
         timestamp: new Date().toISOString(),
       };
@@ -219,10 +221,10 @@ export function ChatInterface({
   }
 
   const suggestedQuestions = [
-    "What herbs help with sleep?",
-    "Is turmeric safe with blood thinners?",
-    "Best herbs for anxiety relief?",
-    "How to calculate child dosage?",
+    t("pharmacist.suggestedQuestions.0"),
+    t("pharmacist.suggestedQuestions.1"),
+    t("pharmacist.suggestedQuestions.2"),
+    t("pharmacist.suggestedQuestions.3"),
   ];
 
   const showSuggestions = messages.length <= 1 && !isLoading;
@@ -240,21 +242,21 @@ export function ChatInterface({
       lower.includes("mg") ||
       lower.includes("ml")
     ) {
-      questions.push("Is this dosage safe for children?");
+      questions.push(t("pharmacist.followUp.childDosage"));
     } else {
-      questions.push("What's the recommended dosage?");
+      questions.push(t("pharmacist.followUp.recommendedDosage"));
     }
 
     if (lower.includes("interaction") || lower.includes("contraindic")) {
-      questions.push("What are safer alternatives?");
+      questions.push(t("pharmacist.followUp.saferAlternatives"));
     } else {
-      questions.push("Any drug interactions I should know about?");
+      questions.push(t("pharmacist.followUp.interactions"));
     }
 
     if (lower.includes("side effect") || lower.includes("adverse")) {
-      questions.push("How can I minimize these side effects?");
+      questions.push(t("pharmacist.followUp.sideEffects"));
     } else {
-      questions.push("Tell me more about the side effects");
+      questions.push(t("pharmacist.followUp.sideEffectsInfo"));
     }
 
     return questions;
@@ -371,7 +373,7 @@ export function ChatInterface({
               <div className="rounded-lg bg-muted px-4 py-3">
                 <div className="flex items-center gap-2">
                   <span className="text-xs font-medium text-muted-foreground">
-                    Thinking
+                    {t("pharmacist.thinking")}
                   </span>
                   <span className="flex items-center gap-1">
                     <span className="size-2 rounded-full bg-primary/70 animate-typing-dot" />
@@ -389,6 +391,7 @@ export function ChatInterface({
               {suggestedQuestions.map((q) => (
                 <button
                   key={q}
+                  type="button"
                   onClick={() => sendMessage(q)}
                   className="rounded-lg border border-primary/20 bg-primary/5 px-3 py-1.5 text-xs font-medium text-primary transition-all hover:bg-primary/10 hover:shadow-sm"
                 >
@@ -404,6 +407,7 @@ export function ChatInterface({
               {followUpQuestions.map((q) => (
                 <button
                   key={q}
+                  type="button"
                   onClick={() => sendMessage(q)}
                   className="rounded-full border border-border/60 bg-background px-3 py-1 text-xs text-muted-foreground transition-all hover:border-primary/30 hover:text-primary"
                 >
@@ -420,19 +424,19 @@ export function ChatInterface({
         <div className="flex items-center justify-between">
           <p className="flex items-center gap-1.5 text-xs text-amber-700 dark:text-amber-400">
             <AlertCircle className="size-3 shrink-0" />
-            This AI assistant provides educational information only. Always
-            consult a healthcare provider for medical advice.
+            {t("pharmacist.disclaimer")}
           </p>
           {messages.length > 1 && (
             <Button
               variant="ghost"
               size="sm"
+              type="button"
               onClick={clearChat}
               className="h-6 px-2 text-xs text-muted-foreground hover:text-foreground"
               aria-label="Clear chat"
             >
               <Trash2 className="size-3" />
-              Clear
+              {t("pharmacist.clear")}
             </Button>
           )}
         </div>
@@ -449,7 +453,7 @@ export function ChatInterface({
             value={input}
             onChange={(e) => setInput(e.target.value)}
             onKeyDown={handleKeyDown}
-            placeholder="Ask about herbs, interactions, dosages..."
+            placeholder={t("pharmacist.placeholder")}
             className="min-h-[44px] max-h-32 resize-none focus-ring-animated"
             rows={1}
             disabled={isLoading}
@@ -463,7 +467,7 @@ export function ChatInterface({
               onClick={toggleVoice}
               className="shrink-0 md:hidden"
               aria-label={
-                isListening ? "Stop voice input" : "Start voice input"
+                isListening ? t("pharmacist.voiceStop") : t("pharmacist.voiceStart")
               }
             >
               {isListening ? (
@@ -483,7 +487,7 @@ export function ChatInterface({
           </Button>
         </form>
         {isSaving && (
-          <p className="mt-1 text-xs text-muted-foreground">Saving...</p>
+          <p className="mt-1 text-xs text-muted-foreground">{t("pharmacist.saving")}</p>
         )}
       </div>
     </div>

@@ -3,6 +3,7 @@
 import { useState } from "react";
 import { ChevronDown, ChevronUp } from "lucide-react";
 import { Button } from "@/components/ui/button";
+import { useI18n } from "@/components/i18n/i18n-provider";
 
 type Interaction = {
   id: string;
@@ -27,6 +28,7 @@ export function InteractionsTable({
 }: {
   interactions: Interaction[];
 }) {
+  const { t } = useI18n();
   const [expanded, setExpanded] = useState(false);
 
   if (interactions.length === 0) return null;
@@ -49,29 +51,29 @@ export function InteractionsTable({
   return (
     <section>
       <h2 className="mb-4 text-xl font-semibold text-foreground">
-        Known Drug Interactions ({interactions.length})
+        {t("interactions.title")} ({interactions.length})
       </h2>
 
       {/* Severity Summary */}
       <div className="mb-4 flex flex-wrap gap-2">
         {severityCounts.contraindicated > 0 && (
           <span className="inline-flex items-center rounded-full bg-red-100 px-2.5 py-0.5 text-xs font-medium text-red-800 dark:bg-red-900/30 dark:text-red-300">
-            {severityCounts.contraindicated} Contraindicated
+            {severityCounts.contraindicated} {t("interactions.severity.contraindicated")}
           </span>
         )}
         {severityCounts.severe > 0 && (
           <span className="inline-flex items-center rounded-full bg-red-100 px-2.5 py-0.5 text-xs font-medium text-red-700 dark:bg-red-900/30 dark:text-red-300">
-            {severityCounts.severe} Severe
+            {severityCounts.severe} {t("interactions.severity.severe")}
           </span>
         )}
         {severityCounts.moderate > 0 && (
           <span className="inline-flex items-center rounded-full bg-orange-100 px-2.5 py-0.5 text-xs font-medium text-orange-800 dark:bg-orange-900/30 dark:text-orange-300">
-            {severityCounts.moderate} Moderate
+            {severityCounts.moderate} {t("interactions.severity.moderate")}
           </span>
         )}
         {severityCounts.mild > 0 && (
           <span className="inline-flex items-center rounded-full bg-yellow-100 px-2.5 py-0.5 text-xs font-medium text-yellow-800 dark:bg-yellow-900/30 dark:text-yellow-300">
-            {severityCounts.mild} Mild
+            {severityCounts.mild} {t("interactions.severity.mild")}
           </span>
         )}
       </div>
@@ -81,13 +83,13 @@ export function InteractionsTable({
           <thead>
             <tr className="border-b bg-muted/50">
               <th className="px-4 py-3 text-left font-medium text-foreground">
-                Drug
+                {t("interactions.headers.drug")}
               </th>
               <th className="px-4 py-3 text-left font-medium text-foreground">
-                Severity
+                {t("interactions.headers.severity")}
               </th>
               <th className="px-4 py-3 text-left font-medium text-foreground">
-                Description
+                {t("interactions.headers.description")}
               </th>
             </tr>
           </thead>
@@ -101,7 +103,7 @@ export function InteractionsTable({
                   <span
                     className={`inline-flex rounded-full px-2 py-0.5 text-xs font-medium capitalize ${severityColors[interaction.severity] || ""}`}
                   >
-                    {interaction.severity}
+                    {t(`interactions.severity.${interaction.severity}`)}
                   </span>
                 </td>
                 <td className="px-4 py-3 text-muted-foreground">
@@ -118,18 +120,19 @@ export function InteractionsTable({
           <Button
             variant="ghost"
             size="sm"
+            type="button"
             onClick={() => setExpanded(!expanded)}
             className="text-muted-foreground"
           >
             {expanded ? (
               <>
                 <ChevronUp className="size-4" />
-                Show Less
+                {t("interactions.showLess")}
               </>
             ) : (
               <>
                 <ChevronDown className="size-4" />
-                Show {interactions.length - INITIAL_COUNT} More
+                {t("interactions.showMore", { count: interactions.length - INITIAL_COUNT })}
               </>
             )}
           </Button>

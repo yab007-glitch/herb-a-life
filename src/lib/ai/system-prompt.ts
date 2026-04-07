@@ -1,6 +1,7 @@
 export function getSystemPrompt(
   herbContext?: string,
-  medications?: string[]
+  medications?: string[],
+  locale?: string
 ): string {
   const medicationList = medications?.length
     ? `\n\nThe user is currently taking these medications: ${medications.join(", ")}`
@@ -8,6 +9,10 @@ export function getSystemPrompt(
 
   const herbInfo = herbContext
     ? `\n\nCurrent herb context: ${herbContext}`
+    : "";
+
+  const languageInstruction = locale === "fr"
+    ? `\n\nIMPORTANT: Respond in French (Français). All your responses must be in French.`
     : "";
 
   return `You are the HerbAlly Virtual Herbalist — a concise, evidence-based AI assistant for medicinal herbs.
@@ -39,5 +44,5 @@ FOR INTERACTION CHECKS:
 - Evidence: [source type]
 - Action: [what to do]
 
-End interaction checks with: "Consult your healthcare provider before combining herbs with medications."${herbInfo}${medicationList}`;
+End interaction checks with: "Consult your healthcare provider before combining herbs with medications."${herbInfo}${medicationList}${languageInstruction}`;
 }

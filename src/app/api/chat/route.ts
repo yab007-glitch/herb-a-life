@@ -40,7 +40,7 @@ export async function POST(request: NextRequest) {
     }
 
     const body = await request.json();
-    const { messages, herbContext, medications } = body;
+    const { messages, herbContext, medications, locale } = body;
 
     if (!messages || !Array.isArray(messages)) {
       return NextResponse.json(
@@ -49,7 +49,7 @@ export async function POST(request: NextRequest) {
       );
     }
 
-    const systemPrompt = getSystemPrompt(herbContext, medications);
+    const systemPrompt = getSystemPrompt(herbContext, medications, locale);
 
     // Format messages for Ollama API
     const ollamaMessages = [

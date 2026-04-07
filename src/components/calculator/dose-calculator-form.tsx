@@ -27,6 +27,7 @@ import {
   lbsToKg,
   type DoseResult,
 } from "@/lib/utils/dosage-calculations";
+import { useI18n } from "@/components/i18n/i18n-provider";
 
 const unitOptions = ["mg", "ml", "g", "drops"] as const;
 
@@ -40,6 +41,7 @@ type PrefillData = {
 } | null;
 
 export function DoseCalculatorForm({ prefill }: { prefill?: PrefillData }) {
+  const { t } = useI18n();
   const [herbName, setHerbName] = useState(prefill?.herbName ?? "");
   const [adultDose, setAdultDose] = useState(prefill?.adultDose ?? "");
   const [doseUnit, setDoseUnit] = useState<(typeof unitOptions)[number]>(
@@ -62,7 +64,7 @@ export function DoseCalculatorForm({ prefill }: { prefill?: PrefillData }) {
 
     const dose = parseFloat(adultDose);
     if (!dose || dose <= 0) {
-      setError("Please enter a valid adult dose.");
+      setError(t("calculator.errors.invalidDose"));
       return;
     }
 
@@ -77,21 +79,21 @@ export function DoseCalculatorForm({ prefill }: { prefill?: PrefillData }) {
       switch (selectedFormula) {
         case "clarks_rule":
           if (!weight || weight <= 0) {
-            setError("Clark's Rule requires patient weight.");
+            setError(t("calculator.errors.weightRequired"));
             return;
           }
           calcResult = clarksRule(weight, dose);
           break;
         case "youngs_rule":
           if (!age || age <= 0) {
-            setError("Young's Rule requires patient age in years.");
+            setError(t("calculator.errors.ageRequired"));
             return;
           }
           calcResult = youngsRule(age, dose);
           break;
         case "bsa":
           if (!weight || weight <= 0 || !height || height <= 0) {
-            setError("BSA method requires both weight and height.");
+            setError(t("calculator.errors.bsaRequired"));
             return;
           }
           calcResult = bsaMethod(height, weight, dose);
@@ -99,32 +101,28 @@ export function DoseCalculatorForm({ prefill }: { prefill?: PrefillData }) {
         case "fried_rule":
           if (useMonths) {
             if (!age || age <= 0) {
-              setError("Fried's Rule requires age in months.");
+              setError(t("calculator.errors.infantAge"));
               return;
             }
             calcResult = friedsRule(age, dose);
           } else {
             const months = parseFloat(ageYears) * 12;
             if (!months || months <= 0) {
-              setError(
-                "Fried's Rule requires age. Toggle to months for infants."
-              );
+              setError(t("calculator.errors.infantAge"));
               return;
             }
             calcResult = friedsRule(months, dose);
           }
           break;
         default:
-          setError("Please select a formula.");
+          setError(t("calculator.errors.calculationError"));
           return;
       }
 
       calcResult.unit = doseUnit;
       setResult(calcResult);
     } catch {
-      setError(
-        "An error occurred during calculation. Please check your inputs."
-      );
+      setError(t("calculator.errors.calculationError"));
     }
   }
 
