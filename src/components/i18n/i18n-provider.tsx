@@ -8,12 +8,12 @@ import {
   ReactNode,
 } from "react";
 import { DEFAULT_LOCALE, type Locale } from "@/lib/i18n/config";
-import enDict from "@/lib/i18n/dictionaries/en.json";
-import frDict from "@/lib/i18n/dictionaries/fr.json";
+import { en } from "@/lib/i18n/dictionaries/en";
+import { fr } from "@/lib/i18n/dictionaries/fr";
 
 const dictionaries: Record<Locale, Record<string, unknown>> = {
-  en: enDict,
-  fr: frDict,
+  en: en as Record<string, unknown>,
+  fr: fr as Record<string, unknown>,
 };
 
 interface I18nContextType {

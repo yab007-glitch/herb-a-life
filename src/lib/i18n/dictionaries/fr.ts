@@ -1,0 +1,408 @@
+export const fr = {
+  "common": {
+    "search": "Rechercher",
+    "loading": "Chargement...",
+    "error": "Erreur",
+    "retry": "Réessayer",
+    "save": "Enregistrer",
+    "cancel": "Annuler",
+    "delete": "Supprimer",
+    "edit": "Modifier",
+    "close": "Fermer",
+    "back": "Retour",
+    "next": "Suivant",
+    "submit": "Soumettre",
+    "clear": "Effacer",
+    "language": "Langue",
+    "theme": "Thème",
+    "light": "Clair",
+    "dark": "Sombre",
+    "system": "Système"
+  },
+  "nav": {
+    "herbs": "Herbes",
+    "calculator": "Calculateur",
+    "herbalist": "Herboriste",
+    "dashboard": "Tableau de bord",
+    "about": "À propos",
+    "support": "Soutenir",
+    "donate": "Faire un don"
+  },
+  "home": {
+    "hero": {
+      "badge": "Plateforme de Médecine Herbale Basée sur les Preuves",
+      "title": "Votre Guide Complet des Herbes Médicinales",
+      "subtitle": "Explorez plus de 2 700 herbes, calculez les dosages précis, vérifiez les interactions médicamenteuses et consultez notre herboriste IA — tout en un seul endroit.",
+      "searchButton": "Explorer les Herbes"
+    },
+    "stats": {
+      "herbs": "Herbes Documentées",
+      "interactions": "Interactions",
+      "free": "Gratuit"
+    },
+    "features": {
+      "title": "Tout ce dont Vous Avez Besoin pour le Bien-être Herbal",
+      "subtitle": "Des outils professionnels basés sur la recherche scientifique et les connaissances traditionnelles.",
+      "herbs": {
+        "title": "2 700+ Herbes Médicinales",
+        "description": "La base de données sur les herbes la plus complète disponible. Profils détaillés avec les composés actifs, les utilisations traditionnelles et les applications modernes."
+      },
+      "calculator": {
+        "title": "Calculateur de Dosage de Précision",
+        "description": "Calculez les dosages sûrs en utilisant la règle de Clark, la règle de Young, la BSA et la règle de Fried. Obtenez des recommandations personnalisées basées sur l'âge et le poids."
+      },
+      "interactions": {
+        "title": "Vérificateur d'Interactions Médicamenteuses",
+        "description": "Faites une référence croisée de vos médicaments avec notre base de données. Identifiez les combinaisons légères, modérées, graves et contre-indiquées."
+      },
+      "ai": {
+        "title": "Herboriste IA Virtuel",
+        "description": "Posez des questions sur les herbes, les dosages et la sécurité. Propulsé par des sources basées sur des preuves, y compris les monographies de l'OMS et la recherche PubMed."
+      }
+    },
+    "cta": {
+      "title": "Commencez Votre Voyage Herbal Aujourd'hui",
+      "subtitle": "Parcourez notre base de données complète gratuitement. Aucun compte requis.",
+      "button": "Parcourir les Herbes"
+    },
+    "trustBadges": "Propulsé par"
+  },
+  "herbs": {
+    "title": "Base de Données d'Herbes Médicinales",
+    "subtitle": "Explorez plus de 2 700 herbes avec des informations basées sur des preuves",
+    "searchPlaceholder": "Rechercher des herbes par nom, symptôme ou utilisation...",
+    "recentSearches": "Recherches récentes",
+    "clearAll": "Tout effacer",
+    "categories": "Catégories",
+    "all": "Tout",
+    "results": "{count} herbes",
+    "noResults": "Aucune herbe trouvée",
+    "tryDifferent": "Essayez un autre terme de recherche",
+    "popularSearches": "Recherches Populaires",
+    "resultsFound": "Trouvé {count} {noun} correspondant à \"{query}\"",
+    "herbSingular": "herbe",
+    "herbPlural": "herbes",
+    "noHerbsQuery": "Aucune herbe trouvée pour \"{query}\"",
+    "trySearching": "Essayez de rechercher un symptôme comme maux de tête, anxiété ou inflammation.",
+    "browseAll": "Parcourir Toutes les Herbes",
+    "pagination": {
+      "previous": "Précédent",
+      "next": "Suivant",
+      "page": "Page",
+      "of": "sur"
+    },
+    "safety": {
+      "safe": "Généralement Sûr",
+      "caution": "Utiliser avec Prudence",
+      "avoid": "Éviter",
+      "unknown": "Sécurité Inconnue"
+    },
+    "detail": {
+      "uses": "Utilisations et Avantages",
+      "dosage": "Dosage Recommandé",
+      "safety": "Informations de Sécurité",
+      "interactions": "Interactions Médicamenteuses",
+      "warnings": "Avertissements",
+      "preparations": "Préparations et Formes",
+      "research": "Recherche et Références"
+    }
+  },
+  "calculator": {
+    "title": "Calculateur de Dosage",
+    "subtitle": "Calculez les dosages sûrs en fonction de votre profil",
+    "selectProfile": "Sélectionner un Profil",
+    "or": "ou",
+    "createNew": "Créer un Nouveau Profil",
+    "herbName": "Nom de l'Herbe",
+    "adultDose": "Dose Adulte",
+    "unit": "Unité",
+    "patientAge": "Âge du Patient",
+    "years": "Ans",
+    "months": "Mois",
+    "patientWeight": "Poids du Patient",
+    "patientHeight": "Taille du Patient (cm)",
+    "optionalForBsa": "optionnel, pour BSA",
+    "calculationFormula": "Formule de Calcul",
+    "calculateDose": "Calculer la Dose",
+    "calculating": "Calcul en cours...",
+    "formulas": {
+      "clarks": "Règle de Clark",
+      "clarksDesc": "Calcul basé sur le poids pour enfants",
+      "youngs": "Règle de Young",
+      "youngsDesc": "Calcul basé sur l'âge pour enfants",
+      "bsa": "Surface Corporelle",
+      "bsaDesc": "Méthode poids/taille la plus précise",
+      "frieds": "Règle de Fried",
+      "friedsDesc": "Pour les nourrissons de moins de 2 ans"
+    },
+    "errors": {
+      "invalidDose": "Veuillez entrer une dose adulte valide.",
+      "weightRequired": "La règle de Clark nécessite le poids du patient.",
+      "ageRequired": "La règle de Young nécessite l'âge du patient en années.",
+      "bsaRequired": "La méthode BSA nécessite le poids et la taille.",
+      "infantAge": "La règle de Fried nécessite l'âge en mois.",
+      "calculationError": "Une erreur s'est produite lors du calcul. Veuillez vérifier vos entrées."
+    },
+    "results": {
+      "calculatedDose": "Dose Calculée",
+      "doseComparison": "Comparaison des Doses",
+      "adultDose": "Dose Adulte",
+      "formulaUsed": "Formule Utilisée",
+      "explanation": "Explication",
+      "disclaimer": "Ce calcul est fourni à titre indicatif uniquement. Vérifiez toujours les dosages avec un professionnel de santé qualifié."
+    },
+    "placeholders": {
+      "herb": "ex., Curcuma, Echinacea...",
+      "dose": "ex., 500",
+      "age": "ex., 8",
+      "weight": "ex., 30",
+      "height": "ex., 130"
+    },
+    "profiles": {
+      "title": "Vos Profils",
+      "create": "Créer Nouveau",
+      "edit": "Modifier le Profil",
+      "delete": "Supprimer le Profil",
+      "name": "Nom du Profil",
+      "age": "Âge",
+      "weight": "Poids",
+      "weightUnit": "kg / lbs",
+      "conditions": "Conditions de Santé",
+      "medications": "Médicaments Actuels",
+      "pregnancy": "Enceinte ou Allaitante"
+    },
+    "result": {
+      "title": "Dosage Calculé",
+      "adultDose": "Dose Adulte",
+      "adjustedDose": "Votre Dose Ajustée",
+      "warnings": "Avertissements",
+      "consult": "Consultez toujours un professionnel de santé avant de commencer tout régime herbal."
+    }
+  },
+  "pharmacist": {
+    "title": "Herboriste IA",
+    "subtitle": "Posez des questions et obtenez des recommandations personnalisées",
+    "placeholder": "Poser des questions sur les herbes, les dosages, les interactions ou les problèmes de santé...",
+    "send": "Envoyer",
+    "thinking": "Réflexion...",
+    "disclaimer": "Cette IA fournit des informations éducatives uniquement. Consultez toujours un professionnel de santé pour des conseils médicaux.",
+    "initialMessage": "Bonjour ! Je suis votre Herboriste Virtuel. Je peux vous aider avec des questions sur les herbes médicinales, leurs utilisations, leur sécurité et les dosages appropriés. Que souhaitez-vous savoir ?",
+    "error": "Je suis désolé, j'ai rencontré une erreur lors du traitement de votre demande. Veuillez réessayer.",
+    "clear": "Effacer",
+    "saving": "Enregistrement...",
+    "voiceStart": "Démarrer la saisie vocale",
+    "voiceStop": "Arrêter la saisie vocale",
+    "suggestedQuestions": [
+      "Quelles herbes aident à dormir ?",
+      "Le curcuma est-il sûr avec les anticoagulants ?",
+      "Meilleures herbes pour l'anxiété ?",
+      "Comment calculer le dosage pour enfant ?"
+    ],
+    "followUp": {
+      "childDosage": "Ce dosage est-il sûr pour les enfants ?",
+      "recommendedDosage": "Quel est le dosage recommandé ?",
+      "saferAlternatives": "Quelles sont les alternatives plus sûres ?",
+      "interactions": "Y a-t-il des interactions médicamenteuses à connaître ?",
+      "sideEffects": "Comment minimiser ces effets secondaires ?",
+      "sideEffectsInfo": "Parlez-moi davantage des effets secondaires"
+    }
+  },
+  "donate": {
+    "title": "Soutenir HerbAlly",
+    "subtitle": "Garder le Savoir Herbal Gratuit",
+    "mission": {
+      "title": "Notre Mission",
+      "description": "Le savoir herbal gratuit pour tous. Pas de publicités, pas de paywalls, pas de tiers premium.",
+      "how": "Comment Votre Don Aide",
+      "hosting": "Hébergement et Serveurs",
+      "ai": "Coûts IA",
+      "database": "Base de Données",
+      "features": "Nouvelles Fonctionnalités",
+      "promise": "Nous ne facturerons jamais les utilisateurs ni ne vendrons vos données."
+    },
+    "amounts": {
+      "choose": "Choisir un Montant",
+      "coffee": "Offrez-nous un café",
+      "supporter": "Supporter",
+      "champion": "Champion",
+      "custom": "Montant Personnalisé",
+      "donate": "Faire un Don"
+    },
+    "trust": {
+      "secure": "Sécurisé par Stripe",
+      "cards": "Toutes les cartes acceptées",
+      "data": "Aucune donnée de carte stockée"
+    },
+    "success": {
+      "title": "Merci pour votre don !",
+      "message": "Votre soutien aide à garder HerbAlly gratuit pour tous."
+    },
+    "canceled": {
+      "title": "Don annulé",
+      "message": "Pas de problème ! N'hésitez pas à réessayer quand vous voulez."
+    }
+  },
+  "about": {
+    "title": "À propos de HerbAlly",
+    "mission": "Notre Mission",
+    "missionText": "Nous croyons que tout le monde mérite un accès à des informations fiables et basées sur des preuves sur la médecine herbal.",
+    "team": "Notre Équipe",
+    "teamText": "Construit par une petite équipe passionnée par la médecine herbal accessible.",
+    "sources": "Nos Sources",
+    "sourcesText": "Informations provenant des monographies de l'OMS, de la Commission E allemande et de la recherche évaluée par les pairs.",
+    "disclaimer": {
+      "title": "Avertissement Médical",
+      "text": "HerbAlly fournit des informations éducatives uniquement. Ce n'est pas un avis médical. Consultez toujours un professionnel de santé qualifié avant d'utiliser tout remède herbal."
+    }
+  },
+  "footer": {
+    "product": "Produit",
+    "resources": "Ressources",
+    "company": "Entreprise",
+    "legal": "Légal",
+    "privacy": "Politique de Confidentialité",
+    "terms": "Conditions d'Utilisation",
+    "disclaimer": "Avertissement Médical",
+    "copyright": "À des fins éducatives uniquement. Pas un avis médical.",
+    "madeWith": "Fait avec soin pour la communauté herbal"
+  },
+  "errors": {
+    "404": {
+      "title": "Page Non Trouvée",
+      "message": "La page que vous recherchez n'existe pas.",
+      "home": "Retour à l'Accueil"
+    },
+    "500": {
+      "title": "Une Erreur s'est Produite",
+      "message": "Une erreur inattendue s'est produite. Veuillez réessayer.",
+      "retry": "Réessayer"
+    }
+  },
+  "fda": {
+    "disclaimer": "Ce produit n'est pas destiné à diagnostiquer, traiter, guérir ou prévenir toute maladie. Ces déclarations n'ont pas été évaluées par la Food and Drug Administration."
+  },
+  "herbDetail": {
+    "notFound": "Herbe Non Trouvée",
+    "uncategorized": "Non Classé",
+    "safePregnancy": "Généralement sûr pendant la grossesse",
+    "notSafePregnancy": "Non recommandé pendant la grossesse",
+    "safeNursing": "Généralement sûr pendant l'allaitement",
+    "notSafeNursing": "Non recommandé pendant l'allaitement",
+    "backToHerbs": "Retour aux Herbes",
+    "traditionalUses": "Utilisations Traditionnelles",
+    "modernUses": "Utilisations Modernes",
+    "activeCompounds": "Composés Actifs",
+    "drugInteractions": "Interactions Médicamenteuses",
+    "preparations": "Préparations",
+    "dosage": "Dosage",
+    "adultDosage": "Dosage Adulte",
+    "childDosage": "Dosage Enfant",
+    "safetyInfo": "Informations de Sécurité",
+    "pregnancySafety": "Sécurité Pendant la Grossesse",
+    "nursingSafety": "Sécurité Pendant l'Allaitement",
+    "category": "Catégorie",
+    "scientificName": "Nom Scientifique",
+    "commonNames": "Noms Communs",
+    "lastUpdated": "Dernière mise à jour"
+  },
+  "search": {
+    "placeholder": "Rechercher des herbes par nom, symptôme ou utilisation...",
+    "searching": "Recherche...",
+    "search": "Rechercher",
+    "surpriseMe": "Surprenez-moi"
+  },
+  "commandPalette": {
+    "placeholder": "Rechercher des herbes, pages ou actions...",
+    "noResults": "Aucun résultat trouvé.",
+    "searching": "Recherche...",
+    "groups": {
+      "herbs": "Herbes",
+      "pages": "Pages",
+      "quickActions": "Actions Rapides"
+    },
+    "pages": {
+      "browseHerbs": "Parcourir les Herbes",
+      "doseCalculator": "Calculateur de Dosage",
+      "virtualHerbalist": "Herboriste Virtuel"
+    },
+    "actions": {
+      "searchHerbs": "Rechercher des Herbes",
+      "askInteractions": "Demander des Interactions",
+      "calculateDose": "Calculer la Dose"
+    }
+  },
+  "interactions": {
+    "title": "Interactions Médicamenteuses Connues",
+    "showMore": "Afficher {count} de plus",
+    "showLess": "Afficher moins",
+    "severity": {
+      "contraindicated": "Contre-indiqué",
+      "severe": "Sévère",
+      "moderate": "Modéré",
+      "mild": "Léger"
+    },
+    "headers": {
+      "drug": "Médicament",
+      "severity": "Sévérité",
+      "description": "Description"
+    }
+  },
+  "auth": {
+    "login": {
+      "email": "Email",
+      "password": "Mot de passe",
+      "emailPlaceholder": "vous@exemple.com",
+      "passwordPlaceholder": "Votre mot de passe",
+      "submit": "Se Connecter",
+      "submitting": "Connexion...",
+      "forgotPassword": "Mot de passe oublié ?",
+      "noAccount": "Pas de compte ?",
+      "register": "S'inscrire"
+    }
+  },
+  "mission": {
+    "title": "Notre Mission",
+    "description": "Le savoir herbal gratuit pour tous. Nous croyons que l'accès à l'information sur la santé est un droit fondamental, pas un privilège. HerbAlly est conçu pour démocratiser l'accès aux connaissances de médecine herbal basées sur des preuves.",
+    "freeAccess": "Pas de publicités, pas de paywalls, pas de tiers premium. Toutes les 2 700+ herbes sont disponibles pour tous, complètement gratuitement.",
+    "herbsCount": "2 700+ Herbes",
+    "herbsDesc": "Base de données complète avec des profils détaillés",
+    "aiHerbalist": "Herboriste IA",
+    "aiHerbalistDesc": "Obtenez des réponses instantanées à vos questions",
+    "freeForever": "100% Gratuit",
+    "freeForeverDesc": "Aucun compte requis pour accéder",
+    "howDonationsHelp": "Comment Votre Don Aide",
+    "donationHostings": "Hébergement et Serveurs — Maintenir l'application rapide et disponible 24/7",
+    "donationAi": "Coûts IA — Alimenter le chatbot herboriste virtuel",
+    "donationDb": "Base de Données — Stocker et servir 2 700+ profils d'herbes",
+    "donationFeatures": "Nouvelles Fonctionnalités — Ajouter plus d'herbes, interactions et outils",
+    "promise": "Nous ne facturerons jamais les utilisateurs et ne vendrons pas vos données.",
+    "sustained": "HerbAlly est maintenu entièrement par des dons volontaires.",
+    "cta": "Faire un Don"
+  },
+  "admin": {
+    "title": "Tableau de Bord Administrateur",
+    "herbs": {
+      "title": "Gérer les Herbes",
+      "addNew": "Ajouter une Herbe",
+      "edit": "Modifier l'Herbe",
+      "published": "Publié",
+      "draft": "Brouillon"
+    },
+    "interactions": {
+      "title": "Gérer les Interactions"
+    },
+    "users": {
+      "title": "Utilisateurs"
+    },
+    "stats": {
+      "totalHerbs": "Total des Herbes",
+      "herbsDescription": "Publié dans la base de données",
+      "drugInteractions": "Interactions Médicamenteuses",
+      "interactionsDescription": "Interactions connues",
+      "registeredUsers": "Utilisateurs Inscrits",
+      "usersDescription": "Total des comptes",
+      "interactionChecks": "Vérifications d'Interactions",
+      "checksDescription": "Vérifications effectuées"
+    }
+  }
+} as const;
