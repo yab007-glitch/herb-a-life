@@ -311,6 +311,26 @@
     "search": "Search",
     "surpriseMe": "Surprise Me"
   },
+  "commandPalette": {
+    "placeholder": "Search herbs, pages, or actions...",
+    "noResults": "No results found.",
+    "searching": "Searching...",
+    "groups": {
+      "herbs": "Herbs",
+      "pages": "Pages",
+      "quickActions": "Quick Actions"
+    },
+    "pages": {
+      "browseHerbs": "Browse Herbs",
+      "doseCalculator": "Dose Calculator",
+      "virtualHerbalist": "Virtual Herbalist"
+    },
+    "actions": {
+      "searchHerbs": "Search Herbs",
+      "askInteractions": "Ask About Interactions",
+      "calculateDose": "Calculate Dose"
+    }
+  },
   "interactions": {
     "title": "Known Drug Interactions",
     "showMore": "Show {count} More",

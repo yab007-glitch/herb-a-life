@@ -22,6 +22,7 @@ import {
   CommandShortcut,
 } from "@/components/ui/command";
 import { cn } from "@/lib/utils";
+import { useI18n } from "@/components/i18n/i18n-provider";
 
 type HerbResult = {
   id: string;
@@ -31,6 +32,7 @@ type HerbResult = {
 };
 
 export function CommandPalette() {
+  const { t } = useI18n();
   const [open, setOpen] = React.useState(false);
   const [query, setQuery] = React.useState("");
   const [herbs, setHerbs] = React.useState<HerbResult[]>([]);
@@ -102,7 +104,7 @@ export function CommandPalette() {
   return (
     <CommandDialog open={open} onOpenChange={setOpen}>
       <CommandInput
-        placeholder="Search herbs, pages, or actions..."
+        placeholder={t("commandPalette.placeholder")}
         value={query}
         onValueChange={setQuery}
       />
@@ -111,16 +113,16 @@ export function CommandPalette() {
           {loading ? (
             <div className="flex items-center justify-center gap-2 text-muted-foreground">
               <Loader2 className="size-4 animate-spin" />
-              Searching...
+              {t("commandPalette.searching")}
             </div>
           ) : (
-            "No results found."
+            t("commandPalette.noResults")
           )}
         </CommandEmpty>
 
         {herbs.length > 0 && (
           <>
-            <CommandGroup heading="Herbs">
+            <CommandGroup heading={t("commandPalette.groups.herbs")}>
               {herbs.map((herb) => (
                 <CommandItem
                   key={herb.id}
@@ -142,40 +144,40 @@ export function CommandPalette() {
           </>
         )}
 
-        <CommandGroup heading="Pages">
+        <CommandGroup heading={t("commandPalette.groups.pages")}>
           <CommandItem onSelect={() => navigate("/herbs")}>
             <Leaf />
-            <span>Browse Herbs</span>
+            <span>{t("commandPalette.pages.browseHerbs")}</span>
             <CommandShortcut>G H</CommandShortcut>
           </CommandItem>
           <CommandItem onSelect={() => navigate("/calculator")}>
             <Calculator />
-            <span>Dose Calculator</span>
+            <span>{t("commandPalette.pages.doseCalculator")}</span>
             <CommandShortcut>G C</CommandShortcut>
           </CommandItem>
           <CommandItem onSelect={() => navigate("/pharmacist")}>
             <MessageCircle />
-            <span>Virtual Herbalist</span>
+            <span>{t("commandPalette.pages.virtualHerbalist")}</span>
             <CommandShortcut>G P</CommandShortcut>
           </CommandItem>
         </CommandGroup>
 
         <CommandSeparator />
 
-        <CommandGroup heading="Quick Actions">
+        <CommandGroup heading={t("commandPalette.groups.quickActions")}>
           <CommandItem onSelect={() => navigate("/herbs?focus=search")}>
             <Search />
-            <span>Search Herbs</span>
+            <span>{t("commandPalette.actions.searchHerbs")}</span>
             <CommandShortcut>S H</CommandShortcut>
           </CommandItem>
           <CommandItem onSelect={() => navigate("/pharmacist")}>
             <AlertTriangle />
-            <span>Ask About Interactions</span>
+            <span>{t("commandPalette.actions.askInteractions")}</span>
             <CommandShortcut>C I</CommandShortcut>
           </CommandItem>
           <CommandItem onSelect={() => navigate("/calculator")}>
             <ArrowRight />
-            <span>Calculate Dose</span>
+            <span>{t("commandPalette.actions.calculateDose")}</span>
             <CommandShortcut>C D</CommandShortcut>
           </CommandItem>
         </CommandGroup>
@@ -185,6 +187,8 @@ export function CommandPalette() {
 }
 
 export function CommandPaletteTrigger() {
+  const { t } = useI18n();
+  
   return (
     <button
       type="button"
@@ -202,7 +206,7 @@ export function CommandPaletteTrigger() {
       )}
     >
       <Search className="size-4" />
-      <span className="hidden lg:inline">Search...</span>
+      <span className="hidden lg:inline">{t("search.search")}...</span>
       <kbd className="pointer-events-none hidden select-none items-center gap-0.5 rounded border border-input bg-muted px-1.5 py-0.5 font-mono text-[10px] font-medium opacity-60 sm:inline-flex">
         <span className="text-xs">&#8984;</span>K
       </kbd>

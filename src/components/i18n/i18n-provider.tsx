@@ -8,6 +8,13 @@ import {
   ReactNode,
 } from "react";
 import { DEFAULT_LOCALE, type Locale } from "@/lib/i18n/config";
+import enDict from "@/lib/i18n/dictionaries/en.json";
+import frDict from "@/lib/i18n/dictionaries/fr.json";
+
+const dictionaries: Record<Locale, Record<string, unknown>> = {
+  en: enDict,
+  fr: frDict,
+};
 
 interface I18nContextType {
   locale: Locale;
@@ -22,10 +29,8 @@ const I18nContext = createContext<I18nContextType | null>(null);
 export function I18nProvider({ children }: { children: ReactNode }) {
   const [locale, setLocaleState] = useState<Locale>(DEFAULT_LOCALE);
   const [detectedLocale, setDetectedLocale] = useState<Locale | null>(null);
-  const [dict, setDict] = useState<Record<string, unknown>>({});
   const [isLoading, setIsLoading] = useState(true);
 
-  // Initialize locale from localStorage or browser
   useEffect(() => {
     if (typeof window === "undefined") return;
 
@@ -33,37 +38,16 @@ export function I18nProvider({ children }: { children: ReactNode }) {
     if (saved && (saved === "en" || saved === "fr")) {
       setLocaleState(saved as Locale);
     } else {
-      // Try browser language
       const browserLang = navigator.language.split("-")[0];
       if (browserLang === "fr" || browserLang === "en") {
         const detected = browserLang as Locale;
         setDetectedLocale(detected);
-        // Auto-set detected language
         setLocaleState(detected);
         localStorage.setItem("herbally-locale", detected);
       }
     }
+    setIsLoading(false);
   }, []);
-
-  // Load dictionary when locale changes
-  useEffect(() => {
-    const loadDict = async () => {
-      setIsLoading(true);
-      try {
-        const res = await fetch(`/api/i18n?locale=${locale}`);
-        if (res.ok) {
-          const data = await res.json();
-          setDict(data);
-        }
-      } catch (error) {
-        console.error("Failed to load dictionary:", error);
-      } finally {
-        setIsLoading(false);
-      }
-    };
-
-    loadDict();
-  }, [locale]);
 
   const setLocale = (newLocale: Locale) => {
     setLocaleState(newLocale);
@@ -71,8 +55,8 @@ export function I18nProvider({ children }: { children: ReactNode }) {
     document.cookie = `herbally-locale=${newLocale};path=/;max-age=31536000`;
   };
 
-  // Translation function with nested key support and interpolation
   const t = (key: string, params?: Record<string, string | number>): string => {
+    const dict = dictionaries[locale] || dictionaries[DEFAULT_LOCALE];
     const keys = key.split(".");
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
     let value: any = dict;
