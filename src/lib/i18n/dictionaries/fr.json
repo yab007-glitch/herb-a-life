@@ -202,5 +202,64 @@
   },
   "fda": {
     "disclaimer": "Ce produit n'est pas destiné à diagnostiquer, traiter, guérir ou prévenir toute maladie. Ces déclarations n'ont pas été évaluées par la Food and Drug Administration."
+  },
+  "herbDetail": {
+    "notFound": "Herbe Non Trouvée",
+    "uncategorized": "Non Classé",
+    "safePregnancy": "Généralement sûr pendant la grossesse",
+    "notSafePregnancy": "Non recommandé pendant la grossesse",
+    "safeNursing": "Généralement sûr pendant l'allaitement",
+    "notSafeNursing": "Non recommandé pendant l'allaitement",
+    "backToHerbs": "Retour aux Herbes",
+    "traditionalUses": "Utilisations Traditionnelles",
+    "modernUses": "Utilisations Modernes",
+    "activeCompounds": "Composés Actifs",
+    "drugInteractions": "Interactions Médicamenteuses",
+    "preparations": "Préparations",
+    "dosage": "Dosage",
+    "adultDosage": "Dosage Adulte",
+    "childDosage": "Dosage Enfant",
+    "safetyInfo": "Informations de Sécurité",
+    "pregnancySafety": "Sécurité Pendant la Grossesse",
+    "nursingSafety": "Sécurité Pendant l'Allaitement",
+    "category": "Catégorie",
+    "scientificName": "Nom Scientifique",
+    "commonNames": "Noms Communs",
+    "lastUpdated": "Dernière mise à jour"
+  },
+  "admin": {
+    "title": "Tableau de Bord Administrateur",
+    "herbs": {
+      "title": "Gérer les Herbes",
+      "addNew": "Ajouter une Herbe",
+      "edit": "Modifier l'Herbe",
+      "published": "Publié",
+      "draft": "Brouillon"
+    },
+    "interactions": {
+      "title": "Gérer les Interactions"
+    },
+    "users": {
+      "title": "Utilisateurs"
+    },
+    "stats": {
+      "totalHerbs": "Total des Herbes",
+      "herbsDescription": "Publié dans la base de données",
+      "drugInteractions": "Interactions Médicamenteuses",
+      "interactionsDescription": "Interactions connues",
+      "registeredUsers": "Utilisateurs Inscrits",
+      "usersDescription": "Total des comptes",
+      "interactionChecks": "Vérifications d'Interactions",
+      "checksDescription": "Vérifications effectuées"
+    }
+  },
+  "about": {
+    "title": "À propos de HerbAlly",
+    "searchDatabase": "Rechercher dans Notre Base de Données",
+    "searchDescription": "Accédez à plus de 2 700 herbes médicinales avec des informations détaillées sur les utilisations traditionnelles, les composés actifs et la sécurité.",
+    "calculateDoses": "Calculer les Dosages Sûrs",
+    "calculateDescription": "Utilisez notre calculateur pour déterminer les dosages appropriés en fonction de l'âge, du poids et des conditions de santé.",
+    "consultHerbalist": "Consulter l'Herboriste Virtuel",
+    "consultDescription": "Obtenez des réponses personnalisées à vos questions sur les herbes grâce à notre IA formée sur des sources basées sur des preuves."
   }
 }

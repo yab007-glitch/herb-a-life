@@ -15,7 +15,7 @@ export function LoginForm() {
     setLoading(true);
     const result = await login(formData);
     if (result.success) {
-      window.location.href = "/dashboard";
+      window.location.href = "/herbs";
     } else {
       toast.error(result.error || "Login failed");
     }

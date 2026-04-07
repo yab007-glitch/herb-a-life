@@ -6,8 +6,7 @@ import {
   Leaf,
   Search,
   MessageCircle,
-  LayoutDashboard,
-  User,
+  Calculator,
 } from "lucide-react";
 import { cn } from "@/lib/utils";
 
@@ -15,8 +14,7 @@ const tabs = [
   { label: "Herbs", href: "/herbs", icon: Leaf },
   { label: "Search", href: "/herbs?focus=search", icon: Search },
   { label: "Chat", href: "/pharmacist", icon: MessageCircle },
-  { label: "Dashboard", href: "/dashboard", icon: LayoutDashboard },
-  { label: "Profile", href: "/dashboard/profiles", icon: User },
+  { label: "Calc", href: "/calculator", icon: Calculator },
 ] as const;
 
 function isActive(pathname: string, href: string): boolean {
@@ -26,10 +24,7 @@ function isActive(pathname: string, href: string): boolean {
   if (href === "/herbs") {
     return pathname === "/herbs" || pathname.startsWith("/herbs/");
   }
-  if (href === "/dashboard") {
-    return pathname === "/dashboard";
-  }
-  return pathname.startsWith(href);
+  return pathname === href || pathname.startsWith(href + "/");
 }
 
 export function MobileTabBar() {

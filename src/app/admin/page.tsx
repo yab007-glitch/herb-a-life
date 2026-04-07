@@ -9,10 +9,10 @@ import {
 import { createClient } from "@/lib/supabase/server";
 
 export const metadata = {
-  title: "Admin Dashboard",
+  title: "Admin Overview",
 };
 
-export default async function AdminDashboardPage() {
+export default async function AdminOverviewPage() {
   const supabase = await createClient();
 
   const [herbs, interactions, users, checks] = await Promise.all([
@@ -66,7 +66,7 @@ export default async function AdminDashboardPage() {
         </div>
         <div>
           <h1 className="text-2xl font-bold tracking-tight text-foreground">
-            Admin Dashboard
+            Admin Overview
           </h1>
           <p className="text-muted-foreground">
             Monitor platform activity and statistics

@@ -202,5 +202,64 @@
   },
   "fda": {
     "disclaimer": "This product is not intended to diagnose, treat, cure, or prevent any disease. These statements have not been evaluated by the Food and Drug Administration."
+  },
+  "herbDetail": {
+    "notFound": "Herb Not Found",
+    "uncategorized": "Uncategorized",
+    "safePregnancy": "Generally safe during pregnancy",
+    "notSafePregnancy": "Not recommended during pregnancy",
+    "safeNursing": "Generally safe while nursing",
+    "notSafeNursing": "Not recommended while nursing",
+    "backToHerbs": "Back to Herbs",
+    "traditionalUses": "Traditional Uses",
+    "modernUses": "Modern Uses",
+    "activeCompounds": "Active Compounds",
+    "drugInteractions": "Drug Interactions",
+    "preparations": "Preparations",
+    "dosage": "Dosage",
+    "adultDosage": "Adult Dosage",
+    "childDosage": "Child Dosage",
+    "safetyInfo": "Safety Information",
+    "pregnancySafety": "Pregnancy Safety",
+    "nursingSafety": "Nursing Safety",
+    "category": "Category",
+    "scientificName": "Scientific Name",
+    "commonNames": "Common Names",
+    "lastUpdated": "Last updated"
+  },
+  "admin": {
+    "title": "Admin Dashboard",
+    "herbs": {
+      "title": "Manage Herbs",
+      "addNew": "Add New Herb",
+      "edit": "Edit Herb",
+      "published": "Published",
+      "draft": "Draft"
+    },
+    "interactions": {
+      "title": "Manage Interactions"
+    },
+    "users": {
+      "title": "Users"
+    },
+    "stats": {
+      "totalHerbs": "Total Herbs",
+      "herbsDescription": "Published in database",
+      "drugInteractions": "Drug Interactions",
+      "interactionsDescription": "Known interactions",
+      "registeredUsers": "Registered Users",
+      "usersDescription": "Total accounts",
+      "interactionChecks": "Interaction Checks",
+      "checksDescription": "Checks performed"
+    }
+  },
+  "about": {
+    "title": "About HerbAlly",
+    "searchDatabase": "Search Our Database",
+    "searchDescription": "Access over 2,700 medicinal herbs with detailed information on traditional uses, active compounds, and safety.",
+    "calculateDoses": "Calculate Safe Doses",
+    "calculateDescription": "Use our calculator to determine appropriate dosages based on age, weight, and health conditions.",
+    "consultHerbalist": "Consult the Virtual Herbalist",
+    "consultDescription": "Get personalized answers to your herb questions from our AI trained on evidence-based sources."
   }
 }

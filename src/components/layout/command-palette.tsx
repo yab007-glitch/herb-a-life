@@ -6,7 +6,6 @@ import {
   Leaf,
   Calculator,
   MessageCircle,
-  LayoutDashboard,
   Search,
   AlertTriangle,
   ArrowRight,
@@ -159,11 +158,6 @@ export function CommandPalette() {
             <span>Virtual Herbalist</span>
             <CommandShortcut>G P</CommandShortcut>
           </CommandItem>
-          <CommandItem onSelect={() => navigate("/dashboard")}>
-            <LayoutDashboard />
-            <span>Dashboard</span>
-            <CommandShortcut>G D</CommandShortcut>
-          </CommandItem>
         </CommandGroup>
 
         <CommandSeparator />
@@ -174,9 +168,9 @@ export function CommandPalette() {
             <span>Search Herbs</span>
             <CommandShortcut>S H</CommandShortcut>
           </CommandItem>
-          <CommandItem onSelect={() => navigate("/dashboard/interactions")}>
+          <CommandItem onSelect={() => navigate("/pharmacist")}>
             <AlertTriangle />
-            <span>Check Interactions</span>
+            <span>Ask About Interactions</span>
             <CommandShortcut>C I</CommandShortcut>
           </CommandItem>
           <CommandItem onSelect={() => navigate("/calculator")}>

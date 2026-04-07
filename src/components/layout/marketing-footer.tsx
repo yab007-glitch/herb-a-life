@@ -6,7 +6,6 @@ const footerLinks = {
     { href: "/herbs", label: "Herb Database" },
     { href: "/calculator", label: "Dose Calculator" },
     { href: "/pharmacist", label: "Virtual Herbalist" },
-    { href: "/dashboard", label: "Dashboard" },
   ],
   resources: [
     { href: "/about", label: "About Us" },

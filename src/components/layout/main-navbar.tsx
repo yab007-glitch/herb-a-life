@@ -7,7 +7,6 @@ import {
   Menu,
   Calculator,
   MessageCircle,
-  LayoutDashboard,
   Heart,
 } from "lucide-react";
 import {
@@ -28,7 +27,6 @@ const navLinks = [
   { href: "/herbs", labelKey: "nav.herbs", icon: Leaf },
   { href: "/calculator", labelKey: "nav.calculator", icon: Calculator },
   { href: "/pharmacist", labelKey: "nav.herbalist", icon: MessageCircle },
-  { href: "/dashboard", labelKey: "nav.dashboard", icon: LayoutDashboard },
 ];
 
 export function MainNavbar() {

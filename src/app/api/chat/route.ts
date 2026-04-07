@@ -2,14 +2,19 @@ import { NextResponse, type NextRequest } from "next/server";
 import { getSystemPrompt } from "@/lib/ai/system-prompt";
 import { rateLimit } from "@/lib/rate-limit";
 
-// Ollama Cloud API configuration
-const OLLAMA_BASE_URL = process.env.OLLAMA_BASE_URL || "https://ollama.com/api";
-const DEFAULT_MODEL = "glm5:cloud";
-
 export async function POST(request: NextRequest) {
   try {
-    // Get API key at runtime (not at module load time)
+    // Get API config at runtime
     const apiKey = process.env.OLLAMA_API_KEY || process.env.OPENROUTER_API_KEY;
+    const baseUrl = process.env.OLLAMA_BASE_URL || "https://ollama.com/api";
+    const model = process.env.OLLAMA_MODEL || "glm-5:cloud";
+
+    console.log("API config:", {
+      hasKey: !!apiKey,
+      keyPrefix: apiKey?.substring(0, 10),
+      baseUrl,
+      model,
+    });
 
     // Check if API key is configured
     if (!apiKey) {
@@ -45,7 +50,6 @@ export async function POST(request: NextRequest) {
     }
 
     const systemPrompt = getSystemPrompt(herbContext, medications);
-    const model = process.env.OLLAMA_MODEL || DEFAULT_MODEL;
 
     // Format messages for Ollama API
     const ollamaMessages = [
@@ -58,12 +62,12 @@ export async function POST(request: NextRequest) {
 
     console.log("Calling Ollama API:", {
       model,
-      baseUrl: OLLAMA_BASE_URL,
+      baseUrl,
       messageCount: ollamaMessages.length,
     });
 
     // Call Ollama Cloud API
-    const response = await fetch(`${OLLAMA_BASE_URL}/chat`, {
+    const response = await fetch(`${baseUrl}/chat`, {
       method: "POST",
       headers: {
         Authorization: `Bearer ${apiKey}`,

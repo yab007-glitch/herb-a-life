@@ -15,7 +15,6 @@ const publicRoutes = [
   "/herbs",
   "/calculator",
   "/pharmacist",
-  "/dashboard",
   "/donate",
   "/robots.txt",
   "/sitemap.xml",
@@ -62,12 +61,11 @@ export async function middleware(request: NextRequest) {
     publicRoutes.some((route) => path === route) ||
     path.startsWith("/auth/") ||
     path.startsWith("/herbs/") ||
-    path.startsWith("/api/") ||
-    path.startsWith("/dashboard/");
+    path.startsWith("/api/");
 
   if (isPublic) {
     if (user && (path === "/login" || path === "/register")) {
-      return NextResponse.redirect(new URL("/dashboard", request.url));
+      return NextResponse.redirect(new URL("/herbs", request.url));
     }
     return applySecurityHeaders(supabaseResponse);
   }
@@ -88,7 +86,7 @@ export async function middleware(request: NextRequest) {
       .single();
 
     if (profile?.role !== "admin") {
-      return NextResponse.redirect(new URL("/dashboard", request.url));
+      return NextResponse.redirect(new URL("/", request.url));
     }
   }
 

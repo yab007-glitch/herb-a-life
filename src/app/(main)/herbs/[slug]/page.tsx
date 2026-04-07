@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import Link from "next/link";
 import { notFound } from "next/navigation";
+import { cookies } from "next/headers";
 import {
   ArrowLeft,
   Calculator,
@@ -29,6 +30,7 @@ import { CopyLinkButton } from "@/components/herbs/copy-link-button";
 import { HerbSchema } from "@/components/seo/herb-schema";
 import { getHerbBySlug } from "@/lib/actions/herbs";
 import { createClient } from "@supabase/supabase-js";
+import { getServerTranslation, type Locale } from "@/lib/i18n/server";
 
 // Use anon client for static generation (no cookies)
 function getAnonClient() {
@@ -126,12 +128,20 @@ export default async function HerbDetailPage({ params }: Props) {
   const { slug } = await params;
   const result = await getHerbBySlug(slug);
 
+  // Get locale from cookies
+  const cookieStore = await cookies();
+  const localeCookie = cookieStore.get("herbally-locale");
+  const locale: Locale = (localeCookie?.value as Locale) || "en";
+
+  // Translation helper
+  const t = (key: string) => getServerTranslation(locale, key);
+
   if (!result.success || !result.data) {
     notFound();
   }
 
   const herb = result.data;
-  const category = herb.herb_categories?.name || "Uncategorized";
+  const category = herb.herb_categories?.name || t("herbDetail.uncategorized");
   const interactions = herb.drug_interactions || [];
 
   return (
@@ -140,7 +150,7 @@ export default async function HerbDetailPage({ params }: Props) {
       {/* Back Button */}
       <Button variant="ghost" size="sm" render={<Link href="/herbs" />}>
         <ArrowLeft className="size-4" />
-        Back to Herbs
+        {t("herbDetail.backToHerbs")}
       </Button>
 
       {/* Header */}
@@ -163,8 +173,8 @@ export default async function HerbDetailPage({ params }: Props) {
           {herb.updated_at && (
             <span className="flex items-center gap-1.5 text-xs text-muted-foreground">
               <Clock className="size-3" />
-              Last updated{" "}
-              {new Date(herb.updated_at).toLocaleDateString("en-US", {
+              {t("herbDetail.lastUpdated")}{" "}
+              {new Date(herb.updated_at).toLocaleDateString(locale === "fr" ? "fr-FR" : "en-US", {
                 month: "short",
                 day: "numeric",
                 year: "numeric",
@@ -317,7 +327,7 @@ export default async function HerbDetailPage({ params }: Props) {
         <CardHeader>
           <CardTitle className="flex items-center gap-2 text-amber-700 dark:text-amber-400">
             <AlertTriangle className="size-5" />
-            Safety Information
+            {t("herbDetail.safetyInfo")}
           </CardTitle>
         </CardHeader>
         <CardContent className="space-y-4">
@@ -330,8 +340,8 @@ export default async function HerbDetailPage({ params }: Props) {
               )}
               <span className="text-sm">
                 {herb.pregnancy_safe
-                  ? "Generally safe during pregnancy"
-                  : "Not recommended during pregnancy"}
+                  ? t("herbDetail.safePregnancy")
+                  : t("herbDetail.notSafePregnancy")}
               </span>
             </div>
             <div className="flex items-center gap-2">
@@ -342,8 +352,8 @@ export default async function HerbDetailPage({ params }: Props) {
               )}
               <span className="text-sm">
                 {herb.nursing_safe
-                  ? "Generally safe while nursing"
-                  : "Not recommended while nursing"}
+                  ? t("herbDetail.safeNursing")
+                  : t("herbDetail.notSafeNursing")}
               </span>
             </div>
           </div>
