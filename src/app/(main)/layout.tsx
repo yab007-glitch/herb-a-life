@@ -1,6 +1,5 @@
 import { MainNavbar } from "@/components/layout/main-navbar";
 import { FDADisclaimerBanner } from "@/components/layout/fda-disclaimer-banner";
-import { CommandPalette } from "@/components/layout/command-palette";
 import { MobileTabBar } from "@/components/layout/mobile-tab-bar";
 
 export default function MainLayout({
@@ -18,7 +17,6 @@ export default function MainLayout({
         </div>
       </main>
       <MobileTabBar />
-      <CommandPalette />
     </div>
   );
 }
