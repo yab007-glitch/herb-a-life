@@ -9,7 +9,6 @@ import { EmptyState } from "@/components/shared/empty-state";
 import {
   getHerbs,
   getHerbCategories,
-  getSymptomCounts,
 } from "@/lib/actions/herbs";
 import { Flame } from "lucide-react";
 import Script from "next/script";
@@ -67,36 +66,14 @@ export default async function HerbsPage({
   const t = (key: string, params?: Record<string, string | number>) => 
     getServerTranslation(locale, key, params);
 
-  const symptoms = [
-    "headache",
-    "anxiety",
-    "insomnia",
-    "inflammation",
-    "digestive",
-    "diabetes",
-    "pain",
-    "cough",
-    "fever",
-    "skin",
-    "hypertension",
-    "fatigue",
-  ];
-
-  const [herbsResult, categoriesResult, countsResult] = await Promise.all([
+  const [herbsResult, categoriesResult] = await Promise.all([
     getHerbs({ query, category, page }),
     getHerbCategories(),
-    !query && !category
-      ? getSymptomCounts(symptoms)
-      : Promise.resolve({ success: false as const, data: undefined }),
   ]);
 
   const herbs = herbsResult.success ? herbsResult.data!.herbs : [];
   const total = herbsResult.success ? herbsResult.data!.total : 0;
   const categories = categoriesResult.success ? categoriesResult.data! : [];
-  const symptomCounts =
-    countsResult.success && countsResult.data
-      ? countsResult.data
-      : ({} as Record<string, number>);
   const totalPages = Math.ceil(total / 20);
 
   const structuredData = generateStructuredData(herbs);

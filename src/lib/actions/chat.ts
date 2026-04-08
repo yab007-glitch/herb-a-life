@@ -151,7 +151,11 @@ export async function updateChatSession(
       }
     }
 
-    const updateData: Record<string, unknown> = {
+    const updateData: {
+      messages: ChatMessage[];
+      updated_at: string;
+      title?: string;
+    } = {
       messages,
       updated_at: new Date().toISOString(),
     };

@@ -146,7 +146,7 @@ export default async function HerbDetailPage({ params }: Props) {
 
   return (
     <div className="space-y-8">
-      <HerbSchema herb={herb as any} />
+      <HerbSchema herb={herb} />
       {/* Back Button */}
       <Button variant="ghost" size="sm" render={<Link href="/herbs" />}>
         <ArrowLeft className="size-4" />
@@ -230,9 +230,9 @@ export default async function HerbDetailPage({ params }: Props) {
               </h2>
             </div>
             <ul className="space-y-2">
-              {herb.traditional_uses.map((use: string, i: number) => (
+              {herb.traditional_uses.map((use: string) => (
                 <li
-                  key={i}
+                  key={use}
                   className="flex items-start gap-2 text-sm text-muted-foreground"
                 >
                   <span className="mt-1.5 size-1.5 shrink-0 rounded-full bg-primary" />
@@ -253,9 +253,9 @@ export default async function HerbDetailPage({ params }: Props) {
               </h2>
             </div>
             <ul className="space-y-2">
-              {herb.modern_uses.map((use: string, i: number) => (
+              {herb.modern_uses.map((use: string) => (
                 <li
-                  key={i}
+                  key={use}
                   className="flex items-start gap-2 text-sm text-muted-foreground"
                 >
                   <span className="mt-1.5 size-1.5 shrink-0 rounded-full bg-green-500" />
@@ -363,15 +363,15 @@ export default async function HerbDetailPage({ params }: Props) {
                 Contraindications
               </h3>
               <ul className="space-y-1">
-                {herb.contraindications.map((c: string, i: number) => (
-                  <li
-                    key={i}
-                    className="flex items-start gap-2 text-sm text-muted-foreground"
-                  >
-                    <span className="mt-1.5 size-1.5 shrink-0 rounded-full bg-red-500" />
-                    {c}
-                  </li>
-                ))}
+              {herb.contraindications.map((c: string) => (
+                <li
+                  key={c}
+                  className="flex items-start gap-2 text-sm text-muted-foreground"
+                >
+                  <span className="mt-1.5 size-1.5 shrink-0 rounded-full bg-red-500" />
+                  {c}
+                </li>
+              ))}
               </ul>
             </div>
           )}
@@ -381,9 +381,9 @@ export default async function HerbDetailPage({ params }: Props) {
                 Possible Side Effects
               </h3>
               <ul className="space-y-1">
-                {herb.side_effects.map((s: string, i: number) => (
+                {herb.side_effects.map((s: string) => (
                   <li
-                    key={i}
+                    key={s}
                     className="flex items-start gap-2 text-sm text-muted-foreground"
                   >
                     <span className="mt-1.5 size-1.5 shrink-0 rounded-full bg-amber-500" />

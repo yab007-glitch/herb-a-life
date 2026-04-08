@@ -9,9 +9,9 @@ export async function POST(request: NextRequest) {
     const baseUrl = process.env.OLLAMA_BASE_URL || "https://ollama.com/api";
     const model = process.env.OLLAMA_MODEL || "glm-5:cloud";
 
+    // Debug logging (key info masked for security)
     console.log("API config:", {
       hasKey: !!apiKey,
-      keyPrefix: apiKey?.substring(0, 10),
       baseUrl,
       model,
     });

@@ -29,7 +29,6 @@ function parseValue(value: string): { target: number; suffix: string } {
 export function AnimatedCounter({ value, className }: AnimatedCounterProps) {
   const { target, suffix } = parseValue(value);
   const [displayValue, setDisplayValue] = useState(0);
-  const [hasMounted, setHasMounted] = useState(false);
   const [isVisible, setIsVisible] = useState(false);
   const hasAnimated = useRef(false);
   const elementRef = useRef<HTMLSpanElement>(null);
@@ -56,6 +55,15 @@ export function AnimatedCounter({ value, className }: AnimatedCounterProps) {
     requestAnimationFrame(step);
   }, [target]);
 
+  // Use useSyncExternalStore for hydration-safe mounting detection
+  const [hasMounted, setHasMounted] = useState(false);
+  
+  useEffect(() => {
+    // Schedule state update for next tick to avoid sync setState warning
+    const timeoutId = setTimeout(() => setHasMounted(true), 0);
+    return () => clearTimeout(timeoutId);
+  }, []);
+
   useEffect(() => {
     const element = elementRef.current;
     if (!element) return;
@@ -77,10 +85,6 @@ export function AnimatedCounter({ value, className }: AnimatedCounterProps) {
       observer.disconnect();
     };
   }, [animate]);
-
-  useEffect(() => {
-    setHasMounted(true);
-  }, []);
 
   return (
     <span

@@ -4,7 +4,6 @@ import {
   createContext,
   useContext,
   useState,
-  useEffect,
   ReactNode,
 } from "react";
 import { DEFAULT_LOCALE, type Locale } from "@/lib/i18n/config";
@@ -26,28 +25,42 @@ interface I18nContextType {
 
 const I18nContext = createContext<I18nContextType | null>(null);
 
+function getInitialLocale(): Locale {
+  if (typeof window === "undefined") return DEFAULT_LOCALE;
+
+  const saved = localStorage.getItem("herbally-locale");
+  if (saved && (saved === "en" || saved === "fr")) {
+    return saved as Locale;
+  }
+
+  const browserLang = navigator.language.split("-")[0];
+  if (browserLang === "fr" || browserLang === "en") {
+    const detected = browserLang as Locale;
+    localStorage.setItem("herbally-locale", detected);
+    return detected;
+  }
+
+  return DEFAULT_LOCALE;
+}
+
+function getDetectedLocale(): Locale | null {
+  if (typeof window === "undefined") return null;
+
+  const saved = localStorage.getItem("herbally-locale");
+  if (saved) return null; // User already has preference saved
+
+  const browserLang = navigator.language.split("-")[0];
+  if (browserLang === "fr" || browserLang === "en") {
+    return browserLang as Locale;
+  }
+  return null;
+}
+
 export function I18nProvider({ children }: { children: ReactNode }) {
-  const [locale, setLocaleState] = useState<Locale>(DEFAULT_LOCALE);
-  const [detectedLocale, setDetectedLocale] = useState<Locale | null>(null);
-  const [isLoading, setIsLoading] = useState(true);
-
-  useEffect(() => {
-    if (typeof window === "undefined") return;
-
-    const saved = localStorage.getItem("herbally-locale");
-    if (saved && (saved === "en" || saved === "fr")) {
-      setLocaleState(saved as Locale);
-    } else {
-      const browserLang = navigator.language.split("-")[0];
-      if (browserLang === "fr" || browserLang === "en") {
-        const detected = browserLang as Locale;
-        setDetectedLocale(detected);
-        setLocaleState(detected);
-        localStorage.setItem("herbally-locale", detected);
-      }
-    }
-    setIsLoading(false);
-  }, []);
+  const [locale, setLocaleState] = useState<Locale>(getInitialLocale);
+  const [detectedLocale] = useState<Locale | null>(getDetectedLocale);
+  // Hydration is complete after initial render since we use lazy init
+  const isLoading = false;
 
   const setLocale = (newLocale: Locale) => {
     setLocaleState(newLocale);
