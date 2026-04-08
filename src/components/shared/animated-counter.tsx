@@ -29,6 +29,7 @@ function parseValue(value: string): { target: number; suffix: string } {
 export function AnimatedCounter({ value, className }: AnimatedCounterProps) {
   const { target, suffix } = parseValue(value);
   const [displayValue, setDisplayValue] = useState(0);
+  const [hasMounted, setHasMounted] = useState(false);
   const [isVisible, setIsVisible] = useState(false);
   const hasAnimated = useRef(false);
   const elementRef = useRef<HTMLSpanElement>(null);
@@ -77,13 +78,17 @@ export function AnimatedCounter({ value, className }: AnimatedCounterProps) {
     };
   }, [animate]);
 
+  useEffect(() => {
+    setHasMounted(true);
+  }, []);
+
   return (
     <span
       ref={elementRef}
-      className={cn(isVisible && "animate-count-up", className)}
+      className={cn(isVisible && "motion-safe:animate-count-up", className)}
+      suppressHydrationWarning
     >
-      {formatNumber(displayValue)}
-      {suffix}
+      {hasMounted ? `${formatNumber(displayValue)}${suffix}` : value}
     </span>
   );
 }

@@ -32,6 +32,7 @@ export default function LandingPage() {
       descriptionFallback:
         "The most comprehensive herbal database available. Detailed profiles with active compounds, traditional uses, and modern applications.",
       gradient: "from-emerald-500 to-teal-600",
+      href: "/herbs",
     },
     {
       icon: Calculator,
@@ -41,6 +42,7 @@ export default function LandingPage() {
       descriptionFallback:
         "Calculate safe dosages using Clark's Rule, Young's Rule, BSA, and Fried's Rule. Get personalized recommendations based on age and weight.",
       gradient: "from-teal-500 to-cyan-600",
+      href: "/calculator",
     },
     {
       icon: Shield,
@@ -50,6 +52,7 @@ export default function LandingPage() {
       descriptionFallback:
         "Cross-reference your medications with our database. Identify mild, moderate, severe, and contraindicated combinations.",
       gradient: "from-cyan-500 to-blue-600",
+      href: "/herbs",
     },
     {
       icon: MessageCircle,
@@ -59,6 +62,7 @@ export default function LandingPage() {
       descriptionFallback:
         "Ask questions about herbs, dosages, and safety. Powered by evidence-based sources including WHO monographs and PubMed research.",
       gradient: "from-blue-500 to-indigo-600",
+      href: "/pharmacist",
     },
   ];
 
@@ -80,25 +84,33 @@ export default function LandingPage() {
       <FDADisclaimerBanner />
       <MarketingNavbar />
 
-      <main className="flex-1">
+      {/* CRITICAL-2: skip link target */}
+      <main id="main-content" tabIndex={-1} className="flex-1">
         {/* Hero Section */}
-        <section className="relative min-h-[90vh] overflow-hidden hero-gradient">
-          <div className="absolute inset-0 dot-pattern opacity-50" />
-          <div className="absolute -top-40 right-0 size-[600px] rounded-full bg-primary/10 blur-3xl animate-pulse-glow" />
+        <section aria-labelledby="hero-heading" className="relative min-h-[90vh] overflow-hidden hero-gradient">
+          {/* HIGH-3: decorative divs get aria-hidden */}
+          <div className="absolute inset-0 dot-pattern opacity-50" aria-hidden="true" />
+          <div className="absolute -top-40 right-0 size-[600px] rounded-full bg-primary/10 blur-3xl motion-safe:animate-pulse-glow" aria-hidden="true" />
           <div
-            className="absolute -bottom-20 left-0 size-[500px] rounded-full bg-cyan-500/10 blur-3xl animate-pulse-glow"
+            className="absolute -bottom-20 left-0 size-[500px] rounded-full bg-cyan-500/10 blur-3xl motion-safe:animate-pulse-glow"
             style={{ animationDelay: "2s" }}
+            aria-hidden="true"
           />
           <FloatingHerbs />
 
           <div className="relative mx-auto max-w-7xl px-4 py-20 sm:px-6 sm:py-28 lg:px-8">
             <div className="text-center">
-              <div className="mb-8 inline-flex items-center gap-2 rounded-full border border-primary/20 bg-primary/5 px-4 py-2 text-sm font-medium text-primary backdrop-blur-sm">
+              {/* MED-5: evidence badge with semantic role */}
+              <div
+                role="note"
+                aria-label="Platform type: Evidence-Based Herbal Medicine"
+                className="mb-8 inline-flex items-center gap-2 rounded-full border border-primary/20 bg-primary/5 px-4 py-2 text-sm font-medium text-primary backdrop-blur-sm"
+              >
                 <Sparkles className="size-4" />
                 <span>{t("home.hero.badge")}</span>
               </div>
 
-              <h1 className="mx-auto max-w-4xl text-4xl font-bold tracking-tight text-foreground sm:text-5xl md:text-6xl lg:text-7xl">
+              <h1 id="hero-heading" className="mx-auto max-w-4xl text-4xl font-bold tracking-tight text-foreground sm:text-5xl md:text-6xl lg:text-7xl">
                 {t("home.hero.title")}
               </h1>
 
@@ -106,6 +118,7 @@ export default function LandingPage() {
                 {t("home.hero.subtitle")}
               </p>
 
+              {/* MED-1: differentiated CTAs */}
               <div className="mt-10 flex flex-col items-center justify-center gap-4 sm:flex-row">
                 <Button
                   size="lg"
@@ -123,7 +136,7 @@ export default function LandingPage() {
                   render={<Link href="/pharmacist" />}
                 >
                   <MessageCircle className="size-5" />
-                  {t("home.cta.button")}
+                  {t("home.features.ai.title")}
                 </Button>
               </div>
 
@@ -143,8 +156,10 @@ export default function LandingPage() {
         </section>
 
         {/* Stats Section */}
-        <section className="border-y bg-muted/30 px-4 py-12 sm:px-6 lg:px-8">
+        <section aria-labelledby="stats-heading" className="border-y bg-muted/30 px-4 py-12 sm:px-6 lg:px-8">
           <div className="mx-auto max-w-5xl">
+            {/* LOW-1: sr-only heading for stats */}
+            <h2 id="stats-heading" className="sr-only">Platform Statistics</h2>
             <div className="grid grid-cols-1 gap-8 sm:grid-cols-3">
               {stats.map((stat) => {
                 const Icon = stat.icon;
@@ -172,10 +187,10 @@ export default function LandingPage() {
         </section>
 
         {/* Features Section */}
-        <section className="px-4 py-20 sm:px-6 lg:px-8">
+        <section aria-labelledby="features-heading" className="px-4 py-20 sm:px-6 lg:px-8">
           <div className="mx-auto max-w-7xl">
             <div className="mb-16 text-center">
-              <h2 className="text-3xl font-bold tracking-tight text-foreground sm:text-4xl">
+              <h2 id="features-heading" className="text-3xl font-bold tracking-tight text-foreground sm:text-4xl">
                 {t("home.features.title")}
               </h2>
               <p className="mx-auto mt-4 max-w-2xl text-lg text-muted-foreground">
@@ -183,31 +198,33 @@ export default function LandingPage() {
               </p>
             </div>
 
+            {/* HIGH-5 & LOW-8: feature cards as linked articles */}
             <div className="grid gap-6 md:grid-cols-2">
               {features.map((feature) => {
                 const Icon = feature.icon;
                 return (
-                  <Card
-                    key={feature.titleKey}
-                    className="feature-card group border-border/50 bg-card/50 backdrop-blur-sm"
-                  >
-                    <CardContent className="p-6">
-                      <div className="mb-4 flex items-start justify-between">
-                        <div
-                          className={`inline-flex size-12 items-center justify-center rounded-xl bg-gradient-to-br ${feature.gradient} text-white shadow-lg`}
-                        >
-                          <Icon className="size-6" />
-                        </div>
-                        <ArrowRight className="size-5 text-muted-foreground/50 transition-transform group-hover:translate-x-1 group-hover:text-primary" />
-                      </div>
-                      <h3 className="mb-2 text-xl font-semibold text-foreground">
-                        {t(feature.titleKey)}
-                      </h3>
-                      <p className="leading-relaxed text-muted-foreground">
-                        {t(feature.descriptionKey)}
-                      </p>
-                    </CardContent>
-                  </Card>
+                  <article key={feature.titleKey}>
+                    <Link href={feature.href} className="block">
+                      <Card className="feature-card group border-border/50 bg-card/50 backdrop-blur-sm">
+                        <CardContent className="p-6">
+                          <div className="mb-4 flex items-start justify-between">
+                            <div
+                              className={`inline-flex size-12 items-center justify-center rounded-xl bg-gradient-to-br ${feature.gradient} text-white shadow-lg`}
+                            >
+                              <Icon className="size-6" />
+                            </div>
+                            <ArrowRight className="size-5 text-muted-foreground/50 transition-transform group-hover:translate-x-1 group-hover:text-primary" />
+                          </div>
+                          <h3 className="mb-2 text-xl font-semibold text-foreground">
+                            {t(feature.titleKey)}
+                          </h3>
+                          <p className="leading-relaxed text-muted-foreground">
+                            {t(feature.descriptionKey)}
+                          </p>
+                        </CardContent>
+                      </Card>
+                    </Link>
+                  </article>
                 );
               })}
             </div>
@@ -215,31 +232,42 @@ export default function LandingPage() {
         </section>
 
         {/* CTA Section */}
-        <section className="px-4 py-20 sm:px-6 lg:px-8">
+        <section aria-labelledby="cta-heading" className="px-4 py-20 sm:px-6 lg:px-8">
           <div className="mx-auto max-w-4xl">
             <Card className="relative overflow-hidden border-primary/20">
-              <div className="absolute inset-0 bg-gradient-to-br from-primary/5 via-transparent to-cyan-500/5" />
-              <div className="absolute -right-20 -top-20 size-64 rounded-full bg-primary/10 blur-3xl" />
-              <div className="absolute -bottom-20 -left-20 size-64 rounded-full bg-cyan-500/10 blur-3xl" />
+              <div className="absolute inset-0 bg-gradient-to-br from-primary/5 via-transparent to-cyan-500/5" aria-hidden="true" />
+              <div className="absolute -right-20 -top-20 size-64 rounded-full bg-primary/10 blur-3xl" aria-hidden="true" />
+              <div className="absolute -bottom-20 -left-20 size-64 rounded-full bg-cyan-500/10 blur-3xl" aria-hidden="true" />
 
               <CardContent className="relative p-8 text-center sm:p-12">
                 <div className="mb-4 inline-flex size-16 items-center justify-center rounded-full bg-primary/10 text-primary">
                   <Leaf className="size-8" />
                 </div>
-                <h2 className="mb-4 text-2xl font-bold text-foreground sm:text-3xl">
+                <h2 id="cta-heading" className="mb-4 text-2xl font-bold text-foreground sm:text-3xl">
                   {t("home.cta.title")}
                 </h2>
                 <p className="mx-auto mb-8 max-w-xl text-muted-foreground">
                   {t("home.cta.subtitle")}
                 </p>
+                {/* MED-1: differentiated CTAs */}
                 <div className="flex flex-col items-center justify-center gap-4 sm:flex-row">
                   <Button
                     size="lg"
                     className="gap-2 px-8"
                     render={<Link href="/herbs" />}
                   >
-                    {t("home.cta.button")}
+                    <Leaf className="size-5" />
+                    {t("home.hero.searchButton")}
                     <ArrowRight className="size-4" />
+                  </Button>
+                  <Button
+                    variant="outline"
+                    size="lg"
+                    className="gap-2 px-8"
+                    render={<Link href="/pharmacist" />}
+                  >
+                    <MessageCircle className="size-5" />
+                    {t("home.features.ai.title")}
                   </Button>
                 </div>
               </CardContent>

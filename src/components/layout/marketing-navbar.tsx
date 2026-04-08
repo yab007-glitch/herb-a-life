@@ -18,6 +18,7 @@ import { useI18n } from "@/components/i18n/i18n-provider";
 const navLinks = [
   { href: "/herbs", labelKey: "nav.herbs" },
   { href: "/calculator", labelKey: "nav.calculator" },
+  // TODO: MED-4 — "Herbalist" label points to /pharmacist; consider renaming route or label
   { href: "/pharmacist", labelKey: "nav.herbalist" },
   { href: "/about", labelKey: "nav.about" },
 ];
@@ -31,8 +32,8 @@ export function MarketingNavbar() {
     <>
       <header className="sticky top-0 z-50 w-full border-b/50 bg-background/80 backdrop-blur-lg">
         <div className="mx-auto flex h-16 max-w-7xl items-center justify-between px-4 sm:px-6 lg:px-8">
-          {/* Logo */}
-          <Link href="/" className="flex items-center gap-2.5 group">
+          {/* LOW-5: Logo link with aria-label */}
+          <Link href="/" className="flex items-center gap-2.5 group" aria-label="HerbAlly home">
             <div className="flex size-9 items-center justify-center rounded-lg bg-gradient-to-br from-primary to-teal-600 text-white shadow-sm transition-transform group-hover:scale-105">
               <Leaf className="size-5" />
             </div>
@@ -41,8 +42,8 @@ export function MarketingNavbar() {
             </span>
           </Link>
 
-          {/* Desktop Nav */}
-          <nav className="hidden items-center gap-1 md:flex">
+          {/* Desktop Nav — LOW-2: aria-label */}
+          <nav aria-label="Main navigation" className="hidden items-center gap-1 md:flex">
             {navLinks.map((link) => (
               <Link
                 key={link.href}
@@ -60,6 +61,7 @@ export function MarketingNavbar() {
             <ThemeToggle />
             {/* Donate CTA - Prominent */}
             <button
+              type="button"
               onClick={() => setShowMission(true)}
               className="group relative flex items-center gap-1.5 rounded-full bg-gradient-to-r from-pink-500 via-rose-500 to-pink-600 px-4 py-1.5 text-sm font-semibold text-white shadow-lg shadow-pink-500/25 transition-all hover:shadow-xl hover:shadow-pink-500/30 hover:scale-105"
             >
@@ -100,6 +102,7 @@ export function MarketingNavbar() {
                 ))}
                 <div className="mt-4 flex flex-col gap-2 border-t pt-4">
                   <button
+                    type="button"
                     onClick={() => {
                       setOpen(false);
                       setShowMission(true);

@@ -6,7 +6,7 @@ import { useI18n } from "@/components/i18n/i18n-provider";
 
 export function MarketingFooter() {
   const { t } = useI18n();
-  
+
   const footerLinks = {
     product: [
       { href: "/herbs", label: t("nav.herbs") },
@@ -24,10 +24,10 @@ export function MarketingFooter() {
   return (
     <footer className="border-t bg-muted/30">
       <div className="mx-auto max-w-7xl px-4 py-12 sm:px-6 lg:px-8">
-        <div className="grid gap-8 sm:grid-cols-2 lg:grid-cols-4">
+        <nav aria-label="Footer navigation" className="grid gap-8 sm:grid-cols-2 lg:grid-cols-4">
           {/* Brand */}
           <div className="lg:col-span-2">
-            <Link href="/" className="flex items-center gap-2.5">
+            <Link href="/" className="flex items-center gap-2.5" aria-label="HerbAlly home">
               <div className="flex size-9 items-center justify-center rounded-lg bg-gradient-to-br from-primary to-teal-600 text-white">
                 <Leaf className="size-5" />
               </div>
@@ -42,9 +42,10 @@ export function MarketingFooter() {
 
           {/* Product Links */}
           <div>
-            <h3 className="mb-3 text-sm font-semibold text-foreground">
+            {/* MED-3: use <p> instead of <h3> */}
+            <p className="mb-3 text-sm font-semibold text-foreground">
               {t("footer.product")}
-            </h3>
+            </p>
             <ul className="space-y-2">
               {footerLinks.product.map((link) => (
                 <li key={link.href}>
@@ -61,9 +62,10 @@ export function MarketingFooter() {
 
           {/* Resources Links */}
           <div>
-            <h3 className="mb-3 text-sm font-semibold text-foreground">
+            {/* MED-3: use <p> instead of <h3> */}
+            <p className="mb-3 text-sm font-semibold text-foreground">
               {t("footer.resources")}
-            </h3>
+            </p>
             <ul className="space-y-2">
               {footerLinks.resources.map((link) => (
                 <li key={link.href}>
@@ -77,12 +79,12 @@ export function MarketingFooter() {
               ))}
             </ul>
           </div>
-        </div>
+        </nav>
 
-        {/* Bottom */}
+        {/* Bottom — MED-2: copyright with year */}
         <div className="mt-12 flex flex-col items-center justify-between gap-4 border-t pt-8 sm:flex-row">
           <p className="text-sm text-muted-foreground">
-            {t("footer.copyright")}
+            &copy; {new Date().getFullYear()} HerbAlly. {t("footer.copyright")}
           </p>
         </div>
       </div>

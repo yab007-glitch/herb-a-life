@@ -1,4 +1,4 @@
-import type { Metadata } from "next";
+import type { Metadata, Viewport } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
 import { Toaster } from "@/components/ui/sonner";
 import { TooltipProvider } from "@/components/ui/tooltip";
@@ -15,6 +15,10 @@ const geistMono = Geist_Mono({
   variable: "--font-geist-mono",
   subsets: ["latin"],
 });
+
+export const viewport: Viewport = {
+  themeColor: "#16a34a",
+};
 
 export const metadata: Metadata = {
   metadataBase: new URL(
@@ -56,6 +60,9 @@ export const metadata: Metadata = {
       "max-snippet": -1,
     },
   },
+  alternates: {
+    canonical: "https://herbally.app",
+  },
   openGraph: {
     type: "website",
     siteName: "HerbAlly",
@@ -70,12 +77,6 @@ export const metadata: Metadata = {
     description:
       "Explore 2,700+ medicinal herbs, calculate dosages, and check drug interactions.",
   },
-  verification: {
-    google: "google-site-verification=YOUR_CODE_HERE",
-  },
-  other: {
-    "msvalidate.01": "YOUR_BING_CODE_HERE",
-  },
 };
 
 export default function RootLayout({
@@ -86,6 +87,7 @@ export default function RootLayout({
   return (
     <html
       lang="en"
+      dir="ltr"
       className={`${geistSans.variable} ${geistMono.variable} h-full antialiased`}
     >
       <body className="min-h-full flex flex-col">

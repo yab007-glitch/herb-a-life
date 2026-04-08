@@ -5,7 +5,7 @@ export function OrganizationSchema() {
     "@context": "https://schema.org",
     "@type": "WebSite",
     name: "HerbAlly",
-    alternateName: "Herb Wise",
+    alternateName: "Herb Ally",
     url: "https://herbally.app",
     description:
       "Explore the world's largest medicinal herb database with 2,700+ herbs. Calculate safe dosages and check drug interactions.",
@@ -28,7 +28,6 @@ export function OrganizationSchema() {
       },
       "query-input": "required name=search_term_string",
     },
-    sameAs: [],
   };
 
   return (

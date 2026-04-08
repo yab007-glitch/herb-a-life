@@ -1,7 +1,6 @@
 "use client";
 
 import { Globe, Check } from "lucide-react";
-import { Button } from "@/components/ui/button";
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -16,11 +15,9 @@ export function LanguageSelector() {
 
   return (
     <DropdownMenu>
-      <DropdownMenuTrigger className="rounded-full">
-        <Button variant="ghost" size="icon" className="relative">
-          <Globe className="size-5" />
-          <span className="sr-only">Change language</span>
-        </Button>
+      <DropdownMenuTrigger className="inline-flex shrink-0 items-center justify-center rounded-full size-8 hover:bg-muted hover:text-foreground transition-all outline-none focus-visible:border-ring focus-visible:ring-3 focus-visible:ring-ring/50">
+        <Globe className="size-5" />
+        <span className="sr-only">Change language</span>
       </DropdownMenuTrigger>
       <DropdownMenuContent align="end" className="w-48">
         {/* Detected language suggestion */}
