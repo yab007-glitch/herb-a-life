@@ -6,6 +6,9 @@ export const metadata: Metadata = {
   title: "Virtual Herbalist",
   description:
     "Chat with our AI-powered virtual herbalist for guidance on herb safety, drug interactions, and usage.",
+  alternates: {
+    canonical: `${process.env.NEXT_PUBLIC_APP_URL ?? "https://herbally.app"}/pharmacist`,
+  },
 };
 
 export default async function PharmacistPage({

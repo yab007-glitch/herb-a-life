@@ -6,6 +6,9 @@ export const metadata: Metadata = {
   title: "Dose Calculator",
   description:
     "Calculate safe herbal dosages for children and infants using medically recognized formulas.",
+  alternates: {
+    canonical: `${process.env.NEXT_PUBLIC_APP_URL ?? "https://herbally.app"}/calculator`,
+  },
 };
 
 function parseDosage(dosageStr: string | null): {

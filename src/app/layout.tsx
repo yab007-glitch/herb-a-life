@@ -73,7 +73,7 @@ export const metadata: Metadata = {
   },
   twitter: {
     card: "summary_large_image",
-    title: "HerbAlly - Medicinal Herbs Database",
+    title: "HerbAlly - Your Trusted Guide to Medicinal Herbs",
     description:
       "Explore 2,700+ medicinal herbs, calculate dosages, and check drug interactions.",
   },

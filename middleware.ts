@@ -18,6 +18,7 @@ const publicRoutes = [
   "/donate",
   "/robots.txt",
   "/sitemap.xml",
+  "/manifest.webmanifest",
 ];
 
 const adminRoutes = ["/admin"];
@@ -62,6 +63,21 @@ export async function middleware(request: NextRequest) {
     path.startsWith("/auth/") ||
     path.startsWith("/herbs/") ||
     path.startsWith("/api/");
+
+  // For unknown public paths that aren't matched, let Next.js handle 404
+  // instead of redirecting to login
+  if (!isPublic && !user) {
+    // Check if this is a likely static/public path that should 404, not redirect
+    const likelyPublicPath =
+      path.endsWith(".webmanifest") ||
+      path.endsWith(".xml") ||
+      path.endsWith(".txt") ||
+      path.endsWith(".json");
+    
+    if (likelyPublicPath) {
+      return applySecurityHeaders(supabaseResponse);
+    }
+  }
 
   if (isPublic) {
     if (user && (path === "/login" || path === "/register")) {

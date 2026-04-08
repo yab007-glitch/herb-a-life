@@ -144,9 +144,90 @@ export default async function HerbDetailPage({ params }: Props) {
   const category = herb.herb_categories?.name || t("herbDetail.uncategorized");
   const interactions = herb.drug_interactions || [];
 
+  // Fetch related herbs (same category, excluding current herb)
+  let relatedHerbs: Array<{ name: string; slug: string; scientific_name: string }> = [];
+  try {
+    const supabase = getAnonClient();
+    if (supabase && herb.herb_categories?.name) {
+      const { data: related } = await supabase
+        .from("herbs")
+        .select("name, slug, scientific_name")
+        .eq("is_published", true)
+        .eq("herb_categories.name", herb.herb_categories.name)
+        .neq("slug", slug)
+        .limit(6);
+      relatedHerbs = related ?? [];
+    }
+    // Fallback: if no category matches or no results, get random herbs
+    if (relatedHerbs.length === 0 && supabase) {
+      const { data: fallback } = await supabase
+        .from("herbs")
+        .select("name, slug, scientific_name")
+        .eq("is_published", true)
+        .neq("slug", slug)
+        .limit(6);
+      relatedHerbs = fallback ?? [];
+    }
+  } catch {
+    // Related herbs are non-critical, swallow errors
+  }
+
   return (
     <div className="space-y-8">
       <HerbSchema herb={herb} />
+
+      {/* Breadcrumbs */}
+      <nav aria-label="Breadcrumb">
+        <ol className="flex items-center gap-1.5 text-sm text-muted-foreground">
+          <li>
+            <Link href="/" className="hover:text-foreground transition-colors">
+              Home
+            </Link>
+          </li>
+          <li aria-hidden="true">/</li>
+          <li>
+            <Link href="/herbs" className="hover:text-foreground transition-colors">
+              Herbs
+            </Link>
+          </li>
+          <li aria-hidden="true">/</li>
+          <li className="text-foreground font-medium" aria-current="page">
+            {herb.name}
+          </li>
+        </ol>
+      </nav>
+
+      {/* BreadcrumbList Schema */}
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{
+          __html: JSON.stringify({
+            "@context": "https://schema.org",
+            "@type": "BreadcrumbList",
+            itemListElement: [
+              {
+                "@type": "ListItem",
+                position: 1,
+                name: "Home",
+                item: "https://herbally.app",
+              },
+              {
+                "@type": "ListItem",
+                position: 2,
+                name: "Herbs",
+                item: "https://herbally.app/herbs",
+              },
+              {
+                "@type": "ListItem",
+                position: 3,
+                name: herb.name,
+                item: `https://herbally.app/herbs/${slug}`,
+              },
+            ],
+          }),
+        }}
+      />
+
       {/* Back Button */}
       <Button variant="ghost" size="sm" render={<Link href="/herbs" />}>
         <ArrowLeft className="size-4" />
@@ -398,6 +479,31 @@ export default async function HerbDetailPage({ params }: Props) {
 
       {/* Drug Interactions */}
       <InteractionsTable interactions={interactions} />
+
+      {/* Related Herbs */}
+      {relatedHerbs.length > 0 && (
+        <section aria-labelledby="related-herbs-heading">
+          <h2 id="related-herbs-heading" className="mb-4 text-xl font-semibold text-foreground">
+            Related Herbs
+          </h2>
+          <div className="grid gap-3 sm:grid-cols-2 lg:grid-cols-3">
+            {relatedHerbs.map((related) => (
+              <Link
+                key={related.slug}
+                href={`/herbs/${related.slug}`}
+                className="group rounded-lg border p-4 transition-colors hover:bg-muted/50"
+              >
+                <h3 className="font-medium text-foreground group-hover:text-primary transition-colors">
+                  {related.name}
+                </h3>
+                <p className="text-sm italic text-muted-foreground">
+                  {related.scientific_name}
+                </p>
+              </Link>
+            ))}
+          </div>
+        </section>
+      )}
 
       {/* CTA Buttons */}
       <div className="flex flex-wrap gap-3 pt-4">
