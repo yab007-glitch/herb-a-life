@@ -264,7 +264,8 @@ export const fr = {
     "terms": "Conditions d'Utilisation",
     "disclaimer": "Avertissement Médical",
     "copyright": "À des fins éducatives uniquement. Pas un avis médical.",
-    "madeWith": "Fait avec soin pour la communauté herbal"
+    "madeWith": "Fait avec soin pour la communauté herbal",
+    "followUs": "Suivez-nous"
   },
   "errors": {
     "404": {

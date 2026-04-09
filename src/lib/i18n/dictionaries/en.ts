@@ -33,7 +33,8 @@ export const en = {
       "badge": "Evidence-Based Herbal Medicine Platform",
       "title": "Your Complete Guide to Medicinal Herbs",
       "subtitle": "Explore 2,700+ herbs, calculate precise dosages, check drug interactions, and consult our AI herbalist — all in one place.",
-      "searchButton": "Explore Herbs"
+      "searchButton": "Explore All Herbs",
+      "askHerbalistButton": "Ask AI Herbalist"
     },
     "stats": {
       "herbs": "Herbs Documented",
@@ -264,7 +265,8 @@ export const en = {
     "terms": "Terms of Service",
     "disclaimer": "Medical Disclaimer",
     "copyright": "Educational purposes only. Not medical advice.",
-    "madeWith": "Made with care for the herbal community"
+    "madeWith": "Made with care for the herbal community",
+    "followUs": "Follow Us"
   },
   "errors": {
     "404": {

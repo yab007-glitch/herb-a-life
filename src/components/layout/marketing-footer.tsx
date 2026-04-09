@@ -1,7 +1,7 @@
 "use client";
 
 import Link from "next/link";
-import { Leaf } from "lucide-react";
+import { Leaf, Facebook } from "lucide-react";
 import { useI18n } from "@/components/i18n/i18n-provider";
 
 export function MarketingFooter() {
@@ -77,6 +77,26 @@ export function MarketingFooter() {
                   </Link>
                 </li>
               ))}
+            </ul>
+          </div>
+
+          {/* Social Links */}
+          <div>
+            <p className="mb-3 text-sm font-semibold text-foreground">
+              {t("footer.followUs")}
+            </p>
+            <ul className="space-y-2">
+              <li>
+                <a
+                  href="https://www.facebook.com/herballyapp/"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="inline-flex items-center gap-2 text-sm text-muted-foreground hover:text-foreground transition-colors"
+                >
+                  <Facebook className="size-4" />
+                  Facebook
+                </a>
+              </li>
             </ul>
           </div>
         </nav>
