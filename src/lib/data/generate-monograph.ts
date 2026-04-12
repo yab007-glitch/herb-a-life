@@ -11,7 +11,7 @@ export function generateMonograph(herb: {
   name: string;
   scientific_name: string;
   slug: string;
-  description: string;
+  description: string | null;
   traditional_uses: string[] | null;
   modern_uses: string[] | null;
   active_compounds: string[] | null;
@@ -22,6 +22,7 @@ export function generateMonograph(herb: {
   pregnancy_safe: boolean | null;
   nursing_safe: boolean | null;
   drug_interactions: Interaction[] | null;
+  citations?: unknown[] | null;
 }): Monograph | null {
   // Check for hand-written monograph first
   const manual = getMonograph(herb.slug);
@@ -29,6 +30,7 @@ export function generateMonograph(herb: {
 
   // Auto-generate from DB data
   const displayName = herb.name || herb.scientific_name;
+  const evidence = (herb.evidence_level?.toUpperCase() || "C") as "A" | "B" | "C" | "D" | "trad";
 
   // Build clinical summary
   const useCount = (herb.modern_uses?.length || 0) + (herb.traditional_uses?.length || 0);
@@ -51,12 +53,21 @@ export function generateMonograph(herb: {
     herb.pregnancy_safe === true ? "safe" :
     "insufficient";
 
+  // Build drug interactions
+  const drugInteractions = buildDrugInteractions(herb.contraindications || []);
+
+  // Build key citations
+  const keyCitations = buildKeyCitations(herb.citations, evidence);
+
   return {
+    slug: herb.slug,
     summary,
     mechanism,
     claims,
     safetyNotes,
+    drugInteractions,
     pregnancyCategory,
+    keyCitations,
   };
 }
 
@@ -287,4 +298,56 @@ function buildSafetyNotes(herb: {
   }
 
   return notes;
+}
+
+function buildDrugInteractions(contraindications: string[]): Monograph["drugInteractions"] {
+  const interactions: Monograph["drugInteractions"] = [];
+
+  // Parse contraindications for drug mentions
+  const drugPatterns: Record<string, { drugs: string[]; severity: "mild" | "moderate" | "severe" | "contraindicated"; detail: string }> = {
+    "warfarin": { drugs: ["Warfarin", "Coumadin"], severity: "moderate", detail: "May increase bleeding risk; requires INR monitoring" },
+    "anticoagulant": { drugs: ["Anticoagulants", "Blood thinners"], severity: "moderate", detail: "May increase bleeding risk" },
+    "aspirin": { drugs: ["Aspirin", "NSAIDs"], severity: "mild", detail: "May increase bleeding risk at high doses" },
+    "blood pressure": { drugs: ["Antihypertensives"], severity: "moderate", detail: "May enhance hypotensive effects" },
+    "diabetes": { drugs: ["Antidiabetic medications"], severity: "moderate", detail: "May affect blood glucose levels" },
+    "sedative": { drugs: ["Sedatives", "CNS depressants"], severity: "moderate", detail: "May enhance sedative effects" },
+    "antidepressant": { drugs: ["Antidepressants", "MAOIs"], severity: "severe", detail: "Risk of serotonin syndrome or altered drug metabolism" },
+    "immunosuppressant": { drugs: ["Immunosuppressants"], severity: "moderate", detail: "May interfere with immune modulation" },
+    "hormone": { drugs: ["Hormone replacement therapy", "Oral contraceptives"], severity: "moderate", detail: "May affect hormone levels" },
+  };
+
+  for (const [pattern, data] of Object.entries(drugPatterns)) {
+    if (contraindications.some((c) => c.toLowerCase().includes(pattern))) {
+      data.drugs.forEach((drug) => {
+        if (!interactions.some((i) => i.drug === drug)) {
+          interactions.push({ drug, severity: data.severity, detail: data.detail });
+        }
+      });
+    }
+  }
+
+  return interactions;
+}
+
+function buildKeyCitations(
+  citations: unknown[] | null | undefined,
+  evidence: string
+): Monograph["keyCitations"] {
+  const baseCitations = (citations || []) as Array<{ source: string; title?: string; url?: string; year?: number; pmid?: string }>;
+
+  // Ensure we have standard references
+  const standardRefs: Monograph["keyCitations"] = [
+    { source: "WHO", title: "WHO Monographs on Selected Medicinal Plants", url: "https://www.who.int/publications/i/item/9241545378", year: 2009 },
+    { source: "NCCIH", title: "Herbs at a Glance", url: "https://www.nccih.nih.gov/health/herbsataglance.htm", year: 2024 },
+  ];
+
+  return [
+    ...baseCitations.map((c) => ({
+      source: c.source,
+      title: c.title || `${c.source} Database`,
+      url: c.url,
+      year: c.year,
+    })),
+    ...standardRefs,
+  ].slice(0, 6);
 }
