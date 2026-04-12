@@ -65,6 +65,8 @@ export async function middleware(request: NextRequest) {
     publicRoutes.some((route) => path === route) ||
     path.startsWith("/auth/") ||
     path.startsWith("/herbs/") ||
+    path.startsWith("/symptoms/") ||
+    path.startsWith("/compare/") ||
     path.startsWith("/api/");
 
   // For unknown public paths that aren't matched, let Next.js handle 404
