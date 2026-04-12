@@ -50,15 +50,6 @@ const nextConfig: NextConfig = {
           },
         ],
       },
-      {
-        source: "/(.*\\.(js|css|svg|png|jpg|jpeg|gif|webp|avif|woff|woff2|ttf|otf|ico))",
-        headers: [
-          {
-            key: "Cache-Control",
-            value: "public, max-age=31536000, immutable",
-          },
-        ],
-      },
     ];
   },
 };
