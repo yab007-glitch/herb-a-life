@@ -128,36 +128,24 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   };
 }
 
-// Get evidence level from herb data (placeholder until DB has this field)
-function getEvidenceLevel(herb: any): "A" | "B" | "C" | "D" | "trad" {
-  // In the future, this would come from the database
-  // For now, we infer based on available data
-  if (herb.modern_uses && herb.modern_uses.length > 2) return "B";
-  if (herb.traditional_uses && herb.traditional_uses.length > 0) return "C";
-  return "trad";
+// Map DB evidence_level to EvidenceLevel type
+function getEvidenceLevel(level: string | null | undefined): "A" | "B" | "C" | "D" | "trad" {
+  if (level && ["A", "B", "C", "D", "trad"].includes(level)) return level as "A" | "B" | "C" | "D" | "trad";
+  return "C";
 }
 
-// Get citations from herb data (placeholder until DB has this field)
-function getCitations(herb: any) {
-  // Placeholder citations - in production these would come from the database
-  const citations: any[] = [];
-  
-  // Add WHO if applicable
-  if (herb.scientific_name) {
-    citations.push({
-      source: "WHO",
-      title: "WHO Monographs on Selected Medicinal Plants",
-      url: `https://www.who.int/publications/i/item/9789241545376`,
-    });
+// Format citations from herb data
+function formatCitations(citations: any[]): any[] {
+  if (!citations || citations.length === 0) {
+    // Default citations for herbs without specific ones
+    return [
+      {
+        source: "NCCIH",
+        title: "Herbs at a Glance",
+        url: "https://www.nccih.nih.gov/health/herbsataglance",
+      },
+    ];
   }
-  
-  // Add NCCIH
-  citations.push({
-    source: "NCCIH",
-    title: "Herbs at a Glance",
-    url: `https://www.nccih.nih.gov/health/herbsataglance`,
-  });
-  
   return citations;
 }
 
@@ -189,14 +177,21 @@ export default async function HerbDetailPage({ params }: Props) {
     mild: interactions.filter((i: any) => i.severity === "mild").length,
   };
   
-  const evidenceLevel = getEvidenceLevel(herb);
-  const citations = getCitations(herb);
-  const lastReviewed = herb.updated_at 
+  const evidenceLevel = getEvidenceLevel(herb.evidence_level);
+  const citations = formatCitations(herb.citations as any[] ?? []);
+  const lastReviewed = herb.last_reviewed 
+    ? new Date(herb.last_reviewed).toLocaleDateString(locale === "fr" ? "fr-FR" : "en-US", {
+        month: "long",
+        year: "numeric",
+      })
+    : herb.updated_at 
     ? new Date(herb.updated_at).toLocaleDateString(locale === "fr" ? "fr-FR" : "en-US", {
         month: "long",
         year: "numeric",
       })
     : undefined;
+  const reviewedBy = herb.reviewed_by || "HerbAlly Editorial Team";
+  const reviewerCredentials = herb.reviewer_credentials || "Medical herbalists and healthcare professionals";
 
   // Fetch related herbs (same category, excluding current herb)
   let relatedHerbs: Array<{ name: string; slug: string; scientific_name: string }> = [];
@@ -567,8 +562,8 @@ export default async function HerbDetailPage({ params }: Props) {
 
       {/* Source Attribution */}
       <SourceAttribution
-        reviewedBy="HerbAlly Editorial Team"
-        reviewerCredentials="Medical herbalists and healthcare professionals"
+        reviewedBy={reviewedBy}
+        reviewerCredentials={reviewerCredentials}
         lastReviewed={lastReviewed}
         sources={["WHO Monographs", "NCCIH", "PubMed", "Commission E"]}
       />

@@ -13,6 +13,7 @@ const publicRoutes = [
   "/reset-password",
   "/auth/callback",
   "/herbs",
+  "/symptoms",
   "/calculator",
   "/pharmacist",
   "/donate",

@@ -7,10 +7,12 @@ import {
   Search,
   MessageCircle,
   Calculator,
+  Stethoscope,
 } from "lucide-react";
 import { cn } from "@/lib/utils";
 
 const tabs = [
+  { label: "Symptoms", href: "/symptoms", icon: Stethoscope },
   { label: "Herbs", href: "/herbs", icon: Leaf },
   { label: "Search", href: "/herbs?focus=search", icon: Search },
   { label: "Chat", href: "/pharmacist", icon: MessageCircle },

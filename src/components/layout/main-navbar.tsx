@@ -8,6 +8,7 @@ import {
   Calculator,
   MessageCircle,
   Heart,
+  Stethoscope,
 } from "lucide-react";
 import {
   Sheet,
@@ -23,6 +24,7 @@ import { useI18n } from "@/components/i18n/i18n-provider";
 import { cn } from "@/lib/utils";
 
 const navLinks = [
+  { href: "/symptoms", labelKey: "nav.symptoms", icon: Stethoscope },
   { href: "/herbs", labelKey: "nav.herbs", icon: Leaf },
   { href: "/calculator", labelKey: "nav.calculator", icon: Calculator },
   { href: "/pharmacist", labelKey: "nav.herbalist", icon: MessageCircle },

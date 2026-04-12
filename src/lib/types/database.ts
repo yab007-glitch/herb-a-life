@@ -91,6 +91,12 @@ export type Database = {
           is_published: boolean;
           created_at: string;
           updated_at: string;
+          evidence_level: string;
+          citations: Json[];
+          reviewed_by: string | null;
+          reviewer_credentials: string | null;
+          last_reviewed: string | null;
+          symptom_keywords: string[];
         };
         Insert: {
           id?: string;
@@ -116,6 +122,12 @@ export type Database = {
           is_published?: boolean;
           created_at?: string;
           updated_at?: string;
+          evidence_level?: string;
+          citations?: Json[];
+          reviewed_by?: string | null;
+          reviewer_credentials?: string | null;
+          last_reviewed?: string | null;
+          symptom_keywords?: string[];
         };
         Update: {
           name?: string;

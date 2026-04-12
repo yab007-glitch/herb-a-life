@@ -20,10 +20,10 @@
     "system": "System"
   },
   "nav": {
+    "symptoms": "By Symptom",
     "herbs": "Herbs",
     "calculator": "Calculator",
     "herbalist": "Herbalist",
-    "dashboard": "Dashboard",
     "about": "About",
     "support": "Support Us",
     "donate": "Donate"

@@ -10,6 +10,7 @@ import {
   Shield,
   Database,
   TrendingUp,
+  Stethoscope,
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
@@ -123,11 +124,20 @@ export default function LandingPage() {
                 <Button
                   size="lg"
                   className="gap-2 px-8 py-6 text-base shadow-lg shadow-primary/25 transition-all hover:shadow-xl hover:shadow-primary/30"
+                  render={<Link href="/symptoms" />}
+                >
+                  <Stethoscope className="size-5" />
+                  Find by Symptom
+                  <ArrowRight className="size-4" />
+                </Button>
+                <Button
+                  variant="outline"
+                  size="lg"
+                  className="gap-2 px-8 py-6 text-base"
                   render={<Link href="/herbs" />}
                 >
                   <Leaf className="size-5" />
-                  {t("home.hero.searchButton")}
-                  <ArrowRight className="size-4" />
+                  Browse All Herbs
                 </Button>
                 <Button
                   variant="outline"
@@ -136,7 +146,7 @@ export default function LandingPage() {
                   render={<Link href="/pharmacist" />}
                 >
                   <MessageCircle className="size-5" />
-                  {t("home.features.ai.title")}
+                  AI Herbalist
                 </Button>
               </div>
 

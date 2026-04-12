@@ -24,6 +24,7 @@ export function MarketingFooter() {
 
   const footerLinks = {
     product: [
+      { href: "/symptoms", label: t("nav.symptoms") },
       { href: "/herbs", label: t("nav.herbs") },
       { href: "/calculator", label: t("nav.calculator") },
       { href: "/pharmacist", label: t("nav.herbalist") },
