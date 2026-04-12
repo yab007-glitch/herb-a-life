@@ -10,7 +10,7 @@ import {
   getHerbs,
   getHerbCategories,
 } from "@/lib/actions/herbs";
-import { Flame } from "lucide-react";
+import { Flame, Stethoscope } from "lucide-react";
 import Script from "next/script";
 import { getServerTranslation, type Locale } from "@/lib/i18n/server";
 import { cookies } from "next/headers";
@@ -207,6 +207,17 @@ export default async function HerbsPage({
             description={t("herbs.trySearching")}
             action={{ label: t("herbs.browseAll"), href: "/herbs" }}
           />
+          {query && (
+            <div className="text-center">
+              <Link
+                href="/symptoms"
+                className="inline-flex items-center gap-2 rounded-md bg-primary px-4 py-2 text-sm font-medium text-primary-foreground hover:bg-primary/90 transition-colors"
+              >
+                <Stethoscope className="size-4" />
+                {t("herbs.browseSymptoms")}
+              </Link>
+            </div>
+          )}
         </div>
       )}
 

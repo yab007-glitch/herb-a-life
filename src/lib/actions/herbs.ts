@@ -32,22 +32,46 @@ export async function getHerbs(params: {
 
     if (params.query) {
       const q = params.query.trim();
+      const words = q.split(/\s+/).filter(Boolean);
 
-      // Use RPC for deep symptom search (searches traditional_uses, modern_uses arrays)
-      const { data: rpcResults } = await supabase.rpc(
-        "search_herbs_by_symptom",
-        { search_term: q }
-      );
-      const matchedIds = (rpcResults || []).map((h: { id: string }) => h.id);
+      if (words.length > 0) {
+        // Try symptom_keywords match first (array contains any word)
+        const { data: keywordResults } = await supabase
+          .from("herbs")
+          .select("id")
+          .eq("is_published", true)
+          .contains("symptom_keywords", [words[0].toLowerCase()])
+          .limit(100);
 
-      if (matchedIds.length > 0) {
-        query = query.in("id", matchedIds);
-      } else {
-        // Fallback to safe parameterized search using ilike
-        const pattern = `%${q}%`;
-        query = query.or(
-          `name.ilike.${pattern},scientific_name.ilike.${pattern},description.ilike.${pattern}`
-        );
+        let matchedIds: string[] = (keywordResults || []).map((h: { id: string }) => h.id);
+
+        // If no keyword matches, try the RPC function
+        if (matchedIds.length === 0) {
+          const { data: rpcResults } = await supabase.rpc(
+            "search_herbs_by_symptom",
+            { search_term: q }
+          );
+          matchedIds = (rpcResults || []).map((h: { id: string }) => h.id);
+        }
+
+        if (matchedIds.length > 0) {
+          query = query.in("id", matchedIds);
+        } else {
+          // Fallback: search individual words with OR
+          // For multi-word queries like "anxiety stress calm", search each word
+          const patterns = words.map(w => `%${w}%`);
+          if (words.length === 1) {
+            query = query.or(
+              `name.ilike.${patterns[0]},scientific_name.ilike.${patterns[0]},description.ilike.${patterns[0]}`
+            );
+          } else {
+            // Build OR conditions for each word across all columns
+            const conditions = words
+              .map(w => `name.ilike.%${w}%,scientific_name.ilike.%${w}%,description.ilike.%${w}%,traditional_uses.cs.{${w}},modern_uses.cs.{${w}}`)
+              .join(",");
+            query = query.or(conditions);
+          }
+        }
       }
     }
 

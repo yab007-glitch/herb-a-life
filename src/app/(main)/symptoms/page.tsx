@@ -19,10 +19,10 @@ const symptomCategories = [
     color: "text-purple-600 dark:text-purple-400",
     bgColor: "bg-purple-100 dark:bg-purple-900/30",
     symptoms: [
-      { name: "Anxiety & Stress", query: "anxiety stress calm relax", description: "Herbs traditionally used for anxiety and stress relief" },
-      { name: "Depression & Mood", query: "depression mood uplift", description: "Herbs that may support mood and emotional wellbeing" },
-      { name: "Sleep & Insomnia", query: "sleep insomnia rest relaxation", description: "Herbs traditionally used to promote sleep" },
-      { name: "Focus & Memory", query: "focus memory concentration cognitive", description: "Herbs that may support cognitive function" },
+      { name: "Anxiety & Stress", query: "anxiety", description: "Herbs traditionally used for anxiety and stress relief" },
+      { name: "Depression & Mood", query: "depression", description: "Herbs that may support mood and emotional wellbeing" },
+      { name: "Sleep & Insomnia", query: "sleep", description: "Herbs traditionally used to promote sleep" },
+      { name: "Focus & Memory", query: "focus", description: "Herbs that may support cognitive function" },
     ],
   },
   {
@@ -31,10 +31,10 @@ const symptomCategories = [
     color: "text-red-600 dark:text-red-400",
     bgColor: "bg-red-100 dark:bg-red-900/30",
     symptoms: [
-      { name: "Inflammation", query: "inflammation anti-inflammatory swelling", description: "Herbs with anti-inflammatory properties" },
-      { name: "Joint & Muscle Pain", query: "joint muscle pain arthritis soreness", description: "Herbs for musculoskeletal discomfort" },
-      { name: "Headaches & Migraines", query: "headache migraine tension", description: "Herbs traditionally used for headache relief" },
-      { name: "Nerve Pain", query: "nerve pain neuropathy", description: "Herbs that may support nerve health" },
+      { name: "Inflammation", query: "inflammation", description: "Herbs with anti-inflammatory properties" },
+      { name: "Joint & Muscle Pain", query: "joint", description: "Herbs for musculoskeletal discomfort" },
+      { name: "Headaches & Migraines", query: "headache", description: "Herbs traditionally used for headache relief" },
+      { name: "Nerve Pain", query: "nerve", description: "Herbs that may support nerve health" },
     ],
   },
   {
@@ -43,10 +43,10 @@ const symptomCategories = [
     color: "text-green-600 dark:text-green-400",
     bgColor: "bg-green-100 dark:bg-green-900/30",
     symptoms: [
-      { name: "Indigestion & Bloating", query: "indigestion bloating digestive gas", description: "Herbs for digestive comfort" },
-      { name: "Nausea", query: "nausea upset stomach queasy", description: "Herbs traditionally used for nausea relief" },
-      { name: "Constipation", query: "constipation bowel laxative", description: "Herbs that support regularity" },
-      { name: "Liver Support", query: "liver detox hepatoprotective", description: "Herbs that support liver health" },
+      { name: "Indigestion & Bloating", query: "digestion", description: "Herbs for digestive comfort" },
+      { name: "Nausea", query: "nausea", description: "Herbs traditionally used for nausea relief" },
+      { name: "Constipation", query: "constipation", description: "Herbs that support regularity" },
+      { name: "Liver Support", query: "liver", description: "Herbs that support liver health" },
     ],
   },
   {
@@ -55,9 +55,9 @@ const symptomCategories = [
     color: "text-rose-600 dark:text-rose-400",
     bgColor: "bg-rose-100 dark:bg-rose-900/30",
     symptoms: [
-      { name: "Blood Pressure", query: "blood pressure hypertension cardiovascular", description: "Herbs that may support cardiovascular health" },
-      { name: "Cholesterol", query: "cholesterol lipid cardiovascular", description: "Herbs traditionally used for lipid management" },
-      { name: "Circulation", query: "circulation blood flow cold hands feet", description: "Herbs that may improve circulation" },
+      { name: "Blood Pressure", query: "blood pressure", description: "Herbs that may support cardiovascular health" },
+      { name: "Cholesterol", query: "cholesterol", description: "Herbs traditionally used for lipid management" },
+      { name: "Circulation", query: "circulation", description: "Herbs that may improve circulation" },
     ],
   },
   {
@@ -66,10 +66,10 @@ const symptomCategories = [
     color: "text-blue-600 dark:text-blue-400",
     bgColor: "bg-blue-100 dark:bg-blue-900/30",
     symptoms: [
-      { name: "Cold & Flu", query: "cold flu immune antiviral", description: "Herbs for immune support during illness" },
-      { name: "Cough & Sore Throat", query: "cough sore throat expectorant", description: "Herbs traditionally used for respiratory relief" },
-      { name: "Allergies", query: "allergy antihistamine hay fever", description: "Herbs that may help with allergic responses" },
-      { name: "Immune Support", query: "immune system defense resistance", description: "Herbs for general immune support" },
+      { name: "Cold & Flu", query: "cold", description: "Herbs for immune support during illness" },
+      { name: "Cough & Sore Throat", query: "cough", description: "Herbs traditionally used for respiratory relief" },
+      { name: "Allergies", query: "allergy", description: "Herbs that may help with allergic responses" },
+      { name: "Immune Support", query: "immune", description: "Herbs for general immune support" },
     ],
   },
   {
@@ -78,9 +78,9 @@ const symptomCategories = [
     color: "text-pink-600 dark:text-pink-400",
     bgColor: "bg-pink-100 dark:bg-pink-900/30",
     symptoms: [
-      { name: "Menstrual Cramps", query: "menstrual cramps period pain PMS", description: "Herbs for menstrual comfort" },
-      { name: "Menopause", query: "menopause hot flashes hormonal balance", description: "Herbs traditionally used during menopause" },
-      { name: "Hormonal Balance", query: "hormonal balance endocrine adaptogen", description: "Herbs that may support hormonal health" },
+      { name: "Menstrual Cramps", query: "menstrual", description: "Herbs for menstrual comfort" },
+      { name: "Menopause", query: "menopause", description: "Herbs traditionally used during menopause" },
+      { name: "Hormonal Balance", query: "hormonal", description: "Herbs that may support hormonal health" },
     ],
   },
   {
@@ -89,9 +89,9 @@ const symptomCategories = [
     color: "text-amber-600 dark:text-amber-400",
     bgColor: "bg-amber-100 dark:bg-amber-900/30",
     symptoms: [
-      { name: "Eczema & Psoriasis", query: "eczema psoriasis skin inflammation", description: "Herbs for inflammatory skin conditions" },
-      { name: "Wound Healing", query: "wound healing antiseptic skin repair", description: "Herbs traditionally used for wound care" },
-      { name: "Acne", query: "acne skin blemish antibacterial", description: "Herbs that may support clear skin" },
+      { name: "Eczema & Psoriasis", query: "skin", description: "Herbs for inflammatory skin conditions" },
+      { name: "Wound Healing", query: "wound", description: "Herbs traditionally used for wound care" },
+      { name: "Acne", query: "acne", description: "Herbs that may support clear skin" },
     ],
   },
 ];

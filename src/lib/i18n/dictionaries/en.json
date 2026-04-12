@@ -83,8 +83,9 @@
     "herbSingular": "herb",
     "herbPlural": "herbs",
     "noHerbsQuery": "No herbs found for \"{query}\"",
-    "trySearching": "Try searching for a symptom like headache, anxiety, or inflammation.",
+    "trySearching": "Try a single keyword like \"anxiety\", \"inflammation\", or \"sleep\". You can also browse by symptom category.",
     "browseAll": "Browse All Herbs",
+    "browseSymptoms": "Browse by Symptom",
     "pagination": {
       "previous": "Previous",
       "next": "Next",
