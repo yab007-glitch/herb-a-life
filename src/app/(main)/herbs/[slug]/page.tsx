@@ -26,7 +26,7 @@ import {
 } from "@/components/ui/card";
 import { Separator } from "@/components/ui/separator";
 import { HerbSafetyBadges } from "@/components/herbs/herb-safety-badges";
-import { InteractionsTable } from "@/components/herbs/interactions-table";
+import { InteractionsTable, type Interaction } from "@/components/herbs/interactions-table";
 import { CopyLinkButton } from "@/components/herbs/copy-link-button";
 import { HerbSchema } from "@/components/seo/herb-schema";
 import { EvidenceGrade } from "@/components/herbs/evidence-grade";
@@ -178,7 +178,7 @@ export default async function HerbDetailPage({ params }: Props) {
 
   const herb = result.data;
   const category = herb.herb_categories?.name || t("herbDetail.uncategorized");
-  const interactions = herb.drug_interactions || [];
+  const interactions = (herb.drug_interactions || []) as Interaction[];
   
   // Calculate severity counts for interactions
   const severityCounts = {
@@ -617,6 +617,19 @@ export default async function HerbDetailPage({ params }: Props) {
           <AlertTriangle className="size-4" />
           Check Interactions
         </Button>
+      </div>
+
+      {/* Report Issue */}
+      <div className="mt-8 rounded-lg border border-dashed p-4 text-center">
+        <p className="text-sm text-muted-foreground">
+          Found an error or have a correction for {herb.name}?
+        </p>
+        <a
+          href={`mailto:support@herbally.app?subject=Correction%20for%20${encodeURIComponent(herb.name)}%20(${encodeURIComponent(herb.scientific_name)})&body=I%20found%20an%20error%20on%20the%20${encodeURIComponent(herb.name)}%20page%3A%0A%0A`}
+          className="mt-1 inline-flex items-center gap-1 text-sm font-medium text-primary hover:underline"
+        >
+          Report an issue →
+        </a>
       </div>
     </div>
   );

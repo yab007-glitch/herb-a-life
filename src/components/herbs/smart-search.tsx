@@ -101,6 +101,7 @@ export function SmartSearch({ defaultValue = "", category }: SmartSearchProps) {
             <button
               type="button"
               onClick={handleClear}
+              aria-label="Clear search"
               className="absolute right-3 top-1/2 -translate-y-1/2 text-muted-foreground hover:text-foreground"
             >
               <X className="size-4" />

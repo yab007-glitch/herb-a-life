@@ -5,7 +5,7 @@ import { ChevronDown, ChevronUp } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { useI18n } from "@/components/i18n/i18n-provider";
 
-type Interaction = {
+export type Interaction = {
   id: string;
   drug_name: string;
   severity: "mild" | "moderate" | "severe" | "contraindicated";

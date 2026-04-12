@@ -3,6 +3,7 @@ import type { Metadata } from "next";
 export const metadata: Metadata = {
   title: "Terms of Service",
   description: "HerbAlly terms of service and conditions of use.",
+  alternates: { canonical: "https://herbally.app/terms" },
 };
 
 export default function TermsPage() {

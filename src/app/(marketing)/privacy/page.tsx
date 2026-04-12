@@ -4,6 +4,7 @@ export const metadata: Metadata = {
   title: "Privacy Policy",
   description:
     "HerbAlly privacy policy - how we collect, use, and protect your data.",
+  alternates: { canonical: "https://herbally.app/privacy" },
 };
 
 export default function PrivacyPage() {

@@ -14,6 +14,9 @@ export const metadata: Metadata = {
   title: "About HerbAlly",
   description:
     "Learn about HerbAlly, our mission, and how we help you make informed decisions about medicinal herbs.",
+  alternates: {
+    canonical: "https://herbally.app/about",
+  },
 };
 
 const howItWorks = [

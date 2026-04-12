@@ -5,6 +5,7 @@ import { FDA_DISCLAIMER_FULL } from "@/lib/constants/fda-disclaimer";
 export const metadata: Metadata = {
   title: "Medical Disclaimer",
   description: "Read the full medical and FDA disclaimer for HerbAlly.",
+  alternates: { canonical: "https://herbally.app/disclaimer" },
 };
 
 export default function DisclaimerPage() {

@@ -14,6 +14,7 @@ const publicRoutes = [
   "/auth/callback",
   "/herbs",
   "/symptoms",
+  "/faq",
   "/calculator",
   "/pharmacist",
   "/donate",
