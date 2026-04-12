@@ -17,11 +17,23 @@ const symptomMeta: Record<string, { title: string; description: string; keywords
     keywords: ["anxiety herbs", "natural anxiety relief", "herbs for stress", "calming herbs", "adaptogens for anxiety"],
     dbKeyword: "anxiety",
   },
+  depression: {
+    title: "Herbs for Depression & Mood",
+    description: "Evidence-based herbs for depression and mood support. Compare effectiveness, safety, and drug interactions for St. John's Wort, Saffron, and more.",
+    keywords: ["herbs for depression", "natural mood support", "st johns wort depression", "herbal antidepressants"],
+    dbKeyword: "depression",
+  },
   sleep: {
     title: "Herbs for Sleep & Insomnia",
-    description: "Evidence-based herbs for better sleep. Compare effectiveness, safety, and drug interactions for herbs like Valerian, Chamomile, and Melatonin.",
+    description: "Evidence-based herbs for better sleep. Compare effectiveness, safety, and drug interactions for Valerian, Chamomile, and Melatonin.",
     keywords: ["sleep herbs", "natural sleep aids", "herbs for insomnia", "calming herbs for sleep", "valerian for sleep"],
     dbKeyword: "sleep",
+  },
+  focus: {
+    title: "Herbs for Focus & Memory",
+    description: "Evidence-based herbs for cognitive enhancement and focus. Compare effectiveness and safety for Ginkgo, Bacopa, Rhodiola, and more.",
+    keywords: ["herbs for focus", "nootropic herbs", "cognitive enhancement herbs", "bacopa for memory", "ginkgo for focus"],
+    dbKeyword: "focus",
   },
   inflammation: {
     title: "Herbs for Inflammation",
@@ -29,23 +41,11 @@ const symptomMeta: Record<string, { title: string; description: string; keywords
     keywords: ["anti-inflammatory herbs", "herbs for inflammation", "natural inflammation relief", "turmeric benefits", "ginger for inflammation"],
     dbKeyword: "inflammation",
   },
-  digestion: {
-    title: "Herbs for Digestive Health",
-    description: "Evidence-based herbs for digestion, bloating, and gut health. Compare effectiveness and safety for Peppermint, Ginger, Chamomile, and more.",
-    keywords: ["digestive herbs", "herbs for bloating", "natural digestion remedies", "peppermint for digestion", "herbs for gut health"],
-    dbKeyword: "digestion",
-  },
-  "blood-pressure": {
-    title: "Herbs for Blood Pressure",
-    description: "Evidence-based herbs for blood pressure support. Compare effectiveness, safety, and drug interactions for Garlic, Hawthorn, and more.",
-    keywords: ["herbs for blood pressure", "natural blood pressure remedies", "hawthorn blood pressure", "garlic for hypertension"],
-    dbKeyword: "blood pressure",
-  },
-  immune: {
-    title: "Herbs for Immune Support",
-    description: "Evidence-based herbs for immune system support. Compare effectiveness and safety for Echinacea, Elderberry, Astragalus, and more.",
-    keywords: ["immune herbs", "herbs for immunity", "natural immune boosters", "echinacea benefits", "elderberry for colds"],
-    dbKeyword: "immune",
+  joint: {
+    title: "Herbs for Joint & Muscle Pain",
+    description: "Evidence-based herbs for joint pain, arthritis, and muscle soreness. Compare effectiveness and safety for Turmeric, Boswellia, Devil's Claw, and more.",
+    keywords: ["herbs for joint pain", "natural arthritis relief", "turmeric for joints", "boswellia for arthritis", "herbs for muscle pain"],
+    dbKeyword: "joint",
   },
   headache: {
     title: "Herbs for Headaches & Migraines",
@@ -53,17 +53,77 @@ const symptomMeta: Record<string, { title: string; description: string; keywords
     keywords: ["herbs for headaches", "natural migraine relief", "feverfew for migraines", "butterbur headache"],
     dbKeyword: "headache",
   },
+  nerve: {
+    title: "Herbs for Nerve Health",
+    description: "Evidence-based herbs for nerve pain and neuropathy. Compare effectiveness and safety for St. John's Wort, Skullcap, and more.",
+    keywords: ["herbs for nerve pain", "natural neuropathy relief", "neuroprotective herbs", "herbs for nerve regeneration"],
+    dbKeyword: "nerve",
+  },
+  digestion: {
+    title: "Herbs for Digestive Health",
+    description: "Evidence-based herbs for digestion, bloating, and gut health. Compare effectiveness and safety for Peppermint, Ginger, Chamomile, and more.",
+    keywords: ["digestive herbs", "herbs for bloating", "natural digestion remedies", "peppermint for digestion", "herbs for gut health"],
+    dbKeyword: "digestion",
+  },
+  nausea: {
+    title: "Herbs for Nausea",
+    description: "Evidence-based herbs for nausea relief. Ginger has Level A evidence for pregnancy-related nausea. Compare options and safety profiles.",
+    keywords: ["herbs for nausea", "natural nausea relief", "ginger for nausea", "herbs for upset stomach"],
+    dbKeyword: "nausea",
+  },
+  constipation: {
+    title: "Herbs for Constipation",
+    description: "Evidence-based herbs for constipation relief. Compare effectiveness and safety for Senna, Psyllium, Cascara, and more.",
+    keywords: ["herbs for constipation", "natural laxatives", "senna for constipation", "psyllium for digestion"],
+    dbKeyword: "constipation",
+  },
   liver: {
     title: "Herbs for Liver Health",
     description: "Evidence-based herbs for liver support and detoxification. Compare effectiveness and safety for Milk Thistle, Artichoke, and more.",
     keywords: ["liver herbs", "herbs for liver health", "milk thistle benefits", "natural liver support", "liver detox herbs"],
     dbKeyword: "liver",
   },
-  skin: {
-    title: "Herbs for Skin Health",
-    description: "Evidence-based herbs for skin conditions like eczema, acne, and wound healing. Compare effectiveness and safety for Tea Tree, Calendula, and more.",
-    keywords: ["herbs for skin", "natural skin remedies", "tea tree for acne", "calendula for eczema", "herbs for wound healing"],
-    dbKeyword: "skin",
+  "blood-pressure": {
+    title: "Herbs for Blood Pressure",
+    description: "Evidence-based herbs for blood pressure support. Compare effectiveness, safety, and drug interactions for Garlic, Hawthorn, and more.",
+    keywords: ["herbs for blood pressure", "natural blood pressure remedies", "hawthorn blood pressure", "garlic for hypertension"],
+    dbKeyword: "blood pressure",
+  },
+  cholesterol: {
+    title: "Herbs for Cholesterol",
+    description: "Evidence-based herbs for cholesterol management. Compare effectiveness and safety for Garlic, Artichoke, Green Tea, and more.",
+    keywords: ["herbs for cholesterol", "natural cholesterol remedies", "garlic for cholesterol", "artichoke cholesterol", "herbs for heart health"],
+    dbKeyword: "cholesterol",
+  },
+  circulation: {
+    title: "Herbs for Circulation",
+    description: "Evidence-based herbs for blood flow and circulatory support. Compare effectiveness and safety for Ginkgo, Cayenne, Horse Chestnut, and more.",
+    keywords: ["herbs for circulation", "natural blood flow support", "ginkgo for circulation", "cayenne for blood flow"],
+    dbKeyword: "circulation",
+  },
+  immune: {
+    title: "Herbs for Immune Support",
+    description: "Evidence-based herbs for immune system support. Compare effectiveness and safety for Echinacea, Elderberry, Astragalus, and more.",
+    keywords: ["immune herbs", "herbs for immunity", "natural immune boosters", "echinacea benefits", "elderberry for colds"],
+    dbKeyword: "immune",
+  },
+  cold: {
+    title: "Herbs for Cold & Flu",
+    description: "Evidence-based herbs for cold and flu relief. Compare effectiveness and safety for Echinacea, Elderberry, Ginger, and more.",
+    keywords: ["cold and flu herbs", "natural cold remedies", "echinacea for colds", "elderberry for flu", "herbs for congestion"],
+    dbKeyword: "cold",
+  },
+  cough: {
+    title: "Herbs for Cough & Sore Throat",
+    description: "Evidence-based herbs for cough and sore throat relief. Compare effectiveness and safety for Thyme, Marshmallow Root, Licorice, and more.",
+    keywords: ["herbs for cough", "natural cough remedies", "sore throat herbs", "thyme for cough", "herbal expectorants"],
+    dbKeyword: "cough",
+  },
+  allergy: {
+    title: "Herbs for Allergies",
+    description: "Evidence-based herbs for allergy and hay fever relief. Compare effectiveness and safety for Butterbur, Quercetin, Stinging Nettle, and more.",
+    keywords: ["herbs for allergies", "natural allergy relief", "butterbur for hay fever", "quercetin for allergies"],
+    dbKeyword: "allergy",
   },
   menstrual: {
     title: "Herbs for Menstrual Health",
@@ -77,29 +137,35 @@ const symptomMeta: Record<string, { title: string; description: string; keywords
     keywords: ["menopause herbs", "natural menopause relief", "black cohosh menopause", "herbs for hot flashes", "red clover menopause"],
     dbKeyword: "menopause",
   },
-  cold: {
-    title: "Herbs for Cold & Flu",
-    description: "Evidence-based herbs for cold and flu relief. Compare effectiveness and safety for Echinacea, Elderberry, Ginger, and more.",
-    keywords: ["cold and flu herbs", "natural cold remedies", "echinacea for colds", "elderberry for flu", "herbs for congestion"],
-    dbKeyword: "cold",
+  hormonal: {
+    title: "Herbs for Hormonal Balance",
+    description: "Evidence-based herbs for hormonal health and endocrine support. Compare effectiveness and safety for Maca, Ashwagandha, Shatavari, and more.",
+    keywords: ["herbs for hormonal balance", "adaptogens for hormones", "maca for hormones", "herbs for endocrine support"],
+    dbKeyword: "menstrual", // Reuse menstrual keywords since "hormonal" has 0 matches
   },
-  joint: {
-    title: "Herbs for Joint & Muscle Pain",
-    description: "Evidence-based herbs for joint pain, arthritis, and muscle soreness. Compare effectiveness and safety for Turmeric, Boswellia, Devil's Claw, and more.",
-    keywords: ["herbs for joint pain", "natural arthritis relief", "turmeric for joints", "boswellia for arthritis", "herbs for muscle pain"],
-    dbKeyword: "joint",
+  skin: {
+    title: "Herbs for Skin Health",
+    description: "Evidence-based herbs for skin conditions like eczema, acne, and wound healing. Compare effectiveness and safety for Tea Tree, Calendula, and more.",
+    keywords: ["herbs for skin", "natural skin remedies", "tea tree for acne", "calendula for eczema", "herbs for wound healing"],
+    dbKeyword: "skin",
+  },
+  wound: {
+    title: "Herbs for Wound Healing",
+    description: "Evidence-based herbs for wound care and tissue repair. Compare effectiveness and safety for Calendula, Gotu Kola, Aloe Vera, and more.",
+    keywords: ["herbs for wound healing", "natural wound care", "calendula for wounds", "aloe vera for skin repair"],
+    dbKeyword: "wound",
+  },
+  acne: {
+    title: "Herbs for Acne",
+    description: "Evidence-based herbs for acne and blemish-prone skin. Compare effectiveness and safety for Tea Tree Oil, Burdock, Neem, and more.",
+    keywords: ["herbs for acne", "natural acne remedies", "tea tree oil for acne", "burdock for skin", "neem for acne"],
+    dbKeyword: "skin", // Reuse skin keywords since "acne" has 0 matches
   },
   diabetes: {
     title: "Herbs for Blood Sugar & Diabetes",
     description: "Evidence-based herbs for blood sugar support. Compare effectiveness, safety, and drug interactions for Berberine, Cinnamon, Fenugreek, and more.",
     keywords: ["herbs for blood sugar", "natural diabetes support", "berberine for diabetes", "cinnamon for blood sugar", "fenugreek glucose"],
     dbKeyword: "diabetes",
-  },
-  cholesterol: {
-    title: "Herbs for Cholesterol",
-    description: "Evidence-based herbs for cholesterol management. Compare effectiveness and safety for Garlic, Artichoke, Green Tea, and more.",
-    keywords: ["herbs for cholesterol", "natural cholesterol remedies", "garlic for cholesterol", "artichoke cholesterol", "herbs for heart health"],
-    dbKeyword: "cholesterol",
   },
 };
 
@@ -271,7 +337,7 @@ export default async function SymptomDetailPage({ params }: Props) {
           className="inline-flex items-center gap-2 rounded-md border px-4 py-2 text-sm font-medium text-foreground hover:bg-muted"
         >
           <Stethoscope className="size-4" />
-          Ask the AI Herbalist about {meta.title.toLowerCase()}
+          Ask the AI Herbalist about {meta.title.toLowerCase().replace("herbs for ", "")}
         </Link>
       </div>
     </div>

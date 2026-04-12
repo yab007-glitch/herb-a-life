@@ -36,7 +36,7 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
       changeFrequency: "weekly",
       priority: 0.9,
     },
-    ...(["anxiety", "sleep", "inflammation", "digestion", "blood-pressure", "immune", "headache", "liver", "skin", "menstrual", "menopause", "cold", "joint", "diabetes", "cholesterol"].map((s) => ({
+    ...(["anxiety", "sleep", "inflammation", "digestion", "blood-pressure", "immune", "headache", "liver", "skin", "menstrual", "menopause", "cold", "joint", "diabetes", "cholesterol", "depression", "focus", "nausea", "constipation", "nerve", "circulation", "allergy", "cough", "wound", "acne", "hormonal"].map((s) => ({
       url: `${baseUrl}/symptoms/${s}`,
       lastModified: new Date(),
       changeFrequency: "weekly" as const,

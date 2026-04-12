@@ -34,6 +34,7 @@ import { EvidenceGrade } from "@/components/herbs/evidence-grade";
 import { SafetyAlert, InteractionAlert, PregnancyAlert } from "@/components/herbs/safety-alert";
 import { CitationsList, SourceAttribution } from "@/components/herbs/citations";
 import { getMonograph } from "@/lib/data/monographs";
+import { generateMonograph } from "@/lib/data/generate-monograph";
 import { getHerbBySlug } from "@/lib/actions/herbs";
 import { createClient } from "@supabase/supabase-js";
 import { getServerTranslation, type Locale } from "@/lib/i18n/server";
@@ -179,7 +180,7 @@ export default async function HerbDetailPage({ params }: Props) {
   }
 
   const herb = result.data;
-  const monograph = getMonograph(slug);
+  const monograph = generateMonograph(herb);
   const category = herb.herb_categories?.name || t("herbDetail.uncategorized");
   const interactions = (herb.drug_interactions || []) as Interaction[];
   
@@ -374,7 +375,7 @@ export default async function HerbDetailPage({ params }: Props) {
       <Separator />
 
       {/* Per-Claim Evidence (from monograph) */}
-      {monograph && monograph.dosageEvidence.length > 0 && (
+      {monograph && monograph.claims.length > 0 && (
         <>
           <section>
             <h2 className="mb-3 flex items-center gap-2 text-xl font-semibold text-foreground">
@@ -382,7 +383,7 @@ export default async function HerbDetailPage({ params }: Props) {
               Evidence by Claim
             </h2>
             <div className="space-y-3">
-              {monograph.dosageEvidence.map((claim: { claim: string; evidence: string; note?: string }) => (
+              {monograph.claims.map((claim) => (
                 <div
                   key={claim.claim}
                   className="flex items-start justify-between gap-4 rounded-lg border p-3"
