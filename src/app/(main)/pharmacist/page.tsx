@@ -1,5 +1,5 @@
 import type { Metadata } from "next";
-import { AlertTriangle, Info } from "lucide-react";
+import { Info } from "lucide-react";
 import { ChatInterface } from "@/components/pharmacist/chat-interface";
 import { SafetyAlert } from "@/components/herbs/safety-alert";
 import { getHerbBySlug } from "@/lib/actions/herbs";

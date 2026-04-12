@@ -71,7 +71,7 @@ export function CitationsList({ citations, className }: CitationsListProps) {
 }
 
 // Component for a single inline citation
-export function InlineCitation({ source, title, url, pmid }: Omit<Citation, 'year'>) {
+export function InlineCitation({ source, url, pmid }: Omit<Citation, 'year' | 'title'>) {
   const linkUrl = url || (pmid ? `https://pubmed.ncbi.nlm.nih.gov/${pmid}/` : null);
   
   if (!linkUrl) {

@@ -134,10 +134,16 @@ function getEvidenceLevel(level: string | null | undefined): "A" | "B" | "C" | "
   return "C";
 }
 
-// Format citations from herb data
-function formatCitations(citations: any[]): any[] {
+interface CitationData {
+  source: string;
+  title?: string;
+  url?: string;
+  year?: number;
+  pmid?: string;
+}
+
+function formatCitations(citations: CitationData[] | null | undefined): CitationData[] {
   if (!citations || citations.length === 0) {
-    // Default citations for herbs without specific ones
     return [
       {
         source: "NCCIH",
@@ -148,6 +154,11 @@ function formatCitations(citations: any[]): any[] {
   }
   return citations;
 }
+
+type DrugInteraction = {
+  severity: string;
+  [key: string]: unknown;
+};
 
 export default async function HerbDetailPage({ params }: Props) {
   const { slug } = await params;
@@ -171,14 +182,14 @@ export default async function HerbDetailPage({ params }: Props) {
   
   // Calculate severity counts for interactions
   const severityCounts = {
-    contraindicated: interactions.filter((i: any) => i.severity === "contraindicated").length,
-    severe: interactions.filter((i: any) => i.severity === "severe").length,
-    moderate: interactions.filter((i: any) => i.severity === "moderate").length,
-    mild: interactions.filter((i: any) => i.severity === "mild").length,
+    contraindicated: interactions.filter((i: DrugInteraction) => i.severity === "contraindicated").length,
+    severe: interactions.filter((i: DrugInteraction) => i.severity === "severe").length,
+    moderate: interactions.filter((i: DrugInteraction) => i.severity === "moderate").length,
+    mild: interactions.filter((i: DrugInteraction) => i.severity === "mild").length,
   };
   
   const evidenceLevel = getEvidenceLevel(herb.evidence_level);
-  const citations = formatCitations(herb.citations as any[] ?? []);
+  const citations = formatCitations(herb.citations as unknown as CitationData[] | null);
   const lastReviewed = herb.last_reviewed 
     ? new Date(herb.last_reviewed).toLocaleDateString(locale === "fr" ? "fr-FR" : "en-US", {
         month: "long",
