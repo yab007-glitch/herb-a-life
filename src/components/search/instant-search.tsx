@@ -160,7 +160,7 @@ export function InstantSearch({
                     <div className="flex items-center gap-2">
                       <span className="font-medium truncate">{herb.name}</span>
                       <EvidenceGrade
-                        level={herb.evidence_level as any}
+                        level={herb.evidence_level as "A" | "B" | "C" | "D" | "trad"}
                         showLabel={false}
                       />
                     </div>

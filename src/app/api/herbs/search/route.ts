@@ -38,7 +38,14 @@ export async function GET(request: NextRequest) {
 
     // Merge results, deduplicate by id
     const seen = new Set<string>();
-    const results: any[] = [];
+    const results: Array<{
+      id: string;
+      name: string;
+      slug: string;
+      scientific_name: string;
+      evidence_level: string;
+      matchedBy: string;
+    }> = [];
 
     for (const herb of (symptomResults || [])) {
       if (!seen.has(herb.id)) {

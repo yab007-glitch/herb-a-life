@@ -229,7 +229,7 @@ export default function MethodologyPage() {
           Questions About Our Methods?
         </h2>
         <p className="mt-2 text-muted-foreground">
-          We're committed to transparency. If you have questions about how we
+          We&apos;re committed to transparency. If you have questions about how we
           grade evidence or want to report an error, please reach out.
         </p>
         <div className="mt-4 flex justify-center gap-3">

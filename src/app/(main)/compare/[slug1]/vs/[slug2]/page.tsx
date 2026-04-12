@@ -6,7 +6,7 @@ import { Card, CardContent } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { EvidenceGrade } from "@/components/herbs/evidence-grade";
 import { SafetyAlert } from "@/components/herbs/safety-alert";
-import { CitationsList, SourceAttribution } from "@/components/herbs/citations";
+import { SourceAttribution } from "@/components/herbs/citations";
 import { getHerbBySlug } from "@/lib/actions/herbs";
 import { notFound } from "next/navigation";
 
@@ -113,7 +113,7 @@ export default async function ComparePage({ params }: Props) {
           <p className="text-sm italic text-muted-foreground">{herbA.scientific_name}</p>
           <div className="mt-2 flex flex-wrap gap-1.5">
             <Badge variant="secondary">{herbA.herb_categories?.name || "Uncategorized"}</Badge>
-            <EvidenceGrade level={(herbA.evidence_level as any) || "C"} showLabel={false} />
+            <EvidenceGrade level={(herbA.evidence_level as "A" | "B" | "C" | "D" | "trad") || "C"} showLabel={false} />
           </div>
         </div>
         <div>
@@ -121,7 +121,7 @@ export default async function ComparePage({ params }: Props) {
           <p className="text-sm italic text-muted-foreground">{herbB.scientific_name}</p>
           <div className="mt-2 flex flex-wrap gap-1.5">
             <Badge variant="secondary">{herbB.herb_categories?.name || "Uncategorized"}</Badge>
-            <EvidenceGrade level={(herbB.evidence_level as any) || "C"} showLabel={false} />
+            <EvidenceGrade level={(herbB.evidence_level as "A" | "B" | "C" | "D" | "trad") || "C"} showLabel={false} />
           </div>
         </div>
       </div>

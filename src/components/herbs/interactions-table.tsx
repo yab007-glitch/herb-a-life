@@ -4,13 +4,9 @@ import { useState } from "react";
 import { ChevronDown, ChevronUp } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { useI18n } from "@/components/i18n/i18n-provider";
+import type { Interaction } from "@/lib/types/interactions";
 
-export type Interaction = {
-  id: string;
-  drug_name: string;
-  severity: "mild" | "moderate" | "severe" | "contraindicated";
-  description: string;
-};
+export type { Interaction };
 
 const severityColors: Record<string, string> = {
   mild: "bg-yellow-100 text-yellow-800 dark:bg-yellow-900/30 dark:text-yellow-300",

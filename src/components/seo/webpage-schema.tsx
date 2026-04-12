@@ -1,5 +1,3 @@
-import type { ReactNode } from "react";
-
 interface WebPageSchemaProps {
   title: string;
   description: string;

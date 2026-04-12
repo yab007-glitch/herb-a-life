@@ -270,7 +270,7 @@ export default async function SymptomDetailPage({ params }: Props) {
             <span>{herbs.length} herbs found for this condition</span>
           </div>
           <div className="grid gap-3 sm:grid-cols-2">
-            {herbs.map((herb: any) => (
+            {herbs.map((herb: { slug: string; name: string; scientific_name: string; evidence_level: string | null; pregnancy_safe: boolean | null; nursing_safe: boolean | null; traditional_uses: string[] | null; modern_uses: string[] | null; }) => (
               <Link key={herb.slug} href={`/herbs/${herb.slug}`} className="group">
                 <Card className="h-full transition-all hover:border-primary/50 hover:shadow-md">
                   <CardContent className="p-4">
@@ -283,7 +283,7 @@ export default async function SymptomDetailPage({ params }: Props) {
                           {herb.scientific_name}
                         </p>
                       </div>
-                      <EvidenceGrade level={herb.evidence_level || "C"} showLabel={false} />
+                      <EvidenceGrade level={(herb.evidence_level || "C") as "A" | "B" | "C" | "D" | "trad"} showLabel={false} />
                     </div>
                     <div className="mt-2 flex flex-wrap gap-1">
                       {(!herb.pregnancy_safe || !herb.nursing_safe) && (

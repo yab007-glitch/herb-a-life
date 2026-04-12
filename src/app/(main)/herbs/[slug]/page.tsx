@@ -33,7 +33,6 @@ import { HerbSchema } from "@/components/seo/herb-schema";
 import { EvidenceGrade } from "@/components/herbs/evidence-grade";
 import { SafetyAlert, InteractionAlert, PregnancyAlert } from "@/components/herbs/safety-alert";
 import { CitationsList, SourceAttribution } from "@/components/herbs/citations";
-import { getMonograph } from "@/lib/data/monographs";
 import { generateMonograph } from "@/lib/data/generate-monograph";
 import { getHerbBySlug } from "@/lib/actions/herbs";
 import { createClient } from "@supabase/supabase-js";
@@ -159,8 +158,7 @@ function formatCitations(citations: CitationData[] | null | undefined): Citation
 }
 
 type DrugInteraction = {
-  severity: string;
-  [key: string]: unknown;
+  severity: "mild" | "moderate" | "severe" | "contraindicated";
 };
 
 export default async function HerbDetailPage({ params }: Props) {
@@ -394,7 +392,7 @@ export default async function HerbDetailPage({ params }: Props) {
                       <p className="mt-0.5 text-xs text-muted-foreground">{claim.note}</p>
                     )}
                   </div>
-                  <EvidenceGrade level={claim.evidence as any} showLabel={false} />
+                  <EvidenceGrade level={claim.evidence as "A" | "B" | "C" | "D" | "trad"} showLabel={false} />
                 </div>
               ))}
             </div>

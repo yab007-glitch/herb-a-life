@@ -2,9 +2,9 @@
 /**
  * Seed citations, evidence levels, symptom keywords, and reviewer info
  * for ALL herbs in the HerbAlly database.
- * 
+ *
  * Uses authoritative sources: WHO Monographs, NCCIH, Commission E, PubMed, EMA.
- * 
+ *
  * Run: npx tsx scripts/seed-citations.ts
  */
 
@@ -190,11 +190,11 @@ interface Citation {
 
 function buildCitations(herbName: string, scientificName: string): Citation[] {
   const citations: Citation[] = [];
-  
+
   // Check WHO monographs
-  for (const [volKey, vol] of Object.entries(WHO_MONOGRAPHS)) {
-    const match = vol.herbs.some(h => 
-      herbName.toLowerCase().includes(h.toLowerCase()) || 
+  for (const vol of Object.values(WHO_MONOGRAPHS)) {
+    const match = vol.herbs.some(h =>
+      herbName.toLowerCase().includes(h.toLowerCase()) ||
       scientificName.toLowerCase().includes(h.toLowerCase().split(' ')[0].toLowerCase())
     );
     if (match) {
@@ -207,7 +207,7 @@ function buildCitations(herbName: string, scientificName: string): Citation[] {
       break;
     }
   }
-  
+
   // Check Commission E
   if (COMMISSION_E_HERBS.some(h => herbName.toLowerCase().includes(h.toLowerCase()) || h.toLowerCase().includes(herbName.toLowerCase()))) {
     citations.push({
@@ -217,7 +217,7 @@ function buildCitations(herbName: string, scientificName: string): Citation[] {
       year: 1993,
     });
   }
-  
+
   // Check EMA
   if (EMA_HERBS.some(h => herbName.toLowerCase().includes(h.toLowerCase()) || h.toLowerCase().includes(herbName.toLowerCase()))) {
     citations.push({
@@ -226,7 +226,7 @@ function buildCitations(herbName: string, scientificName: string): Citation[] {
       url: "https://www.ema.europa.eu/en/human-regulatory-overview/herbal-medicines-overview",
     });
   }
-  
+
   // Check NCCIH
   if (NCCIH_HERBS.some(h => herbName.toLowerCase().includes(h.toLowerCase()) || h.toLowerCase().includes(herbName.toLowerCase()))) {
     citations.push({
@@ -235,7 +235,7 @@ function buildCitations(herbName: string, scientificName: string): Citation[] {
       url: "https://www.nccih.nih.gov/health/herbsataglance",
     });
   }
-  
+
   // PubMed for well-studied herbs
   if (PUBMED_WELL_STUDIED.some(h => herbName.toLowerCase().includes(h.toLowerCase()) || h.toLowerCase().includes(herbName.toLowerCase()))) {
     citations.push({
@@ -244,7 +244,7 @@ function buildCitations(herbName: string, scientificName: string): Citation[] {
       url: `https://pubmed.ncbi.nlm.nih.gov/?term=${encodeURIComponent(scientificName || herbName)}+clinical+trial`,
     });
   }
-  
+
   // Always include NCCIH as baseline
   if (citations.length === 0) {
     citations.push({
@@ -253,7 +253,7 @@ function buildCitations(herbName: string, scientificName: string): Citation[] {
       url: "https://www.nccih.nih.gov/health/herbsataglance",
     });
   }
-  
+
   return citations;
 }
 
@@ -269,10 +269,9 @@ function buildSymptomKeywords(
   herbName: string,
   traditionalUses: string[],
   modernUses: string[],
-  contraindications: string[],
 ): string[] {
   const keywords = new Set<string>();
-  
+
   // Add from uses
   const allUses = [...(traditionalUses || []), ...(modernUses || [])];
   for (const use of allUses) {
@@ -283,7 +282,7 @@ function buildSymptomKeywords(
       }
     }
   }
-  
+
   // Add from herb name
   const nameLower = herbName.toLowerCase();
   for (const [key, terms] of Object.entries(SYMPTOM_MAP)) {
@@ -291,7 +290,7 @@ function buildSymptomKeywords(
       keywords.add(key);
     }
   }
-  
+
   return Array.from(keywords);
 }
 
@@ -301,50 +300,59 @@ function buildSymptomKeywords(
 
 async function main() {
   console.log("Fetching all herbs...");
-  
+
   console.log("Fetching all herbs with pagination...");
-  
-  let allHerbs: any[] = [];
+
+  interface Herb {
+    id: string;
+    name: string;
+    scientific_name: string;
+    modern_uses: string[];
+    traditional_uses: string[];
+    contraindications: string[];
+  }
+
+  let allHerbs: Herb[] = [];
   let offset = 0;
   const batchSize = 500;
-  
+
   while (true) {
     const { data: batch, error: batchError } = await supabase
       .from("herbs")
       .select("id, name, scientific_name, modern_uses, traditional_uses, contraindications")
       .eq("is_published", true)
       .range(offset, offset + batchSize - 1);
-    
+
     if (batchError) {
       console.error("Error fetching herbs:", batchError);
       process.exit(1);
     }
-    
+
     if (!batch || batch.length === 0) break;
-    allHerbs = allHerbs.concat(batch);
+    allHerbs = allHerbs.concat(batch as Herb[]);
     console.log(`Fetched ${allHerbs.length} herbs so far...`);
     offset += batchSize;
   }
-  
+
   console.log(`Found ${allHerbs.length} published herbs`);
   const herbs = allHerbs;
-  
+
   if (!herbs || herbs.length === 0) {
     console.error("No herbs found!");
     process.exit(1);
   }
-  
+
   console.log(`Found ${herbs!.length} published herbs`);
-  
+
   let updated = 0;
   let skipped = 0;
-  
+
   // Process in batches of 50
   const BATCH_SIZE = 50;
-  
+
   for (let i = 0; i < herbs!.length; i += BATCH_SIZE) {
     const batch = herbs!.slice(i, i + BATCH_SIZE);
-    
+
     const updates = batch.map(herb => {
       const citations = buildCitations(herb.name, herb.scientific_name);
       const evidenceLevel = getEvidenceLevel(herb.name, herb.modern_uses, herb.traditional_uses);
@@ -352,9 +360,8 @@ async function main() {
         herb.name,
         herb.traditional_uses,
         herb.modern_uses,
-        herb.contraindications,
       );
-      
+
       return {
         id: herb.id,
         evidence_level: evidenceLevel,
@@ -365,7 +372,7 @@ async function main() {
         symptom_keywords: symptomKeywords,
       };
     });
-    
+
     // Update each herb in the batch
     for (const update of updates) {
       const { error: updateError } = await supabase
@@ -379,7 +386,7 @@ async function main() {
           symptom_keywords: update.symptom_keywords,
         })
         .eq("id", update.id);
-      
+
       if (updateError) {
         console.error(`Error updating ${update.id}:`, updateError);
         skipped++;
@@ -387,17 +394,17 @@ async function main() {
         updated++;
       }
     }
-    
+
     console.log(`Processed ${Math.min(i + BATCH_SIZE, herbs!.length)}/${herbs!.length} herbs...`);
   }
-  
+
   console.log(`\n✅ Done! Updated: ${updated}, Skipped: ${skipped}`);
-  
+
   // Print evidence level distribution
   const { data: stats } = await supabase
     .from("herbs")
     .select("evidence_level");
-  
+
   if (stats) {
     const counts: Record<string, number> = {};
     for (const s of stats) {

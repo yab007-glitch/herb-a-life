@@ -1,5 +1,6 @@
 import { getMonograph } from "./monographs";
 import type { Monograph } from "./monographs";
+import type { Interaction } from "@/lib/types/interactions";
 
 /**
  * Generate a monograph for any herb using DB data + hand-written overrides.
@@ -20,14 +21,13 @@ export function generateMonograph(herb: {
   dosage_adult: string | null;
   pregnancy_safe: boolean | null;
   nursing_safe: boolean | null;
-  drug_interactions: any[] | null;
+  drug_interactions: Interaction[] | null;
 }): Monograph | null {
   // Check for hand-written monograph first
   const manual = getMonograph(herb.slug);
   if (manual) return manual;
 
   // Auto-generate from DB data
-  const eLevel = (herb.evidence_level?.toUpperCase() || "C") as "A" | "B" | "C" | "D" | "trad";
   const displayName = herb.name || herb.scientific_name;
 
   // Build clinical summary
@@ -178,13 +178,18 @@ function gradeClaim(
   const topCutoff = Math.max(1, Math.ceil(totalClaims * 0.4));
 
   if (claimIndex < topCutoff) {
-    return herbLevel as any;
+    const level = herbLevel.toUpperCase();
+    if (level === "A" || level === "B" || level === "C" || level === "D" || level === "TRAD") {
+      return level === "TRAD" ? "trad" : level;
+    }
+    return "C";
   }
 
-  const downgrade: Record<string, string> = {
+  const downgrade: Record<string, "A" | "B" | "C" | "D" | "trad"> = {
     A: "B", B: "C", C: "trad", D: "trad", TRAD: "trad",
   };
-  return (downgrade[herbLevel] || "trad") as any;
+  const level = herbLevel.toUpperCase();
+  return downgrade[level] || "trad";
 }
 
 function formatClaim(use: string): string {
