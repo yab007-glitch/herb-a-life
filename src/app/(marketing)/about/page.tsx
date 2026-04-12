@@ -22,7 +22,7 @@ const howItWorks = [
     icon: Search,
     title: "Search Our Database",
     description:
-      "Browse over 500 medicinal herbs with detailed profiles including active compounds, traditional uses, and modern research.",
+      "Browse 2,700+ medicinal herbs with detailed profiles including active compounds, traditional uses, and modern research.",
   },
   {
     step: 2,

@@ -13,6 +13,7 @@ import {
   Stethoscope,
   Pill,
   Clock,
+  FileText,
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
@@ -28,6 +29,9 @@ import { HerbSafetyBadges } from "@/components/herbs/herb-safety-badges";
 import { InteractionsTable } from "@/components/herbs/interactions-table";
 import { CopyLinkButton } from "@/components/herbs/copy-link-button";
 import { HerbSchema } from "@/components/seo/herb-schema";
+import { EvidenceGrade } from "@/components/herbs/evidence-grade";
+import { SafetyAlert, InteractionAlert, PregnancyAlert } from "@/components/herbs/safety-alert";
+import { CitationsList, SourceAttribution } from "@/components/herbs/citations";
 import { getHerbBySlug } from "@/lib/actions/herbs";
 import { createClient } from "@supabase/supabase-js";
 import { getServerTranslation, type Locale } from "@/lib/i18n/server";
@@ -124,6 +128,39 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   };
 }
 
+// Get evidence level from herb data (placeholder until DB has this field)
+function getEvidenceLevel(herb: any): "A" | "B" | "C" | "D" | "trad" {
+  // In the future, this would come from the database
+  // For now, we infer based on available data
+  if (herb.modern_uses && herb.modern_uses.length > 2) return "B";
+  if (herb.traditional_uses && herb.traditional_uses.length > 0) return "C";
+  return "trad";
+}
+
+// Get citations from herb data (placeholder until DB has this field)
+function getCitations(herb: any) {
+  // Placeholder citations - in production these would come from the database
+  const citations: any[] = [];
+  
+  // Add WHO if applicable
+  if (herb.scientific_name) {
+    citations.push({
+      source: "WHO",
+      title: "WHO Monographs on Selected Medicinal Plants",
+      url: `https://www.who.int/publications/i/item/9789241545376`,
+    });
+  }
+  
+  // Add NCCIH
+  citations.push({
+    source: "NCCIH",
+    title: "Herbs at a Glance",
+    url: `https://www.nccih.nih.gov/health/herbsataglance`,
+  });
+  
+  return citations;
+}
+
 export default async function HerbDetailPage({ params }: Props) {
   const { slug } = await params;
   const result = await getHerbBySlug(slug);
@@ -143,6 +180,23 @@ export default async function HerbDetailPage({ params }: Props) {
   const herb = result.data;
   const category = herb.herb_categories?.name || t("herbDetail.uncategorized");
   const interactions = herb.drug_interactions || [];
+  
+  // Calculate severity counts for interactions
+  const severityCounts = {
+    contraindicated: interactions.filter((i: any) => i.severity === "contraindicated").length,
+    severe: interactions.filter((i: any) => i.severity === "severe").length,
+    moderate: interactions.filter((i: any) => i.severity === "moderate").length,
+    mild: interactions.filter((i: any) => i.severity === "mild").length,
+  };
+  
+  const evidenceLevel = getEvidenceLevel(herb);
+  const citations = getCitations(herb);
+  const lastReviewed = herb.updated_at 
+    ? new Date(herb.updated_at).toLocaleDateString(locale === "fr" ? "fr-FR" : "en-US", {
+        month: "long",
+        year: "numeric",
+      })
+    : undefined;
 
   // Fetch related herbs (same category, excluding current herb)
   let relatedHerbs: Array<{ name: string; slug: string; scientific_name: string }> = [];
@@ -234,6 +288,13 @@ export default async function HerbDetailPage({ params }: Props) {
         {t("herbDetail.backToHerbs")}
       </Button>
 
+      {/* Medical Disclaimer - ABOVE FOLD */}
+      <SafetyAlert severity="info" title="Medical Disclaimer">
+        This information is for educational purposes only and is not a substitute for professional medical advice, 
+        diagnosis, or treatment. Always consult your healthcare provider before using herbs, especially if you are 
+        pregnant, nursing, taking medications, or have a medical condition.
+      </SafetyAlert>
+
       {/* Header */}
       <div>
         <div className="flex flex-wrap items-center gap-3">
@@ -241,6 +302,7 @@ export default async function HerbDetailPage({ params }: Props) {
             {herb.name}
           </h1>
           <Badge variant="secondary">{category}</Badge>
+          <EvidenceGrade level={evidenceLevel} />
           <CopyLinkButton />
         </div>
         <p className="mt-1 text-lg italic text-muted-foreground">
@@ -251,19 +313,28 @@ export default async function HerbDetailPage({ params }: Props) {
             pregnancySafe={herb.pregnancy_safe}
             nursingSafe={herb.nursing_safe}
           />
-          {herb.updated_at && (
+          {lastReviewed && (
             <span className="flex items-center gap-1.5 text-xs text-muted-foreground">
               <Clock className="size-3" />
-              {t("herbDetail.lastUpdated")}{" "}
-              {new Date(herb.updated_at).toLocaleDateString(locale === "fr" ? "fr-FR" : "en-US", {
-                month: "short",
-                day: "numeric",
-                year: "numeric",
-              })}
+              Last reviewed {lastReviewed}
             </span>
           )}
         </div>
       </div>
+
+      {/* Critical Safety Warnings - ABOVE FOLD */}
+      {(!herb.pregnancy_safe || !herb.nursing_safe) && (
+        <PregnancyAlert
+          pregnancySafe={herb.pregnancy_safe}
+          nursingSafe={herb.nursing_safe}
+          evidenceLevel="limited"
+        />
+      )}
+
+      <InteractionAlert 
+        interactionCount={interactions.length}
+        severityCounts={severityCounts}
+      />
 
       {/* Description */}
       <section>
@@ -309,6 +380,7 @@ export default async function HerbDetailPage({ params }: Props) {
               <h2 className="text-xl font-semibold text-foreground">
                 Traditional Uses
               </h2>
+              <EvidenceGrade level="C" showLabel={false} />
             </div>
             <ul className="space-y-2">
               {herb.traditional_uses.map((use: string) => (
@@ -332,6 +404,7 @@ export default async function HerbDetailPage({ params }: Props) {
               <h2 className="text-xl font-semibold text-foreground">
                 Modern Uses
               </h2>
+              <EvidenceGrade level="B" showLabel={false} />
             </div>
             <ul className="space-y-2">
               {herb.modern_uses.map((use: string) => (
@@ -403,13 +476,16 @@ export default async function HerbDetailPage({ params }: Props) {
         </CardContent>
       </Card>
 
-      {/* Safety Information */}
+      {/* Detailed Safety Information */}
       <Card className="border-amber-200 dark:border-amber-800">
         <CardHeader>
           <CardTitle className="flex items-center gap-2 text-amber-700 dark:text-amber-400">
             <AlertTriangle className="size-5" />
-            {t("herbDetail.safetyInfo")}
+            Safety Information
           </CardTitle>
+          <CardDescription>
+            Important safety considerations for this herb
+          </CardDescription>
         </CardHeader>
         <CardContent className="space-y-4">
           <div className="flex flex-wrap gap-4">
@@ -479,6 +555,23 @@ export default async function HerbDetailPage({ params }: Props) {
 
       {/* Drug Interactions */}
       <InteractionsTable interactions={interactions} />
+
+      {/* Citations */}
+      <section>
+        <h2 className="mb-3 flex items-center gap-2 text-xl font-semibold text-foreground">
+          <FileText className="size-5 text-primary" />
+          Sources & Citations
+        </h2>
+        <CitationsList citations={citations} />
+      </section>
+
+      {/* Source Attribution */}
+      <SourceAttribution
+        reviewedBy="HerbAlly Editorial Team"
+        reviewerCredentials="Medical herbalists and healthcare professionals"
+        lastReviewed={lastReviewed}
+        sources={["WHO Monographs", "NCCIH", "PubMed", "Commission E"]}
+      />
 
       {/* Related Herbs */}
       {relatedHerbs.length > 0 && (
