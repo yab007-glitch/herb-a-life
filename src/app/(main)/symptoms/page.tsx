@@ -55,7 +55,7 @@ const symptomCategories = [
     color: "text-rose-600 dark:text-rose-400",
     bgColor: "bg-rose-100 dark:bg-rose-900/30",
     symptoms: [
-      { name: "Blood Pressure", query: "blood pressure", description: "Herbs that may support cardiovascular health" },
+      { name: "Blood Pressure", query: "blood-pressure", description: "Herbs that may support cardiovascular health" },
       { name: "Cholesterol", query: "cholesterol", description: "Herbs traditionally used for lipid management" },
       { name: "Circulation", query: "circulation", description: "Herbs that may improve circulation" },
     ],
@@ -141,7 +141,7 @@ export default function SymptomsPage() {
                 {category.symptoms.map((symptom) => (
                   <Link
                     key={symptom.name}
-                    href={`/herbs?q=${encodeURIComponent(symptom.query)}`}
+                    href={`/symptoms/${encodeURIComponent(symptom.query)}`}
                     className="group"
                   >
                     <Card className="h-full transition-all hover:border-primary/50 hover:shadow-md">

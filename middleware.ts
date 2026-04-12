@@ -15,6 +15,7 @@ const publicRoutes = [
   "/herbs",
   "/symptoms",
   "/faq",
+  "/compare",
   "/calculator",
   "/pharmacist",
   "/donate",

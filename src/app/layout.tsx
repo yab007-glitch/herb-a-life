@@ -4,6 +4,7 @@ import { Toaster } from "@/components/ui/sonner";
 import { TooltipProvider } from "@/components/ui/tooltip";
 import { I18nProvider } from "@/components/i18n/i18n-provider";
 import { OrganizationSchema } from "@/components/seo/organization-schema";
+import { SWRegistration } from "@/components/shared/service-worker-registration";
 import "./globals.css";
 
 const geistSans = Geist({
@@ -101,7 +102,8 @@ export default function RootLayout({
             <Toaster position="top-right" richColors />
           </TooltipProvider>
         </I18nProvider>
-      </body>
+          <SWRegistration />
+    </body>
     </html>
   );
 }

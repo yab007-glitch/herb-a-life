@@ -36,12 +36,12 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
       changeFrequency: "weekly",
       priority: 0.9,
     },
-    {
-      url: `${baseUrl}/symptoms`,
+    ...(["anxiety", "sleep", "inflammation", "digestion", "blood-pressure", "immune", "headache", "liver", "skin", "menstrual", "menopause", "cold", "joint", "diabetes", "cholesterol"].map((s) => ({
+      url: `${baseUrl}/symptoms/${s}`,
       lastModified: new Date(),
-      changeFrequency: "weekly",
-      priority: 0.9,
-    },
+      changeFrequency: "weekly" as const,
+      priority: 0.8,
+    }))),
     {
       url: `${baseUrl}/faq`,
       lastModified: new Date(),

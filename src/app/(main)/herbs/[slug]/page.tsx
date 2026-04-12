@@ -12,6 +12,7 @@ import {
   BookOpen,
   Stethoscope,
   Pill,
+  GitCompare,
   Clock,
   FileText,
 } from "lucide-react";
@@ -32,6 +33,7 @@ import { HerbSchema } from "@/components/seo/herb-schema";
 import { EvidenceGrade } from "@/components/herbs/evidence-grade";
 import { SafetyAlert, InteractionAlert, PregnancyAlert } from "@/components/herbs/safety-alert";
 import { CitationsList, SourceAttribution } from "@/components/herbs/citations";
+import { getMonograph } from "@/lib/data/monographs";
 import { getHerbBySlug } from "@/lib/actions/herbs";
 import { createClient } from "@supabase/supabase-js";
 import { getServerTranslation, type Locale } from "@/lib/i18n/server";
@@ -177,6 +179,7 @@ export default async function HerbDetailPage({ params }: Props) {
   }
 
   const herb = result.data;
+  const monograph = getMonograph(slug);
   const category = herb.herb_categories?.name || t("herbDetail.uncategorized");
   const interactions = (herb.drug_interactions || []) as Interaction[];
   
@@ -350,9 +353,54 @@ export default async function HerbDetailPage({ params }: Props) {
         <p className="leading-relaxed text-muted-foreground">
           {herb.description}
         </p>
+        {monograph && (
+          <div className="mt-4 rounded-lg border border-primary/20 bg-primary/5 p-4">
+            <h3 className="font-semibold text-foreground">Clinical Summary</h3>
+            <p className="mt-1 text-sm leading-relaxed text-muted-foreground">
+              {monograph.summary}
+            </p>
+            {monograph.mechanism && (
+              <>
+                <h4 className="mt-3 font-medium text-foreground">Mechanism of Action</h4>
+                <p className="mt-1 text-sm leading-relaxed text-muted-foreground">
+                  {monograph.mechanism}
+                </p>
+              </>
+            )}
+          </div>
+        )}
       </section>
 
       <Separator />
+
+      {/* Per-Claim Evidence (from monograph) */}
+      {monograph && monograph.dosageEvidence.length > 0 && (
+        <>
+          <section>
+            <h2 className="mb-3 flex items-center gap-2 text-xl font-semibold text-foreground">
+              <FlaskConical className="size-5 text-primary" />
+              Evidence by Claim
+            </h2>
+            <div className="space-y-3">
+              {monograph.dosageEvidence.map((claim: { claim: string; evidence: string; note?: string }) => (
+                <div
+                  key={claim.claim}
+                  className="flex items-start justify-between gap-4 rounded-lg border p-3"
+                >
+                  <div className="flex-1">
+                    <p className="font-medium text-foreground">{claim.claim}</p>
+                    {claim.note && (
+                      <p className="mt-0.5 text-xs text-muted-foreground">{claim.note}</p>
+                    )}
+                  </div>
+                  <EvidenceGrade level={claim.evidence as any} showLabel={false} />
+                </div>
+              ))}
+            </div>
+          </section>
+          <Separator />
+        </>
+      )}
 
       {/* Active Compounds */}
       {herb.active_compounds && herb.active_compounds.length > 0 && (
@@ -617,6 +665,15 @@ export default async function HerbDetailPage({ params }: Props) {
           <AlertTriangle className="size-4" />
           Check Interactions
         </Button>
+        {relatedHerbs.length > 0 && (
+          <Button
+            variant="outline"
+            render={<Link href={`/compare/${slug}/vs/${relatedHerbs[0].slug}`} />}
+          >
+            <GitCompare className="size-4" />
+            Compare with {relatedHerbs[0].name}
+          </Button>
+        )}
       </div>
 
       {/* Report Issue */}

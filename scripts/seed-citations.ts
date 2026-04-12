@@ -302,14 +302,35 @@ function buildSymptomKeywords(
 async function main() {
   console.log("Fetching all herbs...");
   
-  const { data: herbs, error } = await supabase
-    .from("herbs")
-    .select("id, name, scientific_name, modern_uses, traditional_uses, contraindications")
-    .eq("is_published", true)
-    .limit(5000);
+  console.log("Fetching all herbs with pagination...");
   
-  if (error) {
-    console.error("Error fetching herbs:", error);
+  let allHerbs: any[] = [];
+  let offset = 0;
+  const batchSize = 500;
+  
+  while (true) {
+    const { data: batch, error: batchError } = await supabase
+      .from("herbs")
+      .select("id, name, scientific_name, modern_uses, traditional_uses, contraindications")
+      .eq("is_published", true)
+      .range(offset, offset + batchSize - 1);
+    
+    if (batchError) {
+      console.error("Error fetching herbs:", batchError);
+      process.exit(1);
+    }
+    
+    if (!batch || batch.length === 0) break;
+    allHerbs = allHerbs.concat(batch);
+    console.log(`Fetched ${allHerbs.length} herbs so far...`);
+    offset += batchSize;
+  }
+  
+  console.log(`Found ${allHerbs.length} published herbs`);
+  const herbs = allHerbs;
+  
+  if (!herbs || herbs.length === 0) {
+    console.error("No herbs found!");
     process.exit(1);
   }
   
