@@ -15,6 +15,10 @@ interface Herb {
   contraindications?: string[] | null;
   side_effects?: string[] | null;
   herb_categories?: { name: string } | null;
+  reviewed_by?: string | null;
+  reviewer_credentials?: string | null;
+  last_reviewed?: string | null;
+  evidence_level?: string | null;
 }
 
 interface HerbSchemaProps {
@@ -92,9 +96,20 @@ export function HerbSchema({ herb }: HerbSchemaProps) {
       "@type": "Organization",
       name: "HerbAlly",
       url: "https://herbally.app",
+      ...(herb.reviewed_by && {
+        reviewer: {
+          "@type": "Person",
+          name: herb.reviewed_by,
+          ...(herb.reviewer_credentials && {
+            jobTitle: herb.reviewer_credentials,
+          }),
+        },
+      }),
     },
+    ...(herb.last_reviewed && {
+      dateModified: herb.last_reviewed,
+    }),
     datePublished: new Date().toISOString(),
-    dateModified: new Date().toISOString(),
   };
 
   return (
