@@ -159,8 +159,8 @@ export const monographs: Record<string, Monograph> = {
     ],
   },
 
-  "valerian-root": {
-    slug: "valerian-root",
+  valerian: {
+    slug: "valerian",
     summary: "Valerian (Valeriana officinalis) root is the most studied herbal sleep aid, with over 200 trials. While individual studies are often positive, meta-analyses show mixed results. It's generally considered safe and non-habit forming.",
     mechanism: "Valerenic acid and isovaleric acid inhibit GABA-transaminase (GABA-T), increasing GABA availability. Other constituents (valepotriates, lignans) may contribute to sedative effects. Does NOT bind to benzodiazepine receptors.",
     claims: [
@@ -215,8 +215,8 @@ export const monographs: Record<string, Monograph> = {
   },
 
   // New 13 premium monographs
-  ginkgo: {
-    slug: "ginkgo",
+  "ginkgo-biloba": {
+    slug: "ginkgo-biloba",
     summary: "Ginkgo (Ginkgo biloba) is the oldest living tree species with documented medicinal use spanning over 5,000 years. Standardized extracts (24% flavone glycosides, 6% terpene lactones) are among the most studied botanicals for cognitive health.",
     mechanism: "Ginkgolides are potent PAF antagonists, reducing platelet aggregation. Bilobalide protects mitochondrial function. Flavonoids scavenge free radicals. Also modulates neurotransmitter systems and increases BDNF expression.",
     claims: [

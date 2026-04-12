@@ -34,6 +34,7 @@ import { EvidenceGrade } from "@/components/herbs/evidence-grade";
 import { SafetyAlert, InteractionAlert, PregnancyAlert } from "@/components/herbs/safety-alert";
 import { CitationsList, SourceAttribution } from "@/components/herbs/citations";
 import { generateMonograph } from "@/lib/data/generate-monograph";
+import type { Monograph } from "@/lib/data/monographs";
 import { getHerbBySlug } from "@/lib/actions/herbs";
 import { createClient } from "@supabase/supabase-js";
 import { getServerTranslation, type Locale } from "@/lib/i18n/server";
@@ -178,7 +179,40 @@ export default async function HerbDetailPage({ params }: Props) {
   }
 
   const herb = result.data;
-  const monograph = generateMonograph(herb);
+
+  // Try DB monograph first, then fall back to generated monograph
+  let monograph: Monograph | null = null;
+  const supabase = getAnonClient();
+  if (supabase) {
+    try {
+      const { data: dbMonograph } = await supabase
+        .from("herb_monographs")
+        .select("summary, mechanism, claims, safety_notes, drug_interactions, pregnancy_category, key_citations, status")
+        .eq("herb_slug", slug)
+        .eq("status", "published")
+        .single();
+
+      if (dbMonograph) {
+        monograph = {
+          slug,
+          summary: dbMonograph.summary,
+          mechanism: dbMonograph.mechanism,
+          claims: dbMonograph.claims,
+          safetyNotes: dbMonograph.safety_notes,
+          drugInteractions: dbMonograph.drug_interactions,
+          pregnancyCategory: dbMonograph.pregnancy_category,
+          keyCitations: dbMonograph.key_citations,
+        };
+      }
+    } catch {
+      // Fall through to generated monograph
+    }
+  }
+
+  if (!monograph) {
+    monograph = generateMonograph(herb);
+  }
+
   const category = herb.herb_categories?.name || t("herbDetail.uncategorized");
   const interactions = (herb.drug_interactions || []) as Interaction[];
   
