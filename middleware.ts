@@ -19,6 +19,7 @@ const publicRoutes = [
   "/methodology",
   "/calculator",
   "/pharmacist",
+  "/herbalist",
   "/donate",
   "/robots.txt",
   "/sitemap.xml",
