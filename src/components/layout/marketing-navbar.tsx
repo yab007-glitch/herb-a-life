@@ -2,7 +2,7 @@
 
 import Link from "next/link";
 import { useState } from "react";
-import { Leaf, Menu, Heart, Sparkles } from "lucide-react";
+import { Leaf, Menu, Heart, Sparkles, Stethoscope } from "lucide-react";
 import {
   Sheet,
   SheetTrigger,
@@ -16,10 +16,10 @@ import { LanguageSelector } from "@/components/i18n/language-selector";
 import { useI18n } from "@/components/i18n/i18n-provider";
 
 const navLinks = [
+  { href: "/symptoms", labelKey: "nav.symptoms" },
   { href: "/herbs", labelKey: "nav.herbs" },
   { href: "/calculator", labelKey: "nav.calculator" },
-  // TODO: MED-4 — "Herbalist" label points to /pharmacist; consider renaming route or label
-  { href: "/pharmacist", labelKey: "nav.herbalist" },
+  { href: "/herbalist", labelKey: "nav.herbalist" },
   { href: "/about", labelKey: "nav.about" },
 ];
 

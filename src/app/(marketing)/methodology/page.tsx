@@ -11,11 +11,19 @@ import {
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 
 export const metadata: Metadata = {
-  title: "Our Methodology | HerbAlly",
+  title: "Our Methodology",
   description:
     "Learn how HerbAlly grades evidence, sources citations, and ensures accuracy in our herbal medicine database.",
   alternates: {
     canonical: "https://herbally.app/methodology",
+  },
+  openGraph: {
+    title: "Our Methodology",
+    description:
+      "Learn how HerbAlly grades evidence, sources citations, and ensures accuracy.",
+    url: "https://herbally.app/methodology",
+    type: "website",
+    siteName: "HerbAlly",
   },
 };
 

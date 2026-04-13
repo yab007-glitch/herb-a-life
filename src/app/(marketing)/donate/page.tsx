@@ -21,9 +21,20 @@ import {
 import { DonationButtons } from "@/components/donations/donation-buttons";
 
 export const metadata: Metadata = {
-  title: "Support HerbAlly - Keep Herbal Medicine Free",
+  title: "Support Us - Keep Herbal Medicine Free",
   description:
     "Help us keep HerbAlly 100% free. Your donation supports hosting, AI costs, and free access for everyone.",
+  alternates: {
+    canonical: "https://herbally.app/donate",
+  },
+  openGraph: {
+    title: "Support Us - Keep Herbal Medicine Free",
+    description:
+      "Help us keep HerbAlly 100% free. Your donation supports hosting, AI costs, and free access for everyone.",
+    url: "https://herbally.app/donate",
+    type: "website",
+    siteName: "HerbAlly",
+  },
 };
 
 const costs = [

@@ -20,6 +20,7 @@ export const en = {
     "system": "System"
   },
   "nav": {
+    "symptoms": "Find by Symptom",
     "herbs": "Herbs",
     "calculator": "Calculator",
     "herbalist": "Herbalist",

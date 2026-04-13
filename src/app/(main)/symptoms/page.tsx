@@ -4,11 +4,19 @@ import { AlertTriangle, Brain, Flame, Heart, Leaf, Moon, Shield, Stethoscope } f
 import { Card, CardContent } from "@/components/ui/card";
 
 export const metadata: Metadata = {
-  title: "Herbs by Symptom | HerbAlly",
+  title: "Herbs by Symptom",
   description:
     "Find the right herbs for your symptoms. Browse evidence-based herbal recommendations for anxiety, sleep, inflammation, digestion, and more.",
   alternates: {
     canonical: `${process.env.NEXT_PUBLIC_APP_URL ?? "https://herbally.app"}/symptoms`,
+  },
+  openGraph: {
+    title: "Herbs by Symptom",
+    description:
+      "Find the right herbs for your symptoms. Browse evidence-based herbal recommendations.",
+    url: "https://herbally.app/symptoms",
+    type: "website",
+    siteName: "HerbAlly",
   },
 };
 
@@ -173,7 +181,7 @@ export default function SymptomsPage() {
         </p>
         <div className="mt-4 flex flex-wrap justify-center gap-3">
           <Link
-            href="/pharmacist"
+            href="/herbalist"
             className="inline-flex items-center gap-2 rounded-md bg-primary px-4 py-2 text-sm font-medium text-primary-foreground hover:bg-primary/90 transition-colors"
           >
             <Stethoscope className="size-4" />

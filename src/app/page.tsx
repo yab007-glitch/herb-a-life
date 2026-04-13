@@ -63,7 +63,7 @@ export default function LandingPage() {
       descriptionFallback:
         "Ask questions about herbs, dosages, and safety. Powered by evidence-based sources including WHO monographs and PubMed research.",
       gradient: "from-blue-500 to-indigo-600",
-      href: "/pharmacist",
+      href: "/herbalist",
     },
   ];
 
@@ -143,7 +143,7 @@ export default function LandingPage() {
                   variant="outline"
                   size="lg"
                   className="gap-2 px-8 py-6 text-base"
-                  render={<Link href="/pharmacist" />}
+                  render={<Link href="/herbalist" />}
                 >
                   <MessageCircle className="size-5" />
                   AI Herbalist
@@ -274,7 +274,7 @@ export default function LandingPage() {
                     variant="outline"
                     size="lg"
                     className="gap-2 px-8"
-                    render={<Link href="/pharmacist" />}
+                    render={<Link href="/herbalist" />}
                   >
                     <MessageCircle className="size-5" />
                     {t("home.features.ai.title")}

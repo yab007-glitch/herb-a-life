@@ -20,6 +20,7 @@ export const fr = {
     "system": "Système"
   },
   "nav": {
+    "symptoms": "Rechercher par symptôme",
     "herbs": "Herbes",
     "calculator": "Calculateur",
     "herbalist": "Herboriste",

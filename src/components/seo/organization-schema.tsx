@@ -28,6 +28,9 @@ export function OrganizationSchema() {
       },
       "query-input": "required name=search_term_string",
     },
+    sameAs: [
+      "https://www.facebook.com/herballyapp",
+    ],
   };
 
   return (

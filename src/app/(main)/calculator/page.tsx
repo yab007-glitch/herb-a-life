@@ -5,7 +5,7 @@ import { getHerbBySlug } from "@/lib/actions/herbs";
 export const metadata: Metadata = {
   title: "Dose Calculator",
   description:
-    "Calculate safe herbal dosages for children and infants using medically recognized formulas.",
+    "Free herbal dosage calculator using Clark's Rule, Young's Rule, BSA, and Fried's Rule. Calculate safe children's and infant doses for 2,700+ medicinal herbs.",
   alternates: {
     canonical: `${process.env.NEXT_PUBLIC_APP_URL ?? "https://herbally.app"}/calculator`,
   },

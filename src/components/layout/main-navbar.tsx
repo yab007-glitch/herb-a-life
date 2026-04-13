@@ -27,7 +27,7 @@ const navLinks = [
   { href: "/symptoms", labelKey: "nav.symptoms", icon: Stethoscope },
   { href: "/herbs", labelKey: "nav.herbs", icon: Leaf },
   { href: "/calculator", labelKey: "nav.calculator", icon: Calculator },
-  { href: "/pharmacist", labelKey: "nav.herbalist", icon: MessageCircle },
+  { href: "/herbalist", labelKey: "nav.herbalist", icon: MessageCircle },
 ];
 
 export function MainNavbar() {
@@ -40,7 +40,7 @@ export function MainNavbar() {
       <header className="sticky top-0 z-50 w-full border-b/50 bg-background/80 backdrop-blur-lg">
         <div className="mx-auto flex h-16 max-w-7xl items-center justify-between px-4 sm:px-6 lg:px-8">
           {/* Logo */}
-          <Link href="/" className="flex items-center gap-2.5 group">
+          <Link href="/" className="flex items-center gap-2.5 group" aria-label="HerbAlly – Home">
             <div className="flex size-9 items-center justify-center rounded-lg bg-gradient-to-br from-primary to-teal-600 text-white shadow-sm transition-transform group-hover:scale-105">
               <Leaf className="size-5" />
             </div>

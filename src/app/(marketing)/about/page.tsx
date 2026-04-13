@@ -11,11 +11,19 @@ import {
 import { Card, CardContent } from "@/components/ui/card";
 
 export const metadata: Metadata = {
-  title: "About HerbAlly",
+  title: "About",
   description:
     "Learn about HerbAlly, our mission, and how we help you make informed decisions about medicinal herbs.",
   alternates: {
     canonical: "https://herbally.app/about",
+  },
+  openGraph: {
+    title: "About",
+    description:
+      "Learn about HerbAlly, our mission, and how we help you make informed decisions about medicinal herbs.",
+    url: "https://herbally.app/about",
+    type: "website",
+    siteName: "HerbAlly",
   },
 };
 

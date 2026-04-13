@@ -15,7 +15,7 @@ const tabs = [
   { label: "Symptoms", href: "/symptoms", icon: Stethoscope },
   { label: "Herbs", href: "/herbs", icon: Leaf },
   { label: "Search", href: "/herbs?focus=search", icon: Search },
-  { label: "Chat", href: "/pharmacist", icon: MessageCircle },
+  { label: "Chat", href: "/herbalist", icon: MessageCircle },
   { label: "Calc", href: "/calculator", icon: Calculator },
 ] as const;
 

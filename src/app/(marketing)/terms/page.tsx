@@ -4,6 +4,13 @@ export const metadata: Metadata = {
   title: "Terms of Service",
   description: "HerbAlly terms of service and conditions of use.",
   alternates: { canonical: "https://herbally.app/terms" },
+  openGraph: {
+    title: "Terms of Service",
+    description: "HerbAlly terms of service and conditions of use.",
+    url: "https://herbally.app/terms",
+    type: "website",
+    siteName: "HerbAlly",
+  },
 };
 
 export default function TermsPage() {
@@ -13,7 +20,7 @@ export default function TermsPage() {
         Terms of Service
       </h1>
       <p className="mb-8 text-sm text-muted-foreground">
-        Last updated: March 2026
+        Last updated: April 2026
       </p>
 
       <div className="space-y-8 text-sm leading-relaxed text-muted-foreground">
@@ -35,20 +42,19 @@ export default function TermsPage() {
           </h2>
           <p>
             HerbAlly provides educational information about medicinal herbs,
-            dosage calculations, and AI-powered herbalist guidance. You agree to
-            use the service only for lawful purposes and in accordance with
-            these Terms.
+            dosage calculations, and AI-powered herbalist guidance. No account
+            or registration is required — the service is freely available to
+            everyone. You agree to use the service only for lawful purposes and
+            in accordance with these Terms.
           </p>
           <ul className="mt-2 list-inside list-disc space-y-1">
-            <li>You must be at least 18 years old to create an account</li>
-            <li>
-              You are responsible for maintaining the security of your account
-            </li>
+            <li>You must be at least 18 years old to use this service</li>
             <li>You must not misuse or attempt to exploit the platform</li>
             <li>
               You must not use the service for commercial purposes without
               permission
             </li>
+            <li>You must not attempt to overload or disrupt the service</li>
           </ul>
         </section>
 
@@ -67,7 +73,39 @@ export default function TermsPage() {
 
         <section>
           <h2 className="mb-3 text-lg font-semibold text-foreground">
-            4. Intellectual Property
+            4. AI-Generated Content Limitations
+          </h2>
+          <p>
+            HerbAlly uses artificial intelligence to generate responses in the
+            Virtual Herbalist. You acknowledge and agree that:
+          </p>
+          <ul className="mt-2 list-inside list-disc space-y-1">
+            <li>
+              AI-generated responses are for informational and educational
+              purposes only and do not constitute medical advice
+            </li>
+            <li>
+              AI responses may contain inaccuracies, omissions, or outdated
+              information despite our best efforts
+            </li>
+            <li>
+              The AI does not have access to your personal medical history and
+              cannot provide personalized medical recommendations
+            </li>
+            <li>
+              You should always verify AI-generated information with a qualified
+              healthcare professional before acting on it
+            </li>
+            <li>
+              HerbAlly is not liable for any decisions made based on AI-generated
+              content
+            </li>
+          </ul>
+        </section>
+
+        <section>
+          <h2 className="mb-3 text-lg font-semibold text-foreground">
+            5. Intellectual Property
           </h2>
           <p>
             All content on HerbAlly, including text, graphics, logos, and
@@ -80,7 +118,7 @@ export default function TermsPage() {
 
         <section>
           <h2 className="mb-3 text-lg font-semibold text-foreground">
-            5. Limitation of Liability
+            6. Limitation of Liability
           </h2>
           <p>
             HerbAlly shall not be liable for any direct, indirect, incidental,
@@ -92,31 +130,33 @@ export default function TermsPage() {
 
         <section>
           <h2 className="mb-3 text-lg font-semibold text-foreground">
-            6. User Content
+            7. User Content
           </h2>
           <p>
-            Any content you submit through the platform (such as chat messages)
-            may be processed by our AI systems to generate responses. We do not
-            claim ownership of your content, but you grant us a license to use
-            it for the purpose of providing and improving our services.
+            Any content you submit through the platform (such as chat messages to
+            the Virtual Herbalist) may be processed by our AI systems to generate
+            responses. We do not claim ownership of your content, but you grant
+            us a license to use it for the purpose of providing and improving our
+            services. Chat messages are not stored on our servers after the
+            session ends.
           </p>
         </section>
 
         <section>
           <h2 className="mb-3 text-lg font-semibold text-foreground">
-            7. Termination
+            8. Service Availability
           </h2>
           <p>
-            We reserve the right to terminate or suspend your account and access
-            to the service at our sole discretion, without notice, for conduct
-            that we believe violates these Terms or is harmful to other users,
-            us, or third parties.
+            HerbAlly is provided "as is" and "as available." We do not guarantee
+            uninterrupted access to the service. We reserve the right to modify,
+            suspend, or discontinue any part of the service at any time without
+            notice.
           </p>
         </section>
 
         <section>
           <h2 className="mb-3 text-lg font-semibold text-foreground">
-            8. Changes to Terms
+            9. Changes to Terms
           </h2>
           <p>
             We reserve the right to modify these Terms at any time. Changes will
@@ -127,11 +167,13 @@ export default function TermsPage() {
 
         <section>
           <h2 className="mb-3 text-lg font-semibold text-foreground">
-            9. Contact Us
+            10. Contact Us
           </h2>
           <p>
-            If you have questions about these Terms, please contact us at
-            legal@herbally.app.
+            If you have questions about these Terms, please contact us at{" "}
+            <a href="mailto:legal@herbally.app" className="text-primary underline">
+              legal@herbally.app
+            </a>.
           </p>
         </section>
       </div>

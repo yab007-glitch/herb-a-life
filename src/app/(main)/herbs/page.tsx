@@ -19,6 +19,14 @@ export const metadata: Metadata = {
   title: "Medicinal Herbs Database",
   description:
     "Browse our comprehensive database of 2,700+ medicinal herbs with detailed profiles, active compounds, and drug interactions.",
+  openGraph: {
+    title: "Medicinal Herbs Database",
+    description:
+      "Browse 2,700+ medicinal herbs with detailed profiles, active compounds, and drug interactions.",
+    url: "https://herbally.app/herbs",
+    type: "website",
+    siteName: "HerbAlly",
+  },
 };
 
 // JSON-LD structured data for the herbs page
@@ -143,6 +151,7 @@ export default async function HerbsPage({
                 >
                   <Badge
                     variant="secondary"
+                    aria-label={`Search for ${item.label}`}
                     className="cursor-pointer gap-1 transition-all hover:bg-primary/10 hover:text-primary"
                   >
                     <Flame className="size-3 text-orange-400" />
@@ -161,6 +170,7 @@ export default async function HerbsPage({
         <Link href="/herbs">
           <Badge
             variant={!category ? "default" : "outline"}
+            aria-label="Filter by all categories"
             className="cursor-pointer transition-all"
           >
             {t("herbs.all")}
@@ -173,6 +183,7 @@ export default async function HerbsPage({
           >
             <Badge
               variant={category === cat.slug ? "default" : "outline"}
+              aria-label={`Filter by ${cat.name}`}
               className="cursor-pointer transition-all hover:border-primary/50"
             >
               {cat.name}

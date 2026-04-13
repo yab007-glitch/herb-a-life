@@ -12,6 +12,23 @@ import { notFound } from "next/navigation";
 
 export const revalidate = 3600;
 
+// Pre-render popular comparisons for SEO
+export async function generateStaticParams() {
+  const popularComparisons = [
+    { slug1: "turmeric", slug2: "ginger" },
+    { slug1: "ashwagandha", slug2: "rhodiola" },
+    { slug1: "chamomile", slug2: "valerian" },
+    { slug1: "garlic", slug2: "ginger" },
+    { slug1: "echinacea", slug2: "elderberry" },
+    { slug1: "ginkgo", slug2: "ginseng" },
+    { slug1: "lavender", slug2: "chamomile" },
+    { slug1: "turmeric", slug2: "ashwagandha" },
+    { slug1: "st-johns-wort", slug2: "kava" },
+    { slug1: "milk-thistle", slug2: "dandelion" },
+  ];
+  return popularComparisons;
+}
+
 type Props = { params: Promise<{ slug1: string; slug2: string }> };
 
 export async function generateMetadata({ params }: Props): Promise<Metadata> {

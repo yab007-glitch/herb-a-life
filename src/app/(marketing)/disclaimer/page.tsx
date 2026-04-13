@@ -6,6 +6,13 @@ export const metadata: Metadata = {
   title: "Medical Disclaimer",
   description: "Read the full medical and FDA disclaimer for HerbAlly.",
   alternates: { canonical: "https://herbally.app/disclaimer" },
+  openGraph: {
+    title: "Medical Disclaimer",
+    description: "Read the full medical and FDA disclaimer for HerbAlly.",
+    url: "https://herbally.app/disclaimer",
+    type: "website",
+    siteName: "HerbAlly",
+  },
 };
 
 export default function DisclaimerPage() {

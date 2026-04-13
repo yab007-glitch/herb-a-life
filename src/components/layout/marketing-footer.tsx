@@ -27,7 +27,7 @@ export function MarketingFooter() {
       { href: "/symptoms", label: t("nav.symptoms") },
       { href: "/herbs", label: t("nav.herbs") },
       { href: "/calculator", label: t("nav.calculator") },
-      { href: "/pharmacist", label: t("nav.herbalist") },
+      { href: "/herbalist", label: t("nav.herbalist") },
     ],
     resources: [
       { href: "/faq", label: "FAQ" },
