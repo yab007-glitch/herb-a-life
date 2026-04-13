@@ -10,6 +10,76 @@ import type {
 
 const ITEMS_PER_PAGE = 20;
 
+/**
+ * Symptom keyword mapping — maps common user search terms to DB symptom_keywords
+ * Users search in natural language; DB uses specific keywords
+ */
+const SYNONYM_MAP: Record<string, string[]> = {
+  // Common mental health searches
+  anxiety: ["anxiety", "stress", "calm", "relax", "nervous"],
+  stress: ["stress", "anxiety", "adaptogen", "calm"],
+  depression: ["depression", "mood", "anxiety"],
+  sleep: ["sleep", "insomnia", "calm", "relax", "sedative"],
+  calm: ["calm", "anxiety", "relax", "sleep", "nervine"],
+  relax: ["relax", "calm", "sleep", "anxiety", "muscle"],
+  focus: ["focus", "cognitive", "memory", "concentration", "brain"],
+  energy: ["energy", "stimulant", "adaptogen", "fatigue"],
+  pain: ["pain", "analgesic", "anti-inflammatory", "inflammation"],
+  headache: ["headache", "migraine", "pain"],
+  inflammation: ["inflammation", "anti-inflammatory", "pain", "swelling"],
+  // Physical health
+  digestion: ["digestion", "digestive", "stomach", "gut", "nausea", "bloating"],
+  stomach: ["digestion", "stomach", "nausea", "digestive"],
+  nausea: ["nausea", "digestion", "digestive", "stomach"],
+  constipation: ["constipation", "digestion", "laxative", "digestive"],
+  liver: ["liver", "hepatoprotective", "detox"],
+  blood_pressure: ["blood-pressure", "cardiovascular", "heart"],
+  bloodpressure: ["blood-pressure", "cardiovascular", "heart"],
+  cholesterol: ["cholesterol", "cardiovascular", "lipid"],
+  heart: ["cardiovascular", "heart", "blood-pressure", "circulation"],
+  immune: ["immune", "antiviral", "antibacterial", "infection"],
+  cold: ["cold", "immune", "antiviral", "respiratory", "cough"],
+  cough: ["cough", "respiratory", "cold", "throat"],
+  allergy: ["allergy", "antihistamine", "immune"],
+  // Women's health
+  menstrual: ["menstrual", "hormonal", "cramps", "pms"],
+  menopause: ["menopause", "hormonal", "hot flashes"],
+  hormonal: ["hormonal", "menstrual", "menopause", "endocrine"],
+  // Skin
+  acne: ["skin", "acne", "anti-inflammatory"],
+  skin: ["skin", "wound", "anti-inflammatory", "antimicrobial"],
+  wound: ["wound", "skin", "healing", "antimicrobial"],
+  // Men's health
+  prostate: ["prostate", "saw-palmetto", "urinary"],
+  testosterone: ["testosterone", "mens", "energy", "libido"],
+  // General
+  weight: ["weight", "metabolic", "digestion"],
+  diabetes: ["blood-sugar", "diabetes", "metabolic", "glucose"],
+  blood_sugar: ["blood-sugar", "diabetes", "metabolic", "glucose"],
+  detox: ["liver", "detox", "cleansing"],
+};
+
+/**
+ * Expand a user query into DB-friendly symptom keywords using synonym mapping
+ */
+function expandQueryToKeywords(query: string): string[] {
+  const words = query.toLowerCase().split(/\s+/).filter(Boolean);
+  const keywords = new Set<string>();
+
+  for (const word of words) {
+    // Direct mapping
+    if (SYNONYM_MAP[word]) {
+      SYNONYM_MAP[word].forEach(k => keywords.add(k));
+    }
+    // Always include the word itself
+    keywords.add(word);
+    // Also try common variations
+    keywords.add(word.replace(/[_-]/g, " "));
+  }
+
+  return Array.from(keywords);
+}
+
 export async function getHerbs(params: {
   query?: string;
   category?: string;
@@ -35,42 +105,41 @@ export async function getHerbs(params: {
       const words = q.split(/\s+/).filter(Boolean);
 
       if (words.length > 0) {
-        // Try symptom_keywords match first (array contains any word)
+        // Strategy: Expand query to symptom keywords, use overlaps for broad match
+        const expandedKeywords = expandQueryToKeywords(q);
+
+        // Step 1: Try symptom_keywords overlap (any keyword matches)
         const { data: keywordResults } = await supabase
           .from("herbs")
-          .select("id")
+          .select("id, evidence_level")
           .eq("is_published", true)
-          .contains("symptom_keywords", [words[0].toLowerCase()])
-          .limit(100);
+          .overlaps("symptom_keywords", expandedKeywords)
+          .limit(500);
 
         let matchedIds: string[] = (keywordResults || []).map((h: { id: string }) => h.id);
 
-        // If no keyword matches, try the RPC function
-        if (matchedIds.length === 0) {
-          const { data: rpcResults } = await supabase.rpc(
-            "search_herbs_by_symptom",
-            { search_term: q }
-          );
-          matchedIds = (rpcResults || []).map((h: { id: string }) => h.id);
-        }
-
+        // Step 2: If keyword match found results, use them (ranked by evidence)
         if (matchedIds.length > 0) {
+          // Sort by evidence level: A first, then B, etc.
+          const evidenceOrder: Record<string, number> = { A: 0, B: 1, C: 2, D: 3, trad: 4 };
+          const sortedResults = (keywordResults || []).sort((a: { evidence_level: string | null }, b: { evidence_level: string | null }) => {
+            const ea = evidenceOrder[a.evidence_level || "C"] ?? 2;
+            const eb = evidenceOrder[b.evidence_level || "C"] ?? 2;
+            return ea - eb;
+          });
+          matchedIds = sortedResults.map((h: { id: string }) => h.id);
           query = query.in("id", matchedIds);
         } else {
-          // Fallback: search individual words with OR
-          // For multi-word queries like "anxiety stress calm", search each word
-          const patterns = words.map(w => `%${w}%`);
-          if (words.length === 1) {
-            query = query.or(
-              `name.ilike.${patterns[0]},scientific_name.ilike.${patterns[0]},description.ilike.${patterns[0]}`
-            );
-          } else {
-            // Build OR conditions for each word across all columns
-            const conditions = words
-              .map(w => `name.ilike.%${w}%,scientific_name.ilike.%${w}%,description.ilike.%${w}%,traditional_uses.cs.{${w}},modern_uses.cs.{${w}}`)
-              .join(",");
-            query = query.or(conditions);
-          }
+          // Step 3: Fallback to full-text search across name, description, uses
+          // Build OR conditions for each word
+          const conditions = words
+            .flatMap(w => [
+              `name.ilike.%${w}%`,
+              `scientific_name.ilike.%${w}%`,
+              `description.ilike.%${w}%`,
+            ])
+            .join(",");
+          query = query.or(conditions);
         }
       }
     }
@@ -184,6 +253,26 @@ export async function searchHerbs(
   try {
     const supabase = await createClient();
 
+    // Try symptom keywords first with synonym expansion
+    const expandedKeywords = expandQueryToKeywords(term);
+    const { data: keywordResults } = await supabase
+      .from("herbs")
+      .select("id, name, slug, scientific_name, evidence_level")
+      .eq("is_published", true)
+      .overlaps("symptom_keywords", expandedKeywords)
+      .limit(10);
+
+    if (keywordResults && keywordResults.length > 0) {
+      const evidenceOrder: Record<string, number> = { A: 0, B: 1, C: 2, D: 3, trad: 4 };
+      const sorted = keywordResults.sort((a: { evidence_level: string | null }, b: { evidence_level: string | null }) => {
+        const ea = evidenceOrder[a.evidence_level || "C"] ?? 2;
+        const eb = evidenceOrder[b.evidence_level || "C"] ?? 2;
+        return ea - eb;
+      });
+      return { success: true, data: sorted as Herb[] };
+    }
+
+    // Fallback to text search
     const { data, error } = await supabase
       .from("herbs")
       .select("id, name, slug, scientific_name")

@@ -18,8 +18,9 @@ import {
   createChatSession,
   updateChatSession,
   getChatSession,
-  type ChatMessage,
-} from "@/lib/actions/chat";
+  type ChatSession,
+} from "@/lib/actions/chat-local";
+import type { ChatMessage } from "@/lib/actions/chat";
 import { useI18n } from "@/components/i18n/i18n-provider";
 
 type Message = ChatMessage;
@@ -63,19 +64,16 @@ export function ChatInterface({
 
   // Load existing session if sessionId provided
   useEffect(() => {
-    async function loadSession() {
-      if (sessionId) {
-        const result = await getChatSession(sessionId);
-        if (result.success && result.data) {
-          const loadedMessages = result.data.messages as ChatMessage[];
-          if (loadedMessages && loadedMessages.length > 0) {
-            setMessages(loadedMessages);
-          }
-          setCurrentSessionId(sessionId);
+    if (sessionId) {
+      const session = getChatSession(sessionId);
+      if (session) {
+        const loadedMessages = session.messages as ChatMessage[];
+        if (loadedMessages && loadedMessages.length > 0) {
+          setMessages(loadedMessages);
         }
+        setCurrentSessionId(sessionId);
       }
     }
-    loadSession();
   }, [sessionId]);
 
   useEffect(() => {
@@ -93,9 +91,9 @@ export function ChatInterface({
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [autoQuery, autoSent]);
 
-  // Save messages to database
+  // Save messages to localStorage
   const saveMessages = useCallback(
-    async (msgs: Message[]) => {
+    (msgs: Message[]) => {
       // Skip saving if we only have the initial message
       if (msgs.length <= 1) return;
 
@@ -104,14 +102,11 @@ export function ChatInterface({
 
         if (!currentSessionId) {
           // Create new session
-          const result = await createChatSession(herbContext || undefined);
-          if (result.success && result.data) {
-            setCurrentSessionId(result.data.id);
-          }
-        }
-
-        if (currentSessionId) {
-          await updateChatSession(currentSessionId, msgs);
+          const session = createChatSession(herbContext || undefined);
+          setCurrentSessionId(session.id);
+          updateChatSession(session.id, msgs);
+        } else {
+          updateChatSession(currentSessionId, msgs);
         }
       } catch (error) {
         console.error("Failed to save chat:", error);
@@ -188,7 +183,7 @@ export function ChatInterface({
         ...allMessages,
         { ...assistantMessage, content: accumulated },
       ];
-      await saveMessages(finalMessages);
+      saveMessages(finalMessages);
     } catch {
       const errorMessage: Message = {
         role: "assistant",

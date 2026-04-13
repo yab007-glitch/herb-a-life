@@ -1,10 +1,15 @@
-const CACHE_NAME = "herbally-v1";
-const OFFLINE_URLS = ["/", "/herbs", "/symptoms", "/faq", "/pharmacist", "/calculator"];
+const CACHE_NAME = "herbally-v2";
+const STATIC_URLS = ["/", "/herbs", "/symptoms", "/faq", "/pharmacist", "/calculator"];
+const OFFLINE_FALLBACK = "/offline.html";
 
+// Stale-while-revalidate for herb pages, network-first for everything else
 self.addEventListener("install", (event) => {
   event.waitUntil(
-    caches.open(CACHE_NAME).then((cache) => {
-      return cache.addAll(OFFLINE_URLS);
+    caches.open(CACHE_NAME).then(async (cache) => {
+      // Cache static pages — don't block install on failures
+      await cache.addAll(STATIC_URLS).catch(() => {});
+      // Cache offline fallback
+      await cache.add(OFFLINE_FALLBACK).catch(() => {});
     })
   );
   self.skipWaiting();
@@ -26,29 +31,55 @@ self.addEventListener("activate", (event) => {
 self.addEventListener("fetch", (event) => {
   if (event.request.method !== "GET") return;
 
-  // Skip API calls and auth
   const url = new URL(event.request.url);
-  if (url.pathname.startsWith("/api/") || url.pathname.startsWith("/auth/")) return;
 
+  // Skip API calls, auth, and external requests
+  if (url.pathname.startsWith("/api/") || url.pathname.startsWith("/auth/") || url.origin !== self.location.origin) {
+    return;
+  }
+
+  // Herb detail pages: stale-while-revalidate (fast load from cache, update in background)
+  if (url.pathname.startsWith("/herbs/") && !url.pathname.endsWith("/")) {
+    event.respondWith(
+      caches.open(CACHE_NAME).then(async (cache) => {
+        const cached = await cache.match(event.request);
+        const fetchPromise = fetch(event.request)
+          .then((response) => {
+            if (response.ok) {
+              cache.put(event.request, response.clone());
+            }
+            return response;
+          })
+          .catch(() => cached);
+
+        // Return cached immediately if available, otherwise wait for network
+        return cached || fetchPromise;
+      })
+    );
+    return;
+  }
+
+  // Everything else: network first, cache fallback
   event.respondWith(
-    caches.match(event.request).then((cached) => {
-      // Network first, cache fallback
-      const fetchPromise = fetch(event.request)
-        .then((response) => {
-          if (response.ok) {
-            const clone = response.clone();
-            caches.open(CACHE_NAME).then((cache) => {
-              cache.put(event.request, clone);
-            });
-          }
-          return response;
-        })
-        .catch(() => {
-          // If offline, return cached version
-          return cached || new Response("Offline", { status: 503 });
-        });
-
-      return fetchPromise;
-    })
+    fetch(event.request)
+      .then((response) => {
+        if (response.ok) {
+          const clone = response.clone();
+          caches.open(CACHE_NAME).then((cache) => {
+            cache.put(event.request, clone);
+          });
+        }
+        return response;
+      })
+      .catch(async () => {
+        const cached = await caches.match(event.request);
+        if (cached) return cached;
+        // For navigation requests, show offline page
+        if (event.request.mode === "navigate") {
+          const offline = await caches.match(OFFLINE_FALLBACK);
+          if (offline) return offline;
+        }
+        return new Response("Offline", { status: 503 });
+      })
   );
 });

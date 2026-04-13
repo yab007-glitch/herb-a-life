@@ -30,6 +30,7 @@ import { HerbSafetyBadges } from "@/components/herbs/herb-safety-badges";
 import { InteractionsTable, type Interaction } from "@/components/herbs/interactions-table";
 import { CopyLinkButton } from "@/components/herbs/copy-link-button";
 import { HerbSchema } from "@/components/seo/herb-schema";
+import { HerbFAQSchema } from "@/components/seo/herb-faq-schema";
 import { EvidenceGrade } from "@/components/herbs/evidence-grade";
 import { SafetyAlert, InteractionAlert, PregnancyAlert } from "@/components/herbs/safety-alert";
 import { CitationsList, SourceAttribution } from "@/components/herbs/citations";
@@ -271,6 +272,14 @@ export default async function HerbDetailPage({ params }: Props) {
   return (
     <div className="space-y-8">
       <HerbSchema herb={herb} />
+      <HerbFAQSchema
+        herbName={herb.name}
+        scientificName={herb.scientific_name}
+        uses={[...(herb.traditional_uses || []), ...(herb.modern_uses || [])]}
+        safetyNotes={monograph?.safetyNotes?.join(". ") || herb.side_effects?.join(". ") || ""}
+        pregnancyCategory={monograph?.pregnancyCategory || "insufficient"}
+        drugInteractions={interactions.length}
+      />
 
       {/* Breadcrumbs */}
       <nav aria-label="Breadcrumb">
