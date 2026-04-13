@@ -1,3 +1,12 @@
+/**
+ * This route is intentionally PUBLIC and does not require authentication.
+ * The AI chatbot (Virtual Herbalist) should be accessible to all visitors
+ * without requiring a login, as per the public-only nature of the app.
+ */
+export const config = {
+  dynamic = 'force-dynamic'
+};
+
 import type { Metadata } from "next";
 import { Info } from "lucide-react";
 import { ChatInterface } from "@/components/pharmacist/chat-interface";
