@@ -26,6 +26,16 @@ const nextConfig: NextConfig = {
   compress: true,
   // Trailing slash for SEO consistency
   trailingSlash: false,
+  // Redirects for legacy routes
+  async redirects() {
+    return [
+      {
+        source: "/pharmacist",
+        destination: "/herbalist",
+        permanent: true,
+      },
+    ];
+  },
   // Headers for performance and security
   async headers() {
     return [
