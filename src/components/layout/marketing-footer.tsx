@@ -31,7 +31,6 @@ export function MarketingFooter() {
     ],
     resources: [
       { href: "/faq", label: "FAQ" },
-      { href: "/reviewers", label: "Medical Reviewers" },
       { href: "/about", label: t("nav.about") },
       { href: "/methodology", label: "Methodology" },
       { href: "/disclaimer", label: t("footer.disclaimer") },

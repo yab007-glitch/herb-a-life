@@ -20,7 +20,6 @@ const publicRoutes = [
   "/calculator",
   "/pharmacist",
   "/donate",
-  "/reviewers",
   "/robots.txt",
   "/sitemap.xml",
   "/manifest.webmanifest",
