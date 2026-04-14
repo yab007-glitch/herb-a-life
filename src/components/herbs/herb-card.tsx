@@ -48,12 +48,13 @@ const IconComponents = {
 } as const;
 
 function getSafetyLevel(
-  pregnancySafe: boolean,
-  nursingSafe: boolean
+  pregnancySafe: boolean | null,
+  nursingSafe: boolean | null
 ): "safe" | "caution" | "unsafe" {
   if (pregnancySafe && nursingSafe) return "safe";
-  if (!pregnancySafe && !nursingSafe) return "unsafe";
-  return "caution";
+  if (pregnancySafe === false && nursingSafe === false) return "unsafe";
+  if (pregnancySafe === false || nursingSafe === false) return "caution";
+  return "caution"; // null = unknown = caution
 }
 
 interface HerbCardProps {
@@ -63,10 +64,10 @@ interface HerbCardProps {
     scientific_name: string;
     slug: string;
     description: string;
-    pregnancy_safe: boolean;
-    nursing_safe: boolean;
+    pregnancy_safe: boolean | null;
+    nursing_safe: boolean | null;
     dosage_adult?: string | null;
-    traditional_uses?: string[];
+    traditional_uses?: string[] | null;
     herb_categories?: { name: string } | null;
     updated_at?: string;
   };
@@ -171,8 +172,8 @@ export function HerbCard({ herb, className }: HerbCardProps) {
           {/* Safety Badges + Arrow */}
           <div className="mt-4 flex items-center justify-between">
             <HerbSafetyBadges
-              pregnancySafe={herb.pregnancy_safe}
-              nursingSafe={herb.nursing_safe}
+              pregnancySafe={herb.pregnancy_safe ?? false}
+              nursingSafe={herb.nursing_safe ?? false}
             />
             <ArrowRight className="size-4 text-muted-foreground/50 transition-all duration-300 group-hover:translate-x-1 group-hover:text-primary" />
           </div>

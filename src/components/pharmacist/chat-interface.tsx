@@ -20,6 +20,14 @@ import {
   getChatSession,
   type ChatSession,
 } from "@/lib/actions/chat-local";
+import {
+  createPersistedSession,
+  getPersistedSession,
+  addPersistedMessage,
+  deletePersistedSession,
+  getPersistedSessions,
+  type PersistedChatSession,
+} from "@/lib/actions/chat-persist";
 import type { ChatMessage } from "@/lib/actions/chat";
 import { useI18n } from "@/components/i18n/i18n-provider";
 
@@ -62,18 +70,37 @@ export function ChatInterface({
   const scrollRef = useRef<HTMLDivElement>(null);
   const textareaRef = useRef<HTMLTextAreaElement>(null);
 
-  // Load existing session if sessionId provided
+  // Load existing session if sessionId provided (try server, fall back to localStorage)
   useEffect(() => {
-    if (sessionId) {
-      const session = getChatSession(sessionId);
-      if (session) {
-        const loadedMessages = session.messages as ChatMessage[];
+    async function loadSession() {
+      if (!sessionId) return;
+      
+      // Try server persistence first
+      const serverSession = await getPersistedSession(sessionId);
+      if (serverSession && serverSession.messages.length > 0) {
+        setMessages(serverSession.messages
+          .filter((m) => m.role === "user" || m.role === "assistant")
+          .map((m) => ({
+          role: m.role as "user" | "assistant",
+          content: m.content,
+          id: m.id,
+          timestamp: m.createdAt,
+        })));
+        setCurrentSessionId(sessionId);
+        return;
+      }
+      
+      // Fall back to localStorage
+      const localSession = getChatSession(sessionId);
+      if (localSession) {
+        const loadedMessages = localSession.messages as ChatMessage[];
         if (loadedMessages && loadedMessages.length > 0) {
           setMessages(loadedMessages);
         }
         setCurrentSessionId(sessionId);
       }
     }
+    loadSession();
   }, [sessionId]);
 
   useEffect(() => {
@@ -91,25 +118,62 @@ export function ChatInterface({
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [autoQuery, autoSent]);
 
-  // Save messages to localStorage
+  // Save messages to server (with localStorage fallback)
   const saveMessages = useCallback(
-    (msgs: Message[]) => {
+    async (msgs: Message[]) => {
       // Skip saving if we only have the initial message
       if (msgs.length <= 1) return;
 
       try {
         setIsSaving(true);
 
+        // Try server persistence first (requires auth)
+        const lastUserMsg = msgs.find((m) => m.role === "user");
+        const lastAssistantMsg = [...msgs].reverse().find((m) => m.role === "assistant");
+
         if (!currentSessionId) {
-          // Create new session
-          const session = createChatSession(herbContext || undefined);
-          setCurrentSessionId(session.id);
-          updateChatSession(session.id, msgs);
+          // Create new session on server
+          const session = await createPersistedSession(herbContext || undefined);
+          if (session) {
+            setCurrentSessionId(session.id);
+            // Add all messages
+            for (const msg of msgs) {
+              if (msg.role === "user" || msg.role === "assistant") {
+                await addPersistedMessage(session.id, msg.role, msg.content);
+              }
+            }
+          } else {
+            // Fallback to localStorage
+            const localSession = createChatSession(herbContext || undefined);
+            setCurrentSessionId(localSession.id);
+            updateChatSession(localSession.id, msgs);
+          }
         } else {
-          updateChatSession(currentSessionId, msgs);
+          // Update existing session
+          const serverSession = await getPersistedSession(currentSessionId);
+          if (serverSession) {
+            // Only add new messages (compare by content)
+            const existingContent = new Set(serverSession.messages.map((m) => m.content));
+            for (const msg of msgs) {
+              if (!existingContent.has(msg.content) && (msg.role === "user" || msg.role === "assistant")) {
+                await addPersistedMessage(currentSessionId, msg.role, msg.content);
+              }
+            }
+          } else {
+            // Fallback to localStorage
+            updateChatSession(currentSessionId, msgs);
+          }
         }
       } catch (error) {
         console.error("Failed to save chat:", error);
+        // Fallback to localStorage
+        if (!currentSessionId) {
+          const localSession = createChatSession(herbContext || undefined);
+          setCurrentSessionId(localSession.id);
+          updateChatSession(localSession.id, msgs);
+        } else {
+          updateChatSession(currentSessionId, msgs);
+        }
       } finally {
         setIsSaving(false);
       }
@@ -209,8 +273,11 @@ export function ChatInterface({
     }
   }
 
-  function clearChat() {
+  async function clearChat() {
     setMessages([createInitialMessage()]);
+    if (currentSessionId) {
+      await deletePersistedSession(currentSessionId);
+    }
     setCurrentSessionId(null);
     setAutoSent(false);
   }

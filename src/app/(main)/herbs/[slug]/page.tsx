@@ -35,6 +35,7 @@ import { EvidenceGrade } from "@/components/herbs/evidence-grade";
 import { SafetyAlert, InteractionAlert, PregnancyAlert } from "@/components/herbs/safety-alert";
 import { CitationsList, SourceAttribution } from "@/components/herbs/citations";
 import { generateMonograph } from "@/lib/data/generate-monograph";
+import { getComparisonHerbs } from "@/lib/data/comparisons";
 import type { Monograph } from "@/lib/data/monographs";
 import { getHerbBySlug } from "@/lib/actions/herbs";
 import { createClient } from "@supabase/supabase-js";
@@ -211,7 +212,10 @@ export default async function HerbDetailPage({ params }: Props) {
   }
 
   if (!monograph) {
-    monograph = generateMonograph(herb);
+    monograph = generateMonograph({
+      ...herb,
+      citations: herb.citations as unknown[] | null | undefined,
+    });
   }
 
   const category = herb.herb_categories?.name || t("herbDetail.uncategorized");
@@ -241,29 +245,20 @@ export default async function HerbDetailPage({ params }: Props) {
   const reviewedBy = herb.reviewed_by || "HerbAlly Editorial Team";
   const reviewerCredentials = herb.reviewer_credentials || "Medical herbalists and healthcare professionals";
 
-  // Fetch related herbs (same category, excluding current herb)
+  // Fetch related herbs using smart comparison logic
   let relatedHerbs: Array<{ name: string; slug: string; scientific_name: string }> = [];
   try {
     const supabase = getAnonClient();
-    if (supabase && herb.herb_categories?.name) {
-      const { data: related } = await supabase
+    if (supabase) {
+      // Get all herbs with symptom keywords for smart matching
+      const { data: allHerbs } = await supabase
         .from("herbs")
-        .select("name, slug, scientific_name")
-        .eq("is_published", true)
-        .eq("herb_categories.name", herb.herb_categories.name)
-        .neq("slug", slug)
-        .limit(6);
-      relatedHerbs = related ?? [];
-    }
-    // Fallback: if no category matches or no results, get random herbs
-    if (relatedHerbs.length === 0 && supabase) {
-      const { data: fallback } = await supabase
-        .from("herbs")
-        .select("name, slug, scientific_name")
-        .eq("is_published", true)
-        .neq("slug", slug)
-        .limit(6);
-      relatedHerbs = fallback ?? [];
+        .select("name, slug, scientific_name, symptom_keywords, traditional_uses")
+        .eq("is_published", true);
+
+      if (allHerbs) {
+        relatedHerbs = getComparisonHerbs(slug, allHerbs, 3);
+      }
     }
   } catch {
     // Related herbs are non-critical, swallow errors
@@ -361,8 +356,8 @@ export default async function HerbDetailPage({ params }: Props) {
         </p>
         <div className="mt-3 flex flex-wrap items-center gap-4">
           <HerbSafetyBadges
-            pregnancySafe={herb.pregnancy_safe}
-            nursingSafe={herb.nursing_safe}
+            pregnancySafe={herb.pregnancy_safe ?? false}
+            nursingSafe={herb.nursing_safe ?? false}
           />
           {lastReviewed && (
             <span className="flex items-center gap-1.5 text-xs text-muted-foreground">
@@ -376,8 +371,8 @@ export default async function HerbDetailPage({ params }: Props) {
       {/* Critical Safety Warnings - ABOVE FOLD */}
       {(!herb.pregnancy_safe || !herb.nursing_safe) && (
         <PregnancyAlert
-          pregnancySafe={herb.pregnancy_safe}
-          nursingSafe={herb.nursing_safe}
+          pregnancySafe={herb.pregnancy_safe ?? false}
+          nursingSafe={herb.nursing_safe ?? false}
           evidenceLevel="limited"
         />
       )}
