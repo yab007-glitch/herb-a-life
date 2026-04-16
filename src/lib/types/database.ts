@@ -164,6 +164,7 @@ export type Database = {
           severity: Database["public"]["Enums"]["interaction_severity"]
           source: string | null
           source_url: string | null
+          translations: Json | null
           updated_at: string
         }
         Insert: {
@@ -178,6 +179,7 @@ export type Database = {
           severity?: Database["public"]["Enums"]["interaction_severity"]
           source?: string | null
           source_url?: string | null
+          translations?: Json | null
           updated_at?: string
         }
         Update: {
@@ -192,6 +194,7 @@ export type Database = {
           severity?: Database["public"]["Enums"]["interaction_severity"]
           source?: string | null
           source_url?: string | null
+          translations?: Json | null
           updated_at?: string
         }
         Relationships: [
@@ -208,27 +211,33 @@ export type Database = {
         Row: {
           created_at: string
           description: string | null
+          description_fr: string | null
           icon: string | null
           id: string
           name: string
+          name_fr: string | null
           slug: string
           sort_order: number | null
         }
         Insert: {
           created_at?: string
           description?: string | null
+          description_fr?: string | null
           icon?: string | null
           id?: string
           name: string
+          name_fr?: string | null
           slug: string
           sort_order?: number | null
         }
         Update: {
           created_at?: string
           description?: string | null
+          description_fr?: string | null
           icon?: string | null
           id?: string
           name?: string
+          name_fr?: string | null
           slug?: string
           sort_order?: number | null
         }
@@ -335,6 +344,7 @@ export type Database = {
           slug: string
           symptom_keywords: string[] | null
           traditional_uses: string[] | null
+          translations: Json | null
           updated_at: string
         }
         Insert: {
@@ -366,6 +376,7 @@ export type Database = {
           slug: string
           symptom_keywords?: string[] | null
           traditional_uses?: string[] | null
+          translations?: Json | null
           updated_at?: string
         }
         Update: {
@@ -397,6 +408,7 @@ export type Database = {
           slug?: string
           symptom_keywords?: string[] | null
           traditional_uses?: string[] | null
+          translations?: Json | null
           updated_at?: string
         }
         Relationships: [

@@ -13,7 +13,8 @@
     "test:coverage": "vitest run --coverage",
     "format": "prettier --write .",
     "format:check": "prettier --check .",
-    "redis:usage": "./scripts/check-redis-usage.sh"
+    "redis:usage": "./scripts/check-redis-usage.sh",
+    "translate:fr": "npx tsx scripts/translate-herbs-fr.ts"
   },
   "dependencies": {
     "@base-ui/react": "^1.3.0",

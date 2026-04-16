@@ -1,12 +1,24 @@
 "use server";
 
 import { createClient } from "@/lib/supabase/server";
+import { cookies } from "next/headers";
+import { localizeHerb, localizeInteraction, localizeCategoryName } from "@/lib/utils/localize-herb";
 import type {
   ActionResponse,
   Herb,
   HerbWithCategory,
   HerbWithInteractions,
+  HerbCategory,
 } from "@/lib/types";
+
+async function getLocale(): Promise<string> {
+  try {
+    const store = await cookies();
+    return store.get("herbally-locale")?.value === "fr" ? "fr" : "en";
+  } catch {
+    return "en";
+  }
+}
 
 const ITEMS_PER_PAGE = 20;
 
@@ -169,10 +181,14 @@ export async function getHerbs(params: {
       return { success: false, error: error.message };
     }
 
+    const locale = await getLocale();
+    const localizedHerbs = (data || []).map((h) =>
+      localizeHerb(h as HerbWithCategory, locale)
+    );
     return {
       success: true,
       data: {
-        herbs: (data || []) as HerbWithCategory[],
+        herbs: localizedHerbs as HerbWithCategory[],
         total: count || 0,
       },
     };
@@ -198,7 +214,12 @@ export async function getHerbBySlug(
       return { success: false, error: error.message };
     }
 
-    return { success: true, data: data as HerbWithInteractions };
+    const locale = await getLocale();
+    const herb = localizeHerb(data as HerbWithInteractions, locale);
+    const interactions = (herb.drug_interactions || []).map((ix) =>
+      localizeInteraction(ix, locale)
+    );
+    return { success: true, data: { ...herb, drug_interactions: interactions } as HerbWithInteractions };
   } catch {
     return { success: false, error: "Failed to fetch herb" };
   }
@@ -217,7 +238,12 @@ export async function getHerbCategories() {
       return { success: false, error: error.message };
     }
 
-    return { success: true, data: data || [] };
+    const locale = await getLocale();
+    const localized = (data || []).map((cat) => ({
+      ...cat,
+      name: localizeCategoryName(cat as HerbCategory & { name_fr?: string | null }, locale),
+    }));
+    return { success: true, data: localized };
   } catch {
     return { success: false, error: "Failed to fetch categories" };
   }
@@ -262,6 +288,7 @@ export async function searchHerbs(
       .overlaps("symptom_keywords", expandedKeywords)
       .limit(10);
 
+    const locale = await getLocale();
     if (keywordResults && keywordResults.length > 0) {
       const evidenceOrder: Record<string, number> = { A: 0, B: 1, C: 2, D: 3, trad: 4 };
       const sorted = keywordResults.sort((a: { evidence_level: string | null }, b: { evidence_level: string | null }) => {
@@ -275,7 +302,7 @@ export async function searchHerbs(
     // Fallback to text search
     const { data, error } = await supabase
       .from("herbs")
-      .select("id, name, slug, scientific_name")
+      .select("id, name, slug, scientific_name, translations")
       .eq("is_published", true)
       .or(
         `name.ilike.%${term}%,scientific_name.ilike.%${term}%,description.ilike.%${term}%`
@@ -286,7 +313,7 @@ export async function searchHerbs(
       return { success: false, error: error.message };
     }
 
-    return { success: true, data: (data || []) as Herb[] };
+    return { success: true, data: (data || []).map((h) => localizeHerb(h as Herb, locale)) as Herb[] };
   } catch {
     return { success: false, error: "Failed to search herbs" };
   }
