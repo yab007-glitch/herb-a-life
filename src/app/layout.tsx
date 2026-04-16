@@ -5,6 +5,7 @@ import { TooltipProvider } from "@/components/ui/tooltip";
 import { I18nProvider } from "@/components/i18n/i18n-provider";
 import { OrganizationSchema } from "@/components/seo/organization-schema";
 import { SWRegistration } from "@/components/shared/service-worker-registration";
+import { SkipToContent } from "@/components/shared/skip-to-content";
 import { WebVitals } from "@/components/analytics/web-vitals";
 import "./globals.css";
 
@@ -101,11 +102,9 @@ export default function RootLayout({
       className={`${geistSans.variable} ${geistMono.variable} h-full antialiased`}
     >
       <body className="min-h-full flex flex-col">
-        <a href="#main-content" className="skip-to-content">
-          Skip to content
-        </a>
         <OrganizationSchema />
         <I18nProvider>
+          <SkipToContent />
           <TooltipProvider>
             {children}
             <Toaster position="top-right" richColors />

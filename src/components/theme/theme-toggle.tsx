@@ -8,6 +8,7 @@ import {
   DropdownMenuItem,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
+import { useI18n } from "@/components/i18n/i18n-provider";
 
 type Theme = "light" | "dark" | "system";
 
@@ -33,6 +34,7 @@ function applyTheme(theme: Theme) {
 }
 
 export function ThemeToggle() {
+  const { t } = useI18n();
   const [theme, setTheme] = useState<Theme>(() => {
     if (typeof window === "undefined") return "system";
     const initial = getInitialTheme();
@@ -53,20 +55,20 @@ export function ThemeToggle() {
     <DropdownMenu>
       <DropdownMenuTrigger className="inline-flex shrink-0 items-center justify-center rounded-full size-8 hover:bg-muted hover:text-foreground transition-all outline-none focus-visible:border-ring focus-visible:ring-3 focus-visible:ring-ring/50">
         <Icon className="size-5" />
-        <span className="sr-only">Toggle theme</span>
+        <span className="sr-only">{t("common.toggleTheme")}</span>
       </DropdownMenuTrigger>
       <DropdownMenuContent align="end">
         <DropdownMenuItem onClick={() => setThemeValue("light")}>
           <Sun className="mr-2 size-4" />
-          Light
+          {t("common.light")}
         </DropdownMenuItem>
         <DropdownMenuItem onClick={() => setThemeValue("dark")}>
           <Moon className="mr-2 size-4" />
-          Dark
+          {t("common.dark")}
         </DropdownMenuItem>
         <DropdownMenuItem onClick={() => setThemeValue("system")}>
           <Monitor className="mr-2 size-4" />
-          System
+          {t("common.system")}
         </DropdownMenuItem>
       </DropdownMenuContent>
     </DropdownMenu>

@@ -22,7 +22,15 @@
     "copied": "Copied!",
     "copyLink": "Copy Link",
     "toggleTheme": "Toggle theme",
-    "changeLanguage": "Change language"
+    "changeLanguage": "Change language",
+    "skipToContent": "Skip to content",
+    "clearSearch": "Clear search",
+    "clearChat": "Clear chat",
+    "suggested": "Suggested: ",
+    "aiSuggestedAlternatives": "AI-Suggested Alternatives",
+    "basedOnCompounds": "Based on similar active compounds and traditional uses",
+    "suggestionsComingSoon": "Personalized herb suggestions coming soon",
+    "aiWillAnalyze": "Our AI will analyze active compounds and mechanisms to find related herbs"
   },
   "nav": {
     "symptoms": "By Symptom",

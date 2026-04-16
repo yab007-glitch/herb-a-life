@@ -7,6 +7,7 @@ import { Input } from "@/components/ui/input";
 import { Badge } from "@/components/ui/badge";
 import { EvidenceGrade } from "@/components/herbs/evidence-grade";
 import { useDebounce } from "@/lib/hooks/use-debounce";
+import { useI18n } from "@/components/i18n/i18n-provider";
 
 interface SearchResult {
   id: string;
@@ -24,9 +25,11 @@ interface InstantSearchProps {
 }
 
 export function InstantSearch({
-  placeholder = "Search herbs, symptoms, or conditions...",
+  placeholder,
   className,
 }: InstantSearchProps) {
+  const { t } = useI18n();
+  const resolvedPlaceholder = placeholder || t("search.placeholder");
   const [query, setQuery] = useState("");
   const [results, setResults] = useState<SearchResult[]>([]);
   const [isLoading, setIsLoading] = useState(false);
@@ -116,9 +119,9 @@ export function InstantSearch({
           }}
           onFocus={() => setIsOpen(true)}
           onKeyDown={handleKeyDown}
-          placeholder={placeholder}
+          placeholder={resolvedPlaceholder}
           className="h-12 pl-10 pr-10"
-          aria-label="Search herbs"
+          aria-label={t("search.search")}
           aria-autocomplete="list"
           aria-controls="search-results"
           aria-expanded={isOpen && results.length > 0}
@@ -129,7 +132,7 @@ export function InstantSearch({
           <button
             onClick={clearSearch}
             className="absolute right-3 top-1/2 -translate-y-1/2 text-muted-foreground hover:text-foreground"
-            aria-label="Clear search"
+            aria-label={t("common.clearSearch")}
           >
             <X className="h-4 w-4" />
           </button>

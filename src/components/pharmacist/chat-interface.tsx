@@ -492,7 +492,7 @@ export function ChatInterface({
               type="button"
               onClick={clearChat}
               className="h-6 px-2 text-xs text-muted-foreground hover:text-foreground"
-              aria-label="Clear chat"
+              aria-label={t("common.clearChat")}
             >
               <Trash2 className="size-3" />
               {t("pharmacist.clear")}

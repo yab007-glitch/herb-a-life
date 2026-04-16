@@ -22,7 +22,15 @@
     "copied": "Copié !",
     "copyLink": "Copier le lien",
     "toggleTheme": "Changer le thème",
-    "changeLanguage": "Changer la langue"
+    "changeLanguage": "Changer la langue",
+    "skipToContent": "Aller au contenu",
+    "clearSearch": "Effacer la recherche",
+    "clearChat": "Effacer la conversation",
+    "suggested": "Suggéré : ",
+    "aiSuggestedAlternatives": "Alternatives suggérées par l'IA",
+    "basedOnCompounds": "Basé sur des composés actifs et des usages traditionnels similaires",
+    "suggestionsComingSoon": "Suggestions personnalisées d'herbes bientôt disponibles",
+    "aiWillAnalyze": "Notre IA analysera les composés actifs et les mécanismes pour trouver des herbes similaires"
   },
   "nav": {
     "symptoms": "Par Symptôme",

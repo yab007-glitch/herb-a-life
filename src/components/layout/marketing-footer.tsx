@@ -30,9 +30,9 @@ export function MarketingFooter() {
       { href: "/herbalist", label: t("nav.herbalist") },
     ],
     resources: [
-      { href: "/faq", label: "FAQ" },
+      { href: "/faq", label: t("footer.faq") },
       { href: "/about", label: t("nav.about") },
-      { href: "/methodology", label: "Methodology" },
+      { href: "/methodology", label: t("footer.methodology") },
       { href: "/disclaimer", label: t("footer.disclaimer") },
       { href: "/privacy", label: t("footer.privacy") },
       { href: "/terms", label: t("footer.terms") },

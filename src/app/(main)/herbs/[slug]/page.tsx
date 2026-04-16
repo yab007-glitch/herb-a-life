@@ -357,7 +357,7 @@ export default async function HerbDetailPage({ params }: Props) {
           {lastReviewed && (
             <span className="flex items-center gap-1.5 text-xs text-muted-foreground">
               <Clock className="size-3" />
-              {t("herbDetail.lastUpdatedPrefix")} {lastReviewed}
+              {t("herbDetail.lastReviewedPrefix")} {lastReviewed}
             </span>
           )}
         </div>
