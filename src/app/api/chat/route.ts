@@ -57,15 +57,10 @@ export async function POST(request: NextRequest) {
       })),
     ];
 
-    console.log("Calling OpenRouter API:", {
-      model,
-      baseUrl,
-      messageCount: chatMessages.length,
-    });
+    console.log("Calling OpenRouter:", model, "messages:", chatMessages.length);
 
     // Call OpenRouter API (OpenAI-compatible chat completions)
     console.log("About to call OpenRouter at:", `${baseUrl}/chat/completions`);
-    
     let response: Response;
     try {
       response = await fetch(`${baseUrl}/chat/completions`, {
