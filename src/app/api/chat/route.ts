@@ -64,27 +64,38 @@ export async function POST(request: NextRequest) {
     });
 
     // Call OpenRouter API (OpenAI-compatible chat completions)
-    const response = await fetch(`${baseUrl}/chat/completions`, {
-      method: "POST",
-      headers: {
-        Authorization: `Bearer ${apiKey}`,
-        "Content-Type": "application/json",
-        "HTTP-Referer": process.env.NEXT_PUBLIC_APP_URL || "https://herbally.app",
-        "X-Title": "HerbAlly",
-      },
-      body: JSON.stringify({
-        model,
-        messages: chatMessages,
-        stream: true,
-      }),
-    });
+    console.log("About to call OpenRouter at:", `${baseUrl}/chat/completions`);
+    
+    let response: Response;
+    try {
+      response = await fetch(`${baseUrl}/chat/completions`, {
+        method: "POST",
+        headers: {
+          Authorization: `Bearer ${apiKey}`,
+          "Content-Type": "application/json",
+          "HTTP-Referer": process.env.NEXT_PUBLIC_APP_URL || "https://herbally.app",
+          "X-Title": "HerbAlly",
+        },
+        body: JSON.stringify({
+          model,
+          messages: chatMessages,
+          stream: true,
+        }),
+      });
+      console.log("OpenRouter response status:", response.status, response.statusText);
+    } catch (fetchError) {
+      console.error("Fetch to OpenRouter failed:", fetchError);
+      return NextResponse.json(
+        { error: `Fetch failed: ${fetchError instanceof Error ? fetchError.message : "Unknown"}` },
+        { status: 500 }
+      );
+    }
 
     if (!response.ok) {
       const errorText = await response.text().catch(() => "Unknown error");
       console.error("OpenRouter API error:", {
         status: response.status,
         statusText: response.statusText,
-        headers: Object.fromEntries(response.headers.entries()),
         body: errorText.substring(0, 500),
       });
       
@@ -97,7 +108,14 @@ export async function POST(request: NextRequest) {
       }
       
       return NextResponse.json(
-        { error: userMessage },
+        { 
+          error: userMessage,
+          debug: {
+            status: response.status,
+            statusText: response.statusText,
+            body: errorText.substring(0, 300),
+          }
+        },
         { status: response.status === 429 ? 429 : 500 }
       );
     }
