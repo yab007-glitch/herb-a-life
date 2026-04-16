@@ -1,6 +1,8 @@
 import type { Metadata } from "next";
+import { cookies } from "next/headers";
 import { DoseCalculatorForm } from "@/components/calculator/dose-calculator-form";
 import { getHerbBySlug } from "@/lib/actions/herbs";
+import { getServerTranslation, type Locale } from "@/lib/i18n/server";
 
 export const metadata: Metadata = {
   title: "HerbAlly - Dose Calculator",
@@ -33,6 +35,10 @@ export default async function CalculatorPage({
   searchParams: Promise<{ herb?: string }>;
 }) {
   const params = await searchParams;
+  const cookieStore = await cookies();
+  const localeCookie = cookieStore.get("herbally-locale");
+  const locale: Locale = localeCookie?.value === "fr" ? "fr" : "en";
+  const t = (key: string) => getServerTranslation(locale, key);
   const herbSlug = params.herb;
 
   let prefill: {
@@ -64,11 +70,10 @@ export default async function CalculatorPage({
     <div className="space-y-8">
       <div>
         <h1 className="text-3xl font-bold tracking-tight text-foreground">
-          Herbal Dose Calculator
+          {t("calculator.title")}
         </h1>
         <p className="mt-2 text-muted-foreground">
-          Calculate age-appropriate and weight-based dosages for children and
-          infants using medically recognized formulas.
+          {t("calculator.subtitle")}
         </p>
       </div>
       <DoseCalculatorForm prefill={prefill} />

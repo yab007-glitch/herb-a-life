@@ -258,9 +258,7 @@ export default async function SymptomDetailPage({ params }: Props) {
 
       {/* Medical Disclaimer */}
       <SafetyAlert severity="info" title={t("symptomsDetail.medicalDisclaimer")}>
-        {locale === "fr"
-          ? "Ces plantes sont répertoriées à des fins éducatives uniquement. L'efficacité varie selon l'individu. Consultez toujours votre professionnel de santé avant d'utiliser des plantes, en particulier si vous prenez des médicaments ou avez une condition médicale."
-          : "These herbs are listed for educational purposes only. Effectiveness varies by individual. Always consult your healthcare provider before using herbs, especially if you take medications or have a medical condition."}
+        {t("symptomsDetail.medicalDisclaimerText")}
       </SafetyAlert>
 
       {/* Herb Results */}
@@ -268,7 +266,7 @@ export default async function SymptomDetailPage({ params }: Props) {
         <div className="space-y-4">
           <div className="flex items-center gap-2 text-sm text-muted-foreground">
             <Stethoscope className="size-4" />
-            <span>{locale === "fr" ? `${herbs.length} plantes trouvées pour cette condition` : `${herbs.length} herbs found for this condition`}</span>
+            <span>{t("symptomsDetail.herbCount", { count: herbs.length })}</span>
           </div>
           <div className="grid gap-3 sm:grid-cols-2">
             {herbs.map((herb: { slug: string; name: string; scientific_name: string; evidence_level: string | null; pregnancy_safe: boolean | null; nursing_safe: boolean | null; traditional_uses: string[] | null; modern_uses: string[] | null; }) => (
@@ -317,9 +315,7 @@ export default async function SymptomDetailPage({ params }: Props) {
         <div className="mt-8 rounded-lg border bg-muted/50 p-6 text-center">
           <h2 className="text-xl font-bold text-foreground">{t("symptomsDetail.compareThese")}</h2>
           <p className="mt-2 text-muted-foreground">
-            {locale === "fr"
-              ? "Comparez l'efficacité, la sécurité et les interactions côte à côte."
-              : "See side-by-side comparisons of effectiveness, safety, and interactions."}
+            {t("symptomsDetail.compareDesc")}
           </p>
           <div className="mt-4 flex flex-wrap justify-center gap-3">
             <Link
@@ -340,9 +336,7 @@ export default async function SymptomDetailPage({ params }: Props) {
           className="inline-flex items-center gap-2 rounded-md border px-4 py-2 text-sm font-medium text-foreground hover:bg-muted"
         >
           <Stethoscope className="size-4" />
-          {locale === "fr"
-            ? `Interroger l'herboriste IA`
-            : `Ask the AI Herbalist`}
+          {t("symptomsDetail.askHerbalist")}
         </Link>
       </div>
     </div>

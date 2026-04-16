@@ -1076,7 +1076,9 @@
     "aboutUpdated": "Mises à jour régulières au fur et à mesure des nouvelles recherches",
     "aboutNotFDA": "Non révisé ni approuvé par la FDA",
     "description": "Posez des questions à notre herboriste IA sur la sécurité des plantes, les interactions médicamenteuses et la posologie. Réponses fondées sur des preuves de l'OMS, du NCCIH et de PubMed. Gratuit, aucun compte requis.",
-    "aboutProvider": "Propulsé par OpenRouter IA (modèle gratuit)"
+    "aboutProvider": "Propulsé par OpenRouter IA (modèle gratuit)",
+    "medsAutoQuery": "Je prends : {meds}. Vérifiez les interactions connues entre ces médicaments et les compléments phytothérapiques courants. Signalez les associations dangereuses.",
+    "herbAutoQuery": "Quelles sont les principales interactions médicamenteuses et précautions de sécurité pour {name} ({scientific}) ? Listez les interactions les plus importantes, leur gravité et les personnes qui doivent l'éviter."
   },
   "mobileTabs": {
     "symptoms": "Symptômes",
@@ -1314,8 +1316,12 @@
   },
   "symptomsDetail": {
     "medicalDisclaimer": "Avertissement Médical",
+    "medicalDisclaimerText": "Ces plantes sont répertoriées à des fins éducatives uniquement. L'efficacité varie selon l'individu. Consultez toujours votre professionnel de santé avant d'utiliser des plantes, en particulier si vous prenez des médicaments ou avez une condition médicale.",
+    "herbCount": "{count} plantes trouvées pour cette condition",
     "noHerbsYet": "Aucune plante trouvée pour cette condition pour le moment.",
-    "compareThese": "Comparer Ces Plantes"
+    "compareThese": "Comparer Ces Plantes",
+    "compareDesc": "Comparez l'efficacité, la sécurité et les interactions côte à côte.",
+    "askHerbalist": "Interroger l'herboriste IA"
   },
   "seo": {
     "safePregnancy": "Généralement sûr pendant la grossesse",
