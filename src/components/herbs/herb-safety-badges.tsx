@@ -1,3 +1,5 @@
+"use client";
+
 import { ShieldCheck, ShieldX } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { useI18n } from "@/components/i18n/i18n-provider";
