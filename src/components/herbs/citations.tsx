@@ -2,6 +2,7 @@
 
 import { ExternalLink, BookOpen, FileText, Globe } from "lucide-react";
 import { cn } from "@/lib/utils";
+import { useI18n } from "@/components/i18n/i18n-provider";
 
 interface Citation {
   source: string;
@@ -26,10 +27,12 @@ const sourceIcons: Record<string, React.ReactNode> = {
 };
 
 export function CitationsList({ citations, className }: CitationsListProps) {
+  const { t } = useI18n();
+
   if (!citations || citations.length === 0) {
     return (
       <div className={cn("text-sm text-muted-foreground italic", className)}>
-        Citations pending review. Information based on traditional use and preliminary research.
+        {t("citations.pending")}
       </div>
     );
   }
@@ -107,12 +110,14 @@ export function SourceAttribution({
   sources,
   className,
 }: SourceAttributionProps) {
+  const { t } = useI18n();
+
   return (
     <div className={cn("rounded-lg border bg-muted/50 p-4 text-sm", className)}>
       <div className="flex flex-wrap items-center gap-x-4 gap-y-2">
         {reviewedBy && (
           <div>
-            <span className="text-muted-foreground">Reviewed by: </span>
+            <span className="text-muted-foreground">{t("citations.reviewedBy")}</span>
             <span className="font-medium">{reviewedBy}</span>
             {reviewerCredentials && (
               <span className="text-muted-foreground">, {reviewerCredentials}</span>
@@ -121,16 +126,15 @@ export function SourceAttribution({
         )}
         {lastReviewed && (
           <div>
-            <span className="text-muted-foreground">Last updated: </span>
+            <span className="text-muted-foreground">{t("citations.lastUpdated")}</span>
             <span className="font-medium">{lastReviewed}</span>
           </div>
         )}
       </div>
       
       {sources && sources.length > 0 && (
-        <div className="mt-2 pt-2 border-t"
-        >
-          <span className="text-muted-foreground">Sources: </span>
+        <div className="mt-2 pt-2 border-t">
+          <span className="text-muted-foreground">{t("citations.sources")}</span>
           <span className="text-muted-foreground">{sources.join(" · ")}</span>
         </div>
       )}

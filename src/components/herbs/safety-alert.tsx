@@ -2,6 +2,7 @@
 
 import { AlertTriangle, ShieldAlert, Info } from "lucide-react";
 import { cn } from "@/lib/utils";
+import { useI18n } from "@/components/i18n/i18n-provider";
 
 interface SafetyAlertProps {
   severity: "critical" | "warning" | "info";
@@ -78,11 +79,12 @@ export function InteractionAlert({
   severityCounts,
   className,
 }: InteractionAlertProps) {
+  const { t } = useI18n();
+
   if (interactionCount === 0) {
     return (
-      <SafetyAlert severity="info" title="No Known Drug Interactions" className={className}>
-        No clinically significant drug interactions have been documented. However, always
-        consult your healthcare provider before combining herbs with medications.
+      <SafetyAlert severity="info" title={t("safety.noInteractionsTitle")} className={className}>
+        {t("safety.noInteractionsMsg")}
       </SafetyAlert>
     );
   }
@@ -94,44 +96,42 @@ export function InteractionAlert({
 
   const severity = hasSevere ? "critical" : hasModerate ? "warning" : "info";
   const title = hasSevere
-    ? `⚠️ ${interactionCount} Known Drug Interaction${interactionCount === 1 ? "" : "s"} — Some May Be Serious`
-    : `${interactionCount} Known Drug Interaction${interactionCount === 1 ? "" : "s"}`;
+    ? `⚠️ ${interactionCount === 1 ? t("safety.interactionCountTitle", { count: interactionCount }) : t("safety.interactionCountTitlePlural", { count: interactionCount })}`
+    : `${interactionCount} ${interactionCount === 1 ? t("interactions.severity.mild").split(" ")[0] : ""}`;
+
+  const alertTitle = hasSevere
+    ? `⚠️ ${interactionCount} ${t("interactions.title").toLowerCase()}${interactionCount > 1 ? "" : ""} — ${hasSevere ? "⚠️" : ""}`
+    : `${interactionCount} ${t("interactions.title").toLowerCase()}`;
 
   return (
-    <SafetyAlert severity={severity} title={title} className={className}>
+    <SafetyAlert severity={severity} title={interactionCount === 1 ? t("safety.interactionCountTitle", { count: interactionCount }) : t("safety.interactionCountTitlePlural", { count: interactionCount })} className={className}>
       <div className="space-y-2">
         {severityCounts && (
-          <div className="flex flex-wrap gap-2 text-xs"
-          >
+          <div className="flex flex-wrap gap-2 text-xs">
             {(severityCounts.contraindicated || 0) > 0 && (
-              <span className="rounded bg-red-100 px-1.5 py-0.5 font-medium text-red-800 dark:bg-red-900/50 dark:text-red-200"
-              >
-                {severityCounts.contraindicated} Contraindicated
+              <span className="rounded bg-red-100 px-1.5 py-0.5 font-medium text-red-800 dark:bg-red-900/50 dark:text-red-200">
+                {severityCounts.contraindicated} {t("safety.severityContraindicated")}
               </span>
             )}
             {(severityCounts.severe || 0) > 0 && (
-              <span className="rounded bg-red-100 px-1.5 py-0.5 font-medium text-red-800 dark:bg-red-900/50 dark:text-red-200"
-              >
-                {severityCounts.severe} Severe
+              <span className="rounded bg-red-100 px-1.5 py-0.5 font-medium text-red-800 dark:bg-red-900/50 dark:text-red-200">
+                {severityCounts.severe} {t("safety.severitySevere")}
               </span>
             )}
             {(severityCounts.moderate || 0) > 0 && (
-              <span className="rounded bg-amber-100 px-1.5 py-0.5 font-medium text-amber-800 dark:bg-amber-900/50 dark:text-amber-200"
-              >
-                {severityCounts.moderate} Moderate
+              <span className="rounded bg-amber-100 px-1.5 py-0.5 font-medium text-amber-800 dark:bg-amber-900/50 dark:text-amber-200">
+                {severityCounts.moderate} {t("safety.severityModerate")}
               </span>
             )}
             {(severityCounts.mild || 0) > 0 && (
-              <span className="rounded bg-blue-100 px-1.5 py-0.5 font-medium text-blue-800 dark:bg-blue-900/50 dark:text-blue-200"
-              >
-                {severityCounts.mild} Mild
+              <span className="rounded bg-blue-100 px-1.5 py-0.5 font-medium text-blue-800 dark:bg-blue-900/50 dark:text-blue-200">
+                {severityCounts.mild} {t("safety.severityMild")}
               </span>
             )}
           </div>
         )}
         <p>
-          This herb may interact with medications you are taking. Review the interactions
-          table below and consult your healthcare provider before use.
+          {t("safety.interactionMessage")}
         </p>
       </div>
     </SafetyAlert>
@@ -152,28 +152,26 @@ export function PregnancyAlert({
   evidenceLevel = "limited",
   className,
 }: PregnancyAlertProps) {
+  const { t } = useI18n();
+
   if (pregnancySafe && nursingSafe) {
     return (
-      <SafetyAlert severity="info" title="Pregnancy & Nursing Safety" className={className}
-      >
-        Generally considered safe during pregnancy and nursing based on{" "}
-        {evidenceLevel} evidence. However, always consult your healthcare provider
-        before using any herbal supplement during pregnancy or while breastfeeding.
+      <SafetyAlert severity="info" title={t("safety.pregnancySafetyTitle")} className={className}>
+        {t("safety.pregnancySafeMsg", { level: evidenceLevel })}
       </SafetyAlert>
     );
   }
 
   return (
-    <SafetyAlert severity="critical" title="⚠️ Not Recommended During Pregnancy or Nursing" className={className}
-    >
+    <SafetyAlert severity="critical" title={`⚠️ ${t("safety.notSafeTitle")}`} className={className}>
       <div className="space-y-2">
         {!pregnancySafe && (
-          <p>This herb is NOT recommended during pregnancy due to potential risks to the developing fetus.</p>
+          <p>{t("safety.notPregnancyMsg")}</p>
         )}
         {!nursingSafe && (
-          <p>This herb is NOT recommended while breastfeeding as effects on infants are unknown.</p>
+          <p>{t("safety.notNursingMsg")}</p>
         )}
-        <p className="font-medium">Consult your healthcare provider before use.</p>
+        <p className="font-medium">{t("safety.consultProvider")}</p>
       </div>
     </SafetyAlert>
   );

@@ -9,6 +9,7 @@ import {
 } from "@/components/ui/tooltip";
 import { cn } from "@/lib/utils";
 import { FlaskConical, Beaker, Leaf, HelpCircle } from "lucide-react";
+import { useI18n } from "@/components/i18n/i18n-provider";
 
 export type EvidenceLevel = "A" | "B" | "C" | "D" | "trad";
 
@@ -19,49 +20,49 @@ interface EvidenceGradeProps {
 }
 
 const evidenceConfig: Record<EvidenceLevel, {
-  label: string;
-  shortDesc: string;
-  fullDesc: string;
+  labelKey: string;
+  shortDescKey: string;
+  fullDescKey: string;
   color: string;
   bgColor: string;
   icon: React.ReactNode;
 }> = {
   A: {
-    label: "Strong Evidence",
-    shortDesc: "Multiple RCTs",
-    fullDesc: "Strong clinical evidence from multiple randomized controlled trials (RCTs) and systematic reviews.",
+    labelKey: "evidence.A.label",
+    shortDescKey: "evidence.A.shortDesc",
+    fullDescKey: "evidence.A.fullDesc",
     color: "text-green-700 dark:text-green-400",
     bgColor: "bg-green-100 dark:bg-green-900/30",
     icon: <FlaskConical className="size-3" />,
   },
   B: {
-    label: "Moderate Evidence",
-    shortDesc: "Some clinical data",
-    fullDesc: "Moderate evidence from observational studies, case series, or limited RCTs.",
+    labelKey: "evidence.B.label",
+    shortDescKey: "evidence.B.shortDesc",
+    fullDescKey: "evidence.B.fullDesc",
     color: "text-blue-700 dark:text-blue-400",
     bgColor: "bg-blue-100 dark:bg-blue-900/30",
     icon: <Beaker className="size-3" />,
   },
   C: {
-    label: "Limited Evidence",
-    shortDesc: "Traditional/preclinical",
-    fullDesc: "Limited evidence from traditional use, preclinical studies, or expert opinion. More research needed.",
+    labelKey: "evidence.C.label",
+    shortDescKey: "evidence.C.shortDesc",
+    fullDescKey: "evidence.C.fullDesc",
     color: "text-amber-700 dark:text-amber-400",
     bgColor: "bg-amber-100 dark:bg-amber-900/30",
     icon: <Leaf className="size-3" />,
   },
   D: {
-    label: "Anecdotal Only",
-    shortDesc: "Historical use only",
-    fullDesc: "Evidence based primarily on historical use and anecdotal reports. Limited scientific validation.",
+    labelKey: "evidence.D.label",
+    shortDescKey: "evidence.D.shortDesc",
+    fullDescKey: "evidence.D.fullDesc",
     color: "text-gray-700 dark:text-gray-400",
     bgColor: "bg-gray-100 dark:bg-gray-900/30",
     icon: <HelpCircle className="size-3" />,
   },
   trad: {
-    label: "Traditional Use",
-    shortDesc: "Traditional medicine",
-    fullDesc: "Used traditionally in herbal medicine systems. Scientific evidence may be limited or ongoing.",
+    labelKey: "evidence.trad.label",
+    shortDescKey: "evidence.trad.shortDesc",
+    fullDescKey: "evidence.trad.fullDesc",
     color: "text-purple-700 dark:text-purple-400",
     bgColor: "bg-purple-100 dark:bg-purple-900/30",
     icon: <Leaf className="size-3" />,
@@ -69,6 +70,7 @@ const evidenceConfig: Record<EvidenceLevel, {
 };
 
 export function EvidenceGrade({ level, className, showLabel = true }: EvidenceGradeProps) {
+  const { t } = useI18n();
   const config = evidenceConfig[level] || evidenceConfig.C;
 
   return (
@@ -84,16 +86,16 @@ export function EvidenceGrade({ level, className, showLabel = true }: EvidenceGr
             )}
           >
             {config.icon}
-            <span>Evidence: {level}</span>
+            <span>{t("evidence.prefix")} {level}</span>
             {showLabel && (
-              <span className="hidden sm:inline">- {config.shortDesc}</span>
+              <span className="hidden sm:inline">- {t(config.shortDescKey)}</span>
             )}
           </div>
         </TooltipTrigger>
         <TooltipContent side="bottom" className="max-w-xs">
           <div className="space-y-1">
-            <p className="font-semibold">{config.label}</p>
-            <p className="text-xs text-muted-foreground">{config.fullDesc}</p>
+            <p className="font-semibold">{t(config.labelKey)}</p>
+            <p className="text-xs text-muted-foreground">{t(config.fullDescKey)}</p>
           </div>
         </TooltipContent>
       </Tooltip>

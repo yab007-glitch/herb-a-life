@@ -2,6 +2,8 @@ import type { Metadata } from "next";
 import Link from "next/link";
 import { AlertTriangle, Brain, Flame, Heart, Leaf, Moon, Shield, Stethoscope } from "lucide-react";
 import { Card, CardContent } from "@/components/ui/card";
+import { cookies } from "next/headers";
+import { getServerTranslation, type Locale } from "@/lib/i18n/server";
 
 export const metadata: Metadata = {
   title: "Herbs by Symptom",
@@ -20,101 +22,87 @@ export const metadata: Metadata = {
   },
 };
 
-const symptomCategories = [
-  {
-    title: "Mental & Emotional",
-    icon: Brain,
-    color: "text-purple-600 dark:text-purple-400",
-    bgColor: "bg-purple-100 dark:bg-purple-900/30",
+const categoryConfig = [
+  { key: "mental", icon: Brain, color: "text-purple-600 dark:text-purple-400", bgColor: "bg-purple-100 dark:bg-purple-900/30",
     symptoms: [
-      { name: "Anxiety & Stress", query: "anxiety", description: "Herbs traditionally used for anxiety and stress relief" },
-      { name: "Depression & Mood", query: "depression", description: "Herbs that may support mood and emotional wellbeing" },
-      { name: "Sleep & Insomnia", query: "sleep", description: "Herbs traditionally used to promote sleep" },
-      { name: "Focus & Memory", query: "focus", description: "Herbs that may support cognitive function" },
+      { subkey: "anxiety", query: "anxiety" },
+      { subkey: "depression", query: "depression" },
+      { subkey: "sleep", query: "sleep" },
+      { subkey: "focus", query: "focus" },
     ],
   },
-  {
-    title: "Pain & Inflammation",
-    icon: Flame,
-    color: "text-red-600 dark:text-red-400",
-    bgColor: "bg-red-100 dark:bg-red-900/30",
+  { key: "pain", icon: Flame, color: "text-red-600 dark:text-red-400", bgColor: "bg-red-100 dark:bg-red-900/30",
     symptoms: [
-      { name: "Inflammation", query: "inflammation", description: "Herbs with anti-inflammatory properties" },
-      { name: "Joint & Muscle Pain", query: "joint", description: "Herbs for musculoskeletal discomfort" },
-      { name: "Headaches & Migraines", query: "headache", description: "Herbs traditionally used for headache relief" },
-      { name: "Nerve Pain", query: "nerve", description: "Herbs that may support nerve health" },
+      { subkey: "inflammation", query: "inflammation" },
+      { subkey: "joint", query: "joint" },
+      { subkey: "headache", query: "headache" },
+      { subkey: "nerve", query: "nerve" },
     ],
   },
-  {
-    title: "Digestive Health",
-    icon: Leaf,
-    color: "text-green-600 dark:text-green-400",
-    bgColor: "bg-green-100 dark:bg-green-900/30",
+  { key: "digestive", icon: Leaf, color: "text-green-600 dark:text-green-400", bgColor: "bg-green-100 dark:bg-green-900/30",
     symptoms: [
-      { name: "Indigestion & Bloating", query: "digestion", description: "Herbs for digestive comfort" },
-      { name: "Nausea", query: "nausea", description: "Herbs traditionally used for nausea relief" },
-      { name: "Constipation", query: "constipation", description: "Herbs that support regularity" },
-      { name: "Liver Support", query: "liver", description: "Herbs that support liver health" },
+      { subkey: "indigestion", query: "digestion" },
+      { subkey: "nausea", query: "nausea" },
+      { subkey: "constipation", query: "constipation" },
+      { subkey: "liver", query: "liver" },
     ],
   },
-  {
-    title: "Heart & Circulation",
-    icon: Heart,
-    color: "text-rose-600 dark:text-rose-400",
-    bgColor: "bg-rose-100 dark:bg-rose-900/30",
+  { key: "heart", icon: Heart, color: "text-rose-600 dark:text-rose-400", bgColor: "bg-rose-100 dark:bg-rose-900/30",
     symptoms: [
-      { name: "Blood Pressure", query: "blood-pressure", description: "Herbs that may support cardiovascular health" },
-      { name: "Cholesterol", query: "cholesterol", description: "Herbs traditionally used for lipid management" },
-      { name: "Circulation", query: "circulation", description: "Herbs that may improve circulation" },
+      { subkey: "bloodPressure", query: "blood-pressure" },
+      { subkey: "cholesterol", query: "cholesterol" },
+      { subkey: "circulation", query: "circulation" },
     ],
   },
-  {
-    title: "Immune & Respiratory",
-    icon: Shield,
-    color: "text-blue-600 dark:text-blue-400",
-    bgColor: "bg-blue-100 dark:bg-blue-900/30",
+  { key: "immune", icon: Shield, color: "text-blue-600 dark:text-blue-400", bgColor: "bg-blue-100 dark:bg-blue-900/30",
     symptoms: [
-      { name: "Cold & Flu", query: "cold", description: "Herbs for immune support during illness" },
-      { name: "Cough & Sore Throat", query: "cough", description: "Herbs traditionally used for respiratory relief" },
-      { name: "Allergies", query: "allergy", description: "Herbs that may help with allergic responses" },
-      { name: "Immune Support", query: "immune", description: "Herbs for general immune support" },
+      { subkey: "cold", query: "cold" },
+      { subkey: "cough", query: "cough" },
+      { subkey: "allergy", query: "allergy" },
+      { subkey: "immuneSupport", query: "immune" },
     ],
   },
-  {
-    title: "Women's Health",
-    icon: Moon,
-    color: "text-pink-600 dark:text-pink-400",
-    bgColor: "bg-pink-100 dark:bg-pink-900/30",
+  { key: "womens", icon: Moon, color: "text-pink-600 dark:text-pink-400", bgColor: "bg-pink-100 dark:bg-pink-900/30",
     symptoms: [
-      { name: "Menstrual Cramps", query: "menstrual", description: "Herbs for menstrual comfort" },
-      { name: "Menopause", query: "menopause", description: "Herbs traditionally used during menopause" },
-      { name: "Hormonal Balance", query: "hormonal", description: "Herbs that may support hormonal health" },
+      { subkey: "menstrual", query: "menstrual" },
+      { subkey: "menopause", query: "menopause" },
+      { subkey: "hormonal", query: "hormonal" },
     ],
   },
-  {
-    title: "Skin & Wound Care",
-    icon: Stethoscope,
-    color: "text-amber-600 dark:text-amber-400",
-    bgColor: "bg-amber-100 dark:bg-amber-900/30",
+  { key: "skin", icon: Stethoscope, color: "text-amber-600 dark:text-amber-400", bgColor: "bg-amber-100 dark:bg-amber-900/30",
     symptoms: [
-      { name: "Eczema & Psoriasis", query: "skin", description: "Herbs for inflammatory skin conditions" },
-      { name: "Wound Healing", query: "wound", description: "Herbs traditionally used for wound care" },
-      { name: "Acne", query: "acne", description: "Herbs that may support clear skin" },
+      { subkey: "eczema", query: "skin" },
+      { subkey: "wound", query: "wound" },
+      { subkey: "acne", query: "acne" },
     ],
   },
 ];
 
-export default function SymptomsPage() {
+export default async function SymptomsPage() {
+  const cookieStore = await cookies();
+  const localeCookie = cookieStore.get("herbally-locale");
+  const locale: Locale = localeCookie?.value === "fr" ? "fr" : "en";
+  const t = (key: string) => getServerTranslation(locale, key);
+
+  const symptomCategories = categoryConfig.map((cat) => ({
+    ...cat,
+    title: t(`symptomsPage.${cat.key}.title`),
+    symptoms: cat.symptoms.map((s) => ({
+      ...s,
+      name: t(`symptomsPage.${cat.key}.${s.subkey}.name`),
+      description: t(`symptomsPage.${cat.key}.${s.subkey}.desc`),
+    })),
+  }));
+
   return (
     <div className="mx-auto max-w-4xl px-4 py-16 sm:px-6 lg:px-8">
       {/* Header */}
       <div className="mb-12 text-center">
         <h1 className="text-4xl font-bold tracking-tight text-foreground">
-          Find Herbs for Your Symptoms
+          {t("symptomsPage.title")}
         </h1>
         <p className="mx-auto mt-4 max-w-2xl text-lg text-muted-foreground">
-          Don&apos;t know which herb you need? Start here. Select a symptom or condition 
-          and we&apos;ll show you evidence-based herbs that may help.
+          {t("symptomsPage.subtitle")}
         </p>
       </div>
 
@@ -123,11 +111,9 @@ export default function SymptomsPage() {
         <div className="flex gap-3">
           <AlertTriangle className="size-5 shrink-0 text-amber-600 dark:text-amber-400" />
           <div className="text-sm text-amber-800 dark:text-amber-200">
-            <p className="font-semibold">Medical Disclaimer</p>
+            <p className="font-semibold">{t("symptomsPage.disclaimerTitle")}</p>
             <p className="mt-1">
-              This information is for educational purposes only. Herbs can interact with medications 
-              and may not be safe for everyone. Always consult your healthcare provider before starting 
-              any herbal supplement, especially if you are pregnant, nursing, or taking prescription drugs.
+              {t("symptomsPage.disclaimerText")}
             </p>
           </div>
         </div>
@@ -138,7 +124,7 @@ export default function SymptomsPage() {
         {symptomCategories.map((category) => {
           const CategoryIcon = category.icon;
           return (
-            <section key={category.title}>
+            <section key={category.key}>
               <div className="mb-4 flex items-center gap-3">
                 <div className={`inline-flex size-10 items-center justify-center rounded-lg ${category.bgColor}`}>
                   <CategoryIcon className={`size-5 ${category.color}`} />
@@ -148,7 +134,7 @@ export default function SymptomsPage() {
               <div className="grid gap-4 sm:grid-cols-2">
                 {category.symptoms.map((symptom) => (
                   <Link
-                    key={symptom.name}
+                    key={symptom.subkey}
                     href={`/symptoms/${encodeURIComponent(symptom.query)}`}
                     className="group"
                   >
@@ -161,7 +147,7 @@ export default function SymptomsPage() {
                           {symptom.description}
                         </p>
                         <span className="mt-2 inline-flex items-center gap-1 text-xs font-medium text-primary">
-                          Browse herbs →
+                          {t("symptomsPage.browseHerbs")}
                         </span>
                       </CardContent>
                     </Card>
@@ -175,9 +161,9 @@ export default function SymptomsPage() {
 
       {/* Bottom CTA */}
       <div className="mt-12 rounded-lg border bg-muted/50 p-6 text-center">
-        <h2 className="text-xl font-bold text-foreground">Not Sure Where to Start?</h2>
+        <h2 className="text-xl font-bold text-foreground">{t("symptomsPage.notSureTitle")}</h2>
         <p className="mt-2 text-muted-foreground">
-          Try our AI Virtual Herbalist for personalized guidance.
+          {t("symptomsPage.notSureDesc")}
         </p>
         <div className="mt-4 flex flex-wrap justify-center gap-3">
           <Link
@@ -185,14 +171,14 @@ export default function SymptomsPage() {
             className="inline-flex items-center gap-2 rounded-md bg-primary px-4 py-2 text-sm font-medium text-primary-foreground hover:bg-primary/90 transition-colors"
           >
             <Stethoscope className="size-4" />
-            Ask the Virtual Herbalist
+            {t("symptomsPage.askHerbalist")}
           </Link>
           <Link
             href="/herbs"
             className="inline-flex items-center gap-2 rounded-md border px-4 py-2 text-sm font-medium text-foreground hover:bg-muted transition-colors"
           >
             <Leaf className="size-4" />
-            Browse All Herbs
+            {t("symptomsPage.browseAllHerbs")}
           </Link>
         </div>
       </div>

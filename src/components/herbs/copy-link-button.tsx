@@ -3,9 +3,11 @@
 import { useState } from "react";
 import { Link2, Check } from "lucide-react";
 import { Button } from "@/components/ui/button";
+import { useI18n } from "@/components/i18n/i18n-provider";
 
 export function CopyLinkButton() {
   const [copied, setCopied] = useState(false);
+  const { t } = useI18n();
 
   async function handleCopy() {
     try {
@@ -13,7 +15,6 @@ export function CopyLinkButton() {
       setCopied(true);
       setTimeout(() => setCopied(false), 2000);
     } catch {
-      // Fallback for older browsers
       const input = document.createElement("input");
       input.value = window.location.href;
       document.body.appendChild(input);
@@ -31,17 +32,17 @@ export function CopyLinkButton() {
       size="sm"
       onClick={handleCopy}
       className="gap-2"
-      aria-label="Copy link to this herb page"
+      aria-label={t("common.copyLink")}
     >
       {copied ? (
         <>
           <Check className="size-4 text-green-600" />
-          Copied!
+          {t("common.copied")}
         </>
       ) : (
         <>
           <Link2 className="size-4" />
-          Copy Link
+          {t("common.copyLink")}
         </>
       )}
     </Button>

@@ -9,6 +9,8 @@ import {
   BookOpen,
 } from "lucide-react";
 import { Card, CardContent } from "@/components/ui/card";
+import { cookies } from "next/headers";
+import { getServerTranslation, type Locale } from "@/lib/i18n/server";
 
 export const metadata: Metadata = {
   title: "About",
@@ -27,31 +29,33 @@ export const metadata: Metadata = {
   },
 };
 
-const howItWorks = [
-  {
-    step: 1,
-    icon: Search,
-    title: "Search Our Database",
-    description:
-      "Browse 2,700+ medicinal herbs with detailed profiles including active compounds, traditional uses, and modern research.",
-  },
-  {
-    step: 2,
-    icon: Calculator,
-    title: "Calculate Safe Doses",
-    description:
-      "Use our dose calculator with medically recognized formulas to determine appropriate dosages for different ages and weights.",
-  },
-  {
-    step: 3,
-    icon: MessageCircle,
-    title: "Consult the Virtual Herbalist",
-    description:
-      "Ask our AI-powered herbalist about herb safety, drug interactions, and get personalized guidance for your situation.",
-  },
-];
+export default async function AboutPage() {
+  const cookieStore = await cookies();
+  const localeCookie = cookieStore.get("herbally-locale");
+  const locale: Locale = localeCookie?.value === "fr" ? "fr" : "en";
+  const t = (key: string) => getServerTranslation(locale, key);
 
-export default function AboutPage() {
+  const howItWorks = [
+    {
+      step: 1,
+      icon: Search,
+      title: t("aboutContent.howItWorks.step1Title"),
+      description: t("aboutContent.howItWorks.step1Desc"),
+    },
+    {
+      step: 2,
+      icon: Calculator,
+      title: t("aboutContent.howItWorks.step2Title"),
+      description: t("aboutContent.howItWorks.step2Desc"),
+    },
+    {
+      step: 3,
+      icon: MessageCircle,
+      title: t("aboutContent.howItWorks.step3Title"),
+      description: t("aboutContent.howItWorks.step3Desc"),
+    },
+  ];
+
   return (
     <div className="mx-auto max-w-4xl px-4 py-16 sm:px-6 lg:px-8">
       {/* Header */}
@@ -60,50 +64,40 @@ export default function AboutPage() {
           <Leaf className="size-8" />
         </div>
         <h1 className="text-4xl font-bold tracking-tight text-foreground">
-          About HerbAlly
+          {t("aboutContent.header")}
         </h1>
         <p className="mx-auto mt-4 max-w-2xl text-lg text-muted-foreground">
-          Your trusted, evidence-based resource for medicinal herbs and natural
-          remedies.
+          {t("aboutContent.subtitle")}
         </p>
       </div>
 
       {/* What is HerbAlly */}
       <section className="mb-16">
         <h2 className="mb-4 text-2xl font-bold text-foreground">
-          What is HerbAlly?
+          {t("aboutContent.whatIsTitle")}
         </h2>
         <div className="space-y-4 text-muted-foreground">
-          <p>
-            HerbAlly is a comprehensive digital platform designed to provide
-            reliable, evidence-based information about medicinal herbs and
-            natural remedies. We combine a vast herb database, scientifically
-            grounded dosage calculators, and AI-powered guidance to help
-            individuals make informed decisions about herbal supplements and
-            their potential interactions with medications.
-          </p>
-          <p>
-            Whether you are a healthcare professional looking for quick
-            reference material, a herbalist seeking interaction data, or an
-            individual exploring natural wellness options, HerbAlly provides the
-            tools and information you need in one accessible platform.
-          </p>
+          <p>{t("aboutContent.whatIsText1")}</p>
+          <p>{t("aboutContent.whatIsText2")}</p>
         </div>
       </section>
 
       {/* Our Mission */}
       <section className="mb-16">
-        <h2 className="mb-4 text-2xl font-bold text-foreground">Our Mission</h2>
+        <h2 className="mb-4 text-2xl font-bold text-foreground">
+          {t("aboutContent.mission.title")}
+        </h2>
         <div className="grid gap-6 sm:grid-cols-3">
           <Card>
             <CardContent className="pt-2 text-center">
               <div className="mb-3 inline-flex size-10 items-center justify-center rounded-lg bg-green-100 text-green-700 dark:bg-green-900/30 dark:text-green-400">
                 <BookOpen className="size-5" />
               </div>
-              <h3 className="font-semibold text-foreground">Educate</h3>
+              <h3 className="font-semibold text-foreground">
+                {t("aboutContent.mission.educate")}
+              </h3>
               <p className="mt-2 text-sm text-muted-foreground">
-                Provide accessible, evidence-based information about medicinal
-                herbs and their uses.
+                {t("aboutContent.mission.educateDesc")}
               </p>
             </CardContent>
           </Card>
@@ -112,10 +106,11 @@ export default function AboutPage() {
               <div className="mb-3 inline-flex size-10 items-center justify-center rounded-lg bg-blue-100 text-blue-700 dark:bg-blue-900/30 dark:text-blue-400">
                 <Shield className="size-5" />
               </div>
-              <h3 className="font-semibold text-foreground">Protect</h3>
+              <h3 className="font-semibold text-foreground">
+                {t("aboutContent.mission.protect")}
+              </h3>
               <p className="mt-2 text-sm text-muted-foreground">
-                Help users identify potential drug-herb interactions and make
-                safer supplement choices.
+                {t("aboutContent.mission.protectDesc")}
               </p>
             </CardContent>
           </Card>
@@ -124,10 +119,11 @@ export default function AboutPage() {
               <div className="mb-3 inline-flex size-10 items-center justify-center rounded-lg bg-purple-100 text-purple-700 dark:bg-purple-900/30 dark:text-purple-400">
                 <Heart className="size-5" />
               </div>
-              <h3 className="font-semibold text-foreground">Empower</h3>
+              <h3 className="font-semibold text-foreground">
+                {t("aboutContent.mission.empower")}
+              </h3>
               <p className="mt-2 text-sm text-muted-foreground">
-                Give individuals and practitioners the tools to make informed
-                herbal wellness decisions.
+                {t("aboutContent.mission.empowerDesc")}
               </p>
             </CardContent>
           </Card>
@@ -137,7 +133,7 @@ export default function AboutPage() {
       {/* How It Works */}
       <section className="mb-16">
         <h2 className="mb-8 text-center text-2xl font-bold text-foreground">
-          How It Works
+          {t("aboutContent.howItWorks.title")}
         </h2>
         <div className="space-y-8">
           {howItWorks.map((item) => {
@@ -172,41 +168,60 @@ export default function AboutPage() {
       {/* Free & Donation-Supported */}
       <section className="mb-16">
         <h2 className="mb-4 text-2xl font-bold text-foreground">
-          Free Forever, Powered by Donations
+          {t("aboutContent.freeTitle")}
         </h2>
         <div className="space-y-4 text-muted-foreground">
+          <p>{t("aboutContent.freeText1")}</p>
+          <p>{t("aboutContent.freeText2")}</p>
           <p>
-            HerbAlly is completely free to use with no limits, no paywalls, and
-            no advertising. We believe access to herbal medicine knowledge is a
-            right, not a privilege.
-          </p>
-          <p>
-            We sustain our operations entirely through voluntary donations from
-            our community. Your contributions cover server hosting, database
-            costs, AI API usage, and ongoing development.
-          </p>
-          <p>
-            If HerbAlly has been helpful to you, please consider{" "}
-            <a
-              href="/donate"
-              className="font-medium text-primary underline hover:no-underline"
-            >
-              making a donation
-            </a>{" "}
-            to help us keep this resource available for everyone.
+            {t("aboutContent.freeText3").split("making a donation").length > 1 || locale === "en" ? (
+              <>
+                {locale === "en" ? (
+                  <>
+                    If HerbAlly has been helpful to you, please consider{" "}
+                    <a
+                      href="/donate"
+                      className="font-medium text-primary underline hover:no-underline"
+                    >
+                      making a donation
+                    </a>{" "}
+                    to help us keep this resource available for everyone.
+                  </>
+                ) : (
+                  <>
+                    {t("aboutContent.freeText3")}{" "}
+                    <a
+                      href="/donate"
+                      className="font-medium text-primary underline hover:no-underline"
+                    >
+                      {t("aboutContent.freeLink")}
+                    </a>
+                  </>
+                )}
+              </>
+            ) : (
+              <>
+                {t("aboutContent.freeText3").split(t("aboutContent.freeLink"))[0]}
+                <a
+                  href="/donate"
+                  className="font-medium text-primary underline hover:no-underline"
+                >
+                  {t("aboutContent.freeLink")}
+                </a>
+                {t("aboutContent.freeText3").split(t("aboutContent.freeLink"))[1]}
+              </>
+            )}
           </p>
         </div>
       </section>
 
       {/* Team Section */}
       <section>
-        <h2 className="mb-4 text-2xl font-bold text-foreground">Our Team</h2>
+        <h2 className="mb-4 text-2xl font-bold text-foreground">
+          {t("aboutContent.team.title")}
+        </h2>
         <p className="text-muted-foreground">
-          HerbAlly is developed by a dedicated team of software engineers,
-          herbalists, and healthcare professionals passionate about making
-          herbal medicine information accessible and safe. Our content is
-          reviewed by qualified practitioners to ensure accuracy and
-          reliability.
+          {t("aboutContent.team.text")}
         </p>
       </section>
     </div>

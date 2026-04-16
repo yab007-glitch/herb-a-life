@@ -9,6 +9,8 @@ import {
   FileCheck,
 } from "lucide-react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { cookies } from "next/headers";
+import { getServerTranslation, type Locale } from "@/lib/i18n/server";
 
 export const metadata: Metadata = {
   title: "Our Methodology",
@@ -27,114 +29,27 @@ export const metadata: Metadata = {
   },
 };
 
-const methodologySections = [
-  {
-    icon: Scale,
-    title: "Evidence Grading System",
-    content: `
-      Every herb and claim in HerbAlly receives an evidence grade from A to Traditional Use:
+const sectionKeys = [
+  { key: "evidenceGrading", icon: Scale },
+  { key: "sourceHierarchy", icon: BookOpen },
+  { key: "safetyAssessment", icon: Shield },
+  { key: "monographProcess", icon: Microscope },
+  { key: "transparency", icon: FileCheck },
+  { key: "activeCompounds", icon: FlaskConical },
+] as const;
 
-      **A (Strong Evidence)**: Multiple randomized controlled trials (RCTs), systematic reviews, or meta-analyses demonstrating consistent positive results. Example: Ginger for pregnancy nausea has Level A evidence.
+export default async function MethodologyPage() {
+  const cookieStore = await cookies();
+  const localeCookie = cookieStore.get("herbally-locale");
+  const locale: Locale = localeCookie?.value === "fr" ? "fr" : "en";
+  const t = (key: string) => getServerTranslation(locale, key);
 
-      **B (Moderate Evidence)**: Some RCTs or well-designed observational studies showing positive results, but evidence is limited by sample size, duration, or study quality. Example: Ashwagandha for stress reduction.
+  const methodologySections = sectionKeys.map(({ key, icon }) => ({
+    icon,
+    title: t(`methodologyContent.${key}.title`),
+    content: t(`methodologyContent.${key}.content`),
+  }));
 
-      **C (Limited Evidence)**: Preliminary clinical evidence, small pilot studies, or promising mechanistic data with insufficient human trials. Example: Many traditional herbs awaiting rigorous clinical evaluation.
-
-      **Traditional Use**: Long history of traditional use (100+ years) with ethnographic documentation, but limited or no modern clinical trials. These herbs may still be valuable, but efficacy claims are based on historical rather than scientific evidence.
-
-      **D (Anecdotal)**: Only anecdotal reports or theoretical plausibility without clinical data. We flag these clearly and recommend caution.
-    `,
-  },
-  {
-    icon: BookOpen,
-    title: "Source Hierarchy",
-    content: `
-      We prioritize sources in this order:
-
-      1. **Systematic Reviews & Meta-Analyses**: Cochrane Database, PubMed systematic reviews
-      2. **Randomized Controlled Trials**: Peer-reviewed RCTs with adequate sample sizes
-      3. **Authoritative Monographs**: WHO Monographs, German Commission E, EMA Assessments
-      4. **Government Databases**: NCCIH (NIH), NLM (PubMed), FDA GRAS notices
-      5. **Pharmacopoeias**: USP, British Pharmacopoeia, European Pharmacopoeia
-      6. **Traditional Sources**: Historical pharmacopoeias, ethnographic records
-
-      We avoid: Marketing materials, manufacturer-funded studies without peer review, and unverified online sources.
-    `,
-  },
-  {
-    icon: Shield,
-    title: "Safety Assessment",
-    content: `
-      Safety data is evaluated separately from efficacy:
-
-      **Contraindications**: Conditions where the herb should not be used (e.g., pregnancy, liver disease, specific medication interactions)
-
-      **Precautions**: Conditions requiring medical supervision or dose adjustment
-
-      **Drug Interactions**: Based on pharmacokinetic data and case reports. Severity classified as:
-      - Contraindicated: Never combine
-      - Severe: High risk; require monitoring
-      - Moderate: Moderate risk; consult healthcare provider
-      - Mild: Low risk; monitor for side effects
-
-      **Pregnancy & Nursing**: Reviewed against FDA categories, traditional use data, and clinical safety studies. When data is insufficient, we err on the side of caution.
-    `,
-  },
-  {
-    icon: Microscope,
-    title: "Monograph Creation Process",
-    content: `
-      Each herb monograph follows this process:
-
-      1. **Literature Review**: Systematic search of PubMed, Cochrane, and specialized databases
-      2. **Evidence Extraction**: RCTs and systematic reviews evaluated for quality and relevance
-      3. **Grading**: Independent evidence grading by at least two reviewers
-      4. **Safety Review**: Drug interactions, contraindications, and pregnancy data reviewed by medical herbalist
-      5. **Citation**: All claims linked to primary sources with PMIDs where available
-      6. **Medical Review**: Final review by MD or qualified medical herbalist
-      7. **Publication**: Monograph published with "Last Reviewed" date
-
-      **Update Cycle**: Monographs are reviewed annually and updated immediately upon significant new evidence.
-    `,
-  },
-  {
-    icon: FileCheck,
-    title: "Transparency & Limitations",
-    content: `
-      We believe in honest communication about what we know and don't know:
-
-      **What We Do**: Provide evidence-based summaries of herbal medicine research
-      **What We Don't Do**: Make medical recommendations, replace doctor consultation, or guarantee outcomes
-
-      **Limitations**:
-      - Herb quality varies by source; we cannot verify your specific product
-      - Individual responses to herbs vary significantly
-      - Traditional evidence doesn't always translate to modern clinical efficacy
-      - Research gaps exist for many herbs
-
-      **Our Bias**: We are committed to evidence over tradition. If traditional use conflicts with negative clinical evidence, we highlight the clinical findings.
-    `,
-  },
-  {
-    icon: FlaskConical,
-    title: "Active Compound Analysis",
-    content: `
-      For each herb, we identify:
-
-      **Primary Actives**: The compounds most likely responsible for observed effects
-      **Mechanism**: How these compounds interact with human physiology
-      **Bioavailability**: How well compounds are absorbed and utilized
-      **Standardization**: Whether commercial extracts standardize for these compounds
-
-      This information helps users understand:
-      - Why different brands may vary in effectiveness
-      - What to look for on supplement labels
-      - How formulation affects bioavailability (e.g., curcumin + piperine)
-    `,
-  },
-];
-
-export default function MethodologyPage() {
   return (
     <div className="mx-auto max-w-3xl px-4 py-16 sm:px-6 lg:px-8">
       {/* Schema */}
@@ -159,10 +74,10 @@ export default function MethodologyPage() {
 
       <div className="text-center mb-12">
         <h1 className="text-4xl font-bold tracking-tight text-foreground">
-          Our Methodology
+          {t("methodologyContent.title")}
         </h1>
         <p className="mt-4 text-lg text-muted-foreground">
-          How we research, grade, and present herbal medicine information
+          {t("methodologyContent.subtitle")}
         </p>
       </div>
 
@@ -179,7 +94,6 @@ export default function MethodologyPage() {
               <div className="prose prose-sm dark:prose-invert max-w-none">
                 {section.content.split("\n\n").map((paragraph, i) => {
                   if (paragraph.startsWith("**")) {
-                    // Header
                     return (
                       <h3
                         key={i}
@@ -190,7 +104,6 @@ export default function MethodologyPage() {
                     );
                   }
                   if (paragraph.startsWith("1. ")) {
-                    // Numbered list
                     return (
                       <ol
                         key={i}
@@ -205,7 +118,6 @@ export default function MethodologyPage() {
                     );
                   }
                   if (paragraph.startsWith("- ")) {
-                    // Bullet list
                     return (
                       <ul
                         key={i}
@@ -234,24 +146,23 @@ export default function MethodologyPage() {
       {/* CTA */}
       <div className="mt-12 rounded-lg border bg-muted/50 p-8 text-center">
         <h2 className="text-xl font-bold text-foreground">
-          Questions About Our Methods?
+          {t("methodologyContent.questionsTitle")}
         </h2>
         <p className="mt-2 text-muted-foreground">
-          We&apos;re committed to transparency. If you have questions about how we
-          grade evidence or want to report an error, please reach out.
+          {t("methodologyContent.questionsDesc")}
         </p>
         <div className="mt-4 flex justify-center gap-3">
           <Link
             href="/faq"
             className="inline-flex items-center gap-2 rounded-md bg-primary px-4 py-2 text-sm font-medium text-primary-foreground hover:bg-primary/90"
           >
-            View FAQ
+            {t("methodologyContent.viewFaq")}
           </Link>
           <a
             href="mailto:yab007@gmail.com"
             className="inline-flex items-center gap-2 rounded-md border px-4 py-2 text-sm font-medium text-foreground hover:bg-muted"
           >
-            Contact Us
+            {t("methodologyContent.contactUs")}
           </a>
         </div>
       </div>

@@ -4,6 +4,7 @@ import { useState, useEffect } from "react";
 import Link from "next/link";
 import { Clock, X } from "lucide-react";
 import { Badge } from "@/components/ui/badge";
+import { useI18n } from "@/components/i18n/i18n-provider";
 
 const MAX_RECENT = 5;
 const STORAGE_KEY = "herbally-recent-searches";
@@ -11,6 +12,7 @@ const STORAGE_KEY = "herbally-recent-searches";
 export function RecentSearches() {
   const [searches, setSearches] = useState<string[]>([]);
   const [mounted, setMounted] = useState(false);
+  const { t } = useI18n();
 
   useEffect(() => {
     const loadSearches = () => {
@@ -25,7 +27,6 @@ export function RecentSearches() {
       setMounted(true);
     };
 
-    // Defer to avoid sync setState in effect
     const timer = setTimeout(loadSearches, 0);
     return () => clearTimeout(timer);
   }, []);
@@ -52,13 +53,13 @@ export function RecentSearches() {
       <div className="flex items-center justify-between">
         <div className="flex items-center gap-2 text-sm text-muted-foreground">
           <Clock className="size-4" />
-          <span>Recent searches</span>
+          <span>{t("recentSearches.title")}</span>
         </div>
         <button
           onClick={clearAll}
           className="text-xs text-muted-foreground hover:text-foreground transition-colors"
         >
-          Clear all
+          {t("recentSearches.clearAll")}
         </button>
       </div>
       <div className="flex flex-wrap gap-2">

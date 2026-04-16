@@ -4,34 +4,36 @@ import { useState } from "react";
 import { Heart, Coffee, Gift, Crown, Loader2 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
-
-const suggestedAmounts = [
-  {
-    amount: 5,
-    icon: Coffee,
-    label: "Coffee",
-    description: "One day of API costs",
-    color: "from-amber-500 to-orange-500",
-  },
-  {
-    amount: 15,
-    icon: Gift,
-    label: "Supporter",
-    description: "A week of hosting",
-    color: "from-primary to-teal-600",
-  },
-  {
-    amount: 50,
-    icon: Crown,
-    label: "Champion",
-    description: "Half a month of operations",
-    color: "from-pink-500 to-rose-600",
-  },
-];
+import { useI18n } from "@/components/i18n/i18n-provider";
 
 export function DonationButtons() {
+  const { t } = useI18n();
   const [customAmount, setCustomAmount] = useState(20);
   const [loading, setLoading] = useState<number | null>(null);
+
+  const suggestedAmounts = [
+    {
+      amount: 5,
+      icon: Coffee,
+      labelKey: "donateButtons.coffee",
+      descKey: "donateButtons.coffeeDesc",
+      color: "from-amber-500 to-orange-500",
+    },
+    {
+      amount: 15,
+      icon: Gift,
+      labelKey: "donateButtons.supporter",
+      descKey: "donateButtons.supporterDesc",
+      color: "from-primary to-teal-600",
+    },
+    {
+      amount: 50,
+      icon: Crown,
+      labelKey: "donateButtons.champion",
+      descKey: "donateButtons.championDesc",
+      color: "from-pink-500 to-rose-600",
+    },
+  ];
 
   const handleDonate = async (amount: number) => {
     setLoading(amount);
@@ -39,7 +41,7 @@ export function DonationButtons() {
       const res = await fetch("/api/donate", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ amount: amount * 100 }), // Convert to cents
+        body: JSON.stringify({ amount: amount * 100 }),
       });
 
       const data = await res.json();
@@ -51,7 +53,7 @@ export function DonationButtons() {
       }
     } catch (error) {
       console.error("Donation error:", error);
-      alert("Failed to process donation. Please try again.");
+      alert(t("donateButtons.errorMessage"));
     } finally {
       setLoading(null);
     }
@@ -86,9 +88,9 @@ export function DonationButtons() {
                 <p className="text-3xl font-bold text-foreground">
                   ${tier.amount}
                 </p>
-                <p className="font-medium text-foreground mt-1">{tier.label}</p>
+                <p className="font-medium text-foreground mt-1">{t(tier.labelKey)}</p>
                 <p className="text-sm text-muted-foreground mt-1">
-                  {tier.description}
+                  {t(tier.descKey)}
                 </p>
               </CardContent>
             </Card>
@@ -101,7 +103,7 @@ export function DonationButtons() {
         <CardContent className="py-8">
           <div className="flex flex-col items-center gap-4 sm:flex-row sm:justify-center">
             <p className="text-sm text-muted-foreground">
-              Or choose a custom amount:
+              {t("donateButtons.customAmount")}
             </p>
             <div className="flex items-center gap-2">
               <span className="text-xl font-bold text-muted-foreground">$</span>
@@ -130,7 +132,7 @@ export function DonationButtons() {
               ) : (
                 <Heart className="size-5 fill-white" />
               )}
-              Donate
+              {t("donateButtons.donate")}
             </Button>
           </div>
         </CardContent>
@@ -152,7 +154,7 @@ export function DonationButtons() {
               d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z"
             />
           </svg>
-          <span>Secure via Stripe</span>
+          <span>{t("donateButtons.secureViaStripe")}</span>
         </div>
         <div className="flex items-center gap-2">
           <svg
@@ -168,7 +170,7 @@ export function DonationButtons() {
               d="M3 10h18M7 15h1m4 0h1m-7 4h12a3 3 0 003-3V8a3 3 0 00-3-3H6a3 3 0 00-3 3v8a3 3 0 003 3z"
             />
           </svg>
-          <span>All cards accepted</span>
+          <span>{t("donateButtons.allCardsAccepted")}</span>
         </div>
         <div className="flex items-center gap-2">
           <svg
@@ -184,7 +186,7 @@ export function DonationButtons() {
               d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z"
             />
           </svg>
-          <span>No card data stored</span>
+          <span>{t("donateButtons.noCardDataStored")}</span>
         </div>
       </div>
     </>

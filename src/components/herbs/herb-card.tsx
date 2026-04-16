@@ -1,3 +1,5 @@
+"use client";
+
 import Link from "next/link";
 import {
   ArrowRight,
@@ -15,6 +17,7 @@ import { Badge } from "@/components/ui/badge";
 import { HerbSafetyBadges } from "@/components/herbs/herb-safety-badges";
 import { HerbImage } from "@/components/herbs/herb-image";
 import { cn } from "@/lib/utils";
+import { useI18n } from "@/components/i18n/i18n-provider";
 
 const categoryIconMap: Record<string, keyof typeof IconComponents> = {
   adaptogen: "Sprout",
@@ -81,6 +84,7 @@ const safetyColorMap = {
 } as const;
 
 export function HerbCard({ herb, className }: HerbCardProps) {
+  const { t } = useI18n();
   const safetyLevel = getSafetyLevel(herb.pregnancy_safe, herb.nursing_safe);
   const CategoryIcon =
     IconComponents[getCategoryIconKey(herb.herb_categories?.name)];
@@ -132,7 +136,7 @@ export function HerbCard({ herb, className }: HerbCardProps) {
                 ) : (
                   <Badge variant="outline" className="text-xs">
                     <Leaf className="mr-1 size-3" />
-                    Herb
+                    {t("herbBadges.herb")}
                   </Badge>
                 )}
               </div>

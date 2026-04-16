@@ -7,18 +7,12 @@ const publicRoutes = [
   "/disclaimer",
   "/privacy",
   "/terms",
-  "/login",
-  "/register",
-  "/forgot-password",
-  "/reset-password",
-  "/auth/callback",
   "/herbs",
   "/symptoms",
   "/faq",
   "/compare",
   "/methodology",
   "/calculator",
-  "/pharmacist",
   "/herbalist",
   "/donate",
   "/robots.txt",
@@ -87,17 +81,12 @@ export async function middleware(request: NextRequest) {
   }
 
   if (isPublic) {
-    if (user && (path === "/login" || path === "/register")) {
-      return NextResponse.redirect(new URL("/herbs", request.url));
-    }
     return applySecurityHeaders(supabaseResponse);
   }
 
-  // All routes below require authentication
+  // All non-public routes require authentication (admin only)
   if (!user) {
-    const redirectUrl = new URL("/login", request.url);
-    redirectUrl.searchParams.set("redirect", path);
-    return NextResponse.redirect(redirectUrl);
+    return NextResponse.redirect(new URL("/", request.url));
   }
 
   // Admin routes

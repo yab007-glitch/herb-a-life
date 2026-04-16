@@ -40,13 +40,16 @@ function makeId() {
 export function ChatInterface({
   herbContext,
   autoQuery,
+  locale: localeProp = "en",
   sessionId,
 }: {
   herbContext?: string | null;
   autoQuery?: string | null;
+  locale?: string;
   sessionId?: string | null;
 }) {
-  const { locale, t } = useI18n();
+  const { locale: i18nLocale, t } = useI18n();
+  const locale = localeProp || i18nLocale;
   
   function createInitialMessage(): Message {
     return {

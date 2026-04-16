@@ -1,5 +1,6 @@
 import { ShieldCheck, ShieldX } from "lucide-react";
 import { cn } from "@/lib/utils";
+import { useI18n } from "@/components/i18n/i18n-provider";
 
 interface HerbSafetyBadgesProps {
   pregnancySafe: boolean;
@@ -12,6 +13,8 @@ export function HerbSafetyBadges({
   nursingSafe,
   className,
 }: HerbSafetyBadgesProps) {
+  const { t } = useI18n();
+
   return (
     <div className={cn("flex flex-wrap gap-2", className)}>
       <span
@@ -27,7 +30,7 @@ export function HerbSafetyBadges({
         ) : (
           <ShieldX className="size-3" />
         )}
-        Pregnancy
+        {t("herbBadges.pregnancy")}
       </span>
       <span
         className={cn(
@@ -42,7 +45,7 @@ export function HerbSafetyBadges({
         ) : (
           <ShieldX className="size-3" />
         )}
-        Nursing
+        {t("herbBadges.nursing")}
       </span>
     </div>
   );

@@ -10,13 +10,14 @@ import {
   Stethoscope,
 } from "lucide-react";
 import { cn } from "@/lib/utils";
+import { useI18n } from "@/components/i18n/i18n-provider";
 
 const tabs = [
-  { label: "Symptoms", href: "/symptoms", icon: Stethoscope },
-  { label: "Herbs", href: "/herbs", icon: Leaf },
-  { label: "Search", href: "/herbs?focus=search", icon: Search },
-  { label: "Chat", href: "/herbalist", icon: MessageCircle },
-  { label: "Calc", href: "/calculator", icon: Calculator },
+  { labelKey: "mobileTabs.symptoms", href: "/symptoms", icon: Stethoscope },
+  { labelKey: "mobileTabs.herbs", href: "/herbs", icon: Leaf },
+  { labelKey: "mobileTabs.search", href: "/herbs?focus=search", icon: Search },
+  { labelKey: "mobileTabs.chat", href: "/herbalist", icon: MessageCircle },
+  { labelKey: "mobileTabs.calc", href: "/calculator", icon: Calculator },
 ] as const;
 
 function isActive(pathname: string, href: string): boolean {
@@ -31,6 +32,7 @@ function isActive(pathname: string, href: string): boolean {
 
 export function MobileTabBar() {
   const pathname = usePathname();
+  const { t } = useI18n();
 
   return (
     <nav
@@ -47,7 +49,7 @@ export function MobileTabBar() {
 
           return (
             <Link
-              key={tab.label}
+              key={tab.labelKey}
               href={tab.href}
               className={cn(
                 "flex flex-col items-center justify-center gap-0.5 flex-1 h-full",
@@ -58,7 +60,7 @@ export function MobileTabBar() {
               <div className="relative flex flex-col items-center">
                 <Icon className="size-5" />
                 <span className="text-[10px] font-medium mt-0.5">
-                  {tab.label}
+                  {t(tab.labelKey)}
                 </span>
                 <span
                   className={cn(

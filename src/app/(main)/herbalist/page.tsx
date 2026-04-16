@@ -8,15 +8,16 @@ export const config = {
 };
 
 import type { Metadata } from "next";
+import { cookies } from "next/headers";
 import { Info } from "lucide-react";
 import { ChatInterface } from "@/components/pharmacist/chat-interface";
 import { SafetyAlert } from "@/components/herbs/safety-alert";
 import { getHerbBySlug } from "@/lib/actions/herbs";
+import { getServerTranslation, type Locale } from "@/lib/i18n/server";
 
 export const metadata: Metadata = {
   title: "Virtual Herbalist",
-  description:
-    "Ask our AI herbalist about herb safety, drug interactions, and dosage. Evidence-based answers from WHO, NCCIH, and PubMed sources. Free, no account required.",
+  description: "Ask our AI herbalist about herb safety, drug interactions, and dosage. Evidence-based answers from WHO, NCCIH, and PubMed sources. Free, no account required.",
   alternates: {
     canonical: `${process.env.NEXT_PUBLIC_APP_URL ?? "https://herbally.app"}/herbalist`,
   },
@@ -28,6 +29,11 @@ export default async function PharmacistPage({
   searchParams: Promise<{ herb?: string; medications?: string }>;
 }) {
   const params = await searchParams;
+  const cookieStore = await cookies();
+  const localeCookie = cookieStore.get("herbally-locale");
+  const locale: Locale = (localeCookie?.value as Locale) || "en";
+  const t = (key: string, p?: Record<string, string | number>) => getServerTranslation(locale, key, p);
+
   let herbContext: string | null = null;
   let autoQuery: string | null = null;
   let herbName: string | null = null;
@@ -51,29 +57,27 @@ export default async function PharmacistPage({
       {/* Header */}
       <div>
         <h1 className="text-3xl font-bold tracking-tight text-foreground">
-          Virtual Herbalist
+          {t("herbalistPage.title")}
         </h1>
         <p className="mt-2 text-muted-foreground">
-          Ask our AI-powered herbalist about herb safety, drug interactions, and usage guidance.
-          Get evidence-based information from trusted sources.
+          {t("herbalistPage.subtitle")}
         </p>
       </div>
 
       {/* Critical AI Limitations Notice */}
-      <SafetyAlert severity="critical" title="Important: AI-Generated Information Limitations">
+      <SafetyAlert severity="critical" title={t("herbalistPage.safetyTitle")}>
         <div className="space-y-2">
           <p>
-            <strong>This AI provides educational information only, not medical advice.</strong> Responses are generated 
-            from herb databases and may not reflect the most current research or your specific health situation.
+            <strong>{t("herbalistPage.safetyNotMedical")}</strong> {t("herbalistPage.safetyDisclaimer")}
           </p>
           <ul className="list-disc list-inside space-y-1 ml-4">
-            <li>Always consult a healthcare provider before using herbs, especially if pregnant, nursing, or taking medications</li>
-            <li>Drug interactions listed may not be complete — verify with a pharmacist</li>
-            <li>AI cannot diagnose conditions or prescribe treatments</li>
-            <li>Evidence levels vary — some herbs have limited clinical research</li>
+            <li>{t("herbalistPage.safetyConsult")}</li>
+            <li>{t("herbalistPage.safetyInteractions")}</li>
+            <li>{t("herbalistPage.safetyDiagnose")}</li>
+            <li>{t("herbalistPage.safetyEvidence")}</li>
           </ul>
           <p className="font-medium mt-2">
-            In case of emergency or adverse reaction, contact poison control (1-800-222-1222) or call 911.
+            {t("herbalistPage.safetyEmergency")}
           </p>
         </div>
       </SafetyAlert>
@@ -84,26 +88,25 @@ export default async function PharmacistPage({
           <div className="flex items-start gap-3">
             <Info className="size-5 text-primary mt-0.5" />
             <div>
-              <p className="font-medium text-foreground">Asking about {herbName}</p>
+              <p className="font-medium text-foreground">{t("herbalistPage.askingAbout", { name: herbName })}</p>
               <p className="text-sm text-muted-foreground">
-                The AI has been provided with detailed information about this herb from our database, 
-                including active compounds, traditional uses, and known safety concerns.
+                {t("herbalistPage.askingAboutDesc")}
               </p>
             </div>
           </div>
         </div>
       )}
 
-      <ChatInterface herbContext={herbContext} autoQuery={autoQuery} />
+      <ChatInterface herbContext={herbContext} autoQuery={autoQuery} locale={locale} />
 
       {/* Trust signals footer */}
       <div className="rounded-lg border p-4 text-sm text-muted-foreground">
-        <p className="font-medium text-foreground mb-1">About our AI Herbalist</p>
+        <p className="font-medium text-foreground mb-1">{t("herbalistPage.aboutTitle")}</p>
         <ul className="space-y-1">
-          <li>• Powered by Ollama Cloud AI (glm-5:cloud model)</li>
-          <li>• Information sourced from WHO monographs, NCCIH, PubMed, and Commission E</li>
-          <li>• Regularly updated as new research becomes available</li>
-          <li>• Not reviewed or approved by FDA</li>
+          <li>• {t("herbalistPage.aboutOllama")}</li>
+          <li>• {t("herbalistPage.aboutSources")}</li>
+          <li>• {t("herbalistPage.aboutUpdated")}</li>
+          <li>• {t("herbalistPage.aboutNotFDA")}</li>
         </ul>
       </div>
     </div>

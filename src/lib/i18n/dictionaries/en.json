@@ -17,7 +17,10 @@
     "theme": "Theme",
     "light": "Light",
     "dark": "Dark",
-    "system": "System"
+    "system": "System",
+    "menu": "Menu",
+    "copied": "Copied!",
+    "copyLink": "Copy Link"
   },
   "nav": {
     "symptoms": "By Symptom",
@@ -26,19 +29,28 @@
     "herbalist": "Herbalist",
     "about": "About",
     "support": "Support Us",
-    "donate": "Donate"
+    "donate": "Donate",
+    "dashboard": "Dashboard"
   },
   "home": {
     "hero": {
       "badge": "Evidence-Based Herbal Medicine Platform",
       "title": "Your Complete Guide to Medicinal Herbs",
       "subtitle": "Explore 2,700+ herbs, calculate precise dosages, check drug interactions, and consult our AI herbalist — all in one place.",
-      "searchButton": "Explore Herbs"
+      "searchButton": "Explore Herbs",
+      "askHerbalistButton": "Ask AI Herbalist",
+      "trustBadgesList": [
+        "WHO Monographs",
+        "German Commission E",
+        "PubMed Research",
+        "FDA Compliant"
+      ]
     },
     "stats": {
       "herbs": "Herbs Documented",
       "interactions": "Drug Interactions",
-      "free": "Free to Use"
+      "free": "Free to Use",
+      "heading": "Platform Statistics"
     },
     "features": {
       "title": "Everything You Need for Herbal Wellness",
@@ -117,12 +129,12 @@
     "herbName": "Herb Name",
     "adultDose": "Adult Dose",
     "unit": "Unit",
-    "patientAge": "Patient Age",
+    "patientAge": "Patient Age ({unit})",
     "years": "Years",
     "months": "Months",
-    "patientWeight": "Patient Weight",
+    "patientWeight": "Patient Weight ({unit})",
     "patientHeight": "Patient Height (cm)",
-    "optionalForBsa": "optional, for BSA",
+    "optionalForBsa": "- optional, for BSA",
     "calculationFormula": "Calculation Formula",
     "calculateDose": "Calculate Dose",
     "calculating": "Calculating...",
@@ -178,7 +190,15 @@
       "adjustedDose": "Your Adjusted Dose",
       "warnings": "Warnings",
       "consult": "Always consult a healthcare provider before starting any herbal regimen."
-    }
+    },
+    "cardTitle": "Dose Calculator",
+    "cardDesc": "Enter the herb information and patient details to calculate an age-appropriate dose.",
+    "calculatingFor": "Calculating dose for {name}",
+    "standardAdultDose": "Standard adult dose: {dose}",
+    "referenceChildDose": "Reference child dose: {dose}",
+    "forHerb": "for {name}",
+    "enterPrompt": "Enter details and click \"Calculate Dose\" to see results",
+    "patientHeightCm": "Patient Height (cm)"
   },
   "pharmacist": {
     "title": "AI Herbalist",
@@ -265,7 +285,8 @@
     "terms": "Terms of Service",
     "disclaimer": "Medical Disclaimer",
     "copyright": "Educational purposes only. Not medical advice.",
-    "madeWith": "Made with care for the herbal community"
+    "madeWith": "Made with care for the herbal community",
+    "followUs": "Follow Us"
   },
   "errors": {
     "404": {
@@ -304,7 +325,31 @@
     "category": "Category",
     "scientificName": "Scientific Name",
     "commonNames": "Common Names",
-    "lastUpdated": "Last updated"
+    "lastUpdated": "Last updated",
+    "description": "Description",
+    "clinicalSummary": "Clinical Summary",
+    "mechanismOfAction": "Mechanism of Action",
+    "evidenceByClaim": "Evidence by Claim",
+    "forms": "Forms",
+    "adultDoseShort": "Adult Dose",
+    "childDoseShort": "Child Dose",
+    "preparationNotes": "Preparation Notes",
+    "safetyConsiderations": "Important safety considerations for this herb",
+    "contraindicationsLabel": "Contraindications",
+    "possibleSideEffects": "Possible Side Effects",
+    "sourcesAndCitations": "Sources & Citations",
+    "relatedHerbs": "Related Herbs",
+    "calculateDose": "Calculate Dose",
+    "checkInteractions": "Check Interactions",
+    "compareTo": "Compare with {name}",
+    "foundError": "Found an error or have a correction for {name}?",
+    "medicalDisclaimerText": "This information is for educational purposes only and is not a substitute for professional medical advice, diagnosis, or treatment. Always consult your healthcare provider before using herbs, especially if you are pregnant, nursing, taking medications, or have a medical condition.",
+    "lastReviewedPrefix": "Last reviewed",
+    "dosageInfo": "Dosage Information",
+    "recommendedDosing": "Recommended dosing guidelines",
+    "knownInteractions": "{count} known interactions",
+    "viewDetails": "View {name} Details",
+    "herb": "Herb"
   },
   "search": {
     "placeholder": "Search herbs by name, symptom, or use...",
@@ -404,6 +449,656 @@
       "usersDescription": "Total accounts",
       "interactionChecks": "Interaction Checks",
       "checksDescription": "Checks performed"
+    }
+  },
+  "privacy": {
+    "title": "Privacy Policy",
+    "lastUpdated": "Last updated: April 2026",
+    "overview": {
+      "title": "1. Overview",
+      "text": "HerbAlly is a free, public resource — no account, registration, or login is required. We are committed to protecting your privacy and being transparent about what data we collect and how we use it."
+    },
+    "infoWeCollect": {
+      "title": "2. Information We Collect",
+      "text": "Because HerbAlly does not require accounts, we collect minimal data:",
+      "chatMessages": "Chat messages: Questions you type in the Virtual Herbalist are sent to our AI providers to generate responses. We do not store these messages on our servers.",
+      "analytics": "Usage analytics: We collect anonymous, aggregate analytics (page views, popular herbs, general region) to improve the service. No personally identifiable information is collected.",
+      "cookies": "Cookies: A single cookie (herbally-locale) stores your language preference (English or French). No tracking cookies are used.",
+      "notCollect": "We do not collect names, email addresses, or any other personal information. We have no accounts, passwords, or user profiles."
+    },
+    "howWeUse": {
+      "title": "3. How We Use Your Information",
+      "items": [
+        "Provide and maintain our services",
+        "Generate AI responses in the Virtual Herbalist (messages are not stored)",
+        "Improve our herb database and AI responses using anonymous analytics",
+        "Remember your language preference across visits",
+        "Ensure the security and integrity of our platform"
+      ]
+    },
+    "thirdParty": {
+      "title": "4. Third-Party Services",
+      "text": "HerbAlly uses the following third-party services:",
+      "supabase": "Supabase — Database hosting (Canada region). Data stored: herb profiles, interaction data. No personal user data.",
+      "ollama": "Ollama Cloud / OpenRouter — AI processing. Data sent: chat messages you type. Data stored: none (messages are processed and discarded).",
+      "vercel": "Vercel — Application hosting. Data stored: none (serverless functions). Vercel may collect anonymous CDN logs.",
+      "stripe": "Stripe — Payment processing for donations. HerbAlly never sees or stores your card details."
+    },
+    "cookiesSection": {
+      "title": "5. Cookies",
+      "onlyOne": "HerbAlly uses a single cookie:",
+      "localeCookie": "herbally-locale — Stores your language preference (en or fr). Expires after 1 year.",
+      "noTracking": "We do not use Google Analytics, Facebook Pixel, or any third-party tracking cookies."
+    },
+    "dataRetention": {
+      "title": "6. Data Retention",
+      "text": "Since we do not collect personal data, there is no personal data to retain. Chat messages are processed in real-time and not stored. Anonymous analytics are aggregated and cannot be traced to individuals."
+    },
+    "yourRights": {
+      "title": "7. Your Rights (GDPR)",
+      "text": "Even though we collect minimal data, we respect your rights under GDPR and other privacy laws:",
+      "access": "Right of Access: You can request information about any data we process.",
+      "deletion": "Right of Deletion: Since we do not store personal data, there is nothing to delete. Chat messages are never stored.",
+      "complaint": "Right to Complain: Contact our Data Protection Officer at privacy@herbally.app."
+    },
+    "security": {
+      "title": "8. Security",
+      "text": "We implement appropriate technical measures to protect our platform, including HTTPS encryption, Row-Level Security on our database, and regular security reviews."
+    },
+    "changes": {
+      "title": "9. Changes to This Policy",
+      "text": "We may update this policy periodically. Changes will be posted on this page with an updated date."
+    },
+    "contact": {
+      "title": "10. Contact",
+      "text": "For privacy questions, contact us at privacy@herbally.app."
+    }
+  },
+  "terms": {
+    "title": "Terms of Service",
+    "lastUpdated": "Last updated: April 2026",
+    "acceptance": {
+      "title": "1. Acceptance of Terms",
+      "text": "By accessing or using HerbAlly, you agree to be bound by these Terms of Service and all applicable laws and regulations. If you do not agree with any of these terms, you are prohibited from using this platform."
+    },
+    "useOfService": {
+      "title": "2. Use of Service",
+      "text": "HerbAlly provides educational information about medicinal herbs, dosage calculations, and AI-powered herbalist guidance. No account or registration is required — the service is freely available to everyone. You agree to use the service only for lawful purposes and in accordance with these Terms.",
+      "items": [
+        "You must be at least 18 years old to use this service",
+        "You must not misuse or attempt to exploit the platform",
+        "You must not use the service for commercial purposes without permission",
+        "You must not attempt to overload or disrupt the service"
+      ]
+    },
+    "medicalDisclaimer": {
+      "title": "3. Medical Disclaimer",
+      "text": "The information provided on HerbAlly is for educational purposes only. It is not intended to diagnose, treat, cure, or prevent any disease. Always consult a qualified healthcare professional before making any health-related decisions based on information found on this platform."
+    },
+    "aiLimitations": {
+      "title": "4. AI-Generated Content Limitations",
+      "text": "HerbAlly uses artificial intelligence to generate responses in the Virtual Herbalist. You acknowledge and agree that:",
+      "items": [
+        "AI-generated responses are for informational and educational purposes only and do not constitute medical advice",
+        "AI responses may contain inaccuracies, omissions, or outdated information despite our best efforts",
+        "The AI does not have access to your personal medical history and cannot provide personalized medical recommendations",
+        "You should always verify AI-generated information with a qualified healthcare professional before acting on it",
+        "HerbAlly is not liable for any decisions made based on AI-generated content"
+      ]
+    },
+    "intellectualProperty": {
+      "title": "5. Intellectual Property",
+      "text": "All content on HerbAlly, including text, graphics, logos, and software, is the property of HerbAlly or its content suppliers and is protected by intellectual property laws. You may not reproduce, distribute, or create derivative works without our express written permission."
+    },
+    "limitation": {
+      "title": "6. Limitation of Liability",
+      "text": "HerbAlly shall not be liable for any direct, indirect, incidental, special, or consequential damages resulting from the use or inability to use our service, including but not limited to damages for loss of profits, data, or other intangible losses."
+    },
+    "userContent": {
+      "title": "7. User Content",
+      "text": "Any content you submit through the platform (such as chat messages to the Virtual Herbalist) may be processed by our AI systems to generate responses. We do not claim ownership of your content, but you grant us a license to use it for the purpose of providing and improving our services. Chat messages are not stored on our servers after the session ends."
+    },
+    "serviceAvailability": {
+      "title": "8. Service Availability",
+      "text": "HerbAlly is provided as is and as available. We do not guarantee uninterrupted access to the service. We reserve the right to modify, suspend, or discontinue any part of the service at any time without notice."
+    },
+    "changes": {
+      "title": "9. Changes to Terms",
+      "text": "We reserve the right to modify these Terms at any time. Changes will be effective immediately upon posting. Your continued use of the service after changes constitutes acceptance of the modified Terms."
+    },
+    "contact": {
+      "title": "10. Contact Us",
+      "text": "If you have questions about these Terms, please contact us at legal@herbally.app."
+    }
+  },
+  "disclaimer": {
+    "title": "Medical Disclaimer",
+    "text": "HerbAlly provides educational and informational content only. The information on this site is not intended as medical advice and should not be used as a substitute for professional medical advice, diagnosis, or treatment.",
+    "consult": "Always consult your physician or qualified healthcare provider before starting any herbal supplement, especially if you are pregnant, nursing, taking medication, or have a medical condition.",
+    "fda": "These statements have not been evaluated by the Food and Drug Administration. HerbAlly is not intended to diagnose, treat, cure, or prevent any disease.",
+    "emergency": "If you think you may have a medical emergency, call your doctor, go to the emergency department, or call emergency services immediately.",
+    "reliance": "HerbAlly does not endorse or recommend any specific herbs, products, procedures, or opinions. Reliance on any information provided by HerbAlly is solely at your own risk."
+  },
+  "aboutContent": {
+    "header": "About HerbAlly",
+    "subtitle": "Your trusted, evidence-based resource for medicinal herbs and natural remedies.",
+    "whatIsTitle": "What is HerbAlly?",
+    "whatIsText1": "HerbAlly is a comprehensive digital platform designed to provide reliable, evidence-based information about medicinal herbs and natural remedies. We combine a vast herb database, scientifically grounded dosage calculators, and AI-powered guidance to help individuals make informed decisions about herbal supplements and their potential interactions with medications.",
+    "whatIsText2": "Whether you are a healthcare professional looking for quick reference material, a herbalist seeking interaction data, or an individual exploring natural wellness options, HerbAlly provides the tools and information you need in one accessible platform.",
+    "mission": {
+      "title": "Our Mission",
+      "educate": "Educate",
+      "educateDesc": "Provide accessible, evidence-based information about medicinal herbs and their uses.",
+      "protect": "Protect",
+      "protectDesc": "Help users identify potential drug-herb interactions and make safer supplement choices.",
+      "empower": "Empower",
+      "empowerDesc": "Give individuals and practitioners the tools to make informed herbal wellness decisions."
+    },
+    "howItWorks": {
+      "title": "How It Works",
+      "step1Title": "Search Our Database",
+      "step1Desc": "Browse 2,700+ medicinal herbs with detailed profiles including active compounds, traditional uses, and modern research.",
+      "step2Title": "Calculate Safe Doses",
+      "step2Desc": "Use our dose calculator with medically recognized formulas to determine appropriate dosages for different ages and weights.",
+      "step3Title": "Consult the Virtual Herbalist",
+      "step3Desc": "Ask our AI-powered herbalist about herb safety, drug interactions, and get personalized guidance for your situation."
+    },
+    "freeTitle": "Free Forever, Powered by Donations",
+    "freeText1": "HerbAlly is completely free to use with no limits, no paywalls, and no advertising. We believe access to herbal medicine knowledge is a right, not a privilege.",
+    "freeText2": "We sustain our operations entirely through voluntary donations from our community. Your contributions cover server hosting, database costs, AI API usage, and ongoing development.",
+    "freeText3": "If HerbAlly has been helpful to you, please consider making a donation to help us keep this resource available for everyone.",
+    "freeLink": "making a donation",
+    "team": {
+      "title": "Our Team",
+      "text": "HerbAlly is developed by a dedicated team of software engineers, herbalists, and healthcare professionals passionate about making herbal medicine information accessible and safe. Our content is reviewed by qualified practitioners to ensure accuracy and reliability."
+    }
+  },
+  "faqContent": {
+    "title": "Frequently Asked Questions",
+    "subtitle": "Evidence-based answers about medicinal herbs, safety, drug interactions, and how HerbAlly works.",
+    "stillHaveQuestions": "Still have questions?",
+    "askVirtualHerbalist": "Ask our AI-powered Virtual Herbalist for personalized guidance.",
+    "askHerbalistBtn": "Ask the Virtual Herbalist",
+    "findHerbsBtn": "Find Herbs by Symptom",
+    "aboutHerbAlly": "About HerbAlly",
+    "herbSafety": "Herb Safety",
+    "drugInteractions": "Drug Interactions",
+    "dosageUsage": "Dosage & Usage",
+    "virtualHerbalist": "Virtual Herbalist",
+    "sourcesEvidence": "Sources & Evidence",
+    "general": {
+      "free": {
+        "q": "Is HerbAlly free to use?",
+        "a": "Yes, HerbAlly is completely free forever. No ads, no account required, no premium tier. We believe safe herbal information should be accessible to everyone."
+      },
+      "herbCount": {
+        "q": "How many herbs does HerbAlly cover?",
+        "a": "HerbAlly covers 2,700+ medicinal herbs with detailed profiles including active compounds, traditional uses, modern applications, dosage guidance, and drug interactions."
+      },
+      "reviewed": {
+        "q": "Is the information on HerbAlly medically reviewed?",
+        "a": "Every herb profile is reviewed by our editorial team of medical herbalists and healthcare professionals. Evidence levels (A through D) indicate the strength of scientific support, and we cite sources from WHO monographs, NCCIH, PubMed, and Commission E."
+      },
+      "trustAI": {
+        "q": "Can I trust the AI Virtual Herbalist?",
+        "a": "The AI herbalist provides educational information based on our herb database and authoritative sources. However, it is NOT a substitute for professional medical advice. Always verify with your healthcare provider, especially for serious conditions or drug interactions."
+      }
+    },
+    "safety": {
+      "meds": {
+        "q": "Are herbs safe to take with prescription medications?",
+        "a": "Some herbs can interact dangerously with prescription drugs. For example, St. John's Wort can reduce the effectiveness of antidepressants and birth control pills. Always check our interaction database and consult your healthcare provider before combining herbs with medications."
+      },
+      "pregnancy": {
+        "q": "Which herbs should I avoid during pregnancy?",
+        "a": "Many herbs are contraindicated during pregnancy. Herbs like black cohosh, dong quai, and high doses of garlic can stimulate uterine contractions or affect hormones. HerbAlly marks pregnancy safety on every herb page — look for the pregnancy safety badge."
+      },
+      "children": {
+        "q": "Can children take herbal supplements?",
+        "a": "Children's dosages differ significantly from adult dosages. Use our dosage calculator with Clark's Rule (weight-based), Young's Rule (age-based), or BSA method. Always consult a pediatrician before giving herbs to children."
+      },
+      "grades": {
+        "q": "What does the evidence grade (A/B/C/D) mean?",
+        "a": "Evidence grades indicate the strength of scientific support: A = Strong evidence from multiple RCTs and systematic reviews. B = Moderate evidence from clinical studies. C = Limited evidence from traditional use or preclinical research. D = Anecdotal or historical use only. Traditional use (trad) = Well-established traditional use with limited clinical validation."
+      }
+    },
+    "interactions": {
+      "dangerous": {
+        "q": "What are the most dangerous herb-drug interactions?",
+        "a": "The most serious interactions include: St. John's Wort with antidepressants (serotonin syndrome risk), Warfarin with many herbs (bleeding risk), garlic and ginkgo with blood thinners, and kava with sedatives. Our interaction checker rates severity as Contraindicated, Severe, Moderate, or Mild."
+      },
+      "accuracy": {
+        "q": "How accurate is the interaction data?",
+        "a": "Our interaction data is sourced from WHO monographs, PubMed clinical studies, Commission E monographs, and the NCCIH database. Evidence levels are provided for each interaction. However, no database is complete — always verify with a pharmacist."
+      }
+    },
+    "dosage": {
+      "calculator": {
+        "q": "How does the dosage calculator work?",
+        "a": "HerbAlly supports four dosage calculation methods: Clark's Rule (weight-based for children), Young's Rule (age-based for children), Body Surface Area (BSA) method, and Fried's Rule (for infants). Select the method appropriate for your situation and input the relevant measurements."
+      },
+      "multiple": {
+        "q": "Can I take multiple herbs at the same time?",
+        "a": "Some herbs work well together (combinations), while others can compound effects or interact. Always research each herb individually and consult with a qualified herbalist or healthcare provider before combining herbs, especially if you take medications."
+      }
+    },
+    "herbalistCat": {
+      "how": {
+        "q": "How does the AI Virtual Herbalist work?",
+        "a": "The Virtual Herbalist uses AI to provide evidence-based guidance about herbs, including safety information, potential interactions, and traditional uses. It draws from our database of 2,700+ herbs, WHO monographs, PubMed, NCCIH, and Commission E sources. Each response includes evidence levels and source citations."
+      },
+      "notAsk": {
+        "q": "What should I NOT ask the Virtual Herbalist?",
+        "a": "Do not use it for medical diagnosis, prescription recommendations, or emergency situations. The AI cannot replace professional medical advice. If you're experiencing a medical emergency, call 911 or your local emergency number. For poison control, call 1-800-222-1222."
+      }
+    },
+    "sources": {
+      "what": {
+        "q": "What sources does HerbAlly use?",
+        "a": "We reference: WHO Monographs on Selected Medicinal Plants (Volumes 1-4), German Commission E monographs, European Medicines Agency (EMA) herbal monographs, NCCIH Herbs at a Glance database, and PubMed peer-reviewed research. Each herb page shows specific citations with source type and evidence level."
+      },
+      "update": {
+        "q": "How often is the information updated?",
+        "a": "Herb profiles are reviewed regularly by our editorial team. Each herb page shows a 'Last reviewed' date and reviewer credentials. We update interaction data as new research becomes available."
+      }
+    }
+  },
+  "methodologyContent": {
+    "title": "Our Methodology",
+    "subtitle": "How we research, grade, and present herbal medicine information",
+    "questionsTitle": "Questions About Our Methods?",
+    "questionsDesc": "We're committed to transparency. If you have questions about how we grade evidence or want to report an error, please reach out.",
+    "viewFaq": "View FAQ",
+    "contactUs": "Contact Us",
+    "evidenceGrading": {
+      "title": "Evidence Grading System",
+      "content": "Every herb and claim in HerbAlly receives an evidence grade from A to Traditional Use:\n\n**A (Strong Evidence)**: Multiple randomized controlled trials (RCTs), systematic reviews, or meta-analyses demonstrating consistent positive results. Example: Ginger for pregnancy nausea has Level A evidence.\n\n**B (Moderate Evidence)**: Some RCTs or well-designed observational studies showing positive results, but evidence is limited by sample size, duration, or study quality. Example: Ashwagandha for stress reduction.\n\n**C (Limited Evidence)**: Preliminary clinical evidence, small pilot studies, or promising mechanistic data with insufficient human trials. Example: Many traditional herbs awaiting rigorous clinical evaluation.\n\n**Traditional Use**: Long history of traditional use (100+ years) with ethnographic documentation, but limited or no modern clinical trials. These herbs may still be valuable, but efficacy claims are based on historical rather than scientific evidence.\n\n**D (Anecdotal)**: Only anecdotal reports or theoretical plausibility without clinical data. We flag these clearly and recommend caution."
+    },
+    "sourceHierarchy": {
+      "title": "Source Hierarchy",
+      "content": "We prioritize sources in this order:\n\n1. **Systematic Reviews & Meta-Analyses**: Cochrane Database, PubMed systematic reviews\n2. **Randomized Controlled Trials**: Peer-reviewed RCTs with adequate sample sizes\n3. **Authoritative Monographs**: WHO Monographs, German Commission E, EMA Assessments\n4. **Government Databases**: NCCIH (NIH), NLM (PubMed), FDA GRAS notices\n5. **Pharmacopoeias**: USP, British Pharmacopoeia, European Pharmacopoeia\n6. **Traditional Sources**: Historical pharmacopoeias, ethnographic records\n\nWe avoid: Marketing materials, manufacturer-funded studies without peer review, and unverified online sources."
+    },
+    "safetyAssessment": {
+      "title": "Safety Assessment",
+      "content": "Safety data is evaluated separately from efficacy:\n\n**Contraindications**: Conditions where the herb should not be used (e.g., pregnancy, liver disease, specific medication interactions)\n\n**Precautions**: Conditions requiring medical supervision or dose adjustment\n\n**Drug Interactions**: Based on pharmacokinetic data and case reports. Severity classified as:\n- Contraindicated: Never combine\n- Severe: High risk; require monitoring\n- Moderate: Moderate risk; consult healthcare provider\n- Mild: Low risk; monitor for side effects\n\n**Pregnancy & Nursing**: Reviewed against FDA categories, traditional use data, and clinical safety studies. When data is insufficient, we err on the side of caution."
+    },
+    "monographProcess": {
+      "title": "Monograph Creation Process",
+      "content": "Each herb monograph follows this process:\n\n1. **Literature Review**: Systematic search of PubMed, Cochrane, and specialized databases\n2. **Evidence Extraction**: RCTs and systematic reviews evaluated for quality and relevance\n3. **Grading**: Independent evidence grading by at least two reviewers\n4. **Safety Review**: Drug interactions, contraindications, and pregnancy data reviewed by medical herbalist\n5. **Citation**: All claims linked to primary sources with PMIDs where available\n6. **Medical Review**: Final review by MD or qualified medical herbalist\n7. **Publication**: Monograph published with \"Last Reviewed\" date\n\n**Update Cycle**: Monographs are reviewed annually and updated immediately upon significant new evidence."
+    },
+    "transparency": {
+      "title": "Transparency & Limitations",
+      "content": "We believe in honest communication about what we know and don't know:\n\n**What We Do**: Provide evidence-based summaries of herbal medicine research\n**What We Don't Do**: Make medical recommendations, replace doctor consultation, or guarantee outcomes\n\n**Limitations**:\n- Herb quality varies by source; we cannot verify your specific product\n- Individual responses to herbs vary significantly\n- Traditional evidence doesn't always translate to modern clinical efficacy\n- Research gaps exist for many herbs\n\n**Our Bias**: We are committed to evidence over tradition. If traditional use conflicts with negative clinical evidence, we highlight the clinical findings."
+    },
+    "activeCompounds": {
+      "title": "Active Compound Analysis",
+      "content": "For each herb, we identify:\n\n**Primary Actives**: The compounds most likely responsible for observed effects\n**Mechanism**: How these compounds interact with human physiology\n**Bioavailability**: How well compounds are absorbed and utilized\n**Standardization**: Whether commercial extracts standardize for these compounds\n\nThis information helps users understand:\n- Why different brands may vary in effectiveness\n- What to look for on supplement labels\n- How formulation affects bioavailability (e.g., curcumin + piperine)"
+    }
+  },
+  "donateContent": {
+    "title": "Keep HerbAlly 100% Free",
+    "subtitle": "No ads. No paywalls. No premium tiers. Just free herbal knowledge for everyone — powered by people like you.",
+    "herbsStat": "2,700+ herbs",
+    "freeAI": "Free AI herbalist",
+    "freeForever": "100% free forever",
+    "chooseImpact": "Choose Your Impact",
+    "everyDonation": "Every donation helps keep us running",
+    "whereMoneyGoes": "Where Your Money Goes",
+    "fullTransparency": "Full transparency on our monthly operating costs",
+    "estimatedCosts": "Estimated monthly costs",
+    "monthlyCost": "$100+/month",
+    "loveHerbAlly": "Why People Love HerbAlly",
+    "promiseTitle": "Our Promise to You",
+    "noAds": "No ads ever.",
+    "noAdsDesc": "We don't sell your attention to advertisers.",
+    "noPremium": "No premium tiers.",
+    "noPremiumDesc": "Every feature is free for everyone.",
+    "noDataSelling": "No data selling.",
+    "noDataSellingDesc": "Your data stays yours.",
+    "openCosts": "Open about costs.",
+    "openCostsDesc": "We show you exactly where donations go.",
+    "thankYou": "Thank you for your donation! 💚",
+    "thankYouDesc": "Your support helps keep HerbAlly free for everyone. You're amazing!",
+    "canceled": "Donation canceled",
+    "canceledDesc": "No worries! Feel free to try again whenever you're ready.",
+    "questions": "Questions?",
+    "learnMore": "Learn more about HerbAlly",
+    "breakdown": {
+      "hosting": {
+        "label": "Hosting & Infrastructure",
+        "desc": "Servers, CDN, and deployment to keep the app fast and reliable",
+        "monthly": "$20"
+      },
+      "database": {
+        "label": "Database & Storage",
+        "desc": "Supabase database hosting for 2,700+ herbs and user data",
+        "monthly": "$25"
+      },
+      "ai": {
+        "label": "AI Herbalist",
+        "desc": "OpenRouter API costs for the virtual herbalist chatbot",
+        "monthly": "$50+"
+      },
+      "domain": {
+        "label": "Domain & SSL",
+        "desc": "Domain registration and secure HTTPS certificates",
+        "monthly": "$5"
+      }
+    },
+    "testimonials": [
+      {
+        "quote": "Finally, a free resource for herbal information!",
+        "author": "Sarah M.",
+        "location": "Portland, OR"
+      },
+      {
+        "quote": "The AI herbalist helped me understand herb-drug interactions.",
+        "author": "James K.",
+        "location": "Austin, TX"
+      },
+      {
+        "quote": "I use this weekly for my herbal tea recommendations.",
+        "author": "Maria L.",
+        "location": "Denver, CO"
+      }
+    ]
+  },
+  "symptomsPage": {
+    "title": "Find Herbs for Your Symptoms",
+    "subtitle": "Don't know which herb you need? Start here. Select a symptom or condition and we'll show you evidence-based herbs that may help.",
+    "disclaimerTitle": "Medical Disclaimer",
+    "disclaimerText": "This information is for educational purposes only. Herbs can interact with medications and may not be safe for everyone. Always consult your healthcare provider before starting any herbal supplement, especially if you are pregnant, nursing, or taking prescription drugs.",
+    "browseHerbs": "Browse herbs →",
+    "notSureTitle": "Not Sure Where to Start?",
+    "notSureDesc": "Try our AI Virtual Herbalist for personalized guidance.",
+    "askHerbalist": "Ask the Virtual Herbalist",
+    "browseAllHerbs": "Browse All Herbs",
+    "mental": {
+      "title": "Mental & Emotional",
+      "anxiety": {
+        "name": "Anxiety & Stress",
+        "desc": "Herbs traditionally used for anxiety and stress relief"
+      },
+      "depression": {
+        "name": "Depression & Mood",
+        "desc": "Herbs that may support mood and emotional wellbeing"
+      },
+      "sleep": {
+        "name": "Sleep & Insomnia",
+        "desc": "Herbs traditionally used to promote sleep"
+      },
+      "focus": {
+        "name": "Focus & Memory",
+        "desc": "Herbs that may support cognitive function"
+      }
+    },
+    "pain": {
+      "title": "Pain & Inflammation",
+      "inflammation": {
+        "name": "Inflammation",
+        "desc": "Herbs with anti-inflammatory properties"
+      },
+      "joint": {
+        "name": "Joint & Muscle Pain",
+        "desc": "Herbs for musculoskeletal discomfort"
+      },
+      "headache": {
+        "name": "Headaches & Migraines",
+        "desc": "Herbs traditionally used for headache relief"
+      },
+      "nerve": {
+        "name": "Nerve Pain",
+        "desc": "Herbs that may support nerve health"
+      }
+    },
+    "digestive": {
+      "title": "Digestive Health",
+      "indigestion": {
+        "name": "Indigestion & Bloating",
+        "desc": "Herbs for digestive comfort"
+      },
+      "nausea": {
+        "name": "Nausea",
+        "desc": "Herbs traditionally used for nausea relief"
+      },
+      "constipation": {
+        "name": "Constipation",
+        "desc": "Herbs that support regularity"
+      },
+      "liver": {
+        "name": "Liver Support",
+        "desc": "Herbs that support liver health"
+      }
+    },
+    "heart": {
+      "title": "Heart & Circulation",
+      "bloodPressure": {
+        "name": "Blood Pressure",
+        "desc": "Herbs that may support cardiovascular health"
+      },
+      "cholesterol": {
+        "name": "Cholesterol",
+        "desc": "Herbs traditionally used for lipid management"
+      },
+      "circulation": {
+        "name": "Circulation",
+        "desc": "Herbs that may improve circulation"
+      }
+    },
+    "immune": {
+      "title": "Immune & Respiratory",
+      "cold": {
+        "name": "Cold & Flu",
+        "desc": "Herbs for immune support during illness"
+      },
+      "cough": {
+        "name": "Cough & Sore Throat",
+        "desc": "Herbs traditionally used for respiratory relief"
+      },
+      "allergy": {
+        "name": "Allergies",
+        "desc": "Herbs that may help with allergic responses"
+      },
+      "immuneSupport": {
+        "name": "Immune Support",
+        "desc": "Herbs for general immune support"
+      }
+    },
+    "womens": {
+      "title": "Women's Health",
+      "menstrual": {
+        "name": "Menstrual Cramps",
+        "desc": "Herbs for menstrual comfort"
+      },
+      "menopause": {
+        "name": "Menopause",
+        "desc": "Herbs traditionally used during menopause"
+      },
+      "hormonal": {
+        "name": "Hormonal Balance",
+        "desc": "Herbs that may support hormonal health"
+      }
+    },
+    "skin": {
+      "title": "Skin & Wound Care",
+      "eczema": {
+        "name": "Eczema & Psoriasis",
+        "desc": "Herbs for inflammatory skin conditions"
+      },
+      "wound": {
+        "name": "Wound Healing",
+        "desc": "Herbs traditionally used for wound care"
+      },
+      "acne": {
+        "name": "Acne",
+        "desc": "Herbs that may support clear skin"
+      }
+    }
+  },
+  "herbDetailContent": {
+    "herbNotFound": "Herb Not Found",
+    "editorialTeam": "HerbAlly Editorial Team",
+    "editorialCredentials": "Medical herbalists and healthcare professionals",
+    "herbsAtAGlance": "Herbs at a Glance",
+    "breadcrumbHome": "Home",
+    "breadcrumbHerbs": "Herbs",
+    "reportIssue": "Report an Issue",
+    "sources": {
+      "who": "WHO Monographs",
+      "nccih": "NCCIH",
+      "pubmed": "PubMed",
+      "commissionE": "Commission E"
+    }
+  },
+  "notFound": {
+    "title": "Page not found",
+    "message": "The page you are looking for does not exist or may have been moved.",
+    "goHome": "Go home",
+    "browseHerbs": "Browse herbs"
+  },
+  "evidence": {
+    "prefix": "Evidence:",
+    "A": {
+      "label": "Strong Evidence",
+      "shortDesc": "Multiple RCTs",
+      "fullDesc": "Strong clinical evidence from multiple randomized controlled trials (RCTs) and systematic reviews."
+    },
+    "B": {
+      "label": "Moderate Evidence",
+      "shortDesc": "Some clinical data",
+      "fullDesc": "Moderate evidence from observational studies, case series, or limited RCTs."
+    },
+    "C": {
+      "label": "Limited Evidence",
+      "shortDesc": "Traditional/preclinical",
+      "fullDesc": "Limited evidence from traditional use, preclinical studies, or expert opinion. More research needed."
+    },
+    "D": {
+      "label": "Anecdotal Only",
+      "shortDesc": "Historical use only",
+      "fullDesc": "Evidence based primarily on historical use and anecdotal reports. Limited scientific validation."
+    },
+    "trad": {
+      "label": "Traditional Use",
+      "shortDesc": "Traditional medicine",
+      "fullDesc": "Used traditionally in herbal medicine systems. Scientific evidence may be limited or ongoing."
+    }
+  },
+  "safety": {
+    "noInteractionsTitle": "No Known Drug Interactions",
+    "noInteractionsMsg": "No clinically significant drug interactions have been documented. However, always consult your healthcare provider before combining herbs with medications.",
+    "interactionCountTitle": "{count} Known Drug Interaction — Some May Be Serious",
+    "interactionCountTitlePlural": "{count} Known Drug Interactions — Some May Be Serious",
+    "interactionMessage": "This herb may interact with medications you are taking. Review the interactions table below and consult your healthcare provider before use.",
+    "pregnancySafetyTitle": "Pregnancy & Nursing Safety",
+    "pregnancySafeMsg": "Generally considered safe during pregnancy and nursing based on {level} evidence. However, always consult your healthcare provider before using any herbal supplement during pregnancy or while breastfeeding.",
+    "notSafeTitle": "Not Recommended During Pregnancy or Nursing",
+    "notPregnancyMsg": "This herb is NOT recommended during pregnancy due to potential risks to the developing fetus.",
+    "notNursingMsg": "This herb is NOT recommended while breastfeeding as effects on infants are unknown.",
+    "consultProvider": "Consult your healthcare provider before use.",
+    "severityContraindicated": "Contraindicated",
+    "severitySevere": "Severe",
+    "severityModerate": "Moderate",
+    "severityMild": "Mild"
+  },
+  "citations": {
+    "pending": "Citations pending review. Information based on traditional use and preliminary research.",
+    "reviewedBy": "Reviewed by: ",
+    "lastUpdated": "Last updated: ",
+    "sources": "Sources: "
+  },
+  "herbBadges": {
+    "pregnancy": "Pregnancy",
+    "nursing": "Nursing",
+    "herb": "Herb"
+  },
+  "compare": {
+    "notFound": "Herb Comparison Not Found",
+    "title": "{name1} vs {name2}",
+    "subtitle": "Side-by-side comparison of medicinal herbs",
+    "backToHerbs": "Back to Herbs",
+    "herb": "Herb",
+    "description": "Description",
+    "activeCompounds": "Active Compounds",
+    "traditionalUses": "Traditional Uses",
+    "modernUses": "Modern Uses",
+    "adultDosage": "Adult Dosage",
+    "contraindications": "Contraindications",
+    "sideEffects": "Side Effects",
+    "drugInteractions": "Drug Interactions",
+    "knownInteractions": "{count} known interactions",
+    "pregnancyWarnings": "Pregnancy & Nursing Warnings",
+    "safeInPregnancy": "Generally safe in pregnancy",
+    "notRecommendedPregnancy": "Not recommended in pregnancy",
+    "safeNursing": "Generally safe while nursing",
+    "notRecommendedNursing": "Not recommended while nursing",
+    "viewDetails": "View {name} Details"
+  },
+  "herbalistPage": {
+    "title": "Virtual Herbalist",
+    "subtitle": "Ask our AI-powered herbalist about herb safety, drug interactions, and usage guidance. Get evidence-based information from trusted sources.",
+    "safetyTitle": "Important: AI-Generated Information Limitations",
+    "safetyNotMedical": "This AI provides educational information only, not medical advice.",
+    "safetyDisclaimer": "Responses are generated from herb databases and may not reflect the most current research or your specific health situation.",
+    "safetyConsult": "Always consult a healthcare provider before using herbs, especially if pregnant, nursing, or taking medications",
+    "safetyInteractions": "Drug interactions listed may not be complete — verify with a pharmacist",
+    "safetyDiagnose": "AI cannot diagnose conditions or prescribe treatments",
+    "safetyEvidence": "Evidence levels vary — some herbs have limited clinical research",
+    "safetyEmergency": "In case of emergency or adverse reaction, contact poison control (1-800-222-1222) or call 911.",
+    "askingAbout": "Asking about {name}",
+    "askingAboutDesc": "The AI has been provided with detailed information about this herb from our database, including active compounds, traditional uses, and known safety concerns.",
+    "aboutTitle": "About our AI Herbalist",
+    "aboutOllama": "Powered by Ollama Cloud AI (glm-5:cloud model)",
+    "aboutSources": "Information sourced from WHO monographs, NCCIH, PubMed, and Commission E",
+    "aboutUpdated": "Regularly updated as new research becomes available",
+    "aboutNotFDA": "Not reviewed or approved by FDA",
+    "description": "Ask our AI herbalist about herb safety, drug interactions, and dosage. Evidence-based answers from WHO, NCCIH, and PubMed sources. Free, no account required."
+  },
+  "mobileTabs": {
+    "symptoms": "Symptoms",
+    "herbs": "Herbs",
+    "search": "Search",
+    "chat": "Chat",
+    "calc": "Calc"
+  },
+  "donateButtons": {
+    "coffee": "Coffee",
+    "supporter": "Supporter",
+    "champion": "Champion",
+    "coffeeDesc": "One day of API costs",
+    "supporterDesc": "A week of hosting",
+    "championDesc": "Half a month of operations",
+    "customAmount": "Or choose a custom amount:",
+    "donate": "Donate",
+    "secureViaStripe": "Secure via Stripe",
+    "allCardsAccepted": "All cards accepted",
+    "noCardDataStored": "No card data stored",
+    "errorMessage": "Failed to process donation. Please try again."
+  },
+  "recentSearches": {
+    "title": "Recent searches",
+    "clearAll": "Clear all"
+  },
+  "dosageFormulas": {
+    "clarks_rule": {
+      "name": "Clark's Rule",
+      "description": "Based on patient weight. Best for children and adults of varying sizes.",
+      "bestFor": "Children 2+ years, weight-based dosing"
+    },
+    "youngs_rule": {
+      "name": "Young's Rule",
+      "description": "Based on patient age. Simple but less accurate than weight-based methods.",
+      "bestFor": "Children 2-12 years when weight is unknown"
+    },
+    "bsa": {
+      "name": "BSA Method (Mosteller)",
+      "description": "Based on body surface area. Most accurate method for dosage calculation.",
+      "bestFor": "Most accurate for all ages when height and weight are known"
+    },
+    "fried_rule": {
+      "name": "Fried's Rule",
+      "description": "Specifically designed for infants under 2 years of age.",
+      "bestFor": "Infants under 2 years"
     }
   }
 }

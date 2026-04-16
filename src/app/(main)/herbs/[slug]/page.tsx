@@ -6,8 +6,6 @@ import {
   ArrowLeft,
   Calculator,
   AlertTriangle,
-  ShieldCheck,
-  ShieldX,
   FlaskConical,
   BookOpen,
   Stethoscope,
@@ -15,6 +13,8 @@ import {
   GitCompare,
   Clock,
   FileText,
+  ShieldCheck,
+  ShieldX,
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
@@ -86,7 +86,6 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const herb = result.data;
   const baseUrl = process.env.NEXT_PUBLIC_APP_URL ?? "https://herbally.app";
   
-  // Build keywords from herb data
   const keywords = [
     herb.name,
     herb.scientific_name,
@@ -174,7 +173,7 @@ export default async function HerbDetailPage({ params }: Props) {
   const locale: Locale = (localeCookie?.value as Locale) || "en";
 
   // Translation helper
-  const t = (key: string) => getServerTranslation(locale, key);
+  const t = (key: string, params?: Record<string, string | number>) => getServerTranslation(locale, key, params);
 
   if (!result.success || !result.data) {
     notFound();
@@ -221,7 +220,6 @@ export default async function HerbDetailPage({ params }: Props) {
   const category = herb.herb_categories?.name || t("herbDetail.uncategorized");
   const interactions = (herb.drug_interactions || []) as Interaction[];
   
-  // Calculate severity counts for interactions
   const severityCounts = {
     contraindicated: interactions.filter((i: DrugInteraction) => i.severity === "contraindicated").length,
     severe: interactions.filter((i: DrugInteraction) => i.severity === "severe").length,
@@ -242,16 +240,15 @@ export default async function HerbDetailPage({ params }: Props) {
         year: "numeric",
       })
     : undefined;
-  const reviewedBy = herb.reviewed_by || "HerbAlly Editorial Team";
-  const reviewerCredentials = herb.reviewer_credentials || "Medical herbalists and healthcare professionals";
+  const reviewedBy = herb.reviewed_by || t("herbDetailContent.editorialTeam");
+  const reviewerCredentials = herb.reviewer_credentials || t("herbDetailContent.editorialCredentials");
 
   // Fetch related herbs using smart comparison logic
   let relatedHerbs: Array<{ name: string; slug: string; scientific_name: string }> = [];
   try {
-    const supabase = getAnonClient();
-    if (supabase) {
-      // Get all herbs with symptom keywords for smart matching
-      const { data: allHerbs } = await supabase
+    const supabaseClient = getAnonClient();
+    if (supabaseClient) {
+      const { data: allHerbs } = await supabaseClient
         .from("herbs")
         .select("name, slug, scientific_name, symptom_keywords, traditional_uses")
         .eq("is_published", true);
@@ -281,13 +278,13 @@ export default async function HerbDetailPage({ params }: Props) {
         <ol className="flex items-center gap-1.5 text-sm text-muted-foreground">
           <li>
             <Link href="/" className="hover:text-foreground transition-colors">
-              Home
+              {t("herbDetailContent.breadcrumbHome")}
             </Link>
           </li>
           <li aria-hidden="true">/</li>
           <li>
             <Link href="/herbs" className="hover:text-foreground transition-colors">
-              Herbs
+              {t("herbDetailContent.breadcrumbHerbs")}
             </Link>
           </li>
           <li aria-hidden="true">/</li>
@@ -308,13 +305,13 @@ export default async function HerbDetailPage({ params }: Props) {
               {
                 "@type": "ListItem",
                 position: 1,
-                name: "Home",
+                name: t("herbDetailContent.breadcrumbHome"),
                 item: "https://herbally.app",
               },
               {
                 "@type": "ListItem",
                 position: 2,
-                name: "Herbs",
+                name: t("herbDetailContent.breadcrumbHerbs"),
                 item: "https://herbally.app/herbs",
               },
               {
@@ -335,10 +332,8 @@ export default async function HerbDetailPage({ params }: Props) {
       </Button>
 
       {/* Medical Disclaimer - ABOVE FOLD */}
-      <SafetyAlert severity="info" title="Medical Disclaimer">
-        This information is for educational purposes only and is not a substitute for professional medical advice, 
-        diagnosis, or treatment. Always consult your healthcare provider before using herbs, especially if you are 
-        pregnant, nursing, taking medications, or have a medical condition.
+      <SafetyAlert severity="info" title={t("fda.disclaimer").split(".")[0]}>
+        {t("herbDetail.medicalDisclaimerText")}
       </SafetyAlert>
 
       {/* Header */}
@@ -362,7 +357,7 @@ export default async function HerbDetailPage({ params }: Props) {
           {lastReviewed && (
             <span className="flex items-center gap-1.5 text-xs text-muted-foreground">
               <Clock className="size-3" />
-              Last reviewed {lastReviewed}
+              {t("herbDetail.lastUpdatedPrefix")} {lastReviewed}
             </span>
           )}
         </div>
@@ -385,20 +380,20 @@ export default async function HerbDetailPage({ params }: Props) {
       {/* Description */}
       <section>
         <h2 className="mb-3 text-xl font-semibold text-foreground">
-          Description
+          {t("herbDetail.description")}
         </h2>
         <p className="leading-relaxed text-muted-foreground">
           {herb.description}
         </p>
         {monograph && (
           <div className="mt-4 rounded-lg border border-primary/20 bg-primary/5 p-4">
-            <h3 className="font-semibold text-foreground">Clinical Summary</h3>
+            <h3 className="font-semibold text-foreground">{t("herbDetail.clinicalSummary")}</h3>
             <p className="mt-1 text-sm leading-relaxed text-muted-foreground">
               {monograph.summary}
             </p>
             {monograph.mechanism && (
               <>
-                <h4 className="mt-3 font-medium text-foreground">Mechanism of Action</h4>
+                <h4 className="mt-3 font-medium text-foreground">{t("herbDetail.mechanismOfAction")}</h4>
                 <p className="mt-1 text-sm leading-relaxed text-muted-foreground">
                   {monograph.mechanism}
                 </p>
@@ -416,7 +411,7 @@ export default async function HerbDetailPage({ params }: Props) {
           <section>
             <h2 className="mb-3 flex items-center gap-2 text-xl font-semibold text-foreground">
               <FlaskConical className="size-5 text-primary" />
-              Evidence by Claim
+              {t("herbDetail.evidenceByClaim")}
             </h2>
             <div className="space-y-3">
               {monograph.claims.map((claim) => (
@@ -446,7 +441,7 @@ export default async function HerbDetailPage({ params }: Props) {
             <div className="mb-3 flex items-center gap-2">
               <FlaskConical className="size-5 text-primary" />
               <h2 className="text-xl font-semibold text-foreground">
-                Active Compounds
+                {t("herbDetail.activeCompounds")}
               </h2>
             </div>
             <div className="flex flex-wrap gap-2">
@@ -469,7 +464,7 @@ export default async function HerbDetailPage({ params }: Props) {
             <div className="mb-3 flex items-center gap-2">
               <BookOpen className="size-5 text-primary" />
               <h2 className="text-xl font-semibold text-foreground">
-                Traditional Uses
+                {t("herbDetail.traditionalUses")}
               </h2>
               <EvidenceGrade level="C" showLabel={false} />
             </div>
@@ -493,7 +488,7 @@ export default async function HerbDetailPage({ params }: Props) {
             <div className="mb-3 flex items-center gap-2">
               <Stethoscope className="size-5 text-primary" />
               <h2 className="text-xl font-semibold text-foreground">
-                Modern Uses
+                {t("herbDetail.modernUses")}
               </h2>
               <EvidenceGrade level="B" showLabel={false} />
             </div>
@@ -519,15 +514,15 @@ export default async function HerbDetailPage({ params }: Props) {
         <CardHeader>
           <CardTitle className="flex items-center gap-2">
             <Pill className="size-5 text-primary" />
-            Dosage Information
+            {t("herbDetail.dosageInfo")}
           </CardTitle>
-          <CardDescription>Recommended dosing guidelines</CardDescription>
+          <CardDescription>{t("herbDetail.recommendedDosing")}</CardDescription>
         </CardHeader>
         <CardContent>
           <dl className="grid gap-4 sm:grid-cols-2">
             {herb.dosage_forms && herb.dosage_forms.length > 0 && (
               <div>
-                <dt className="text-sm font-medium text-foreground">Forms</dt>
+                <dt className="text-sm font-medium text-foreground">{t("herbDetail.forms")}</dt>
                 <dd className="text-sm capitalize text-muted-foreground">
                   {herb.dosage_forms.join(", ")}
                 </dd>
@@ -536,7 +531,7 @@ export default async function HerbDetailPage({ params }: Props) {
             {herb.dosage_adult && (
               <div>
                 <dt className="text-sm font-medium text-foreground">
-                  Adult Dose
+                  {t("herbDetail.adultDosage")}
                 </dt>
                 <dd className="text-sm text-muted-foreground">
                   {herb.dosage_adult}
@@ -546,7 +541,7 @@ export default async function HerbDetailPage({ params }: Props) {
             {herb.dosage_child && (
               <div>
                 <dt className="text-sm font-medium text-foreground">
-                  Child Dose
+                  {t("herbDetail.childDosage")}
                 </dt>
                 <dd className="text-sm text-muted-foreground">
                   {herb.dosage_child}
@@ -556,7 +551,7 @@ export default async function HerbDetailPage({ params }: Props) {
             {herb.preparation_notes && (
               <div className="sm:col-span-2">
                 <dt className="text-sm font-medium text-foreground">
-                  Preparation Notes
+                  {t("herbDetail.preparationNotes")}
                 </dt>
                 <dd className="text-sm text-muted-foreground">
                   {herb.preparation_notes}
@@ -572,10 +567,10 @@ export default async function HerbDetailPage({ params }: Props) {
         <CardHeader>
           <CardTitle className="flex items-center gap-2 text-amber-700 dark:text-amber-400">
             <AlertTriangle className="size-5" />
-            Safety Information
+            {t("herbDetail.safetyInfo")}
           </CardTitle>
           <CardDescription>
-            Important safety considerations for this herb
+            {t("herbDetail.safetyConsiderations")}
           </CardDescription>
         </CardHeader>
         <CardContent className="space-y-4">
@@ -608,7 +603,7 @@ export default async function HerbDetailPage({ params }: Props) {
           {herb.contraindications && herb.contraindications.length > 0 && (
             <div>
               <h3 className="mb-2 text-sm font-medium text-foreground">
-                Contraindications
+                {t("herbDetail.contraindicationsLabel")}
               </h3>
               <ul className="space-y-1">
               {herb.contraindications.map((c: string) => (
@@ -626,7 +621,7 @@ export default async function HerbDetailPage({ params }: Props) {
           {herb.side_effects && herb.side_effects.length > 0 && (
             <div>
               <h3 className="mb-2 text-sm font-medium text-foreground">
-                Possible Side Effects
+                {t("herbDetail.possibleSideEffects")}
               </h3>
               <ul className="space-y-1">
                 {herb.side_effects.map((s: string) => (
@@ -651,7 +646,7 @@ export default async function HerbDetailPage({ params }: Props) {
       <section>
         <h2 className="mb-3 flex items-center gap-2 text-xl font-semibold text-foreground">
           <FileText className="size-5 text-primary" />
-          Sources & Citations
+          {t("herbDetail.sourcesAndCitations")}
         </h2>
         <CitationsList citations={citations} />
       </section>
@@ -661,14 +656,14 @@ export default async function HerbDetailPage({ params }: Props) {
         reviewedBy={reviewedBy}
         reviewerCredentials={reviewerCredentials}
         lastReviewed={lastReviewed}
-        sources={["WHO Monographs", "NCCIH", "PubMed", "Commission E"]}
+        sources={[t("herbDetailContent.sources.who"), t("herbDetailContent.sources.nccih"), t("herbDetailContent.sources.pubmed"), t("herbDetailContent.sources.commissionE")]}
       />
 
       {/* Related Herbs */}
       {relatedHerbs.length > 0 && (
         <section aria-labelledby="related-herbs-heading">
           <h2 id="related-herbs-heading" className="mb-4 text-xl font-semibold text-foreground">
-            Related Herbs
+            {t("herbDetail.relatedHerbs")}
           </h2>
           <div className="grid gap-3 sm:grid-cols-2 lg:grid-cols-3">
             {relatedHerbs.map((related) => (
@@ -693,14 +688,14 @@ export default async function HerbDetailPage({ params }: Props) {
       <div className="flex flex-wrap gap-3 pt-4">
         <Button render={<Link href={`/calculator?herb=${slug}`} />}>
           <Calculator className="size-4" />
-          Calculate Dose
+          {t("herbDetail.calculateDose")}
         </Button>
         <Button
           variant="outline"
           render={<Link href={`/pharmacist?herb=${slug}`} />}
         >
           <AlertTriangle className="size-4" />
-          Check Interactions
+          {t("herbDetail.checkInteractions")}
         </Button>
         {relatedHerbs.length > 0 && (
           <Button
@@ -708,7 +703,7 @@ export default async function HerbDetailPage({ params }: Props) {
             render={<Link href={`/compare/${slug}/vs/${relatedHerbs[0].slug}`} />}
           >
             <GitCompare className="size-4" />
-            Compare with {relatedHerbs[0].name}
+            {t("herbDetail.compareTo", { name: relatedHerbs[0].name })}
           </Button>
         )}
       </div>
@@ -716,13 +711,13 @@ export default async function HerbDetailPage({ params }: Props) {
       {/* Report Issue */}
       <div className="mt-8 rounded-lg border border-dashed p-4 text-center">
         <p className="text-sm text-muted-foreground">
-          Found an error or have a correction for {herb.name}?
+          {t("herbDetail.foundError", { name: herb.name })}
         </p>
         <a
           href={`mailto:support@herbally.app?subject=Correction%20for%20${encodeURIComponent(herb.name)}%20(${encodeURIComponent(herb.scientific_name)})&body=I%20found%20an%20error%20on%20the%20${encodeURIComponent(herb.name)}%20page%3A%0A%0A`}
           className="mt-1 inline-flex items-center gap-1 text-sm font-medium text-primary hover:underline"
         >
-          Report an issue →
+          {t("herbDetailContent.reportIssue")} →
         </a>
       </div>
     </div>

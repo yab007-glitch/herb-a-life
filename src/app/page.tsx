@@ -28,40 +28,28 @@ export default function LandingPage() {
     {
       icon: Database,
       titleKey: "home.features.herbs.title",
-      titleFallback: "2,700+ Medicinal Herbs",
       descriptionKey: "home.features.herbs.description",
-      descriptionFallback:
-        "The most comprehensive herbal database available. Detailed profiles with active compounds, traditional uses, and modern applications.",
       gradient: "from-emerald-500 to-teal-600",
       href: "/herbs",
     },
     {
       icon: Calculator,
       titleKey: "home.features.calculator.title",
-      titleFallback: "Precision Dosage Calculator",
       descriptionKey: "home.features.calculator.description",
-      descriptionFallback:
-        "Calculate safe dosages using Clark's Rule, Young's Rule, BSA, and Fried's Rule. Get personalized recommendations based on age and weight.",
       gradient: "from-teal-500 to-cyan-600",
       href: "/calculator",
     },
     {
       icon: Shield,
       titleKey: "home.features.interactions.title",
-      titleFallback: "Drug Interaction Checker",
       descriptionKey: "home.features.interactions.description",
-      descriptionFallback:
-        "Cross-reference your medications with our database. Identify mild, moderate, severe, and contraindicated combinations.",
       gradient: "from-cyan-500 to-blue-600",
       href: "/herbs",
     },
     {
       icon: MessageCircle,
       titleKey: "home.features.ai.title",
-      titleFallback: "AI Virtual Herbalist",
       descriptionKey: "home.features.ai.description",
-      descriptionFallback:
-        "Ask questions about herbs, dosages, and safety. Powered by evidence-based sources including WHO monographs and PubMed research.",
       gradient: "from-blue-500 to-indigo-600",
       href: "/herbalist",
     },
@@ -73,23 +61,14 @@ export default function LandingPage() {
     { value: "100%", labelKey: "home.stats.free", icon: TrendingUp },
   ];
 
-  const trustBadges = [
-    "WHO Monographs",
-    "German Commission E",
-    "PubMed Research",
-    "FDA Compliant",
-  ];
-
   return (
     <div className="flex min-h-screen flex-col">
       <FDADisclaimerBanner />
       <MarketingNavbar />
 
-      {/* CRITICAL-2: skip link target */}
       <main id="main-content" tabIndex={-1} className="flex-1">
         {/* Hero Section */}
         <section aria-labelledby="hero-heading" className="relative min-h-[90vh] overflow-hidden hero-gradient">
-          {/* HIGH-3: decorative divs get aria-hidden */}
           <div className="absolute inset-0 dot-pattern opacity-50" aria-hidden="true" />
           <div className="absolute -top-40 right-0 size-[600px] rounded-full bg-primary/10 blur-3xl motion-safe:animate-pulse-glow" aria-hidden="true" />
           <div
@@ -101,7 +80,6 @@ export default function LandingPage() {
 
           <div className="relative mx-auto max-w-7xl px-4 py-20 sm:px-6 sm:py-28 lg:px-8">
             <div className="text-center">
-              {/* MED-5: evidence badge with semantic role */}
               <div
                 role="note"
                 aria-label="Platform type: Evidence-Based Herbal Medicine"
@@ -119,7 +97,6 @@ export default function LandingPage() {
                 {t("home.hero.subtitle")}
               </p>
 
-              {/* MED-1: differentiated CTAs */}
               <div className="mt-10 flex flex-col items-center justify-center gap-4 sm:flex-row">
                 <Button
                   size="lg"
@@ -127,7 +104,7 @@ export default function LandingPage() {
                   render={<Link href="/symptoms" />}
                 >
                   <Stethoscope className="size-5" />
-                  Find by Symptom
+                  {t("nav.symptoms")}
                   <ArrowRight className="size-4" />
                 </Button>
                 <Button
@@ -137,7 +114,7 @@ export default function LandingPage() {
                   render={<Link href="/herbs" />}
                 >
                   <Leaf className="size-5" />
-                  Browse All Herbs
+                  {t("herbs.browseAll")}
                 </Button>
                 <Button
                   variant="outline"
@@ -146,18 +123,18 @@ export default function LandingPage() {
                   render={<Link href="/herbalist" />}
                 >
                   <MessageCircle className="size-5" />
-                  AI Herbalist
+                  {t("home.hero.askHerbalistButton")}
                 </Button>
               </div>
 
               <div className="mt-12 flex flex-wrap items-center justify-center gap-4 text-xs text-muted-foreground">
                 <span className="font-medium">{t("home.trustBadges")}:</span>
-                {trustBadges.map((badge) => (
+                {[0, 1, 2, 3].map((i) => (
                   <span
-                    key={badge}
+                    key={i}
                     className="rounded-full border bg-muted/50 px-3 py-1"
                   >
-                    {badge}
+                    {t(`home.hero.trustBadgesList[${i}]`)}
                   </span>
                 ))}
               </div>
@@ -168,8 +145,7 @@ export default function LandingPage() {
         {/* Stats Section */}
         <section aria-labelledby="stats-heading" className="border-y bg-muted/30 px-4 py-12 sm:px-6 lg:px-8">
           <div className="mx-auto max-w-5xl">
-            {/* LOW-1: sr-only heading for stats */}
-            <h2 id="stats-heading" className="sr-only">Platform Statistics</h2>
+            <h2 id="stats-heading" className="sr-only">{t("home.stats.heading")}</h2>
             <div className="grid grid-cols-1 gap-8 sm:grid-cols-3">
               {stats.map((stat) => {
                 const Icon = stat.icon;
@@ -208,7 +184,6 @@ export default function LandingPage() {
               </p>
             </div>
 
-            {/* HIGH-5 & LOW-8: feature cards as linked articles */}
             <div className="grid gap-6 md:grid-cols-2">
               {features.map((feature) => {
                 const Icon = feature.icon;
@@ -259,7 +234,6 @@ export default function LandingPage() {
                 <p className="mx-auto mb-8 max-w-xl text-muted-foreground">
                   {t("home.cta.subtitle")}
                 </p>
-                {/* MED-1: differentiated CTAs */}
                 <div className="flex flex-col items-center justify-center gap-4 sm:flex-row">
                   <Button
                     size="lg"
