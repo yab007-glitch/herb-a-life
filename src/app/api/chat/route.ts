@@ -81,7 +81,12 @@ export async function POST(request: NextRequest) {
 
     if (!response.ok) {
       const errorText = await response.text().catch(() => "Unknown error");
-      console.error("OpenRouter API error:", response.status, errorText);
+      console.error("OpenRouter API error:", {
+        status: response.status,
+        statusText: response.statusText,
+        headers: Object.fromEntries(response.headers.entries()),
+        body: errorText.substring(0, 500),
+      });
       
       // Provide user-friendly message for common errors
       let userMessage = "AI service is temporarily unavailable.";
@@ -155,8 +160,9 @@ export async function POST(request: NextRequest) {
     });
   } catch (error) {
     console.error("Chat API error:", error);
+    const message = error instanceof Error ? error.message : "Internal server error";
     return NextResponse.json(
-      { error: "Internal server error" },
+      { error: `Chat error: ${message}` },
       { status: 500 }
     );
   }
