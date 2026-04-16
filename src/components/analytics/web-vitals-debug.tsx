@@ -21,8 +21,8 @@ export function WebVitalsDebug() {
       setVitals((prev) => [event.detail, ...prev].slice(0, 10));
     };
 
-    window.addEventListener("web-vital" as any, handleVital);
-    return () => window.removeEventListener("web-vital" as any, handleVital);
+    window.addEventListener("web-vital", handleVital as EventListener);
+    return () => window.removeEventListener("web-vital", handleVital as EventListener);
   }, []);
 
   if (process.env.NODE_ENV === "production" || vitals.length === 0) {

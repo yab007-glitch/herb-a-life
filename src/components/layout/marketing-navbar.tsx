@@ -2,7 +2,7 @@
 
 import Link from "next/link";
 import { useState } from "react";
-import { Leaf, Menu, Heart, Sparkles, Stethoscope } from "lucide-react";
+import { Leaf, Menu, Heart, Sparkles } from "lucide-react";
 import {
   Sheet,
   SheetTrigger,

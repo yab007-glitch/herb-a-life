@@ -11,7 +11,6 @@ const VITALS_ENDPOINT = "/api/analytics/vitals";
 function sendToAnalytics(metric: Metric) {
   // Only send in production
   if (process.env.NODE_ENV !== "production") {
-    // eslint-disable-next-line no-console
     console.log("[Web Vitals]", metric.name, metric.value);
     return;
   }

@@ -81,7 +81,7 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const { slug } = await params;
   const result = await getHerbBySlug(slug);
   if (!result.success || !result.data) {
-    return { title: "Herb Not Found" };
+    return { title: "Herbally" };
   }
   const herb = result.data;
   const baseUrl = process.env.NEXT_PUBLIC_APP_URL ?? "https://herbally.app";
@@ -146,12 +146,12 @@ interface CitationData {
   pmid?: string;
 }
 
-function formatCitations(citations: CitationData[] | null | undefined): CitationData[] {
+function formatCitations(citations: CitationData[] | null | undefined, t: (key: string, params?: Record<string, string | number>) => string): CitationData[] {
   if (!citations || citations.length === 0) {
     return [
       {
-        source: "NCCIH",
-        title: "Herbs at a Glance",
+        source: t("herbDetailContent.sources.nccih"),
+        title: t("seo.nccihSource"),
         url: "https://www.nccih.nih.gov/health/herbsataglance",
       },
     ];
@@ -228,7 +228,7 @@ export default async function HerbDetailPage({ params }: Props) {
   };
   
   const evidenceLevel = getEvidenceLevel(herb.evidence_level);
-  const citations = formatCitations(herb.citations as unknown as CitationData[] | null);
+  const citations = formatCitations(herb.citations as unknown as CitationData[] | null, t);
   const lastReviewed = herb.last_reviewed 
     ? new Date(herb.last_reviewed).toLocaleDateString(locale === "fr" ? "fr-FR" : "en-US", {
         month: "long",
@@ -692,7 +692,7 @@ export default async function HerbDetailPage({ params }: Props) {
         </Button>
         <Button
           variant="outline"
-          render={<Link href={`/pharmacist?herb=${slug}`} />}
+          render={<Link href={`/herbalist?herb=${slug}`} />}
         >
           <AlertTriangle className="size-4" />
           {t("herbDetail.checkInteractions")}

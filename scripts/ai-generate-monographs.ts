@@ -71,11 +71,6 @@ async function callOllama(prompt: string): Promise<string> {
 }
 
 function buildPrompt(herb: Herb): string {
-  const uses = [
-    ...(herb.modern_uses || []),
-    ...(herb.traditional_uses || []),
-  ].join(", ");
-
   const compounds = herb.active_compounds?.join(", ") || "unknown";
 
   return `You are a medical herbalist writing a clinical monograph. Based on the following herb data, write a detailed monograph in JSON format.

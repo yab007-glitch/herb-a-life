@@ -20,7 +20,9 @@
     "system": "Système",
     "menu": "Menu",
     "copied": "Copié !",
-    "copyLink": "Copier le lien"
+    "copyLink": "Copier le lien",
+    "toggleTheme": "Changer le thème",
+    "changeLanguage": "Changer la langue"
   },
   "nav": {
     "symptoms": "Par Symptôme",
@@ -36,7 +38,7 @@
     "hero": {
       "badge": "Plateforme de Phytothérapie Basée sur les Preuves",
       "title": "Votre Guide Complet des Herbes Médicinales",
-      "subtitle": "Explorez plus de 2 700 herbes, calculez les dosages précis, vérifiez les interactions médicamenteuses et consultez notre herboriste IA — tout en un seul endroit.",
+      "subtitle": "Explorez plus de 2 700 herbes, calculez les posologies précis, vérifiez les interactions médicamenteuses et consultez notre herboriste IA — tout en un seul endroit.",
       "searchButton": "Explorer les Herbes",
       "askHerbalistButton": "Demander à l'Herboriste IA",
       "trustBadgesList": [
@@ -60,8 +62,8 @@
         "description": "La base de données sur les herbes la plus complète disponible. Profils détaillés avec les composés actifs, les utilisations traditionnelles et les applications modernes."
       },
       "calculator": {
-        "title": "Calculateur de Dosage de Précision",
-        "description": "Calculez les dosages sûrs en utilisant la règle de Clark, la règle de Young, la BSA et la règle de Fried. Obtenez des recommandations personnalisées basées sur l'âge et le poids."
+        "title": "Calculateur de Posologie de Précision",
+        "description": "Calculez les posologies sûrs en utilisant la règle de Clark, la règle de Young, la BSA et la règle de Fried. Obtenez des recommandations personnalisées basées sur l'âge et le poids."
       },
       "interactions": {
         "title": "Vérificateur d'Interactions Médicamenteuses",
@@ -69,7 +71,7 @@
       },
       "ai": {
         "title": "Herboriste IA Virtuel",
-        "description": "Posez des questions sur les herbes, les dosages et la sécurité. Propulsé par des sources basées sur des preuves, y compris les monographies de l'OMS et la recherche PubMed."
+        "description": "Posez des questions sur les herbes, les posologies et la sécurité. Propulsé par des sources basées sur des preuves, y compris les monographies de l'OMS et la recherche PubMed."
       }
     },
     "cta": {
@@ -111,7 +113,7 @@
     },
     "detail": {
       "uses": "Utilisations et Avantages",
-      "dosage": "Dosage Recommandé",
+      "dosage": "Posologie Recommandé",
       "safety": "Informations de Sécurité",
       "interactions": "Interactions Médicamenteuses",
       "warnings": "Avertissements",
@@ -124,8 +126,8 @@
     "findBysymptom": "Trouver des Herbes par Symptôme →"
   },
   "calculator": {
-    "title": "Calculateur de Dosage",
-    "subtitle": "Calculez les dosages sûrs en fonction de votre profil",
+    "title": "Calculateur de Posologie",
+    "subtitle": "Calculez les posologies sûrs en fonction de votre profil",
     "selectProfile": "Sélectionner un Profil",
     "or": "ou",
     "createNew": "Créer un Nouveau Profil",
@@ -165,7 +167,7 @@
       "adultDose": "Dose Adulte",
       "formulaUsed": "Formule Utilisée",
       "explanation": "Explication",
-      "disclaimer": "Ce calcul est fourni à titre indicatif uniquement. Vérifiez toujours les dosages avec un professionnel de santé qualifié."
+      "disclaimer": "Ce calcul est fourni à titre indicatif uniquement. Vérifiez toujours les posologies avec un professionnel de santé qualifié."
     },
     "placeholders": {
       "herb": "ex., Curcuma, Echinacea...",
@@ -188,7 +190,7 @@
       "pregnancy": "Enceinte ou Allaitante"
     },
     "result": {
-      "title": "Dosage Calculé",
+      "title": "Posologie Calculée",
       "adultDose": "Dose Adulte",
       "adjustedDose": "Votre Dose Ajustée",
       "warnings": "Avertissements",
@@ -201,16 +203,17 @@
     "referenceChildDose": "Dose enfant de référence : {dose}",
     "forHerb": "pour {name}",
     "enterPrompt": "Entrez les détails et cliquez sur « Calculer la dose » pour voir les résultats",
-    "patientHeightCm": "Taille du patient (cm)"
+    "patientHeightCm": "Taille du patient (cm)",
+    "description": "Entrez les informations sur la plante et les détails du patient pour calculer une posologie adaptée à l'âge."
   },
   "pharmacist": {
     "title": "Herboriste IA",
     "subtitle": "Posez des questions et obtenez des recommandations personnalisées",
-    "placeholder": "Poser des questions sur les herbes, les dosages, les interactions ou les problèmes de santé...",
+    "placeholder": "Poser des questions sur les herbes, les posologies, les interactions ou les problèmes de santé...",
     "send": "Envoyer",
     "thinking": "Réflexion...",
     "disclaimer": "Cette IA fournit des informations éducatives uniquement. Consultez toujours un professionnel de santé pour des conseils médicaux.",
-    "initialMessage": "Bonjour ! Je suis votre Herboriste Virtuel. Je peux vous aider avec des questions sur les herbes médicinales, leurs utilisations, leur sécurité et les dosages appropriés. Que souhaitez-vous savoir ?",
+    "initialMessage": "Bonjour ! Je suis votre Herboriste Virtuel. Je peux vous aider avec des questions sur les herbes médicinales, leurs utilisations, leur sécurité et les posologies appropriés. Que souhaitez-vous savoir ?",
     "error": "Je suis désolé, j'ai rencontré une erreur lors du traitement de votre demande. Veuillez réessayer.",
     "clear": "Effacer",
     "saving": "Enregistrement...",
@@ -223,13 +226,14 @@
       "Comment calculer le dosage pour enfant ?"
     ],
     "followUp": {
-      "childDosage": "Ce dosage est-il sûr pour les enfants ?",
-      "recommendedDosage": "Quel est le dosage recommandé ?",
+      "childDosage": "Cette posologie est-elle sans danger pour les enfants ?",
+      "recommendedDosage": "Quelle est la posologie recommandée ?",
       "saferAlternatives": "Quelles sont les alternatives plus sûres ?",
       "interactions": "Y a-t-il des interactions médicamenteuses à connaître ?",
       "sideEffects": "Comment minimiser ces effets secondaires ?",
       "sideEffectsInfo": "Parlez-moi davantage des effets secondaires"
-    }
+    },
+    "chatError": "Échec de l'obtention de la réponse"
   },
   "donate": {
     "title": "Soutenir HerbAlly",
@@ -301,13 +305,19 @@
       "title": "Une Erreur s'est Produite",
       "message": "Une erreur inattendue s'est produite. Veuillez réessayer.",
       "retry": "Réessayer"
-    }
+    },
+    "somethingWentWrong": "Une erreur est survenue",
+    "goHome": "Retour à l'accueil",
+    "notFoundTitle": "Page Non Trouvée",
+    "notFoundDesc": "La page que vous recherchez n'existe pas ou a été déplacée.",
+    "unexpectedError": "Une erreur inattendue s'est produite. Veuillez réessayer ou retourner à la page d'accueil.",
+    "tryAgain": "Réessayer"
   },
   "fda": {
     "disclaimer": "Ce produit n'est pas destiné à diagnostiquer, traiter, guérir ou prévenir toute maladie. Ces déclarations n'ont pas été évaluées par la Food and Drug Administration."
   },
   "herbDetail": {
-    "notFound": "Herbe Non Trouvée",
+    "notFound": "Plante Non Trouvée",
     "uncategorized": "Non Classé",
     "safePregnancy": "Généralement sûr pendant la grossesse",
     "notSafePregnancy": "Non recommandé pendant la grossesse",
@@ -320,8 +330,8 @@
     "drugInteractions": "Interactions Médicamenteuses",
     "preparations": "Préparations",
     "dosage": "Posologie",
-    "adultDosage": "Dosage Adulte",
-    "childDosage": "Dosage Enfant",
+    "adultDosage": "Posologie Adulte",
+    "childDosage": "Posologie Enfant",
     "safetyInfo": "Informations de Sécurité",
     "pregnancySafety": "Sécurité Pendant la Grossesse",
     "nursingSafety": "Sécurité Pendant l'Allaitement",
@@ -352,7 +362,10 @@
     "recommendedDosing": "Directives de posologie recommandées",
     "knownInteractions": "{count} interactions connues",
     "viewDetails": "Voir les détails de {name}",
-    "herb": "Plante"
+    "herb": "Plante",
+    "notFoundDesc": "La plante que vous recherchez n'existe pas ou a été supprimée.",
+    "browseHerbs": "Parcourir toutes les plantes",
+    "herbsAtAGlance": "Plantes en Bref"
   },
   "search": {
     "placeholder": "Rechercher des herbes par nom, symptôme ou utilisation...",
@@ -371,7 +384,7 @@
     },
     "pages": {
       "browseHerbs": "Parcourir les Herbes",
-      "doseCalculator": "Calculateur de Dosage",
+      "doseCalculator": "Calculateur de Posologie",
       "virtualHerbalist": "Herboriste Virtuel"
     },
     "actions": {
@@ -804,7 +817,10 @@
         "author": "Maria L.",
         "location": "Denver, CO"
       }
-    ]
+    ],
+    "supportStripe": "Soutenir HerbAlly",
+    "supportStripeDesc": "Aidez à garder l'information en médecine par les plantes gratuite pour tous",
+    "checkoutError": "Échec de la création de la session de paiement"
   },
   "symptomsPage": {
     "title": "Trouvez des Herbes pour Vos Symptômes",
@@ -936,7 +952,9 @@
         "name": "Acné",
         "desc": "Herbes pouvant soutenir une peau claire"
       }
-    }
+    },
+    "viewDetails": "Voir les détails",
+    "allSymptoms": "Tous les Symptômes"
   },
   "herbDetailContent": {
     "herbNotFound": "Herbe Non Trouvée",
@@ -954,10 +972,10 @@
     }
   },
   "notFound": {
-    "title": "Page non trouvée",
-    "message": "La page que vous recherchez n'existe pas ou a peut-être été déplacée.",
+    "title": "Page Non Trouvée",
+    "message": "La page que vous recherchez n'existe pas ou a été déplacée.",
     "goHome": "Retour à l'accueil",
-    "browseHerbs": "Parcourir les herbes"
+    "browseHerbs": "Parcourir les plantes"
   },
   "evidence": {
     "prefix": "Preuves :",
@@ -1013,10 +1031,11 @@
   "herbBadges": {
     "pregnancy": "Grossesse",
     "nursing": "Allaitement",
-    "herb": "Plante"
+    "herb": "Plante",
+    "pregnancyRisk": "Risque Grossesse/Allaitement"
   },
   "compare": {
-    "notFound": "Comparaison de plantes non trouvée",
+    "notFound": "Comparaison de Plantes Non Trouvée",
     "title": "{name1} vs {name2}",
     "subtitle": "Comparaison côte à côte des plantes médicinales",
     "backToHerbs": "Retour aux Herbes",
@@ -1035,7 +1054,9 @@
     "notRecommendedPregnancy": "Non recommandé pendant la grossesse",
     "safeNursing": "Généralement sûr pendant l'allaitement",
     "notRecommendedNursing": "Non recommandé pendant l'allaitement",
-    "viewDetails": "Voir les détails de {name}"
+    "viewDetails": "Voir les détails de {name}",
+    "notFoundTitle": "Comparaison de Plantes Non Trouvée",
+    "notFoundDesc": "La comparaison de plantes que vous recherchez n'existe pas."
   },
   "herbalistPage": {
     "title": "Herboriste Virtuel",
@@ -1086,7 +1107,7 @@
     "clarks_rule": {
       "name": "Règle de Clark",
       "description": "Basée sur le poids du patient. Recommandée pour les enfants et les adultes de tailles variées.",
-      "bestFor": "Enfants de 2+ ans, dosage basé sur le poids"
+      "bestFor": "Enfants de 2+ ans, posologie basée sur le poids"
     },
     "youngs_rule": {
       "name": "Règle de Young",
@@ -1103,5 +1124,209 @@
       "description": "Conçue spécifiquement pour les nourrissons de moins de 2 ans.",
       "bestFor": "Nourrissons de moins de 2 ans"
     }
+  },
+  "meta": {
+    "herbsDatabase": "Base de Données de Plantes Médicinales",
+    "herbsDatabaseDesc": "Parcourez notre base de données complète de plus de 2 700 plantes médicinales avec des profils détaillés, composants actifs et interactions médicamenteuses.",
+    "virtualHerbalist": "Herboriste Virtuel",
+    "virtualHerbalistDesc": "Interrogez notre herboriste IA sur la sécurité des plantes, les interactions médicamenteuses et la posologie. Réponses fondées sur les sources OMS, NCCIH et PubMed. Gratuit, sans compte requis.",
+    "doseCalculator": "Calculateur de Posologie",
+    "herbsBySymptom": "Plantes par Symptôme",
+    "herbsBySymptomDesc": "Trouvez les bonnes plantes pour vos symptômes. Parcourez les recommandations phytothérapiques fondées sur les preuves pour l'anxiété, le sommeil, l'inflammation, la digestion et plus encore.",
+    "privacyPolicy": "Politique de Confidentialité",
+    "medicalDisclaimer": "Avertissement Médical",
+    "medicalDisclaimerDesc": "Lisez l'avertissement médical et FDA complet pour HerbAlly.",
+    "faq": "Questions Fréquemment Posées",
+    "methodology": "Notre Méthodologie",
+    "termsOfService": "Conditions d'Utilisation",
+    "termsDesc": "Conditions d'utilisation et d'utilisation de HerbAlly.",
+    "supportUs": "Soutenez-nous - Gardez la Médecine par les Plantes Gratuite",
+    "supportUsDesc": "Aidez-nous à garder HerbAlly 100% gratuit. Votre don soutient l'hébergement, les coûts IA et l'accès gratuit pour tous.",
+    "herbNotFound": "Plante Non Trouvée",
+    "herbComparisonNotFound": "Comparaison de Plantes Non Trouvée",
+    "about": "À Propos",
+    "aboutDesc": "Découvrez HerbAlly, notre mission et comment nous vous aidons à prendre des décisions éclairées sur les plantes médicinales.",
+    "appDescription": "Explorez la plus grande base de données mondiale de plantes médicinales avec plus de 2 700 plantes. Calculez les posologies sûres et vérifiez les interactions médicamenteuses avec notre herboriste virtuel alimenté par l'IA.",
+    "herbsFor": "Plantes pour {symptom}"
+  },
+  "calculatorForm": {
+    "herbName": "Nom de la Plante",
+    "herbNamePlaceholder": "ex. Camomille",
+    "adultDose": "Dose Adulte",
+    "unit": "Unité",
+    "years": "Ans",
+    "months": "Mois",
+    "calculationFormula": "Formule de Calcul",
+    "calculatedDose": "Posologie Calculée",
+    "childAge": "Âge de l'Enfant",
+    "childWeight": "Poids de l'Enfant",
+    "childDoseResult": "Posologie Enfant",
+    "selectHerb": "Sélectionnez une plante...",
+    "selectUnit": "Sélectionnez l'unité",
+    "selectFormula": "Sélectionnez la formule",
+    "calculate": "Calculer",
+    "reset": "Réinitialiser",
+    "adultDoseMg": "Dose adulte (mg)",
+    "childWeightKg": "Poids (kg)",
+    "adultWeightKg": "Poids adulte (kg)",
+    "childAgeYears": "Âge enfant (années)",
+    "childAgeMonths": "Âge enfant (mois)",
+    "safeRange": "Plage sûre",
+    "result": "Résultat",
+    "disclaimer": "Ce calculateur fournit des estimations uniquement. Consultez toujours un professionnel de santé.",
+    "clarkRule": "Règle de Clark",
+    "youngsRule": "Règle de Young",
+    "salisburyRule": "Règle de Salisbury",
+    "cowlingRule": "Règle de Cowling",
+    "clarkDesc": "Posologie basée sur le rapport de poids",
+    "youngDesc": "Posologie basée sur le rapport d'âge",
+    "salisburyDesc": "Posologie basée sur le poids pour enfants",
+    "cowlingDesc": "Posologie basée sur l'âge en mois",
+    "standardDose": "Standard",
+    "weightBased": "Basé sur le poids",
+    "ageBased": "Basé sur l'âge",
+    "formulaDesc": "Formule",
+    "mg": "mg",
+    "ml": "ml",
+    "g": "g",
+    "drops": "gouttes",
+    "capsules": "gélules",
+    "cups": "tasses",
+    "notForNewborns": "Non recommandé pour les nouveau-nés",
+    "consultPediatrician": "Consultez un pédiatre pour les enfants de moins de 2 ans",
+    "doseNote": "Note de posologie",
+    "prefillContext": "Calcul de la posologie pour {name}",
+    "standardAdultDose": "Dose adulte standard",
+    "referenceChildDose": "Dose enfant de référence",
+    "forHerb": "pour {name}",
+    "doseComparison": "Comparaison de Posologie",
+    "formulaUsed": "Formule Utilisée",
+    "explanation": "Explication",
+    "enterDetailsPrompt": "Entrez les détails et cliquez sur « Calculer » pour voir les résultats",
+    "heightCm": "Taille du Patient (cm)",
+    "optionalForBsa": "facultatif, pour BSA"
+  },
+  "symptomMeta": {
+    "anxiety": {
+      "title": "Plantes pour l'Anxiété et le Stress",
+      "desc": "Plantes fondées sur les preuves pour le soulagement de l'anxiété et du stress."
+    },
+    "depression": {
+      "title": "Plantes pour la Dépression et l'Humeur",
+      "desc": "Plantes fondées sur les preuves pour le soutien de la dépression et de l'humeur."
+    },
+    "sleep": {
+      "title": "Plantes pour le Sommeil et l'Insomnie",
+      "desc": "Plantes fondées sur les preuves pour un meilleur sommeil."
+    },
+    "inflammation": {
+      "title": "Plantes pour l'Inflammation",
+      "desc": "Plantes anti-inflammatoires fondées sur les preuves."
+    },
+    "digestion": {
+      "title": "Plantes pour la Santé Digestive",
+      "desc": "Plantes fondées sur les preuves pour les troubles digestifs."
+    },
+    "nausea": {
+      "title": "Plantes pour les Nausées",
+      "desc": "Plantes fondées sur les preuves pour les nausées et les maux d'estomac."
+    },
+    "constipation": {
+      "title": "Plantes pour la Constipation",
+      "desc": "Plantes fondées sur les preuves pour le soulagement de la constipation."
+    },
+    "liver": {
+      "title": "Plantes pour la Santé du Foie",
+      "desc": "Plantes fondées sur les preuves pour le soutien hépatique."
+    },
+    "bloodPressure": {
+      "title": "Plantes pour la Tension Artérielle",
+      "desc": "Plantes fondées sur les preuves pour la gestion de la tension artérielle."
+    },
+    "cholesterol": {
+      "title": "Plantes pour le Cholestérol",
+      "desc": "Plantes fondées sur les preuves pour la gestion du cholestérol."
+    },
+    "circulation": {
+      "title": "Plantes pour la Circulation",
+      "desc": "Plantes fondées sur les preuves pour la circulation et la santé cardiovasculaire."
+    },
+    "immune": {
+      "title": "Plantes pour le Soutien Immunitaire",
+      "desc": "Plantes fondées sur les preuves pour le soutien du système immunitaire."
+    },
+    "allergy": {
+      "title": "Plantes pour les Allergies",
+      "desc": "Plantes fondées sur les preuves pour le soulagement des allergies."
+    },
+    "menstrual": {
+      "title": "Plantes pour la Santé Menstruelle",
+      "desc": "Plantes fondées sur les preuves pour les crampes menstruelles et le SPM."
+    },
+    "menopause": {
+      "title": "Plantes pour la Ménopause",
+      "desc": "Plantes fondées sur les preuves pour le soulagement des symptômes de la ménopause."
+    },
+    "hormonal": {
+      "title": "Plantes pour l'Équilibre Hormonal",
+      "desc": "Plantes fondées sur les preuves pour l'équilibre hormonal."
+    },
+    "skin": {
+      "title": "Plantes pour la Santé de la Peau",
+      "desc": "Plantes fondées sur les preuves pour les affections cutanées."
+    },
+    "wound": {
+      "title": "Plantes pour la Cicatrisation",
+      "desc": "Plantes fondées sur les preuves pour la guérison des plaies."
+    },
+    "acne": {
+      "title": "Plantes pour l'Acné",
+      "desc": "Plantes fondées sur les preuves pour le traitement de l'acné."
+    },
+    "nerve": {
+      "title": "Plantes pour la Santé Nerveuse",
+      "desc": "Plantes fondées sur les preuves pour la santé nerveuse."
+    },
+    "prostate": {
+      "title": "Plantes pour la Santé Prostatique",
+      "desc": "Plantes fondées sur les preuves pour le soutien prostatique."
+    },
+    "diabetes": {
+      "title": "Plantes pour la Glycémie",
+      "desc": "Plantes fondées sur les preuves pour la gestion de la glycémie."
+    },
+    "focus": {
+      "title": "Plantes pour la Concentration et la Mémoire",
+      "desc": "Plantes fondées sur les preuves pour l'amélioration cognitive et la concentration."
+    },
+    "joint": {
+      "title": "Plantes pour les Articulations et les Muscles",
+      "desc": "Plantes fondées sur les preuves pour les douleurs articulaires et musculaires."
+    },
+    "headache": {
+      "title": "Plantes pour les Maux de Tête et Migraines",
+      "desc": "Plantes fondées sur les preuves pour le soulagement des maux de tête et migraines."
+    },
+    "cold": {
+      "title": "Plantes pour le Rhume et la Grippe",
+      "desc": "Plantes fondées sur les preuves pour le soulagement du rhume et de la grippe."
+    }
+  },
+  "symptomsDetail": {
+    "medicalDisclaimer": "Avertissement Médical",
+    "noHerbsYet": "Aucune plante trouvée pour cette condition pour le moment.",
+    "compareThese": "Comparer Ces Plantes"
+  },
+  "seo": {
+    "safePregnancy": "Généralement sûr pendant la grossesse",
+    "notSafePregnancy": "Déconseillé pendant la grossesse",
+    "safeNursing": "Généralement sûr pendant l'allaitement",
+    "notSafeNursing": "Déconseillé pendant l'allaitement",
+    "nccihSource": "Plantes Médicinales en Bref",
+    "orgName": "HerbAlly",
+    "orgDesc": "Explorez la plus grande base de données mondiale de plantes médicinales avec plus de 2 700 plantes. Calculez les posologies sûres et vérifiez les interactions médicamenteuses."
+  },
+  "brand": {
+    "full": "HerbAlly"
   }
 }

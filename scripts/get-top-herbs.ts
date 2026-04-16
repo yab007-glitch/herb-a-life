@@ -46,7 +46,7 @@ async function getTopHerbs() {
   const top120 = scored.slice(0, 120);
   
   console.log("export const TOP_120_HERBS = [");
-  top120.forEach((h, i) => {
+  top120.forEach((h) => {
     console.log(`  { slug: "${h.slug}", name: "${h.name}", evidence: "${h.evidence_level}", score: ${h.priority_score} },`);
   });
   console.log("];");

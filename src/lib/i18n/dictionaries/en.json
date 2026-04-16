@@ -20,7 +20,9 @@
     "system": "System",
     "menu": "Menu",
     "copied": "Copied!",
-    "copyLink": "Copy Link"
+    "copyLink": "Copy Link",
+    "toggleTheme": "Toggle theme",
+    "changeLanguage": "Change language"
   },
   "nav": {
     "symptoms": "By Symptom",
@@ -201,7 +203,8 @@
     "referenceChildDose": "Reference child dose: {dose}",
     "forHerb": "for {name}",
     "enterPrompt": "Enter details and click \"Calculate Dose\" to see results",
-    "patientHeightCm": "Patient Height (cm)"
+    "patientHeightCm": "Patient Height (cm)",
+    "description": "Enter the herb information and patient details to calculate an age-appropriate dose."
   },
   "pharmacist": {
     "title": "AI Herbalist",
@@ -229,7 +232,8 @@
       "interactions": "Any drug interactions I should know about?",
       "sideEffects": "How can I minimize these side effects?",
       "sideEffectsInfo": "Tell me more about the side effects"
-    }
+    },
+    "chatError": "Failed to get response"
   },
   "donate": {
     "title": "Support HerbAlly",
@@ -301,7 +305,13 @@
       "title": "Something Went Wrong",
       "message": "An unexpected error occurred. Please try again.",
       "retry": "Try Again"
-    }
+    },
+    "somethingWentWrong": "Something went wrong",
+    "goHome": "Retour à l'accueil",
+    "notFoundTitle": "Page Not Found",
+    "notFoundDesc": "The page you are looking for does not exist or may have been moved.",
+    "unexpectedError": "An unexpected error occurred. Please try again or return to the home page.",
+    "tryAgain": "Try again"
   },
   "fda": {
     "disclaimer": "This product is not intended to diagnose, treat, cure, or prevent any disease. These statements have not been evaluated by the Food and Drug Administration."
@@ -352,7 +362,10 @@
     "recommendedDosing": "Recommended dosing guidelines",
     "knownInteractions": "{count} known interactions",
     "viewDetails": "View {name} Details",
-    "herb": "Herb"
+    "herb": "Herb",
+    "notFoundDesc": "The herb you're looking for doesn't exist or may have been removed.",
+    "browseHerbs": "Browse all herbs",
+    "herbsAtAGlance": "Herbs at a Glance"
   },
   "search": {
     "placeholder": "Search herbs by name, symptom, or use...",
@@ -804,7 +817,10 @@
         "author": "Maria L.",
         "location": "Denver, CO"
       }
-    ]
+    ],
+    "supportStripe": "Support HerbAlly",
+    "supportStripeDesc": "Help keep herbal medicine information free for everyone",
+    "checkoutError": "Failed to create checkout session"
   },
   "symptomsPage": {
     "title": "Find Herbs for Your Symptoms",
@@ -936,7 +952,9 @@
         "name": "Acne",
         "desc": "Herbs that may support clear skin"
       }
-    }
+    },
+    "viewDetails": "View details",
+    "allSymptoms": "All Symptoms"
   },
   "herbDetailContent": {
     "herbNotFound": "Herb Not Found",
@@ -954,7 +972,7 @@
     }
   },
   "notFound": {
-    "title": "Page not found",
+    "title": "Page Not Found",
     "message": "The page you are looking for does not exist or may have been moved.",
     "goHome": "Go home",
     "browseHerbs": "Browse herbs"
@@ -1013,7 +1031,8 @@
   "herbBadges": {
     "pregnancy": "Pregnancy",
     "nursing": "Nursing",
-    "herb": "Herb"
+    "herb": "Herb",
+    "pregnancyRisk": "Pregnancy/Nursing Risk"
   },
   "compare": {
     "notFound": "Herb Comparison Not Found",
@@ -1035,7 +1054,9 @@
     "notRecommendedPregnancy": "Not recommended in pregnancy",
     "safeNursing": "Generally safe while nursing",
     "notRecommendedNursing": "Not recommended while nursing",
-    "viewDetails": "View {name} Details"
+    "viewDetails": "View {name} Details",
+    "notFoundTitle": "Herb Comparison Not Found",
+    "notFoundDesc": "The herb comparison you're looking for doesn't exist."
   },
   "herbalistPage": {
     "title": "Virtual Herbalist",
@@ -1103,5 +1124,209 @@
       "description": "Specifically designed for infants under 2 years of age.",
       "bestFor": "Infants under 2 years"
     }
+  },
+  "meta": {
+    "herbsDatabase": "Medicinal Herbs Database",
+    "herbsDatabaseDesc": "Browse our comprehensive database of 2,700+ medicinal herbs with detailed profiles, active compounds, and drug interactions.",
+    "virtualHerbalist": "Virtual Herbalist",
+    "virtualHerbalistDesc": "Ask our AI herbalist about herb safety, drug interactions, and dosage. Evidence-based answers from WHO, NCCIH, and PubMed sources. Free, no account required.",
+    "doseCalculator": "Dose Calculator",
+    "herbsBySymptom": "Herbs by Symptom",
+    "herbsBySymptomDesc": "Find the right herbs for your symptoms. Browse evidence-based herbal recommendations for anxiety, sleep, inflammation, digestion, and more.",
+    "privacyPolicy": "Privacy Policy",
+    "medicalDisclaimer": "Medical Disclaimer",
+    "medicalDisclaimerDesc": "Read the full medical and FDA disclaimer for HerbAlly.",
+    "faq": "Frequently Asked Questions",
+    "methodology": "Our Methodology",
+    "termsOfService": "Terms of Service",
+    "termsDesc": "HerbAlly terms of service and conditions of use.",
+    "supportUs": "Support Us - Keep Herbal Medicine Free",
+    "supportUsDesc": "Help us keep HerbAlly 100% free. Your donation supports hosting, AI costs, and free access for everyone.",
+    "herbNotFound": "Herb Not Found",
+    "herbComparisonNotFound": "Herb Comparison Not Found",
+    "about": "About",
+    "aboutDesc": "Learn about HerbAlly, our mission, and how we help you make informed decisions about medicinal herbs.",
+    "appDescription": "Explore the world's largest medicinal herb database with 2,700+ herbs. Calculate safe dosages and check drug interactions with our AI-powered virtual herbalist.",
+    "herbsFor": "Herbs for {symptom}"
+  },
+  "calculatorForm": {
+    "herbName": "Herb Name",
+    "herbNamePlaceholder": "e.g. Chamomile",
+    "adultDose": "Adult Dose",
+    "unit": "Unit",
+    "years": "Years",
+    "months": "Months",
+    "calculationFormula": "Calculation Formula",
+    "calculatedDose": "Calculated Dose",
+    "childAge": "Child's Age",
+    "childWeight": "Child's Weight",
+    "childDoseResult": "Child Dose",
+    "selectHerb": "Select an herb...",
+    "selectUnit": "Select unit",
+    "selectFormula": "Select formula",
+    "calculate": "Calculate",
+    "reset": "Reset",
+    "adultDoseMg": "Adult dose (mg)",
+    "childWeightKg": "Weight (kg)",
+    "adultWeightKg": "Adult weight (kg)",
+    "childAgeYears": "Child age (years)",
+    "childAgeMonths": "Child age (months)",
+    "safeRange": "Safe range",
+    "result": "Result",
+    "disclaimer": "This calculator provides estimates only. Always consult a healthcare provider.",
+    "clarkRule": "Clark's Rule",
+    "youngsRule": "Young's Rule",
+    "salisburyRule": "Salisbury's Rule",
+    "cowlingRule": "Cowling's Rule",
+    "clarkDesc": "Dose based on weight ratio",
+    "youngDesc": "Dose based on age ratio",
+    "salisburyDesc": "Dose based on weight for children",
+    "cowlingDesc": "Dose based on age in months",
+    "standardDose": "Standard",
+    "weightBased": "Weight-based",
+    "ageBased": "Age-based",
+    "formulaDesc": "Formula",
+    "mg": "mg",
+    "ml": "ml",
+    "g": "g",
+    "drops": "drops",
+    "capsules": "capsules",
+    "cups": "cups",
+    "notForNewborns": "Not recommended for newborns",
+    "consultPediatrician": "Consult a pediatrician for children under 2",
+    "doseNote": "Dose note",
+    "prefillContext": "Calculating dose for {name}",
+    "standardAdultDose": "Standard adult dose",
+    "referenceChildDose": "Reference child dose",
+    "forHerb": "for {name}",
+    "doseComparison": "Dose Comparison",
+    "formulaUsed": "Formula Used",
+    "explanation": "Explanation",
+    "enterDetailsPrompt": "Enter details and click \"Calculate\" to see results",
+    "heightCm": "Patient Height (cm)",
+    "optionalForBsa": "optional, for BSA"
+  },
+  "symptomMeta": {
+    "anxiety": {
+      "title": "Herbs for Anxiety & Stress",
+      "desc": ""
+    },
+    "depression": {
+      "title": "Herbs for Depression & Mood",
+      "desc": ""
+    },
+    "sleep": {
+      "title": "Herbs for Sleep & Insomnia",
+      "desc": ""
+    },
+    "inflammation": {
+      "title": "Herbs for Inflammation",
+      "desc": ""
+    },
+    "digestion": {
+      "title": "Herbs for Digestive Health",
+      "desc": ""
+    },
+    "nausea": {
+      "title": "Herbs for Nausea",
+      "desc": ""
+    },
+    "constipation": {
+      "title": "Herbs for Constipation",
+      "desc": ""
+    },
+    "liver": {
+      "title": "Herbs for Liver Health",
+      "desc": ""
+    },
+    "bloodPressure": {
+      "title": "Herbs for Blood Pressure",
+      "desc": ""
+    },
+    "cholesterol": {
+      "title": "Herbs for Cholesterol",
+      "desc": ""
+    },
+    "circulation": {
+      "title": "Herbs for Circulation",
+      "desc": ""
+    },
+    "immune": {
+      "title": "Herbs for Immune Support",
+      "desc": ""
+    },
+    "allergy": {
+      "title": "Herbs for Allergies",
+      "desc": ""
+    },
+    "menstrual": {
+      "title": "Herbs for Menstrual Health",
+      "desc": ""
+    },
+    "menopause": {
+      "title": "Herbs for Menopause",
+      "desc": ""
+    },
+    "hormonal": {
+      "title": "Hormonal Balance",
+      "desc": ""
+    },
+    "skin": {
+      "title": "Herbs for Skin Health",
+      "desc": ""
+    },
+    "wound": {
+      "title": "Herbs for Wound Healing",
+      "desc": ""
+    },
+    "acne": {
+      "title": "Herbs for Acne",
+      "desc": ""
+    },
+    "nerve": {
+      "title": "Herbs for Nerve Health",
+      "desc": ""
+    },
+    "prostate": {
+      "title": "Herbs for Prostate Health",
+      "desc": ""
+    },
+    "diabetes": {
+      "title": "Herbs for Blood Sugar",
+      "desc": ""
+    },
+    "focus": {
+      "title": "Herbs for Focus & Memory",
+      "desc": "Evidence-based herbs for cognitive enhancement and focus."
+    },
+    "joint": {
+      "title": "Herbs for Joint & Muscle Pain",
+      "desc": "Evidence-based herbs for joint pain and muscle soreness."
+    },
+    "headache": {
+      "title": "Herbs for Headaches & Migraines",
+      "desc": "Evidence-based herbs for headache and migraine relief."
+    },
+    "cold": {
+      "title": "Herbs for Colds & Flu",
+      "desc": "Evidence-based herbs for cold and flu relief."
+    }
+  },
+  "symptomsDetail": {
+    "medicalDisclaimer": "Medical Disclaimer",
+    "noHerbsYet": "No herbs found for this condition yet.",
+    "compareThese": "Compare These Herbs"
+  },
+  "seo": {
+    "safePregnancy": "Generally safe during pregnancy",
+    "notSafePregnancy": "Not recommended during pregnancy",
+    "safeNursing": "Generally safe while nursing",
+    "notSafeNursing": "Not recommended while nursing",
+    "nccihSource": "Herbs at a Glance",
+    "orgName": "HerbAlly",
+    "orgDesc": "Explore the world's largest medicinal herb database with 2,700+ herbs. Calculate safe dosages and check drug interactions."
+  },
+  "brand": {
+    "full": "HerbAlly"
   }
 }

@@ -6,8 +6,7 @@ import { cookies } from "next/headers";
 import { getServerTranslation, type Locale } from "@/lib/i18n/server";
 
 export const metadata: Metadata = {
-  title: "Page Not Found",
-  description: "The page you are looking for does not exist or may have been moved.",
+  title: "HerbAlly - Page Not Found",
   robots: { index: false, follow: false },
 };
 

@@ -16,11 +16,11 @@ import { getServerTranslation, type Locale } from "@/lib/i18n/server";
 import { cookies } from "next/headers";
 
 export const metadata: Metadata = {
-  title: "Medicinal Herbs Database",
+  title: "HerbAlly - Medicinal Herbs",
   description:
     "Browse our comprehensive database of 2,700+ medicinal herbs with detailed profiles, active compounds, and drug interactions.",
   openGraph: {
-    title: "Medicinal Herbs Database",
+    title: "HerbAlly - Medicinal Herbs",
     description:
       "Browse 2,700+ medicinal herbs with detailed profiles, active compounds, and drug interactions.",
     url: "https://herbally.app/herbs",

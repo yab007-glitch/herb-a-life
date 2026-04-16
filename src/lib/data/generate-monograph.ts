@@ -331,7 +331,7 @@ function buildDrugInteractions(contraindications: string[]): Monograph["drugInte
 
 function buildKeyCitations(
   citations: unknown[] | null | undefined,
-  evidence: string
+  _evidence: string
 ): Monograph["keyCitations"] {
   const baseCitations = (citations || []) as Array<{ source: string; title?: string; url?: string; year?: number; pmid?: string }>;
 

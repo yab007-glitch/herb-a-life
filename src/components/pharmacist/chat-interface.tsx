@@ -18,15 +18,12 @@ import {
   createChatSession,
   updateChatSession,
   getChatSession,
-  type ChatSession,
 } from "@/lib/actions/chat-local";
 import {
   createPersistedSession,
   getPersistedSession,
   addPersistedMessage,
   deletePersistedSession,
-  getPersistedSessions,
-  type PersistedChatSession,
 } from "@/lib/actions/chat-persist";
 import type { ChatMessage } from "@/lib/actions/chat";
 import { useI18n } from "@/components/i18n/i18n-provider";
@@ -131,9 +128,6 @@ export function ChatInterface({
         setIsSaving(true);
 
         // Try server persistence first (requires auth)
-        const lastUserMsg = msgs.find((m) => m.role === "user");
-        const lastAssistantMsg = [...msgs].reverse().find((m) => m.role === "assistant");
-
         if (!currentSessionId) {
           // Create new session on server
           const session = await createPersistedSession(herbContext || undefined);

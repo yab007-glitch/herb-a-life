@@ -95,13 +95,6 @@ export function InteractionAlert({
   const hasModerate = (severityCounts?.moderate || 0) > 0;
 
   const severity = hasSevere ? "critical" : hasModerate ? "warning" : "info";
-  const title = hasSevere
-    ? `⚠️ ${interactionCount === 1 ? t("safety.interactionCountTitle", { count: interactionCount }) : t("safety.interactionCountTitlePlural", { count: interactionCount })}`
-    : `${interactionCount} ${interactionCount === 1 ? t("interactions.severity.mild").split(" ")[0] : ""}`;
-
-  const alertTitle = hasSevere
-    ? `⚠️ ${interactionCount} ${t("interactions.title").toLowerCase()}${interactionCount > 1 ? "" : ""} — ${hasSevere ? "⚠️" : ""}`
-    : `${interactionCount} ${t("interactions.title").toLowerCase()}`;
 
   return (
     <SafetyAlert severity={severity} title={interactionCount === 1 ? t("safety.interactionCountTitle", { count: interactionCount }) : t("safety.interactionCountTitlePlural", { count: interactionCount })} className={className}>

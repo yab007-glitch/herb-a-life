@@ -240,7 +240,7 @@ function determinePregnancyCategory(herb: HerbData): "safe" | "caution" | "unsaf
 
 function buildKeyCitations(
   citations: HerbData["citations"],
-  evidence: string
+  _evidence: string
 ): Array<{ source: string; title: string; url?: string; year?: number }> {
   const baseCitations = citations || [];
   

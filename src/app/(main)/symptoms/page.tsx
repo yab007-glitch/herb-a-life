@@ -6,14 +6,14 @@ import { cookies } from "next/headers";
 import { getServerTranslation, type Locale } from "@/lib/i18n/server";
 
 export const metadata: Metadata = {
-  title: "Herbs by Symptom",
+  title: "HerbAlly - Herbs by Symptom",
   description:
     "Find the right herbs for your symptoms. Browse evidence-based herbal recommendations for anxiety, sleep, inflammation, digestion, and more.",
   alternates: {
     canonical: `${process.env.NEXT_PUBLIC_APP_URL ?? "https://herbally.app"}/symptoms`,
   },
   openGraph: {
-    title: "Herbs by Symptom",
+    title: "HerbAlly - Herbs by Symptom",
     description:
       "Find the right herbs for your symptoms. Browse evidence-based herbal recommendations.",
     url: "https://herbally.app/symptoms",

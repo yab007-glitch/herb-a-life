@@ -16,8 +16,8 @@ import { getHerbBySlug } from "@/lib/actions/herbs";
 import { getServerTranslation, type Locale } from "@/lib/i18n/server";
 
 export const metadata: Metadata = {
-  title: "Virtual Herbalist",
-  description: "Ask our AI herbalist about herb safety, drug interactions, and dosage. Evidence-based answers from WHO, NCCIH, and PubMed sources. Free, no account required.",
+  title: "HerbAlly - Virtual Herbalist",
+  description: "Ask our AI herbalist about herb safety, drug interactions, and dosage.",
   alternates: {
     canonical: `${process.env.NEXT_PUBLIC_APP_URL ?? "https://herbally.app"}/herbalist`,
   },

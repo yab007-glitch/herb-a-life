@@ -1,6 +1,5 @@
 import { createClient } from "@supabase/supabase-js";
 import { generateMonograph } from "../src/lib/data/generate-monograph";
-import type { Monograph } from "../src/lib/data/monographs";
 
 /**
  * Batch monograph generator

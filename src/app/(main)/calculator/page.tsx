@@ -3,7 +3,7 @@ import { DoseCalculatorForm } from "@/components/calculator/dose-calculator-form
 import { getHerbBySlug } from "@/lib/actions/herbs";
 
 export const metadata: Metadata = {
-  title: "Dose Calculator",
+  title: "HerbAlly - Dose Calculator",
   description:
     "Free herbal dosage calculator using Clark's Rule, Young's Rule, BSA, and Fried's Rule. Calculate safe children's and infant doses for 2,700+ medicinal herbs.",
   alternates: {

@@ -40,6 +40,20 @@ type PrefillData = {
   dosageForms: string[];
 } | null;
 
+const FORMULA_KEY_MAP: Record<FormulaKey, string> = {
+  clarks_rule: "clarkRule",
+  youngs_rule: "youngsRule",
+  bsa: "salisburyRule",
+  fried_rule: "cowlingRule",
+};
+
+const FORMULA_DESC_MAP: Record<FormulaKey, string> = {
+  clarks_rule: "clarkDesc",
+  youngs_rule: "youngDesc",
+  bsa: "salisburyDesc",
+  fried_rule: "cowlingDesc",
+};
+
 export function DoseCalculatorForm({ prefill }: { prefill?: PrefillData }) {
   const { t } = useI18n();
   const [herbName, setHerbName] = useState(prefill?.herbName ?? "");
@@ -133,11 +147,10 @@ export function DoseCalculatorForm({ prefill }: { prefill?: PrefillData }) {
         <CardHeader>
           <CardTitle className="flex items-center gap-2">
             <Calculator className="size-5 text-primary" />
-            Dose Calculator
+            {t("calculatorForm.calculatedDose")}
           </CardTitle>
           <CardDescription>
-            Enter the herb information and patient details to calculate an
-            age-appropriate dose.
+            {t("calculator.description")}
           </CardDescription>
         </CardHeader>
         <CardContent className="space-y-6">
@@ -148,16 +161,16 @@ export function DoseCalculatorForm({ prefill }: { prefill?: PrefillData }) {
                 <Leaf className="mt-0.5 size-5 shrink-0 text-green-600" />
                 <div className="space-y-1 text-sm">
                   <p className="font-medium text-green-900 dark:text-green-100">
-                    Calculating dose for {prefill.herbName}
+                    {t("calculatorForm.prefillContext", { name: prefill.herbName })}
                   </p>
                   {prefill.dosageAdultRaw && (
                     <p className="text-green-700 dark:text-green-300">
-                      Standard adult dose: {prefill.dosageAdultRaw}
+                      {t("calculatorForm.standardAdultDose")}: {prefill.dosageAdultRaw}
                     </p>
                   )}
                   {prefill.dosageChildRaw && (
                     <p className="text-green-700 dark:text-green-300">
-                      Reference child dose: {prefill.dosageChildRaw}
+                      {t("calculatorForm.referenceChildDose")}: {prefill.dosageChildRaw}
                     </p>
                   )}
                   {prefill.dosageForms.length > 0 && (
@@ -180,10 +193,10 @@ export function DoseCalculatorForm({ prefill }: { prefill?: PrefillData }) {
 
           {/* Herb Name */}
           <div className="space-y-2">
-            <Label htmlFor="herb-name">Herb Name</Label>
+            <Label htmlFor="herb-name">{t("calculatorForm.herbName")}</Label>
             <Input
               id="herb-name"
-              placeholder="e.g., Turmeric, Echinacea..."
+              placeholder={t("calculatorForm.herbNamePlaceholder")}
               value={herbName}
               onChange={(e) => setHerbName(e.target.value)}
             />
@@ -192,19 +205,19 @@ export function DoseCalculatorForm({ prefill }: { prefill?: PrefillData }) {
           {/* Adult Dose + Unit */}
           <div className="grid gap-4 sm:grid-cols-[1fr_auto]">
             <div className="space-y-2">
-              <Label htmlFor="adult-dose">Adult Dose</Label>
+              <Label htmlFor="adult-dose">{t("calculatorForm.adultDose")}</Label>
               <Input
                 id="adult-dose"
                 type="number"
                 min="0"
                 step="any"
-                placeholder="e.g., 500"
+                placeholder={t("calculatorForm.selectHerb")}
                 value={adultDose}
                 onChange={(e) => setAdultDose(e.target.value)}
               />
             </div>
             <div className="space-y-2">
-              <Label>Unit</Label>
+              <Label>{t("calculatorForm.unit")}</Label>
               <div className="flex gap-1">
                 {unitOptions.map((unit) => (
                   <button
@@ -229,12 +242,12 @@ export function DoseCalculatorForm({ prefill }: { prefill?: PrefillData }) {
           <div className="space-y-2">
             <div className="flex items-center justify-between">
               <Label htmlFor="patient-age">
-                Patient Age ({useMonths ? "months" : "years"})
+                {t("calculatorForm.childAge")} ({useMonths ? t("calculatorForm.months").toLowerCase() : t("calculatorForm.years").toLowerCase()})
               </Label>
               <div className="flex items-center gap-2 text-sm">
-                <span className="text-muted-foreground">Years</span>
+                <span className="text-muted-foreground">{t("calculatorForm.years")}</span>
                 <Switch checked={useMonths} onCheckedChange={setUseMonths} />
-                <span className="text-muted-foreground">Months</span>
+                <span className="text-muted-foreground">{t("calculatorForm.months")}</span>
               </div>
             </div>
             <Input
@@ -242,7 +255,7 @@ export function DoseCalculatorForm({ prefill }: { prefill?: PrefillData }) {
               type="number"
               min="0"
               step="any"
-              placeholder={useMonths ? "e.g., 18" : "e.g., 8"}
+              placeholder={useMonths ? "18" : "8"}
               value={useMonths ? ageMonths : ageYears}
               onChange={(e) =>
                 useMonths
@@ -256,7 +269,7 @@ export function DoseCalculatorForm({ prefill }: { prefill?: PrefillData }) {
           <div className="space-y-2">
             <div className="flex items-center justify-between">
               <Label htmlFor="patient-weight">
-                Patient Weight ({useLbs ? "lbs" : "kg"})
+                {t("calculatorForm.childWeight")} ({useLbs ? "lbs" : "kg"})
               </Label>
               <div className="flex items-center gap-2 text-sm">
                 <span className="text-muted-foreground">kg</span>
@@ -269,7 +282,7 @@ export function DoseCalculatorForm({ prefill }: { prefill?: PrefillData }) {
               type="number"
               min="0"
               step="any"
-              placeholder={useLbs ? "e.g., 66" : "e.g., 30"}
+              placeholder="30"
               value={weightValue}
               onChange={(e) => setWeightValue(e.target.value)}
             />
@@ -278,15 +291,15 @@ export function DoseCalculatorForm({ prefill }: { prefill?: PrefillData }) {
           {/* Height (optional, for BSA) */}
           <div className="space-y-2">
             <Label htmlFor="patient-height">
-              Patient Height (cm){" "}
-              <span className="text-muted-foreground">- optional, for BSA</span>
+              {t("calculatorForm.heightCm")}
+              <span className="text-muted-foreground"> — {t("calculatorForm.optionalForBsa")}</span>
             </Label>
             <Input
               id="patient-height"
               type="number"
               min="0"
               step="any"
-              placeholder="e.g., 130"
+              placeholder="130"
               value={heightCm}
               onChange={(e) => setHeightCm(e.target.value)}
             />
@@ -294,14 +307,14 @@ export function DoseCalculatorForm({ prefill }: { prefill?: PrefillData }) {
 
           {/* Formula Selection */}
           <div className="space-y-3">
-            <Label>Calculation Formula</Label>
+            <Label>{t("calculatorForm.calculationFormula")}</Label>
             <div className="grid gap-3 sm:grid-cols-2">
               {(
                 Object.entries(DOSAGE_FORMULAS) as [
                   FormulaKey,
                   (typeof DOSAGE_FORMULAS)[FormulaKey],
                 ][]
-              ).map(([key, formula]) => (
+              ).map(([key]) => (
                 <button
                   key={key}
                   type="button"
@@ -314,10 +327,10 @@ export function DoseCalculatorForm({ prefill }: { prefill?: PrefillData }) {
                   )}
                 >
                   <div className="text-sm font-medium text-foreground">
-                    {formula.name}
+                    {t(`calculatorForm.${FORMULA_KEY_MAP[key]}`)}
                   </div>
                   <div className="mt-1 text-xs text-muted-foreground">
-                    {formula.bestFor}
+                    {t(`calculatorForm.${FORMULA_DESC_MAP[key]}`)}
                   </div>
                 </button>
               ))}
@@ -334,7 +347,7 @@ export function DoseCalculatorForm({ prefill }: { prefill?: PrefillData }) {
           {/* Calculate Button */}
           <Button onClick={handleCalculate} className="w-full" size="lg">
             <Calculator className="size-4" />
-            Calculate Dose
+            {t("calculatorForm.calculate")}
           </Button>
         </CardContent>
       </Card>
@@ -344,7 +357,7 @@ export function DoseCalculatorForm({ prefill }: { prefill?: PrefillData }) {
         {result ? (
           <Card className="border-primary/20 bg-gradient-to-br from-primary/5 to-green-50 dark:to-green-950/20 animate-message-in">
             <CardHeader>
-              <CardTitle className="text-primary">Calculated Dose</CardTitle>
+              <CardTitle className="text-primary">{t("calculatorForm.calculatedDose")}</CardTitle>
             </CardHeader>
             <CardContent className="space-y-4">
               <div className="text-center">
@@ -356,7 +369,7 @@ export function DoseCalculatorForm({ prefill }: { prefill?: PrefillData }) {
                 </div>
                 {herbName && (
                   <p className="mt-1 text-sm text-muted-foreground">
-                    for {herbName}
+                    {t("calculatorForm.forHerb", { name: herbName })}
                   </p>
                 )}
               </div>
@@ -365,13 +378,13 @@ export function DoseCalculatorForm({ prefill }: { prefill?: PrefillData }) {
               {adultDose && (
                 <div className="space-y-2 rounded-lg bg-background/80 p-4">
                   <p className="text-xs font-medium uppercase tracking-wide text-muted-foreground">
-                    Dose Comparison
+                    {t("calculatorForm.doseComparison")}
                   </p>
                   <div className="space-y-2">
                     <div className="space-y-1">
                       <div className="flex justify-between text-xs">
                         <span className="text-muted-foreground">
-                          Adult Dose
+                          {t("calculatorForm.adultDose")}
                         </span>
                         <span className="font-medium">
                           {adultDose} {doseUnit}
@@ -387,7 +400,7 @@ export function DoseCalculatorForm({ prefill }: { prefill?: PrefillData }) {
                     <div className="space-y-1">
                       <div className="flex justify-between text-xs">
                         <span className="text-muted-foreground">
-                          Calculated Dose
+                          {t("calculatorForm.calculatedDose")}
                         </span>
                         <span className="font-medium text-primary">
                           {result.dose} {result.unit}
@@ -410,7 +423,7 @@ export function DoseCalculatorForm({ prefill }: { prefill?: PrefillData }) {
               <div className="space-y-3 rounded-lg bg-background/80 p-4">
                 <div>
                   <span className="text-xs font-medium uppercase tracking-wide text-muted-foreground">
-                    Formula Used
+                    {t("calculatorForm.formulaUsed")}
                   </span>
                   <p className="mt-0.5 font-mono text-sm text-foreground">
                     {result.formula}
@@ -418,7 +431,7 @@ export function DoseCalculatorForm({ prefill }: { prefill?: PrefillData }) {
                 </div>
                 <div>
                   <span className="text-xs font-medium uppercase tracking-wide text-muted-foreground">
-                    Explanation
+                    {t("calculatorForm.explanation")}
                   </span>
                   <p className="mt-0.5 text-sm text-muted-foreground">
                     {result.explanation}
@@ -428,8 +441,7 @@ export function DoseCalculatorForm({ prefill }: { prefill?: PrefillData }) {
 
               <div className="rounded-lg bg-amber-50 px-3 py-2 text-xs text-amber-800 dark:bg-amber-900/20 dark:text-amber-300">
                 <Info className="mb-0.5 mr-1 inline-block size-3" />
-                This calculation is for reference only. Always verify dosages
-                with a qualified healthcare provider.
+                {t("calculatorForm.disclaimer")}
               </div>
             </CardContent>
           </Card>
@@ -438,8 +450,7 @@ export function DoseCalculatorForm({ prefill }: { prefill?: PrefillData }) {
             <CardContent className="flex flex-col items-center justify-center py-12 text-center">
               <Calculator className="mb-3 size-10 text-muted-foreground/40" />
               <p className="text-sm font-medium text-muted-foreground">
-                Enter details and click &quot;Calculate Dose&quot; to see
-                results
+                {t("calculatorForm.enterDetailsPrompt")}
               </p>
             </CardContent>
           </Card>
@@ -449,16 +460,16 @@ export function DoseCalculatorForm({ prefill }: { prefill?: PrefillData }) {
         <Card>
           <CardHeader>
             <CardTitle className="text-base">
-              {DOSAGE_FORMULAS[selectedFormula].name}
+              {t(`calculatorForm.${FORMULA_KEY_MAP[selectedFormula]}`)}
             </CardTitle>
           </CardHeader>
           <CardContent className="space-y-2 text-sm text-muted-foreground">
-            <p>{DOSAGE_FORMULAS[selectedFormula].description}</p>
+            <p>{t(`calculatorForm.${FORMULA_DESC_MAP[selectedFormula]}`)}</p>
             <p className="font-mono text-xs">
               {DOSAGE_FORMULAS[selectedFormula].formula}
             </p>
             <Badge variant="secondary">
-              {DOSAGE_FORMULAS[selectedFormula].bestFor}
+              {t(`calculatorForm.${FORMULA_DESC_MAP[selectedFormula]}`)}
             </Badge>
           </CardContent>
         </Card>

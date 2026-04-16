@@ -1,10 +1,13 @@
 import type { Metadata } from "next";
 import Link from "next/link";
-import { ArrowRight, Stethoscope, Shield, AlertTriangle } from "lucide-react";
+import { ArrowRight, Stethoscope, Shield } from "lucide-react";
 import { Card, CardContent } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { createClient } from "@supabase/supabase-js";
 import { EvidenceGrade } from "@/components/herbs/evidence-grade";
+import { SafetyAlert } from "@/components/herbs/safety-alert";
+import { cookies } from "next/headers";
+import { getServerTranslation, type Locale } from "@/lib/i18n/server";
 
 export const revalidate = 3600;
 
@@ -49,143 +52,139 @@ const symptomMeta: Record<string, { title: string; description: string; keywords
   },
   headache: {
     title: "Herbs for Headaches & Migraines",
-    description: "Evidence-based herbs for headache and migraine relief. Compare effectiveness and safety for Feverfew, Butterbur, and more.",
-    keywords: ["herbs for headaches", "natural migraine relief", "feverfew for migraines", "butterbur headache"],
+    description: "Evidence-based herbs for headache and migraine relief. Compare effectiveness and safety for Feverfew, Butterbur, Peppermint, and more.",
+    keywords: ["herbs for headaches", "natural migraine relief", "feverfew for migraines", "herbal headache remedies"],
     dbKeyword: "headache",
-  },
-  nerve: {
-    title: "Herbs for Nerve Health",
-    description: "Evidence-based herbs for nerve pain and neuropathy. Compare effectiveness and safety for St. John's Wort, Skullcap, and more.",
-    keywords: ["herbs for nerve pain", "natural neuropathy relief", "neuroprotective herbs", "herbs for nerve regeneration"],
-    dbKeyword: "nerve",
   },
   digestion: {
     title: "Herbs for Digestive Health",
-    description: "Evidence-based herbs for digestion, bloating, and gut health. Compare effectiveness and safety for Peppermint, Ginger, Chamomile, and more.",
-    keywords: ["digestive herbs", "herbs for bloating", "natural digestion remedies", "peppermint for digestion", "herbs for gut health"],
+    description: "Evidence-based herbs for digestive issues including bloating, nausea, and IBS. Compare effectiveness and safety for Peppermint, Ginger, Fennel, and more.",
+    keywords: ["herbs for digestion", "natural digestive remedies", "peppermint for IBS", "ginger for nausea", "herbs for bloating"],
     dbKeyword: "digestion",
-  },
-  nausea: {
-    title: "Herbs for Nausea",
-    description: "Evidence-based herbs for nausea relief. Ginger has Level A evidence for pregnancy-related nausea. Compare options and safety profiles.",
-    keywords: ["herbs for nausea", "natural nausea relief", "ginger for nausea", "herbs for upset stomach"],
-    dbKeyword: "nausea",
-  },
-  constipation: {
-    title: "Herbs for Constipation",
-    description: "Evidence-based herbs for constipation relief. Compare effectiveness and safety for Senna, Psyllium, Cascara, and more.",
-    keywords: ["herbs for constipation", "natural laxatives", "senna for constipation", "psyllium for digestion"],
-    dbKeyword: "constipation",
   },
   liver: {
     title: "Herbs for Liver Health",
-    description: "Evidence-based herbs for liver support and detoxification. Compare effectiveness and safety for Milk Thistle, Artichoke, and more.",
-    keywords: ["liver herbs", "herbs for liver health", "milk thistle benefits", "natural liver support", "liver detox herbs"],
+    description: "Evidence-based herbs for liver support and detoxification. Compare effectiveness and safety for Milk Thistle, Dandelion Root, Turmeric, and more.",
+    keywords: ["herbs for liver", "milk thistle benefits", "natural liver detox", "liver support herbs", "dandelion root for liver"],
     dbKeyword: "liver",
   },
-  "blood-pressure": {
+  bloodPressure: {
     title: "Herbs for Blood Pressure",
-    description: "Evidence-based herbs for blood pressure support. Compare effectiveness, safety, and drug interactions for Garlic, Hawthorn, and more.",
-    keywords: ["herbs for blood pressure", "natural blood pressure remedies", "hawthorn blood pressure", "garlic for hypertension"],
-    dbKeyword: "blood pressure",
+    description: "Evidence-based herbs for blood pressure management. Compare effectiveness and safety for Garlic, Hibiscus, Hawthorn, and more.",
+    keywords: ["herbs for blood pressure", "natural blood pressure remedies", "garlic for hypertension", "hibiscus for blood pressure"],
+    dbKeyword: "blood-pressure",
   },
   cholesterol: {
     title: "Herbs for Cholesterol",
-    description: "Evidence-based herbs for cholesterol management. Compare effectiveness and safety for Garlic, Artichoke, Green Tea, and more.",
-    keywords: ["herbs for cholesterol", "natural cholesterol remedies", "garlic for cholesterol", "artichoke cholesterol", "herbs for heart health"],
+    description: "Evidence-based herbs for cholesterol management. Compare effectiveness and safety for Garlic, Red Yeast Rice, Artichoke, and more.",
+    keywords: ["herbs for cholesterol", "natural cholesterol remedies", "garlic for cholesterol", "red yeast rice benefits"],
     dbKeyword: "cholesterol",
   },
   circulation: {
     title: "Herbs for Circulation",
-    description: "Evidence-based herbs for blood flow and circulatory support. Compare effectiveness and safety for Ginkgo, Cayenne, Horse Chestnut, and more.",
-    keywords: ["herbs for circulation", "natural blood flow support", "ginkgo for circulation", "cayenne for blood flow"],
+    description: "Evidence-based herbs for circulation and cardiovascular health. Compare effectiveness and safety for Ginkgo, Cayenne, Horse Chestnut, and more.",
+    keywords: ["herbs for circulation", "ginkgo for circulation", "natural circulation remedies", "herbs for cardiovascular health"],
     dbKeyword: "circulation",
   },
   immune: {
     title: "Herbs for Immune Support",
     description: "Evidence-based herbs for immune system support. Compare effectiveness and safety for Echinacea, Elderberry, Astragalus, and more.",
-    keywords: ["immune herbs", "herbs for immunity", "natural immune boosters", "echinacea benefits", "elderberry for colds"],
+    keywords: ["herbs for immunity", "natural immune support", "echinacea benefits", "elderberry for colds", "adaptogen immune support"],
     dbKeyword: "immune",
   },
   cold: {
-    title: "Herbs for Cold & Flu",
-    description: "Evidence-based herbs for cold and flu relief. Compare effectiveness and safety for Echinacea, Elderberry, Ginger, and more.",
-    keywords: ["cold and flu herbs", "natural cold remedies", "echinacea for colds", "elderberry for flu", "herbs for congestion"],
+    title: "Herbs for Colds & Flu",
+    description: "Evidence-based herbs for cold and flu relief. Compare effectiveness and safety for Echinacea, Elderberry, Andrographis, and more.",
+    keywords: ["herbs for colds", "natural flu remedies", "echinacea for colds", "elderberry for flu", "herbs for immunity"],
     dbKeyword: "cold",
-  },
-  cough: {
-    title: "Herbs for Cough & Sore Throat",
-    description: "Evidence-based herbs for cough and sore throat relief. Compare effectiveness and safety for Thyme, Marshmallow Root, Licorice, and more.",
-    keywords: ["herbs for cough", "natural cough remedies", "sore throat herbs", "thyme for cough", "herbal expectorants"],
-    dbKeyword: "cough",
   },
   allergy: {
     title: "Herbs for Allergies",
-    description: "Evidence-based herbs for allergy and hay fever relief. Compare effectiveness and safety for Butterbur, Quercetin, Stinging Nettle, and more.",
-    keywords: ["herbs for allergies", "natural allergy relief", "butterbur for hay fever", "quercetin for allergies"],
+    description: "Evidence-based herbs for allergy relief. Compare effectiveness and safety for Butterbur, Quercetin, Stinging Nettle, and more.",
+    keywords: ["herbs for allergies", "natural allergy relief", "butterbur for allergies", "quercetin for allergies"],
     dbKeyword: "allergy",
   },
   menstrual: {
     title: "Herbs for Menstrual Health",
-    description: "Evidence-based herbs for menstrual cramps, PMS, and hormonal balance. Compare effectiveness and safety for Chasteberry, Black Cohosh, and more.",
-    keywords: ["herbs for menstrual cramps", "PMS herbs", "natural period relief", "chasteberry for PMS", "herbs for hormonal balance"],
+    description: "Evidence-based herbs for menstrual cramps, PMS, and cycle support. Compare effectiveness and safety for Vitex, Cramp Bark, Ginger, and more.",
+    keywords: ["herbs for menstrual cramps", "natural PMS relief", "vitex for hormones", "herbs for period pain"],
     dbKeyword: "menstrual",
   },
   menopause: {
     title: "Herbs for Menopause",
-    description: "Evidence-based herbs for menopause symptoms like hot flashes and night sweats. Compare effectiveness and safety for Black Cohosh, Red Clover, and more.",
-    keywords: ["menopause herbs", "natural menopause relief", "black cohosh menopause", "herbs for hot flashes", "red clover menopause"],
+    description: "Evidence-based herbs for menopause symptom relief. Compare effectiveness and safety for Black Cohosh, Red Clover, Dong Quai, and more.",
+    keywords: ["herbs for menopause", "black cohosh benefits", "natural menopause relief", "red clover for hot flashes"],
     dbKeyword: "menopause",
   },
   hormonal: {
     title: "Herbs for Hormonal Balance",
-    description: "Evidence-based herbs for hormonal health and endocrine support. Compare effectiveness and safety for Maca, Ashwagandha, Shatavari, and more.",
-    keywords: ["herbs for hormonal balance", "adaptogens for hormones", "maca for hormones", "herbs for endocrine support"],
-    dbKeyword: "menstrual", // Reuse menstrual keywords since "hormonal" has 0 matches
+    description: "Evidence-based herbs for hormonal balance and endocrine support. Compare effectiveness and safety for Vitex, Maca, Ashwagandha, and more.",
+    keywords: ["herbs for hormones", "natural hormonal balance", "vitex for hormones", "maca for hormone balance"],
+    dbKeyword: "hormonal",
   },
   skin: {
     title: "Herbs for Skin Health",
-    description: "Evidence-based herbs for skin conditions like eczema, acne, and wound healing. Compare effectiveness and safety for Tea Tree, Calendula, and more.",
-    keywords: ["herbs for skin", "natural skin remedies", "tea tree for acne", "calendula for eczema", "herbs for wound healing"],
+    description: "Evidence-based herbs for skin conditions including acne, eczema, and wound healing. Compare effectiveness and safety for Tea Tree, Aloe, Calendula, and more.",
+    keywords: ["herbs for skin", "natural skin remedies", "tea tree for acne", "aloe for skin", "calendula for eczema"],
     dbKeyword: "skin",
   },
   wound: {
     title: "Herbs for Wound Healing",
-    description: "Evidence-based herbs for wound care and tissue repair. Compare effectiveness and safety for Calendula, Gotu Kola, Aloe Vera, and more.",
-    keywords: ["herbs for wound healing", "natural wound care", "calendula for wounds", "aloe vera for skin repair"],
+    description: "Evidence-based herbs for wound healing and tissue repair. Compare effectiveness and safety for Calendula, Comfrey, Aloe, and more.",
+    keywords: ["herbs for wounds", "natural wound healing", "calendula for wounds", "comfrey for healing"],
     dbKeyword: "wound",
   },
   acne: {
     title: "Herbs for Acne",
-    description: "Evidence-based herbs for acne and blemish-prone skin. Compare effectiveness and safety for Tea Tree Oil, Burdock, Neem, and more.",
-    keywords: ["herbs for acne", "natural acne remedies", "tea tree oil for acne", "burdock for skin", "neem for acne"],
-    dbKeyword: "skin", // Reuse skin keywords since "acne" has 0 matches
+    description: "Evidence-based herbs for acne treatment and prevention. Compare effectiveness and safety for Tea Tree, Zinc, Burdock, and more.",
+    keywords: ["herbs for acne", "natural acne remedies", "tea tree for acne", "burdock for skin"],
+    dbKeyword: "acne",
+  },
+  nerve: {
+    title: "Herbs for Nerve Health",
+    description: "Evidence-based herbs for nerve health and neuropathy support. Compare effectiveness and safety for St. John's Wort, Lion's Mane, and more.",
+    keywords: ["herbs for nerves", "natural nerve support", "lions mane for nerves", "st johns wort for neuropathy"],
+    dbKeyword: "nerve",
+  },
+  prostate: {
+    title: "Herbs for Prostate Health",
+    description: "Evidence-based herbs for prostate support. Compare effectiveness and safety for Saw Palmetto, Pygeum, Stinging Nettle Root, and more.",
+    keywords: ["herbs for prostate", "saw palmetto for prostate", "natural prostate support", "pygeum benefits"],
+    dbKeyword: "prostate",
   },
   diabetes: {
-    title: "Herbs for Blood Sugar & Diabetes",
-    description: "Evidence-based herbs for blood sugar support. Compare effectiveness, safety, and drug interactions for Berberine, Cinnamon, Fenugreek, and more.",
-    keywords: ["herbs for blood sugar", "natural diabetes support", "berberine for diabetes", "cinnamon for blood sugar", "fenugreek glucose"],
-    dbKeyword: "diabetes",
+    title: "Herbs for Blood Sugar",
+    description: "Evidence-based herbs for blood sugar management. Compare effectiveness and safety for Gymnema, Fenugreek, Bitter Melon, and more.",
+    keywords: ["herbs for diabetes", "natural blood sugar support", "gymnema for blood sugar", "fenugreek for glucose"],
+    dbKeyword: "blood-sugar",
+  },
+  constipation: {
+    title: "Herbs for Constipation",
+    description: "Evidence-based herbs for constipation relief. Compare effectiveness and safety for Senna, Cascara, Psyllium, and more.",
+    keywords: ["herbs for constipation", "natural laxatives", "senna for constipation", "psyllium for digestion"],
+    dbKeyword: "constipation",
+  },
+  nausea: {
+    title: "Herbs for Nausea",
+    description: "Evidence-based herbs for nausea and upset stomach. Compare effectiveness and safety for Ginger, Peppermint, Fennel, and more.",
+    keywords: ["herbs for nausea", "natural nausea relief", "ginger for nausea", "peppermint for stomach"],
+    dbKeyword: "nausea",
   },
 };
 
 export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const { symptom } = await params;
   const meta = symptomMeta[symptom];
-  if (!meta) return { title: "Herbs by Symptom" };
-
-  const baseUrl = process.env.NEXT_PUBLIC_APP_URL ?? "https://herbally.app";
+  if (!meta) {
+    return { title: "HerbAlly" };
+  }
   return {
     title: meta.title,
     description: meta.description,
     keywords: meta.keywords,
-    alternates: { canonical: `${baseUrl}/symptoms/${symptom}` },
     openGraph: {
       title: meta.title,
       description: meta.description,
-      url: `${baseUrl}/symptoms/${symptom}`,
-      type: "article",
-      siteName: "HerbAlly",
     },
   };
 }
@@ -197,77 +196,79 @@ export async function generateStaticParams() {
 export default async function SymptomDetailPage({ params }: Props) {
   const { symptom } = await params;
   const meta = symptomMeta[symptom];
-  if (!meta) return null;
 
-  const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL!;
-  const supabaseKey = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!;
-  const supabase = createClient(supabaseUrl, supabaseKey);
+  const cookieStore = await cookies();
+  const localeCookie = cookieStore.get("herbally-locale");
+  const locale: Locale = localeCookie?.value === "fr" ? "fr" : "en";
+  const t = (key: string, params?: Record<string, string | number>) => getServerTranslation(locale, key, params);
 
-  const keyword = meta.dbKeyword;
-  const { data: herbs } = await supabase
-    .from("herbs")
-    .select("name, slug, scientific_name, evidence_level, pregnancy_safe, nursing_safe, traditional_uses, modern_uses")
-    .eq("is_published", true)
-    .contains("symptom_keywords", [keyword])
-    .order("name", { ascending: true })
-    .limit(20);
+  if (!meta) {
+    return (
+      <div className="flex min-h-[60vh] flex-col items-center justify-center gap-6 px-4 text-center">
+        <h2 className="text-2xl font-semibold">{t("herbDetail.notFound")}</h2>
+        <Link href="/symptoms" className="text-primary hover:underline">
+          {t("symptomsPage.allSymptoms")}
+        </Link>
+      </div>
+    );
+  }
+
+  const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL;
+  const supabaseKey = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY;
+  let herbs: Array<{
+    slug: string;
+    name: string;
+    scientific_name: string;
+    evidence_level: string | null;
+    pregnancy_safe: boolean | null;
+    nursing_safe: boolean | null;
+    traditional_uses: string[] | null;
+    modern_uses: string[] | null;
+  }> = [];
+
+  if (supabaseUrl && supabaseKey) {
+    try {
+      const supabase = createClient(supabaseUrl, supabaseKey);
+      const { data } = await supabase
+        .from("herbs")
+        .select("slug, name, scientific_name, evidence_level, pregnancy_safe, nursing_safe, traditional_uses, modern_uses")
+        .eq("is_published", true)
+        .overlaps("symptom_keywords", [meta.dbKeyword])
+        .order("evidence_level", { ascending: true })
+        .limit(20);
+      herbs = data || [];
+    } catch {
+      // Show empty state on error
+    }
+  }
 
   return (
-    <div className="mx-auto max-w-4xl px-4 py-16 sm:px-6 lg:px-8">
-      {/* Schema */}
-      <script
-        type="application/ld+json"
-        dangerouslySetInnerHTML={{
-          __html: JSON.stringify({
-            "@context": "https://schema.org",
-            "@type": "MedicalWebPage",
-            name: meta.title,
-            description: meta.description,
-            url: `https://herbally.app/symptoms/${symptom}`,
-            about: { "@type": "MedicalCondition", name: meta.title },
-            publisher: {
-              "@type": "Organization",
-              name: "HerbAlly",
-              url: "https://herbally.app",
-            },
-          }),
-        }}
-      />
-
-      {/* Header */}
-      <div className="mb-8">
-        <Link href="/symptoms" className="text-sm text-primary hover:underline">
-          ← All Symptoms
+    <div className="space-y-8">
+      <div>
+        <Link href="/symptoms" className="inline-flex items-center gap-1 text-sm text-muted-foreground hover:text-primary transition-colors">
+          ← {t("symptomsPage.allSymptoms")}
         </Link>
         <h1 className="mt-4 text-4xl font-bold tracking-tight text-foreground">
-          {meta.title}
+          {locale === "fr" ? (t(`symptomMeta.${symptom}.title`) || meta.title) : meta.title}
         </h1>
         <p className="mt-3 text-lg text-muted-foreground">
-          {meta.description}
+          {locale === "fr" ? (t(`symptomMeta.${symptom}.desc`) || meta.description) : meta.description}
         </p>
       </div>
 
       {/* Medical Disclaimer */}
-      <div className="mb-8 rounded-lg border border-amber-200 bg-amber-50 p-4 dark:border-amber-800 dark:bg-amber-950/30">
-        <div className="flex gap-3">
-          <AlertTriangle className="size-5 shrink-0 text-amber-600 dark:text-amber-400" />
-          <div className="text-sm text-amber-800 dark:text-amber-200">
-            <p className="font-semibold">Medical Disclaimer</p>
-            <p className="mt-1">
-              These herbs are listed for educational purposes only. Effectiveness varies by individual.
-              Always consult your healthcare provider before using herbs, especially if you take medications
-              or have a medical condition.
-            </p>
-          </div>
-        </div>
-      </div>
+      <SafetyAlert severity="info" title={t("symptomsDetail.medicalDisclaimer")}>
+        {locale === "fr"
+          ? "Ces plantes sont répertoriées à des fins éducatives uniquement. L'efficacité varie selon l'individu. Consultez toujours votre professionnel de santé avant d'utiliser des plantes, en particulier si vous prenez des médicaments ou avez une condition médicale."
+          : "These herbs are listed for educational purposes only. Effectiveness varies by individual. Always consult your healthcare provider before using herbs, especially if you take medications or have a medical condition."}
+      </SafetyAlert>
 
       {/* Herb Results */}
       {herbs && herbs.length > 0 ? (
         <div className="space-y-4">
           <div className="flex items-center gap-2 text-sm text-muted-foreground">
             <Stethoscope className="size-4" />
-            <span>{herbs.length} herbs found for this condition</span>
+            <span>{locale === "fr" ? `${herbs.length} plantes trouvées pour cette condition` : `${herbs.length} herbs found for this condition`}</span>
           </div>
           <div className="grid gap-3 sm:grid-cols-2">
             {herbs.map((herb: { slug: string; name: string; scientific_name: string; evidence_level: string | null; pregnancy_safe: boolean | null; nursing_safe: boolean | null; traditional_uses: string[] | null; modern_uses: string[] | null; }) => (
@@ -287,14 +288,14 @@ export default async function SymptomDetailPage({ params }: Props) {
                     </div>
                     <div className="mt-2 flex flex-wrap gap-1">
                       {(!herb.pregnancy_safe || !herb.nursing_safe) && (
-                        <Badge variant="destructive" className="text-xs">⚠️ Pregnancy/Nursing Risk</Badge>
+                        <Badge variant="destructive" className="text-xs">⚠️ {t("herbBadges.pregnancyRisk")}</Badge>
                       )}
                       {(herb.traditional_uses || herb.modern_uses || []).slice(0, 3).map((use: string) => (
                         <Badge key={use} variant="outline" className="text-xs">{use}</Badge>
                       ))}
                     </div>
                     <span className="mt-2 inline-flex items-center gap-1 text-xs font-medium text-primary">
-                      View details <ArrowRight className="size-3" />
+                      {t("symptomsPage.viewDetails")} <ArrowRight className="size-3" />
                     </span>
                   </CardContent>
                 </Card>
@@ -304,9 +305,9 @@ export default async function SymptomDetailPage({ params }: Props) {
         </div>
       ) : (
         <div className="text-center py-12">
-          <p className="text-muted-foreground">No herbs found for this condition yet.</p>
+          <p className="text-muted-foreground">{t("symptomsDetail.noHerbsYet")}</p>
           <Link href="/herbs" className="mt-4 inline-flex items-center gap-2 rounded-md bg-primary px-4 py-2 text-sm font-medium text-primary-foreground">
-            Browse All Herbs
+            {t("herbs.browseAll")}
           </Link>
         </div>
       )}
@@ -314,9 +315,11 @@ export default async function SymptomDetailPage({ params }: Props) {
       {/* Compare CTA */}
       {herbs && herbs.length >= 2 && (
         <div className="mt-8 rounded-lg border bg-muted/50 p-6 text-center">
-          <h2 className="text-xl font-bold text-foreground">Compare These Herbs</h2>
+          <h2 className="text-xl font-bold text-foreground">{t("symptomsDetail.compareThese")}</h2>
           <p className="mt-2 text-muted-foreground">
-            See side-by-side comparisons of effectiveness, safety, and interactions.
+            {locale === "fr"
+              ? "Comparez l'efficacité, la sécurité et les interactions côte à côte."
+              : "See side-by-side comparisons of effectiveness, safety, and interactions."}
           </p>
           <div className="mt-4 flex flex-wrap justify-center gap-3">
             <Link
@@ -337,7 +340,9 @@ export default async function SymptomDetailPage({ params }: Props) {
           className="inline-flex items-center gap-2 rounded-md border px-4 py-2 text-sm font-medium text-foreground hover:bg-muted"
         >
           <Stethoscope className="size-4" />
-          Ask the AI Herbalist about {meta.title.toLowerCase().replace("herbs for ", "")}
+          {locale === "fr"
+            ? `Interroger l'herboriste IA`
+            : `Ask the AI Herbalist`}
         </Link>
       </div>
     </div>
