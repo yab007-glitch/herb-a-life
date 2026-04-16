@@ -82,8 +82,17 @@ export async function POST(request: NextRequest) {
     if (!response.ok) {
       const errorText = await response.text().catch(() => "Unknown error");
       console.error("OpenRouter API error:", response.status, errorText);
+      
+      // Provide user-friendly message for common errors
+      let userMessage = "AI service is temporarily unavailable.";
+      if (response.status === 401) {
+        userMessage = "AI service is not configured. Please set a valid OPENROUTER_API_KEY.";
+      } else if (response.status === 429) {
+        userMessage = "AI service is busy. Please try again in a moment.";
+      }
+      
       return NextResponse.json(
-        { error: `AI service error: ${response.status}` },
+        { error: userMessage },
         { status: response.status === 429 ? 429 : 500 }
       );
     }

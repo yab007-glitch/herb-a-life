@@ -50,11 +50,41 @@ export async function GET() {
         : undefined,
   };
 
-  // Check OpenRouter API key configuration
-  checks.ai = {
-    status: process.env.OPENROUTER_API_KEY ? "healthy" : "unconfigured",
-    error: !process.env.OPENROUTER_API_KEY ? "OPENROUTER_API_KEY not set" : undefined,
-  };
+  // Check OpenRouter API by making a lightweight models request
+  try {
+    const openrouterKey = process.env.OPENROUTER_API_KEY?.trim();
+    const openrouterBaseUrl = process.env.OPENROUTER_BASE_URL || "https://openrouter.ai/api/v1";
+    
+    if (!openrouterKey || openrouterKey.startsWith("sk-or-v1-REPLACE")) {
+      checks.ai = {
+        status: "unconfigured",
+        error: "OPENROUTER_API_KEY not set or is a placeholder",
+      };
+    } else {
+      // Quick validation: list models (lightweight, no token cost)
+      const aiStart = Date.now();
+      const aiResponse = await fetch(`${openrouterBaseUrl}/models`, {
+        headers: { Authorization: `Bearer ${openrouterKey}` },
+        signal: AbortSignal.timeout(5000),
+      });
+      const aiLatency = Date.now() - aiStart;
+      
+      if (aiResponse.ok) {
+        checks.ai = { status: "healthy", latency: aiLatency };
+      } else {
+        checks.ai = {
+          status: "unhealthy",
+          latency: aiLatency,
+          error: `API returned ${aiResponse.status}`,
+        };
+      }
+    }
+  } catch (err) {
+    checks.ai = {
+      status: "unhealthy",
+      error: err instanceof Error ? err.message : "Connection failed",
+    };
+  }
 
   // Check Stripe configuration
   checks.stripe = {
