@@ -5,8 +5,8 @@ import { rateLimit } from "@/lib/rate-limit";
 export async function POST(request: NextRequest) {
   try {
     const apiKey = process.env.OPENROUTER_API_KEY?.trim();
-    const baseUrl = process.env.OPENROUTER_BASE_URL || "https://openrouter.ai/api/v1";
-    const model = process.env.OPENROUTER_MODEL || "openrouter/free";
+    const baseUrl = (process.env.OPENROUTER_BASE_URL || "https://openrouter.ai/api/v1").trim();
+    const model = (process.env.OPENROUTER_MODEL || "openrouter/free").trim();
 
     console.log("API config:", {
       hasKey: !!apiKey,
@@ -93,11 +93,7 @@ export async function POST(request: NextRequest) {
 
     if (!response.ok) {
       const errorText = await response.text().catch(() => "Unknown error");
-      console.error("OpenRouter API error:", {
-        status: response.status,
-        statusText: response.statusText,
-        body: errorText.substring(0, 500),
-      });
+      console.error("OpenRouter API error:", response.status, errorText.substring(0, 200));
       
       // Provide user-friendly message for common errors
       let userMessage = "AI service is temporarily unavailable.";
@@ -108,14 +104,7 @@ export async function POST(request: NextRequest) {
       }
       
       return NextResponse.json(
-        { 
-          error: userMessage,
-          debug: {
-            status: response.status,
-            statusText: response.statusText,
-            body: errorText.substring(0, 300),
-          }
-        },
+        { error: userMessage },
         { status: response.status === 429 ? 429 : 500 }
       );
     }
