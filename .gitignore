@@ -31,6 +31,8 @@ yarn-error.log*
 # env files
 .env
 .env*.local
+.env.production
+.env.staging
 
 # vercel
 .vercel
@@ -40,3 +42,8 @@ yarn-error.log*
 next-env.d.ts
 .backups
 .claude
+
+# secrets - NEVER commit these
+*.pem
+*.key
+*.secret

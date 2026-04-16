@@ -1,5 +1,5 @@
 import { NextResponse, type NextRequest } from "next/server";
-import { openai } from "@/lib/ai/openai-client";
+import { openai, MODEL } from "@/lib/ai/openai-client";
 
 export async function POST(request: NextRequest) {
   let originalQuery = "";
@@ -18,7 +18,7 @@ export async function POST(request: NextRequest) {
     }
 
     const response = await openai.chat.completions.create({
-      model: (process.env.OPENROUTER_MODEL ?? "openai/gpt-4o-mini").trim(),
+      model: MODEL,
       stream: false,
       messages: [
         {

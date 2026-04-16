@@ -103,7 +103,7 @@ export default async function PharmacistPage({
       <div className="rounded-lg border p-4 text-sm text-muted-foreground">
         <p className="font-medium text-foreground mb-1">{t("herbalistPage.aboutTitle")}</p>
         <ul className="space-y-1">
-          <li>• {t("herbalistPage.aboutOllama")}</li>
+          <li>• {t("herbalistPage.aboutProvider")}</li>
           <li>• {t("herbalistPage.aboutSources")}</li>
           <li>• {t("herbalistPage.aboutUpdated")}</li>
           <li>• {t("herbalistPage.aboutNotFDA")}</li>

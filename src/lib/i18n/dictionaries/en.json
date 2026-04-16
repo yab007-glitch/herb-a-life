@@ -118,7 +118,10 @@
       "warnings": "Warnings",
       "preparations": "Preparations & Forms",
       "research": "Research & References"
-    }
+    },
+    "dontKnowWhichHerb": "Don't know which herb you need?",
+    "dontKnowDesc": "Search by symptom or condition — anxiety, sleep, inflammation, and more.",
+    "findBysymptom": "Find Herbs by Symptom →"
   },
   "calculator": {
     "title": "Dosage Calculator",
@@ -480,9 +483,9 @@
       "title": "4. Third-Party Services",
       "text": "HerbAlly uses the following third-party services:",
       "supabase": "Supabase — Database hosting (Canada region). Data stored: herb profiles, interaction data. No personal user data.",
-      "ollama": "Ollama Cloud / OpenRouter — AI processing. Data sent: chat messages you type. Data stored: none (messages are processed and discarded).",
       "vercel": "Vercel — Application hosting. Data stored: none (serverless functions). Vercel may collect anonymous CDN logs.",
-      "stripe": "Stripe — Payment processing for donations. HerbAlly never sees or stores your card details."
+      "stripe": "Stripe — Payment processing for donations. HerbAlly never sees or stores your card details.",
+      "openrouter": "OpenRouter — AI processing. Data sent: chat messages you type. Data stored: none (messages are processed and discarded)."
     },
     "cookiesSection": {
       "title": "5. Cookies",
@@ -1048,11 +1051,11 @@
     "askingAbout": "Asking about {name}",
     "askingAboutDesc": "The AI has been provided with detailed information about this herb from our database, including active compounds, traditional uses, and known safety concerns.",
     "aboutTitle": "About our AI Herbalist",
-    "aboutOllama": "Powered by Ollama Cloud AI (glm-5:cloud model)",
     "aboutSources": "Information sourced from WHO monographs, NCCIH, PubMed, and Commission E",
     "aboutUpdated": "Regularly updated as new research becomes available",
     "aboutNotFDA": "Not reviewed or approved by FDA",
-    "description": "Ask our AI herbalist about herb safety, drug interactions, and dosage. Evidence-based answers from WHO, NCCIH, and PubMed sources. Free, no account required."
+    "description": "Ask our AI herbalist about herb safety, drug interactions, and dosage. Evidence-based answers from WHO, NCCIH, and PubMed sources. Free, no account required.",
+    "aboutProvider": "Powered by OpenRouter AI (free model)"
   },
   "mobileTabs": {
     "symptoms": "Symptoms",

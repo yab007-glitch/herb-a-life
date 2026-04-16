@@ -118,7 +118,10 @@
       "preparations": "Préparations et Formes",
       "research": "Recherche et Références"
     },
-    "browseSymptoms": "Parcourir par Symptôme"
+    "browseSymptoms": "Parcourir par Symptôme",
+    "dontKnowWhichHerb": "Vous ne savez pas quelle herbe vous faut ?",
+    "dontKnowDesc": "Recherchez par symptôme ou condition — anxiété, sommeil, inflammation et plus.",
+    "findBysymptom": "Trouver des Herbes par Symptôme →"
   },
   "calculator": {
     "title": "Calculateur de Dosage",
@@ -480,9 +483,9 @@
       "title": "4. Services Tiers",
       "text": "HerbAlly utilise les services tiers suivants :",
       "supabase": "Supabase — Hébergement de base de données (région Canada). Données stockées : profils de plantes, données d'interactions. Aucune donnée utilisateur personnelle.",
-      "ollama": "Ollama Cloud / OpenRouter — Traitement IA. Données envoyées : messages de discussion que vous tapez. Données stockées : aucune (les messages sont traités puis supprimés).",
       "vercel": "Vercel — Hébergement d'application. Données stockées : aucune (fonctions serverless). Vercel peut collecter des journaux CDN anonymes.",
-      "stripe": "Stripe — Traitement des paiements pour les dons. HerbAlly ne voit ni ne stocke jamais vos coordonnées bancaires."
+      "stripe": "Stripe — Traitement des paiements pour les dons. HerbAlly ne voit ni ne stocke jamais vos coordonnées bancaires.",
+      "openrouter": "OpenRouter — Traitement IA. Données envoyées : messages de discussion que vous tapez. Données stockées : aucune (les messages sont traités puis supprimés)."
     },
     "cookiesSection": {
       "title": "5. Cookies",
@@ -1048,11 +1051,11 @@
     "askingAbout": "Question sur {name}",
     "askingAboutDesc": "L'IA a reçu des informations détaillées sur cette plante provenant de notre base de données, y compris les composés actifs, les utilisations traditionnelles et les problèmes de sécurité connus.",
     "aboutTitle": "À propos de notre Herboriste IA",
-    "aboutOllama": "Propulsé par Ollama Cloud IA (modèle glm-5:cloud)",
     "aboutSources": "Informations provenant des monographies de l'OMS, du NCCIH, de PubMed et de la Commission E",
     "aboutUpdated": "Mises à jour régulières au fur et à mesure des nouvelles recherches",
     "aboutNotFDA": "Non révisé ni approuvé par la FDA",
-    "description": "Posez des questions à notre herboriste IA sur la sécurité des plantes, les interactions médicamenteuses et la posologie. Réponses fondées sur des preuves de l'OMS, du NCCIH et de PubMed. Gratuit, aucun compte requis."
+    "description": "Posez des questions à notre herboriste IA sur la sécurité des plantes, les interactions médicamenteuses et la posologie. Réponses fondées sur des preuves de l'OMS, du NCCIH et de PubMed. Gratuit, aucun compte requis.",
+    "aboutProvider": "Propulsé par OpenRouter IA (modèle gratuit)"
   },
   "mobileTabs": {
     "symptoms": "Symptômes",

@@ -4,21 +4,18 @@ import { rateLimit } from "@/lib/rate-limit";
 
 export async function POST(request: NextRequest) {
   try {
-    // Get API config at runtime
-    const apiKey = process.env.OLLAMA_API_KEY || process.env.OPENROUTER_API_KEY;
-    const baseUrl = process.env.OLLAMA_BASE_URL || "https://ollama.com/api";
-    const model = process.env.OLLAMA_MODEL || "glm-5:cloud";
+    const apiKey = process.env.OPENROUTER_API_KEY?.trim();
+    const baseUrl = process.env.OPENROUTER_BASE_URL || "https://openrouter.ai/api/v1";
+    const model = process.env.OPENROUTER_MODEL || "openrouter/free";
 
-    // Debug logging (key info masked for security)
     console.log("API config:", {
       hasKey: !!apiKey,
       baseUrl,
       model,
     });
 
-    // Check if API key is configured
     if (!apiKey) {
-      console.error("AI API key not configured");
+      console.error("OpenRouter API key not configured");
       return NextResponse.json(
         { error: "AI service is not configured. Please contact support." },
         { status: 503 }
@@ -51,8 +48,8 @@ export async function POST(request: NextRequest) {
 
     const systemPrompt = getSystemPrompt(herbContext, medications, locale);
 
-    // Format messages for Ollama API
-    const ollamaMessages = [
+    // Format messages for OpenRouter (OpenAI-compatible) API
+    const chatMessages = [
       { role: "system", content: systemPrompt },
       ...messages.map((m: { role: string; content: string }) => ({
         role: m.role,
@@ -60,36 +57,38 @@ export async function POST(request: NextRequest) {
       })),
     ];
 
-    console.log("Calling Ollama API:", {
+    console.log("Calling OpenRouter API:", {
       model,
       baseUrl,
-      messageCount: ollamaMessages.length,
+      messageCount: chatMessages.length,
     });
 
-    // Call Ollama Cloud API
-    const response = await fetch(`${baseUrl}/chat`, {
+    // Call OpenRouter API (OpenAI-compatible chat completions)
+    const response = await fetch(`${baseUrl}/chat/completions`, {
       method: "POST",
       headers: {
         Authorization: `Bearer ${apiKey}`,
         "Content-Type": "application/json",
+        "HTTP-Referer": process.env.NEXT_PUBLIC_APP_URL || "https://herbally.app",
+        "X-Title": "HerbAlly",
       },
       body: JSON.stringify({
         model,
-        messages: ollamaMessages,
+        messages: chatMessages,
         stream: true,
       }),
     });
 
     if (!response.ok) {
       const errorText = await response.text().catch(() => "Unknown error");
-      console.error("Ollama API error:", response.status, errorText);
+      console.error("OpenRouter API error:", response.status, errorText);
       return NextResponse.json(
         { error: `AI service error: ${response.status}` },
         { status: response.status === 429 ? 429 : 500 }
       );
     }
 
-    // Stream the response
+    // Stream the response (OpenAI SSE format)
     const encoder = new TextEncoder();
     const stream = new ReadableStream({
       async start(controller) {
@@ -112,11 +111,19 @@ export async function POST(request: NextRequest) {
             buffer = lines.pop() || "";
 
             for (const line of lines) {
-              if (!line.trim()) continue;
+              const trimmed = line.trim();
+              if (!trimmed) continue;
+              if (trimmed === "data: [DONE]") {
+                controller.close();
+                return;
+              }
+              if (!trimmed.startsWith("data: ")) continue;
+
               try {
-                const data = JSON.parse(line);
-                if (data.message?.content) {
-                  controller.enqueue(encoder.encode(data.message.content));
+                const data = JSON.parse(trimmed.slice(6));
+                const content = data.choices?.[0]?.delta?.content;
+                if (content) {
+                  controller.enqueue(encoder.encode(content));
                 }
               } catch {
                 // Skip invalid JSON lines

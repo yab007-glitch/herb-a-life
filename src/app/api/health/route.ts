@@ -50,15 +50,10 @@ export async function GET() {
         : undefined,
   };
 
-  // Check Ollama/OpenRouter API key configuration
+  // Check OpenRouter API key configuration
   checks.ai = {
-    status:
-      process.env.OLLAMA_API_KEY || process.env.OPENROUTER_API_KEY
-        ? "healthy"
-        : "unconfigured",
-    error: !(process.env.OLLAMA_API_KEY || process.env.OPENROUTER_API_KEY)
-      ? "OLLAMA_API_KEY or OPENROUTER_API_KEY not set"
-      : undefined,
+    status: process.env.OPENROUTER_API_KEY ? "healthy" : "unconfigured",
+    error: !process.env.OPENROUTER_API_KEY ? "OPENROUTER_API_KEY not set" : undefined,
   };
 
   // Check Stripe configuration
