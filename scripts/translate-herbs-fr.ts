@@ -15,27 +15,12 @@
  * The script is resumable — herbs already translated are skipped automatically.
  */
 
-import * as fs from "fs";
-import * as path from "path";
 import { createClient } from "@supabase/supabase-js";
+import * as dotenv from "dotenv";
+import * as path from "path";
 
-// ── Env loading ──────────────────────────────────────────────────────────────
-
-function loadEnv() {
-  const envPath = path.join(process.cwd(), ".env.local");
-  if (!fs.existsSync(envPath)) return;
-  for (const line of fs.readFileSync(envPath, "utf-8").split("\n")) {
-    const trimmed = line.trim();
-    if (!trimmed || trimmed.startsWith("#")) continue;
-    const eq = trimmed.indexOf("=");
-    if (eq < 0) continue;
-    const key = trimmed.slice(0, eq).trim();
-    const val = trimmed.slice(eq + 1).trim().replace(/^["']|["']$/g, "");
-    if (!process.env[key]) process.env[key] = val;
-  }
-}
-
-loadEnv();
+// Load .env.local — dotenv handles quoting, multi-value, and all edge cases
+dotenv.config({ path: path.join(process.cwd(), ".env.local"), override: false });
 
 const SUPABASE_URL = process.env.NEXT_PUBLIC_SUPABASE_URL ?? "";
 const SERVICE_KEY = process.env.SUPABASE_SERVICE_ROLE_KEY ?? "";
@@ -44,9 +29,12 @@ const BASE_URL = (process.env.OPENROUTER_BASE_URL ?? "https://openrouter.ai/api/
 const MODEL = (process.env.OPENROUTER_MODEL ?? "openrouter/auto").trim();
 
 const HERB_BATCH = 3;   // herbs per API call
-const HERB_DELAY = 2500; // ms between herb batches
+const HERB_DELAY = 4000; // ms between herb calls (respect 20 req/min limit)
 const IX_BATCH = 5;     // interactions per API call
-const IX_DELAY = 1500;  // ms between interaction batches
+const IX_DELAY = 4000;  // ms between interaction calls
+const CAT_DELAY = 4000; // ms between category calls
+const MAX_RETRIES = 3;  // retries on 429
+const RETRY_WAIT = 65000; // ms to wait on rate limit (1 min + buffer)
 
 // ── Validation ───────────────────────────────────────────────────────────────
 
@@ -70,7 +58,20 @@ const supabase = createClient(SUPABASE_URL, SERVICE_KEY, {
 
 // ── AI translation ────────────────────────────────────────────────────────────
 
-async function translateJSON(input: object): Promise<object> {
+async function translateJSON(input: object, attempt = 1): Promise<object> {
+  const prompt = [
+    "You are a professional medical translator specialising in herbal medicine.",
+    "Translate the JSON below from English to French.",
+    "Rules:",
+    "- Return ONLY valid JSON — no markdown, no code fences, no explanation.",
+    "- Keep scientific/Latin names, chemical compound names, and drug names in English.",
+    "- Keep dosage numbers and units unchanged (mg, g, ml, drops, etc.).",
+    "- Translate all other text naturally into professional French.",
+    "- Preserve the exact JSON structure (same keys, same array lengths).",
+    "",
+    `JSON to translate:\n${JSON.stringify(input, null, 2)}`,
+  ].join("\n");
+
   const response = await fetch(`${BASE_URL}/chat/completions`, {
     method: "POST",
     headers: {
@@ -82,27 +83,15 @@ async function translateJSON(input: object): Promise<object> {
     body: JSON.stringify({
       model: MODEL,
       stream: false,
-      messages: [
-        {
-          role: "system",
-          content: [
-            "You are a professional medical translator specialising in herbal medicine.",
-            "Translate the provided JSON from English to French.",
-            "Rules:",
-            "- Return ONLY valid JSON — no markdown, no code fences, no explanation.",
-            "- Keep scientific/Latin names, chemical compound names, and drug names in English.",
-            "- Keep dosage numbers and units unchanged (mg, g, ml, drops, etc.).",
-            "- Translate all other text naturally into professional French.",
-            "- Preserve the exact JSON structure (same keys, same array lengths).",
-          ].join("\n"),
-        },
-        {
-          role: "user",
-          content: `Translate to French:\n${JSON.stringify(input, null, 2)}`,
-        },
-      ],
+      messages: [{ role: "user", content: prompt }],
     }),
   });
+
+  if (response.status === 429 && attempt <= MAX_RETRIES) {
+    console.log(`    ⏳ Rate limited — waiting ${RETRY_WAIT / 1000}s before retry ${attempt}/${MAX_RETRIES}…`);
+    await sleep(RETRY_WAIT);
+    return translateJSON(input, attempt + 1);
+  }
 
   if (!response.ok) {
     const err = await response.text().catch(() => "");
@@ -156,10 +145,10 @@ async function translateCategories() {
       } else {
         console.log(`  ✓ ${cat.name} → ${translated.name}`);
       }
-      await sleep(800);
+      await sleep(CAT_DELAY);
     } catch (e) {
       console.error(`  ❌ "${cat.name}":`, (e as Error).message);
-      await sleep(800);
+      await sleep(CAT_DELAY);
     }
   }
 }
