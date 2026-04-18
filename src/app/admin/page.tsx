@@ -5,57 +5,137 @@ import {
   Users,
   ClipboardCheck,
   Activity,
+  MessageSquare,
+  Eye,
+  TrendingUp,
 } from "lucide-react";
-import { createClient } from "@/lib/supabase/server";
+import { createAdminClient } from "@/lib/supabase/admin";
+import type { SupabaseClient } from "@supabase/supabase-js";
 
 export const metadata = {
   title: "Admin Overview",
 };
 
 export default async function AdminOverviewPage() {
-  const supabase = await createClient();
+  let stats: {
+    label: string;
+    value: number;
+    icon: typeof Leaf;
+    gradient: string;
+    description: string;
+  }[] = [];
 
-  const [herbs, interactions, users, checks] = await Promise.all([
-    supabase.from("herbs").select("id", { count: "exact", head: true }),
-    supabase
-      .from("drug_interactions")
-      .select("id", { count: "exact", head: true }),
-    supabase.from("profiles").select("id", { count: "exact", head: true }),
-    supabase
-      .from("interaction_checks")
-      .select("id", { count: "exact", head: true }),
-  ]);
+  try {
+    const supabase = createAdminClient();
 
-  const stats = [
-    {
-      label: "Total Herbs",
-      value: herbs.count ?? 0,
-      icon: Leaf,
-      gradient: "from-emerald-500 to-teal-500",
-      description: "Published in database",
-    },
-    {
-      label: "Drug Interactions",
-      value: interactions.count ?? 0,
-      icon: AlertTriangle,
-      gradient: "from-amber-500 to-orange-500",
-      description: "Known interactions",
-    },
-    {
-      label: "Registered Users",
-      value: users.count ?? 0,
-      icon: Users,
-      gradient: "from-blue-500 to-cyan-500",
-      description: "Total accounts",
-    },
-    {
-      label: "Interaction Checks",
-      value: checks.count ?? 0,
-      icon: ClipboardCheck,
-      gradient: "from-purple-500 to-indigo-500",
-      description: "Checks performed",
-    },
-  ];
+    const [herbs, interactions, users, checks, chatSessions] =
+      await Promise.all([
+        supabase.from("herbs").select("id", { count: "exact", head: true }),
+        supabase
+          .from("drug_interactions")
+          .select("id", { count: "exact", head: true }),
+        supabase
+          .from("profiles")
+          .select("id", { count: "exact", head: true }),
+        supabase
+          .from("interaction_checks")
+          .select("id", { count: "exact", head: true }),
+        supabase
+          .from("chat_sessions")
+          .select("id", { count: "exact", head: true }),
+      ]);
+
+    // Get herb with evidence breakdown
+    const { data: evidenceStats } = await supabase
+      .from("herbs")
+      .select("evidence_level");
+
+    const evidenceCounts: Record<string, number> = {};
+    if (evidenceStats) {
+      for (const h of evidenceStats) {
+        const level = h.evidence_level || "none";
+        evidenceCounts[level] = (evidenceCounts[level] || 0) + 1;
+      }
+    }
+
+    stats = [
+      {
+        label: "Total Herbs",
+        value: herbs.count ?? 0,
+        icon: Leaf,
+        gradient: "from-emerald-500 to-teal-500",
+        description: "Published in database",
+      },
+      {
+        label: "Drug Interactions",
+        value: interactions.count ?? 0,
+        icon: AlertTriangle,
+        gradient: "from-amber-500 to-orange-500",
+        description: "Known interactions",
+      },
+      {
+        label: "Registered Users",
+        value: users.count ?? 0,
+        icon: Users,
+        gradient: "from-blue-500 to-cyan-500",
+        description: "Total accounts",
+      },
+      {
+        label: "Interaction Checks",
+        value: checks.count ?? 0,
+        icon: ClipboardCheck,
+        gradient: "from-purple-500 to-indigo-500",
+        description: "Checks performed",
+      },
+      {
+        label: "Chat Sessions",
+        value: chatSessions.count ?? 0,
+        icon: MessageSquare,
+        gradient: "from-pink-500 to-rose-500",
+        description: "Persisted conversations",
+      },
+    ];
+  } catch (error) {
+    console.error("Admin stats error:", error);
+    // Show zeros if service role key not configured
+    stats = [
+      {
+        label: "Total Herbs",
+        value: 0,
+        icon: Leaf,
+        gradient: "from-emerald-500 to-teal-500",
+        description: "Set SUPABASE_SERVICE_ROLE_KEY",
+      },
+      {
+        label: "Drug Interactions",
+        value: 0,
+        icon: AlertTriangle,
+        gradient: "from-amber-500 to-orange-500",
+        description: "Set SUPABASE_SERVICE_ROLE_KEY",
+      },
+      {
+        label: "Registered Users",
+        value: 0,
+        icon: Users,
+        gradient: "from-blue-500 to-cyan-500",
+        description: "Set SUPABASE_SERVICE_ROLE_KEY",
+      },
+      {
+        label: "Interaction Checks",
+        value: 0,
+        icon: ClipboardCheck,
+        gradient: "from-purple-500 to-indigo-500",
+        description: "Set SUPABASE_SERVICE_ROLE_KEY",
+      },
+      {
+        label: "Chat Sessions",
+        value: 0,
+        icon: MessageSquare,
+        gradient: "from-pink-500 to-rose-500",
+        description: "Set SUPABASE_SERVICE_ROLE_KEY",
+      },
+    ];
+  }
 
   return (
     <div className="space-y-8">
@@ -75,7 +155,7 @@ export default async function AdminOverviewPage() {
       </div>
 
       {/* Stats Grid */}
-      <div className="grid gap-5 sm:grid-cols-2 lg:grid-cols-4">
+      <div className="grid gap-5 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-5">
         {stats.map((stat) => {
           const Icon = stat.icon;
           return (

@@ -20,11 +20,12 @@ import {
   getChatSession,
 } from "@/lib/actions/chat-local";
 import {
-  createPersistedSession,
-  getPersistedSession,
-  addPersistedMessage,
-  deletePersistedSession,
+  createGuestSession,
+  getGuestSession,
+  addGuestMessage,
+  deleteGuestSession,
 } from "@/lib/actions/chat-persist";
+import { getGuestId, setGuestId } from "@/lib/actions/guest-id";
 import type { ChatMessage } from "@/lib/actions/chat";
 import { useI18n } from "@/components/i18n/i18n-provider";
 
@@ -67,27 +68,40 @@ export function ChatInterface({
     sessionId || null
   );
   const [isSaving, setIsSaving] = useState(false);
+  const [guestId, setLocalGuestId] = useState<string | null>(null);
   const scrollRef = useRef<HTMLDivElement>(null);
   const textareaRef = useRef<HTMLTextAreaElement>(null);
 
-  // Load existing session if sessionId provided (try server, fall back to localStorage)
+  // Initialize guest ID on mount
+  useEffect(() => {
+    async function initGuestId() {
+      const id = await getGuestId();
+      setLocalGuestId(id);
+      await setGuestId(id); // Ensure cookie is set
+    }
+    initGuestId();
+  }, []);
+
+  // Load existing session if sessionId provided
   useEffect(() => {
     async function loadSession() {
       if (!sessionId) return;
       
-      // Try server persistence first
-      const serverSession = await getPersistedSession(sessionId);
-      if (serverSession && serverSession.messages.length > 0) {
-        setMessages(serverSession.messages
-          .filter((m) => m.role === "user" || m.role === "assistant")
-          .map((m) => ({
-          role: m.role as "user" | "assistant",
-          content: m.content,
-          id: m.id,
-          timestamp: m.createdAt,
-        })));
-        setCurrentSessionId(sessionId);
-        return;
+      // Try server persistence first (using guest ID)
+      if (guestId) {
+        const serverSession = await getGuestSession(sessionId, guestId);
+        if (serverSession && serverSession.messages.length > 0) {
+          setMessages(serverSession.messages
+            .filter((m) => m.role === "user" || m.role === "assistant")
+            .map((m) => ({
+            role: m.role as "user" | "assistant",
+            content: m.content,
+            id: m.id,
+            timestamp: m.createdAt,
+          })));
+          setCurrentSessionId(sessionId);
+          return;
+        }
       }
       
       // Fall back to localStorage
@@ -100,8 +114,8 @@ export function ChatInterface({
         setCurrentSessionId(sessionId);
       }
     }
-    loadSession();
-  }, [sessionId]);
+    if (guestId) loadSession();
+  }, [sessionId, guestId]);
 
   useEffect(() => {
     if (scrollRef.current) {
@@ -123,20 +137,20 @@ export function ChatInterface({
     async (msgs: Message[]) => {
       // Skip saving if we only have the initial message
       if (msgs.length <= 1) return;
+      if (!guestId) return;
 
       try {
         setIsSaving(true);
 
-        // Try server persistence first (requires auth)
+        // Try guest persistence (no auth required)
         if (!currentSessionId) {
-          // Create new session on server
-          const session = await createPersistedSession(herbContext || undefined);
+          const session = await createGuestSession(guestId, herbContext || undefined);
           if (session) {
             setCurrentSessionId(session.id);
             // Add all messages
             for (const msg of msgs) {
               if (msg.role === "user" || msg.role === "assistant") {
-                await addPersistedMessage(session.id, msg.role, msg.content);
+                await addGuestMessage(session.id, msg.role, msg.content, guestId);
               }
             }
           } else {
@@ -147,13 +161,13 @@ export function ChatInterface({
           }
         } else {
           // Update existing session
-          const serverSession = await getPersistedSession(currentSessionId);
+          const serverSession = await getGuestSession(currentSessionId, guestId);
           if (serverSession) {
             // Only add new messages (compare by content)
             const existingContent = new Set(serverSession.messages.map((m) => m.content));
             for (const msg of msgs) {
               if (!existingContent.has(msg.content) && (msg.role === "user" || msg.role === "assistant")) {
-                await addPersistedMessage(currentSessionId, msg.role, msg.content);
+                await addGuestMessage(currentSessionId, msg.role, msg.content, guestId);
               }
             }
           } else {
@@ -175,7 +189,7 @@ export function ChatInterface({
         setIsSaving(false);
       }
     },
-    [currentSessionId, herbContext]
+    [currentSessionId, herbContext, guestId]
   );
 
   async function sendMessage(text: string) {
@@ -272,8 +286,8 @@ export function ChatInterface({
 
   async function clearChat() {
     setMessages([createInitialMessage()]);
-    if (currentSessionId) {
-      await deletePersistedSession(currentSessionId);
+    if (currentSessionId && guestId) {
+      await deleteGuestSession(currentSessionId, guestId);
     }
     setCurrentSessionId(null);
     setAutoSent(false);
