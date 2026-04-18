@@ -30,7 +30,7 @@ export async function createGuestSession(
 
     const { data, error } = await supabase.rpc("create_guest_chat_session", {
       p_guest_id: guestId,
-      p_herb_context: herbContext || null,
+      p_herb_context: herbContext || undefined,
     });
 
     if (error || !data) {

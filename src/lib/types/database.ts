@@ -12,6 +12,31 @@ export type Database = {
   __InternalSupabase: {
     PostgrestVersion: "14.4"
   }
+  graphql_public: {
+    Tables: {
+      [_ in never]: never
+    }
+    Views: {
+      [_ in never]: never
+    }
+    Functions: {
+      graphql: {
+        Args: {
+          extensions?: Json
+          operationName?: string
+          query?: string
+          variables?: Json
+        }
+        Returns: Json
+      }
+    }
+    Enums: {
+      [_ in never]: never
+    }
+    CompositeTypes: {
+      [_ in never]: never
+    }
+  }
   public: {
     Tables: {
       chat_messages: {
@@ -49,6 +74,7 @@ export type Database = {
       chat_sessions: {
         Row: {
           created_at: string
+          guest_id: string | null
           herb_context: string | null
           id: string
           messages: Json
@@ -58,6 +84,7 @@ export type Database = {
         }
         Insert: {
           created_at?: string
+          guest_id?: string | null
           herb_context?: string | null
           id?: string
           messages?: Json
@@ -67,6 +94,7 @@ export type Database = {
         }
         Update: {
           created_at?: string
+          guest_id?: string | null
           herb_context?: string | null
           id?: string
           messages?: Json
@@ -599,6 +627,85 @@ export type Database = {
       [_ in never]: never
     }
     Functions: {
+      add_guest_chat_message: {
+        Args: {
+          p_content: string
+          p_guest_id: string
+          p_role: string
+          p_session_id: string
+        }
+        Returns: {
+          content: string
+          created_at: string
+          id: string
+          role: string
+          session_id: string
+        }
+        SetofOptions: {
+          from: "*"
+          to: "chat_messages"
+          isOneToOne: true
+          isSetofReturn: false
+        }
+      }
+      create_guest_chat_session: {
+        Args: { p_guest_id: string; p_herb_context?: string }
+        Returns: {
+          created_at: string
+          guest_id: string | null
+          herb_context: string | null
+          id: string
+          messages: Json
+          title: string | null
+          updated_at: string
+          user_id: string | null
+        }
+        SetofOptions: {
+          from: "*"
+          to: "chat_sessions"
+          isOneToOne: true
+          isSetofReturn: false
+        }
+      }
+      delete_guest_chat_session: {
+        Args: { p_guest_id: string; p_session_id: string }
+        Returns: boolean
+      }
+      get_guest_chat_messages: {
+        Args: { p_session_id: string }
+        Returns: {
+          content: string
+          created_at: string
+          id: string
+          role: string
+          session_id: string
+        }[]
+        SetofOptions: {
+          from: "*"
+          to: "chat_messages"
+          isOneToOne: false
+          isSetofReturn: true
+        }
+      }
+      get_guest_chat_sessions: {
+        Args: { p_guest_id: string }
+        Returns: {
+          created_at: string
+          guest_id: string | null
+          herb_context: string | null
+          id: string
+          messages: Json
+          title: string | null
+          updated_at: string
+          user_id: string | null
+        }[]
+        SetofOptions: {
+          from: "*"
+          to: "chat_sessions"
+          isOneToOne: false
+          isSetofReturn: true
+        }
+      }
       is_admin: { Args: never; Returns: boolean }
       search_herbs_by_symptom: {
         Args: { search_term: string }
@@ -631,6 +738,7 @@ export type Database = {
           slug: string
           symptom_keywords: string[] | null
           traditional_uses: string[] | null
+          translations: Json | null
           updated_at: string
         }[]
         SetofOptions: {
@@ -782,6 +890,9 @@ export type CompositeTypes<
     : never
 
 export const Constants = {
+  graphql_public: {
+    Enums: {},
+  },
   public: {
     Enums: {
       dosage_form: [

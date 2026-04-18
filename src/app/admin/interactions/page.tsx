@@ -1,4 +1,4 @@
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { Card, CardContent } from "@/components/ui/card";
 import { AlertTriangle } from "lucide-react";
 import { createAdminClient } from "@/lib/supabase/admin";
 
@@ -24,13 +24,22 @@ export default async function AdminInteractionsPage() {
         .select("id", { count: "exact", head: true }),
       supabase
         .from("drug_interactions")
-        .select("id, herb_name, drug_name, severity")
+        .select("id, drug_name, severity, herbs(name)")
         .order("severity")
         .limit(100),
     ]);
 
     totalCount = countResult.count ?? 0;
-    interactions = (dataResult.data as typeof interactions) ?? [];
+
+    // Map the joined data to a flat structure
+    if (dataResult.data) {
+      interactions = dataResult.data.map((row: Record<string, unknown>) => ({
+        id: row.id as string,
+        herb_name: (row.herbs as Record<string, string>)?.name || "Unknown",
+        drug_name: row.drug_name as string,
+        severity: row.severity as string,
+      }));
+    }
   } catch {
     // Service role key not configured
   }
