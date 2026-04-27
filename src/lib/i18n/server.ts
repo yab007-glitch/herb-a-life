@@ -1,10 +1,10 @@
-import { DEFAULT_LOCALE, LOCALES, type Locale } from "./config";
+import { DEFAULT_LOCALE, type Locale } from "./config";
+import { lookupTranslation } from "./utils";
 import enDict from "./dictionaries/en.json";
 import frDict from "./dictionaries/fr.json";
 
-// Re-export Locale type and LOCALES
+// Re-export Locale type
 export type { Locale };
-export { LOCALES };
 
 const dictionaries: Record<Locale, Record<string, unknown>> = {
   en: enDict,
@@ -23,29 +23,7 @@ export function getServerTranslation(
   params?: Record<string, string | number>
 ): string {
   const dict = dictionaries[locale] || dictionaries[DEFAULT_LOCALE];
-  const keys = key.split(".");
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  let value: any = dict;
-
-  for (const k of keys) {
-    if (value && typeof value === "object" && k in value) {
-      value = value[k];
-    } else {
-      return key; // Return the key if translation not found
-    }
-  }
-
-  if (typeof value !== "string") {
-    return key;
-  }
-
-  if (params) {
-    return value.replace(/{(\w+)}/g, (_, param) => {
-      return String(params[param] ?? `{${param}}`);
-    });
-  }
-
-  return value;
+  return lookupTranslation(dict, key, params);
 }
 
 /**

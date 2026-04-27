@@ -4,23 +4,19 @@ import {
   createContext,
   useContext,
   useState,
+  useEffect,
+  useRef,
   ReactNode,
 } from "react";
 import { DEFAULT_LOCALE, type Locale } from "@/lib/i18n/config";
+import { lookupTranslation } from "@/lib/i18n/utils";
 import enDict from "@/lib/i18n/dictionaries/en.json";
-import frDict from "@/lib/i18n/dictionaries/fr.json";
-
-const dictionaries: Record<Locale, Record<string, unknown>> = {
-  en: enDict as Record<string, unknown>,
-  fr: frDict as Record<string, unknown>,
-};
 
 interface I18nContextType {
   locale: Locale;
   setLocale: (locale: Locale) => void;
   t: (key: string, params?: Record<string, string | number>) => string;
   detectedLocale: Locale | null;
-  isLoading: boolean;
 }
 
 const I18nContext = createContext<I18nContextType | null>(null);
@@ -59,8 +55,18 @@ function getDetectedLocale(): Locale | null {
 export function I18nProvider({ children }: { children: ReactNode }) {
   const [locale, setLocaleState] = useState<Locale>(getInitialLocale);
   const [detectedLocale] = useState<Locale | null>(getDetectedLocale);
-  // Hydration is complete after initial render since we use lazy init
-  const isLoading = false;
+  const [frDict, setFrDict] = useState<Record<string, unknown> | null>(null);
+  const frLoadStarted = useRef(false);
+
+  // Load French dictionary on demand (code-split, not in initial bundle)
+  useEffect(() => {
+    if (locale === "fr" && !frLoadStarted.current) {
+      frLoadStarted.current = true;
+      import("@/lib/i18n/dictionaries/fr.json").then((mod) => {
+        setFrDict(mod.default as Record<string, unknown>);
+      });
+    }
+  }, [locale]);
 
   const setLocale = (newLocale: Locale) => {
     setLocaleState(newLocale);
@@ -68,36 +74,19 @@ export function I18nProvider({ children }: { children: ReactNode }) {
     document.cookie = `herbally-locale=${newLocale};path=/;max-age=31536000`;
   };
 
+  // Build current dictionary: English is always available, French loads on demand
+  const dict =
+    locale === "fr" && frDict
+      ? frDict
+      : (enDict as Record<string, unknown>);
+
   const t = (key: string, params?: Record<string, string | number>): string => {
-    const dict = dictionaries[locale] || dictionaries[DEFAULT_LOCALE];
-    const keys = key.split(".");
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    let value: any = dict;
-
-    for (const k of keys) {
-      if (value && typeof value === "object" && k in value) {
-        value = value[k];
-      } else {
-        return key;
-      }
-    }
-
-    if (typeof value !== "string") {
-      return key;
-    }
-
-    if (params) {
-      return value.replace(/{(\w+)}/g, (_, param) => {
-        return String(params[param] ?? `{${param}}`);
-      });
-    }
-
-    return value;
+    return lookupTranslation(dict, key, params);
   };
 
   return (
     <I18nContext.Provider
-      value={{ locale, setLocale, t, detectedLocale, isLoading }}
+      value={{ locale, setLocale, t, detectedLocale }}
     >
       {children}
     </I18nContext.Provider>
