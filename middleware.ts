@@ -25,6 +25,7 @@ const adminRoutes = ["/admin"];
 const securityHeaders = {
   "X-Frame-Options": "DENY",
   "X-Content-Type-Options": "nosniff",
+  "X-XSS-Protection": "1; mode=block",
   "Referrer-Policy": "strict-origin-when-cross-origin",
   "X-DNS-Prefetch-Control": "on",
   "Permissions-Policy": "camera=(), microphone=(), geolocation=()",

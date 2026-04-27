@@ -59,6 +59,9 @@ jobs:
       NEXT_PUBLIC_SUPABASE_ANON_KEY: placeholder
       SUPABASE_SERVICE_ROLE_KEY: placeholder
       OPENROUTER_API_KEY: placeholder
+      SENTRY_ORG: placeholder
+      SENTRY_PROJECT: placeholder
+      SENTRY_AUTH_TOKEN: placeholder
     steps:
       - uses: actions/checkout@v4
       - uses: actions/setup-node@v4
