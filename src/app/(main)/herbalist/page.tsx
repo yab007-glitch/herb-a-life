@@ -3,9 +3,7 @@
  * The AI chatbot (Virtual Herbalist) should be accessible to all visitors
  * without requiring a login, as per the public-only nature of the app.
  */
-export const config = {
-  dynamic: 'force-dynamic'
-};
+export const dynamic = 'force-dynamic';
 
 import type { Metadata } from "next";
 import { cookies } from "next/headers";
