@@ -101,9 +101,10 @@
     "noResults": "Aucune herbe trouvée",
     "tryDifferent": "Essayez un autre terme de recherche",
     "popularSearches": "Recherches Populaires",
-    "resultsFound": "Trouvé {count} {noun} correspondant à \"{query}\"",
-    "herbSingular": "herbe",
-    "herbPlural": "herbes",
+    "resultsFound": {
+      "one": "Trouvé {count} herbe correspondant à \"{query}\"",
+      "other": "Trouvé {count} herbes correspondant à \"{query}\""
+    },
     "noHerbsQuery": "Aucune herbe trouvée pour \"{query}\"",
     "trySearching": "Essayez de rechercher un symptôme comme maux de tête, anxiété ou inflammation.",
     "browseAll": "Parcourir Toutes les Herbes",

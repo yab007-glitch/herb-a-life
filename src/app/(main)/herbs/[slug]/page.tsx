@@ -243,18 +243,24 @@ export default async function HerbDetailPage({ params }: Props) {
   const reviewedBy = herb.reviewed_by || t("herbDetailContent.editorialTeam");
   const reviewerCredentials = herb.reviewer_credentials || t("herbDetailContent.editorialCredentials");
 
-  // Fetch related herbs using smart comparison logic
+  // Fetch related herbs using smart comparison logic (same category only)
   let relatedHerbs: Array<{ name: string; slug: string; scientific_name: string }> = [];
   try {
     const supabaseClient = getAnonClient();
     if (supabaseClient) {
-      const { data: allHerbs } = await supabaseClient
+      let relatedQuery = supabaseClient
         .from("herbs")
         .select("name, slug, scientific_name, symptom_keywords, traditional_uses")
         .eq("is_published", true);
 
-      if (allHerbs) {
-        relatedHerbs = getComparisonHerbs(slug, allHerbs, 3);
+      if (herb.category_id) {
+        relatedQuery = relatedQuery.eq("category_id", herb.category_id);
+      }
+
+      const { data: categoryHerbs } = await relatedQuery;
+
+      if (categoryHerbs) {
+        relatedHerbs = getComparisonHerbs(slug, categoryHerbs, 3);
       }
     }
   } catch {

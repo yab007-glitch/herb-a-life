@@ -101,9 +101,10 @@
     "noResults": "No herbs found",
     "tryDifferent": "Try a different search term",
     "popularSearches": "Popular Searches",
-    "resultsFound": "Found {count} {noun} matching \"{query}\"",
-    "herbSingular": "herb",
-    "herbPlural": "herbs",
+    "resultsFound": {
+      "one": "Found {count} herb matching \"{query}\"",
+      "other": "Found {count} herbs matching \"{query}\""
+    },
     "noHerbsQuery": "No herbs found for \"{query}\"",
     "trySearching": "Try a single keyword like \"anxiety\", \"inflammation\", or \"sleep\". You can also browse by symptom category.",
     "browseAll": "Browse All Herbs",

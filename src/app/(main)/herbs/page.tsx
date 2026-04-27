@@ -12,7 +12,7 @@ import {
 } from "@/lib/actions/herbs";
 import { Flame, Stethoscope } from "lucide-react";
 import Script from "next/script";
-import { getServerTranslation, type Locale } from "@/lib/i18n/server";
+import { getServerTranslation, getServerPluralTranslation, type Locale } from "@/lib/i18n/server";
 import { cookies } from "next/headers";
 
 export const metadata: Metadata = {
@@ -71,8 +71,10 @@ export default async function HerbsPage({
   const category = params.category || "";
   const page = parseInt(params.page || "1", 10);
   const locale = await getLocale();
-  const t = (key: string, params?: Record<string, string | number>) => 
+  const t = (key: string, params?: Record<string, string | number>) =>
     getServerTranslation(locale, key, params);
+  const tPlural = (key: string, count: number, params?: Record<string, string | number>) =>
+    getServerPluralTranslation(locale, key, count, params);
 
   const [herbsResult, categoriesResult] = await Promise.all([
     getHerbs({ query, category, page }),
@@ -195,11 +197,7 @@ export default async function HerbsPage({
       {/* Search Results Label */}
       {query && herbs.length > 0 && (
         <p className="text-sm text-muted-foreground">
-          {t("herbs.resultsFound", { 
-            count: total, 
-            noun: total !== 1 ? t("herbs.herbPlural") : t("herbs.herbSingular"),
-            query 
-          })}
+          {tPlural("herbs.resultsFound", total, { query })}
         </p>
       )}
 

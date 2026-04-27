@@ -9,13 +9,14 @@ import {
   ReactNode,
 } from "react";
 import { DEFAULT_LOCALE, type Locale } from "@/lib/i18n/config";
-import { lookupTranslation } from "@/lib/i18n/utils";
+import { lookupTranslation, lookupPluralTranslation } from "@/lib/i18n/utils";
 import enDict from "@/lib/i18n/dictionaries/en.json";
 
 interface I18nContextType {
   locale: Locale;
   setLocale: (locale: Locale) => void;
   t: (key: string, params?: Record<string, string | number>) => string;
+  tPlural: (key: string, count: number, params?: Record<string, string | number>) => string;
   detectedLocale: Locale | null;
 }
 
@@ -89,9 +90,13 @@ export function I18nProvider({ children }: { children: ReactNode }) {
     return lookupTranslation(dict, key, params);
   };
 
+  const tPlural = (key: string, count: number, params?: Record<string, string | number>): string => {
+    return lookupPluralTranslation(dict, locale, key, count, params);
+  };
+
   return (
     <I18nContext.Provider
-      value={{ locale, setLocale, t, detectedLocale }}
+      value={{ locale, setLocale, t, tPlural, detectedLocale }}
     >
       {children}
     </I18nContext.Provider>

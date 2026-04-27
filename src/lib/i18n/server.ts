@@ -1,5 +1,5 @@
 import { DEFAULT_LOCALE, type Locale } from "./config";
-import { lookupTranslation } from "./utils";
+import { lookupTranslation, lookupPluralTranslation } from "./utils";
 import enDict from "./dictionaries/en.json";
 import frDict from "./dictionaries/fr.json";
 
@@ -24,6 +24,23 @@ export function getServerTranslation(
 ): string {
   const dict = dictionaries[locale] || dictionaries[DEFAULT_LOCALE];
   return lookupTranslation(dict, key, params);
+}
+
+/**
+ * Server-side plural translation for use in Server Components
+ * @param locale - The locale to use (defaults to 'en')
+ * @param key - The translation key base (e.g., "herbs.resultsFound")
+ * @param count - The numeric count to determine plural form
+ * @param params - Optional additional parameters for interpolation
+ */
+export function getServerPluralTranslation(
+  locale: Locale = DEFAULT_LOCALE,
+  key: string,
+  count: number,
+  params?: Record<string, string | number>
+): string {
+  const dict = dictionaries[locale] || dictionaries[DEFAULT_LOCALE];
+  return lookupPluralTranslation(dict, locale, key, count, params);
 }
 
 /**
