@@ -59,7 +59,7 @@ export function SmartSearch({ defaultValue = "", category }: SmartSearchProps) {
 
       timeoutRef.current = window.setTimeout(() => {
         handleSearch(value);
-      }, 500);
+      }, 300);
     },
     [handleSearch]
   );

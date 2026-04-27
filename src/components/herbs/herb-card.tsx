@@ -90,11 +90,18 @@ export function HerbCard({ herb, className }: HerbCardProps) {
     IconComponents[getCategoryIconKey(herb.herb_categories?.name)];
   const primaryBenefit = herb.traditional_uses?.[0];
 
+  const safetyLabelKey =
+    safetyLevel === "safe"
+      ? "herbBadges.safetySafe"
+      : safetyLevel === "unsafe"
+        ? "herbBadges.safetyUnsafe"
+        : "herbBadges.safetyCaution";
+
   return (
     <Link
       href={`/herbs/${herb.slug}`}
       className="group"
-      aria-label={`View details for ${herb.name}`}
+      aria-label={`${herb.name}. ${t(safetyLabelKey)}`}
     >
       <Card
         className={cn(

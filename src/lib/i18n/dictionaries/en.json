@@ -1041,7 +1041,10 @@
     "pregnancy": "Pregnancy",
     "nursing": "Nursing",
     "herb": "Herb",
-    "pregnancyRisk": "Pregnancy/Nursing Risk"
+    "pregnancyRisk": "Pregnancy/Nursing Risk",
+    "safetySafe": "Safe for pregnancy and nursing",
+    "safetyCaution": "Caution: check pregnancy or nursing safety",
+    "safetyUnsafe": "Unsafe for pregnancy or nursing"
   },
   "compare": {
     "notFound": "Herb Comparison Not Found",

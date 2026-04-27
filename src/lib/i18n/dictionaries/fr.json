@@ -1041,7 +1041,10 @@
     "pregnancy": "Grossesse",
     "nursing": "Allaitement",
     "herb": "Plante",
-    "pregnancyRisk": "Risque Grossesse/Allaitement"
+    "pregnancyRisk": "Risque Grossesse/Allaitement",
+    "safetySafe": "Sûr pendant la grossesse et l'allaitement",
+    "safetyCaution": "Attention : vérifier la sécurité grossesse/allaitement",
+    "safetyUnsafe": "Non sûr pendant la grossesse ou l'allaitement"
   },
   "compare": {
     "notFound": "Comparaison de Plantes Non Trouvée",

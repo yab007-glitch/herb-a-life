@@ -36,6 +36,16 @@ export function AnimatedCounter({ value, className }: AnimatedCounterProps) {
   const animate = useCallback(() => {
     if (target === 0) return;
 
+    // Respect reduced motion preference
+    const prefersReducedMotion =
+      typeof window !== "undefined" &&
+      window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+
+    if (prefersReducedMotion) {
+      setDisplayValue(target);
+      return;
+    }
+
     const duration = 1500;
     const startTime = performance.now();
 
