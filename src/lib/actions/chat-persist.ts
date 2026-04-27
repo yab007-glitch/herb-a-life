@@ -18,9 +18,6 @@ export type PersistedChatMessage = {
   createdAt: string;
 };
 
-/**
- * Create a new chat session for a guest (anonymous) user
- */
 export async function createGuestSession(
   guestId: string,
   herbContext?: string | null
@@ -52,21 +49,16 @@ export async function createGuestSession(
   }
 }
 
-/**
- * Get all chat sessions for a guest user
- */
 export async function getGuestSessions(
   guestId: string
 ): Promise<PersistedChatSession[]> {
   try {
     const supabase = createAdminClient();
-
     const { data, error } = await supabase.rpc("get_guest_chat_sessions", {
       p_guest_id: guestId,
     });
 
     if (error || !data) return [];
-
     return data.map((s: Record<string, unknown>) => ({
       id: s.id as string,
       title: s.title as string,
@@ -80,17 +72,12 @@ export async function getGuestSessions(
   }
 }
 
-/**
- * Get a chat session with all its messages for a guest user
- */
 export async function getGuestSession(
   sessionId: string,
   guestId: string
 ): Promise<PersistedChatSession | null> {
   try {
     const supabase = createAdminClient();
-
-    // Verify session belongs to this guest
     const { data: session, error: sessionError } = await supabase
       .from("chat_sessions")
       .select("id, title, herb_context, created_at, updated_at, guest_id")
@@ -99,12 +86,10 @@ export async function getGuestSession(
       .single();
 
     if (sessionError || !session) return null;
-
     const { data: messages, error: messagesError } = await supabase.rpc(
       "get_guest_chat_messages",
       { p_session_id: sessionId }
     );
-
     if (messagesError) return null;
 
     return {
@@ -125,9 +110,6 @@ export async function getGuestSession(
   }
 }
 
-/**
- * Add a message to a guest chat session
- */
 export async function addGuestMessage(
   sessionId: string,
   role: "user" | "assistant" | "system",
@@ -161,9 +143,6 @@ export async function addGuestMessage(
   }
 }
 
-/**
- * Delete a guest chat session and all its messages
- */
 export async function deleteGuestSession(
   sessionId: string,
   guestId: string
@@ -175,42 +154,8 @@ export async function deleteGuestSession(
       p_session_id: sessionId,
       p_guest_id: guestId,
     });
-
     return !error && !!data;
   } catch {
     return false;
   }
-}
-
-// Keep the old authenticated versions for backward compat
-// (these won't be used in the public app, but don't break existing code)
-
-export async function createPersistedSession(
-  _herbContext?: string | null
-): Promise<PersistedChatSession | null> {
-  return null; // No auth in public app
-}
-
-export async function getPersistedSessions(): Promise<PersistedChatSession[]> {
-  return [];
-}
-
-export async function getPersistedSession(
-  _sessionId: string
-): Promise<PersistedChatSession | null> {
-  return null;
-}
-
-export async function addPersistedMessage(
-  _sessionId: string,
-  _role: "user" | "assistant" | "system",
-  _content: string
-): Promise<PersistedChatMessage | null> {
-  return null;
-}
-
-export async function deletePersistedSession(
-  _sessionId: string
-): Promise<boolean> {
-  return false;
 }

@@ -16,7 +16,11 @@ interface I18nContextType {
   locale: Locale;
   setLocale: (locale: Locale) => void;
   t: (key: string, params?: Record<string, string | number>) => string;
-  tPlural: (key: string, count: number, params?: Record<string, string | number>) => string;
+  tPlural: (
+    key: string,
+    count: number,
+    params?: Record<string, string | number>
+  ) => string;
   detectedLocale: Locale | null;
 }
 
@@ -73,7 +77,7 @@ export function I18nProvider({ children }: { children: ReactNode }) {
     if (newLocale === locale) return;
     setLocaleState(newLocale);
     localStorage.setItem("herbally-locale", newLocale);
-    document.cookie = `herbally-locale=${newLocale};path=/;max-age=31536000`;
+    document.cookie = `herbally-locale=${newLocale};path=/;max-age=31536000;SameSite=Lax`;
     // Reload so server components pick up the new locale from the cookie
     if (typeof window !== "undefined") {
       window.location.reload();
@@ -82,15 +86,17 @@ export function I18nProvider({ children }: { children: ReactNode }) {
 
   // Build current dictionary: English is always available, French loads on demand
   const dict =
-    locale === "fr" && frDict
-      ? frDict
-      : (enDict as Record<string, unknown>);
+    locale === "fr" && frDict ? frDict : (enDict as Record<string, unknown>);
 
   const t = (key: string, params?: Record<string, string | number>): string => {
     return lookupTranslation(dict, key, params);
   };
 
-  const tPlural = (key: string, count: number, params?: Record<string, string | number>): string => {
+  const tPlural = (
+    key: string,
+    count: number,
+    params?: Record<string, string | number>
+  ): string => {
     return lookupPluralTranslation(dict, locale, key, count, params);
   };
 

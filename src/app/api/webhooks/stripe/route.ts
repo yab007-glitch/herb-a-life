@@ -5,10 +5,10 @@ let stripeInstance: Stripe | null = null;
 
 function getStripe(): Stripe | null {
   if (stripeInstance) return stripeInstance;
-  
+
   const key = process.env.STRIPE_SECRET_KEY;
   if (!key) return null;
-  
+
   try {
     stripeInstance = new Stripe(key);
     return stripeInstance;
@@ -134,11 +134,5 @@ export async function POST(request: NextRequest) {
   }
 }
 
-// Optional: GET endpoint to view recent donations (admin only in production)
-export async function GET() {
-  // In production, add authentication here
-  return NextResponse.json({
-    donations: donationLog.slice(-10),
-    total: donationLog.reduce((sum, d) => sum + d.amount, 0),
-  });
-}
+// GET endpoint removed — donation data must not be exposed publicly.
+// In production, store donations in Supabase and query via authenticated admin routes.

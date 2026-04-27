@@ -2,7 +2,12 @@
 
 import { createClient } from "@/lib/supabase/server";
 import { cookies } from "next/headers";
-import { localizeHerb, localizeInteraction, localizeCategoryName } from "@/lib/utils/localize-herb";
+import {
+  localizeHerb,
+  localizeInteraction,
+  localizeCategoryName,
+} from "@/lib/utils/localize-herb";
+import { expandQueryToKeywords } from "@/lib/data/synonym-map";
 import type {
   ActionResponse,
   Herb,
@@ -21,76 +26,6 @@ async function getLocale(): Promise<string> {
 }
 
 const ITEMS_PER_PAGE = 20;
-
-/**
- * Symptom keyword mapping — maps common user search terms to DB symptom_keywords
- * Users search in natural language; DB uses specific keywords
- */
-const SYNONYM_MAP: Record<string, string[]> = {
-  // Common mental health searches
-  anxiety: ["anxiety", "stress", "calm", "relax", "nervous"],
-  stress: ["stress", "anxiety", "adaptogen", "calm"],
-  depression: ["depression", "mood", "anxiety"],
-  sleep: ["sleep", "insomnia", "calm", "relax", "sedative"],
-  calm: ["calm", "anxiety", "relax", "sleep", "nervine"],
-  relax: ["relax", "calm", "sleep", "anxiety", "muscle"],
-  focus: ["focus", "cognitive", "memory", "concentration", "brain"],
-  energy: ["energy", "stimulant", "adaptogen", "fatigue"],
-  pain: ["pain", "analgesic", "anti-inflammatory", "inflammation"],
-  headache: ["headache", "migraine", "pain"],
-  inflammation: ["inflammation", "anti-inflammatory", "pain", "swelling"],
-  // Physical health
-  digestion: ["digestion", "digestive", "stomach", "gut", "nausea", "bloating"],
-  stomach: ["digestion", "stomach", "nausea", "digestive"],
-  nausea: ["nausea", "digestion", "digestive", "stomach"],
-  constipation: ["constipation", "digestion", "laxative", "digestive"],
-  liver: ["liver", "hepatoprotective", "detox"],
-  blood_pressure: ["blood-pressure", "cardiovascular", "heart"],
-  bloodpressure: ["blood-pressure", "cardiovascular", "heart"],
-  cholesterol: ["cholesterol", "cardiovascular", "lipid"],
-  heart: ["cardiovascular", "heart", "blood-pressure", "circulation"],
-  immune: ["immune", "antiviral", "antibacterial", "infection"],
-  cold: ["cold", "immune", "antiviral", "respiratory", "cough"],
-  cough: ["cough", "respiratory", "cold", "throat"],
-  allergy: ["allergy", "antihistamine", "immune"],
-  // Women's health
-  menstrual: ["menstrual", "hormonal", "cramps", "pms"],
-  menopause: ["menopause", "hormonal", "hot flashes"],
-  hormonal: ["hormonal", "menstrual", "menopause", "endocrine"],
-  // Skin
-  acne: ["skin", "acne", "anti-inflammatory"],
-  skin: ["skin", "wound", "anti-inflammatory", "antimicrobial"],
-  wound: ["wound", "skin", "healing", "antimicrobial"],
-  // Men's health
-  prostate: ["prostate", "saw-palmetto", "urinary"],
-  testosterone: ["testosterone", "mens", "energy", "libido"],
-  // General
-  weight: ["weight", "metabolic", "digestion"],
-  diabetes: ["blood-sugar", "diabetes", "metabolic", "glucose"],
-  blood_sugar: ["blood-sugar", "diabetes", "metabolic", "glucose"],
-  detox: ["liver", "detox", "cleansing"],
-};
-
-/**
- * Expand a user query into DB-friendly symptom keywords using synonym mapping
- */
-function expandQueryToKeywords(query: string): string[] {
-  const words = query.toLowerCase().split(/\s+/).filter(Boolean);
-  const keywords = new Set<string>();
-
-  for (const word of words) {
-    // Direct mapping
-    if (SYNONYM_MAP[word]) {
-      SYNONYM_MAP[word].forEach(k => keywords.add(k));
-    }
-    // Always include the word itself
-    keywords.add(word);
-    // Also try common variations
-    keywords.add(word.replace(/[_-]/g, " "));
-  }
-
-  return Array.from(keywords);
-}
 
 export async function getHerbs(params: {
   query?: string;
@@ -115,12 +50,9 @@ export async function getHerbs(params: {
     if (params.query) {
       const q = params.query.trim();
       const words = q.split(/\s+/).filter(Boolean);
-
       if (words.length > 0) {
-        // Strategy: Expand query to symptom keywords, use overlaps for broad match
         const expandedKeywords = expandQueryToKeywords(q);
 
-        // Step 1: Try symptom_keywords overlap (any keyword matches)
         const { data: keywordResults } = await supabase
           .from("herbs")
           .select("id, evidence_level")
@@ -128,24 +60,32 @@ export async function getHerbs(params: {
           .overlaps("symptom_keywords", expandedKeywords)
           .limit(500);
 
-        let matchedIds: string[] = (keywordResults || []).map((h: { id: string }) => h.id);
-
-        // Step 2: If keyword match found results, use them (ranked by evidence)
+        let matchedIds: string[] = (keywordResults || []).map(
+          (h: { id: string }) => h.id
+        );
         if (matchedIds.length > 0) {
-          // Sort by evidence level: A first, then B, etc.
-          const evidenceOrder: Record<string, number> = { A: 0, B: 1, C: 2, D: 3, trad: 4 };
-          const sortedResults = (keywordResults || []).sort((a: { evidence_level: string | null }, b: { evidence_level: string | null }) => {
-            const ea = evidenceOrder[a.evidence_level || "C"] ?? 2;
-            const eb = evidenceOrder[b.evidence_level || "C"] ?? 2;
-            return ea - eb;
-          });
+          const evidenceOrder: Record<string, number> = {
+            A: 0,
+            B: 1,
+            C: 2,
+            D: 3,
+            trad: 4,
+          };
+          const sortedResults = (keywordResults || []).sort(
+            (
+              a: { evidence_level: string | null },
+              b: { evidence_level: string | null }
+            ) => {
+              const ea = evidenceOrder[a.evidence_level || "C"] ?? 2;
+              const eb = evidenceOrder[b.evidence_level || "C"] ?? 2;
+              return ea - eb;
+            }
+          );
           matchedIds = sortedResults.map((h: { id: string }) => h.id);
           query = query.in("id", matchedIds);
         } else {
-          // Step 3: Fallback to full-text search across name, description, uses
-          // Build OR conditions for each word
           const conditions = words
-            .flatMap(w => [
+            .flatMap((w) => [
               `name.ilike.%${w}%`,
               `scientific_name.ilike.%${w}%`,
               `description.ilike.%${w}%`,
@@ -219,7 +159,13 @@ export async function getHerbBySlug(
     const interactions = (herb.drug_interactions || []).map((ix) =>
       localizeInteraction(ix, locale)
     );
-    return { success: true, data: { ...herb, drug_interactions: interactions } as HerbWithInteractions };
+    return {
+      success: true,
+      data: {
+        ...herb,
+        drug_interactions: interactions,
+      } as HerbWithInteractions,
+    };
   } catch {
     return { success: false, error: "Failed to fetch herb" };
   }
@@ -241,7 +187,10 @@ export async function getHerbCategories() {
     const locale = await getLocale();
     const localized = (data || []).map((cat) => ({
       ...cat,
-      name: localizeCategoryName(cat as HerbCategory & { name_fr?: string | null }, locale),
+      name: localizeCategoryName(
+        cat as HerbCategory & { name_fr?: string | null },
+        locale
+      ),
     }));
     return { success: true, data: localized };
   } catch {
@@ -279,7 +228,6 @@ export async function searchHerbs(
   try {
     const supabase = await createClient();
 
-    // Try symptom keywords first with synonym expansion
     const expandedKeywords = expandQueryToKeywords(term);
     const { data: keywordResults } = await supabase
       .from("herbs")
@@ -290,16 +238,26 @@ export async function searchHerbs(
 
     const locale = await getLocale();
     if (keywordResults && keywordResults.length > 0) {
-      const evidenceOrder: Record<string, number> = { A: 0, B: 1, C: 2, D: 3, trad: 4 };
-      const sorted = keywordResults.sort((a: { evidence_level: string | null }, b: { evidence_level: string | null }) => {
-        const ea = evidenceOrder[a.evidence_level || "C"] ?? 2;
-        const eb = evidenceOrder[b.evidence_level || "C"] ?? 2;
-        return ea - eb;
-      });
+      const evidenceOrder: Record<string, number> = {
+        A: 0,
+        B: 1,
+        C: 2,
+        D: 3,
+        trad: 4,
+      };
+      const sorted = keywordResults.sort(
+        (
+          a: { evidence_level: string | null },
+          b: { evidence_level: string | null }
+        ) => {
+          const ea = evidenceOrder[a.evidence_level || "C"] ?? 2;
+          const eb = evidenceOrder[b.evidence_level || "C"] ?? 2;
+          return ea - eb;
+        }
+      );
       return { success: true, data: sorted as Herb[] };
     }
 
-    // Fallback to text search
     const { data, error } = await supabase
       .from("herbs")
       .select("id, name, slug, scientific_name, translations")
@@ -313,7 +271,10 @@ export async function searchHerbs(
       return { success: false, error: error.message };
     }
 
-    return { success: true, data: (data || []).map((h) => localizeHerb(h as Herb, locale)) as Herb[] };
+    return {
+      success: true,
+      data: (data || []).map((h) => localizeHerb(h as Herb, locale)) as Herb[],
+    };
   } catch {
     return { success: false, error: "Failed to search herbs" };
   }

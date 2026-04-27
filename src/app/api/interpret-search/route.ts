@@ -1,7 +1,19 @@
 import { NextResponse, type NextRequest } from "next/server";
 import { openai, MODEL } from "@/lib/ai/openai-client";
+import { rateLimit } from "@/lib/rate-limit";
 
 export async function POST(request: NextRequest) {
+  const ip =
+    request.headers.get("x-forwarded-for")?.split(",")[0]?.trim() ??
+    "unknown";
+  const { success } = await rateLimit(ip, 20, 60_000);
+  if (!success) {
+    return NextResponse.json(
+      { error: "Too many requests. Please try again later." },
+      { status: 429, headers: { "Retry-After": "60" } }
+    );
+  }
+
   let originalQuery = "";
   try {
     const { query } = await request.json();
@@ -11,7 +23,6 @@ export async function POST(request: NextRequest) {
       return NextResponse.json({ keywords: [query || ""] });
     }
 
-    // If query is already a simple keyword (1-2 words, no complex phrasing), skip AI
     const words = query.trim().split(/\s+/);
     if (words.length <= 2 && /^[a-zA-Z\s]+$/.test(query)) {
       return NextResponse.json({ keywords: [query.trim().toLowerCase()] });
@@ -28,7 +39,6 @@ export async function POST(request: NextRequest) {
         {
           role: "user",
           content: `Extract search keywords: "${query}"
-
 Examples:
 "my stomach hurts after eating" → ["digestive","bloating","stomach pain"]
 "I can't sleep and feel anxious" → ["insomnia","anxiety"]
@@ -41,7 +51,6 @@ Examples:
 
     const text = response.choices[0]?.message?.content?.trim() ?? "";
 
-    // Parse the JSON array from the response
     try {
       const parsed = JSON.parse(text);
       if (Array.isArray(parsed) && parsed.length > 0) {
@@ -55,9 +64,10 @@ Examples:
       // If AI response isn't valid JSON, extract words manually
     }
 
-    // Fallback: use the original query
     return NextResponse.json({ keywords: [query.trim().toLowerCase()] });
   } catch {
-    return NextResponse.json({ keywords: [originalQuery.toLowerCase() || ""] });
+    return NextResponse.json({
+      keywords: [originalQuery.toLowerCase() || ""],
+    });
   }
 }
