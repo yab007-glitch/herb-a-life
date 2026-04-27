@@ -15,11 +15,14 @@ export function LanguageSelector() {
 
   return (
     <DropdownMenu>
-      <DropdownMenuTrigger className="inline-flex shrink-0 items-center justify-center rounded-full size-8 hover:bg-muted hover:text-foreground transition-all outline-none focus-visible:border-ring focus-visible:ring-3 focus-visible:ring-ring/50">
+      <DropdownMenuTrigger className="inline-flex shrink-0 items-center justify-center gap-1.5 rounded-full h-11 min-w-11 px-2.5 hover:bg-muted hover:text-foreground transition-all outline-none focus-visible:border-ring focus-visible:ring-3 focus-visible:ring-ring/50">
         <Globe className="size-5" />
+        <span className="text-xs font-semibold uppercase tracking-wide hidden sm:inline">
+          {locale}
+        </span>
         <span className="sr-only">{t("common.changeLanguage")}</span>
       </DropdownMenuTrigger>
-      <DropdownMenuContent align="end" className="w-48">
+      <DropdownMenuContent align="end" className="w-52">
         {/* Detected language suggestion */}
         {detectedLocale && detectedLocale !== locale && (
           <div className="px-2 py-1.5 text-xs text-muted-foreground border-b">
@@ -40,7 +43,7 @@ export function LanguageSelector() {
             onClick={() => setLocale(lang.code)}
             className={lang.code === locale ? "bg-muted/50 font-medium" : ""}
           >
-            <span className="mr-2">{lang.flag}</span>
+            <span className="mr-2 text-base" aria-hidden="true">{lang.flag}</span>
             {lang.nativeName}
             <span className="ml-auto text-xs text-muted-foreground">
               {lang.name}

@@ -2,7 +2,7 @@
 
 import Link from "next/link";
 import { useState } from "react";
-import { Leaf, Menu, Heart, Sparkles } from "lucide-react";
+import { Leaf, Menu, Heart, Sparkles, Globe, Moon, Sun, Monitor } from "lucide-react";
 import {
   Sheet,
   SheetTrigger,
@@ -13,7 +13,10 @@ import {
 import { ThemeToggle } from "@/components/theme/theme-toggle";
 import { MissionModal } from "@/components/donations/mission-modal";
 import { LanguageSelector } from "@/components/i18n/language-selector";
+import { LanguageDrawer } from "@/components/i18n/language-drawer";
 import { useI18n } from "@/components/i18n/i18n-provider";
+import { LANGUAGES } from "@/lib/i18n/config";
+import { cn } from "@/lib/utils";
 
 const navLinks = [
   { href: "/symptoms", labelKey: "nav.symptoms" },
@@ -23,10 +26,44 @@ const navLinks = [
   { href: "/about", labelKey: "nav.about" },
 ];
 
+type Theme = "light" | "dark" | "system";
+
+function getMobileThemeIcon(theme: Theme) {
+  if (theme === "dark") return Moon;
+  if (theme === "light") return Sun;
+  return Monitor;
+}
+
+function applyMobileTheme(theme: Theme) {
+  const root = document.documentElement;
+  root.classList.remove("light", "dark");
+  if (theme === "system") {
+    const systemTheme = window.matchMedia("(prefers-color-scheme: dark)").matches
+      ? "dark"
+      : "light";
+    root.classList.add(systemTheme);
+  } else {
+    root.classList.add(theme);
+  }
+}
+
 export function MarketingNavbar() {
   const [open, setOpen] = useState(false);
   const [showMission, setShowMission] = useState(false);
-  const { t } = useI18n();
+  const [showLangDrawer, setShowLangDrawer] = useState(false);
+  const { t, locale } = useI18n();
+
+  const currentLang = LANGUAGES.find((l) => l.code === locale);
+  const [mobileTheme, setMobileTheme] = useState<Theme>(() => {
+    if (typeof window === "undefined") return "system";
+    return (localStorage.getItem("theme") as Theme) || "system";
+  });
+
+  function handleMobileThemeChange(newTheme: Theme) {
+    setMobileTheme(newTheme);
+    localStorage.setItem("theme", newTheme);
+    applyMobileTheme(newTheme);
+  }
 
   return (
     <>
@@ -100,7 +137,52 @@ export function MarketingNavbar() {
                     {t(link.labelKey)}
                   </Link>
                 ))}
-                <div className="mt-4 flex flex-col gap-2 border-t pt-4">
+                {/* Mobile utilities */}
+                <div className="mt-4 space-y-2 border-t pt-4">
+                  <button
+                    type="button"
+                    onClick={() => {
+                      setOpen(false);
+                      setShowLangDrawer(true);
+                    }}
+                    className="flex w-full items-center gap-3 rounded-lg px-4 py-3 text-sm font-medium text-muted-foreground transition-colors hover:bg-muted hover:text-foreground"
+                  >
+                    <Globe className="size-4" />
+                    <span className="flex-1 text-left">{t("common.language")}</span>
+                    {currentLang && (
+                      <span className="flex items-center gap-1.5 text-xs text-muted-foreground">
+                        <span aria-hidden="true">{currentLang.flag}</span>
+                        <span className="uppercase">{currentLang.code}</span>
+                      </span>
+                    )}
+                  </button>
+
+                  {/* Mobile theme toggle */}
+                  <div className="flex items-center gap-2 px-4 py-2">
+                    <span className="text-sm text-muted-foreground">{t("common.theme")}</span>
+                    <div className="ml-auto flex items-center gap-1 rounded-lg border p-1">
+                      {(["light", "dark", "system"] as Theme[]).map((th) => {
+                        const Icon = getMobileThemeIcon(th);
+                        return (
+                          <button
+                            key={th}
+                            type="button"
+                            onClick={() => handleMobileThemeChange(th)}
+                            className={cn(
+                              "inline-flex size-9 items-center justify-center rounded-md transition-colors",
+                              mobileTheme === th
+                                ? "bg-primary text-primary-foreground"
+                                : "text-muted-foreground hover:bg-muted"
+                            )}
+                            aria-label={t(`common.${th}`)}
+                          >
+                            <Icon className="size-4" />
+                          </button>
+                        );
+                      })}
+                    </div>
+                  </div>
+
                   <button
                     type="button"
                     onClick={() => {
@@ -122,6 +204,9 @@ export function MarketingNavbar() {
 
       {/* Mission Modal */}
       <MissionModal open={showMission} onOpenChange={setShowMission} />
+
+      {/* Language Drawer */}
+      <LanguageDrawer open={showLangDrawer} onOpenChange={setShowLangDrawer} />
     </>
   );
 }

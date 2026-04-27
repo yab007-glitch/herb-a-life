@@ -69,9 +69,14 @@ export function I18nProvider({ children }: { children: ReactNode }) {
   }, [locale]);
 
   const setLocale = (newLocale: Locale) => {
+    if (newLocale === locale) return;
     setLocaleState(newLocale);
     localStorage.setItem("herbally-locale", newLocale);
     document.cookie = `herbally-locale=${newLocale};path=/;max-age=31536000`;
+    // Reload so server components pick up the new locale from the cookie
+    if (typeof window !== "undefined") {
+      window.location.reload();
+    }
   };
 
   // Build current dictionary: English is always available, French loads on demand
