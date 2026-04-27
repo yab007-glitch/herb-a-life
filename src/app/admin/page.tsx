@@ -6,11 +6,8 @@ import {
   ClipboardCheck,
   Activity,
   MessageSquare,
-  Eye,
-  TrendingUp,
 } from "lucide-react";
 import { createAdminClient } from "@/lib/supabase/admin";
-import type { SupabaseClient } from "@supabase/supabase-js";
 
 export const metadata = {
   title: "Admin Overview",

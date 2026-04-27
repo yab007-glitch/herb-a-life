@@ -8,12 +8,6 @@ export async function POST(request: NextRequest) {
     const baseUrl = (process.env.OPENROUTER_BASE_URL || "https://openrouter.ai/api/v1").trim();
     const model = (process.env.OPENROUTER_MODEL || "openrouter/free").trim();
 
-    console.log("API config:", {
-      hasKey: !!apiKey,
-      baseUrl,
-      model,
-    });
-
     if (!apiKey) {
       console.error("OpenRouter API key not configured");
       return NextResponse.json(
@@ -57,10 +51,7 @@ export async function POST(request: NextRequest) {
       })),
     ];
 
-    console.log("Calling OpenRouter:", model, "messages:", chatMessages.length);
-
     // Call OpenRouter API (OpenAI-compatible chat completions)
-    console.log("About to call OpenRouter at:", `${baseUrl}/chat/completions`);
     let response: Response;
     try {
       response = await fetch(`${baseUrl}/chat/completions`, {
@@ -77,7 +68,6 @@ export async function POST(request: NextRequest) {
           stream: true,
         }),
       });
-      console.log("OpenRouter response status:", response.status, response.statusText);
     } catch (fetchError) {
       console.error("Fetch to OpenRouter failed:", fetchError);
       return NextResponse.json(

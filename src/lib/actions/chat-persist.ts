@@ -186,7 +186,7 @@ export async function deleteGuestSession(
 // (these won't be used in the public app, but don't break existing code)
 
 export async function createPersistedSession(
-  herbContext?: string | null
+  _herbContext?: string | null
 ): Promise<PersistedChatSession | null> {
   return null; // No auth in public app
 }
