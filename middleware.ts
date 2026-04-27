@@ -52,9 +52,47 @@ function applySecurityHeaders(response: NextResponse): NextResponse {
   return response;
 }
 
+/**
+ * Parse Accept-Language header and detect if French is the preferred language.
+ * Returns "fr" if French is preferred, null otherwise.
+ */
+function detectLocaleFromAcceptLanguage(acceptLanguage: string | null): string | null {
+  if (!acceptLanguage) return null;
+
+  // Parse "fr-FR,fr;q=0.9,en;q=0.8" -> extract language tags in order of preference
+  const entries = acceptLanguage.split(",").map((entry) => {
+    const [tag] = entry.trim().split(";");
+    const lang = tag.split("-")[0].toLowerCase();
+    const q = parseFloat(entry.split("q=")[1]) || 1.0;
+    return { lang, q };
+  });
+
+  // Return "fr" if it appears before "en" (or if en is absent)
+  for (const entry of entries.sort((a, b) => b.q - a.q)) {
+    if (entry.lang === "fr") return "fr";
+    if (entry.lang === "en") return null; // en is default, no cookie needed
+  }
+
+  return null;
+}
+
 export async function middleware(request: NextRequest) {
   const { supabaseResponse, user, supabase } = await updateSession(request);
   const path = request.nextUrl.pathname;
+
+  // Detect locale from Accept-Language header on first visit (no cookie yet)
+  // This prevents the flash-of-wrong-language for French visitors
+  if (!request.cookies.has("herbally-locale")) {
+    const detected = detectLocaleFromAcceptLanguage(
+      request.headers.get("Accept-Language")
+    );
+    if (detected) {
+      supabaseResponse.cookies.set("herbally-locale", detected, {
+        path: "/",
+        maxAge: 60 * 60 * 24 * 365, // 1 year
+      });
+    }
+  }
 
   // Allow public routes and herb detail pages
   const isPublic =
