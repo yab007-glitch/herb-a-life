@@ -213,11 +213,11 @@ export default async function HerbDetailPage({ params }: Props) {
           slug,
           summary: dbMonograph.summary,
           mechanism: dbMonograph.mechanism,
-          claims: dbMonograph.claims,
-          safetyNotes: dbMonograph.safety_notes,
-          drugInteractions: dbMonograph.drug_interactions,
-          pregnancyCategory: dbMonograph.pregnancy_category,
-          keyCitations: dbMonograph.key_citations,
+          claims: dbMonograph.claims as Monograph["claims"],
+          safetyNotes: dbMonograph.safety_notes as Monograph["safetyNotes"],
+          drugInteractions: dbMonograph.drug_interactions as Monograph["drugInteractions"],
+          pregnancyCategory: dbMonograph.pregnancy_category as Monograph["pregnancyCategory"],
+          keyCitations: dbMonograph.key_citations as Monograph["keyCitations"],
         };
       }
     } catch {
