@@ -2,10 +2,43 @@ import { NextResponse, type NextRequest } from "next/server";
 import { openai, MODEL } from "@/lib/ai/openai-client";
 import { rateLimit } from "@/lib/rate-limit";
 
+const MAX_BODY_SIZE = 10 * 1024; // 10KB max for search interpretation
+
+/**
+ * Extract the real client IP from request headers.
+ * Handles Vercel (x-vercel-forwarded-for), Render (rightmost x-forwarded-for),
+ * and Cloudflare (cf-connecting-ip).
+ */
+function getClientIP(request: NextRequest): string {
+  const vercelIP = request.headers.get("x-vercel-forwarded-for");
+  if (vercelIP) return vercelIP.trim();
+
+  const cfIP = request.headers.get("cf-connecting-ip");
+  if (cfIP) return cfIP.trim();
+
+  const forwarded = request.headers.get("x-forwarded-for");
+  if (forwarded) {
+    const ips = forwarded.split(",").map((s) => s.trim());
+    return ips[ips.length - 1] || "unknown";
+  }
+
+  return "unknown";
+}
+
 export async function POST(request: NextRequest) {
-  const ip =
-    request.headers.get("x-forwarded-for")?.split(",")[0]?.trim() ??
-    "unknown";
+  // Body size guard
+  const contentLength = parseInt(
+    request.headers.get("content-length") || "0",
+    10
+  );
+  if (contentLength > MAX_BODY_SIZE) {
+    return NextResponse.json(
+      { error: "Request body too large" },
+      { status: 413 }
+    );
+  }
+
+  const ip = getClientIP(request);
   const { success } = await rateLimit(ip, 20, 60_000);
   if (!success) {
     return NextResponse.json(
@@ -23,9 +56,11 @@ export async function POST(request: NextRequest) {
       return NextResponse.json({ keywords: [query || ""] });
     }
 
-    const words = query.trim().split(/\s+/);
-    if (words.length <= 2 && /^[a-zA-Z\s]+$/.test(query)) {
-      return NextResponse.json({ keywords: [query.trim().toLowerCase()] });
+    // Max 200 chars to prevent token abuse
+    const trimmed = query.trim().slice(0, 200);
+    const words = trimmed.split(/\s+/);
+    if (words.length <= 2 && /^[a-zA-Z\s]+$/.test(trimmed)) {
+      return NextResponse.json({ keywords: [trimmed.toLowerCase()] });
     }
 
     const response = await openai.chat.completions.create({
@@ -38,7 +73,7 @@ export async function POST(request: NextRequest) {
         },
         {
           role: "user",
-          content: `Extract search keywords: "${query}"
+          content: `Extract search keywords: "${trimmed}"
 Examples:
 "my stomach hurts after eating" → ["digestive","bloating","stomach pain"]
 "I can't sleep and feel anxious" → ["insomnia","anxiety"]
@@ -61,11 +96,12 @@ Examples:
         });
       }
     } catch {
-      // If AI response isn't valid JSON, extract words manually
+      // If AI response isn't valid JSON, fall through to fallback
     }
 
-    return NextResponse.json({ keywords: [query.trim().toLowerCase()] });
-  } catch {
+    return NextResponse.json({ keywords: [trimmed.toLowerCase()] });
+  } catch (error) {
+    console.error("[interpret-search] Failed:", error);
     return NextResponse.json({
       keywords: [originalQuery.toLowerCase() || ""],
     });

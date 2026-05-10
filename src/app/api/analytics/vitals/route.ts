@@ -31,14 +31,12 @@ export async function POST(request: NextRequest) {
 
     const body = parsed.data;
 
-    // Store in Supabase if configured
-    const supabaseUrl = process.env.SUPABASE_SERVICE_ROLE_KEY
-      ? process.env.NEXT_PUBLIC_SUPABASE_URL
-      : null;
+    // Store in Supabase if configured — uses anon key (safe for public endpoint)
+    const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL;
+    const supabaseAnonKey = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY;
 
-    if (supabaseUrl) {
-      const supabaseKey = process.env.SUPABASE_SERVICE_ROLE_KEY!;
-      const supabase = createClient(supabaseUrl, supabaseKey);
+    if (supabaseUrl && supabaseAnonKey) {
+      const supabase = createClient(supabaseUrl, supabaseAnonKey);
 
       const { error } = await supabase.from("web_vitals").insert({
         metric_name: body.name,
@@ -54,14 +52,6 @@ export async function POST(request: NextRequest) {
         console.error("Failed to store web vital:", error);
       }
     }
-
-    // Log to console for now (until DB table created)
-    console.log("[Web Vitals]", {
-      name: body.name,
-      value: body.value,
-      rating: body.rating,
-      pathname: body.pathname,
-    });
 
     return NextResponse.json({ success: true });
   } catch (error) {

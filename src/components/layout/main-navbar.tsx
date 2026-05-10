@@ -1,6 +1,7 @@
 "use client";
 
 import Link from "next/link";
+import { usePathname } from "next/navigation";
 import { useState } from "react";
 import {
   Leaf,
@@ -63,6 +64,7 @@ export function MainNavbar() {
   const [showMission, setShowMission] = useState(false);
   const [showLangDrawer, setShowLangDrawer] = useState(false);
   const { t, locale } = useI18n();
+  const pathname = usePathname();
 
   const currentLang = LANGUAGES.find((l) => l.code === locale);
   const [mobileTheme, setMobileTheme] = useState<Theme>(() => {
@@ -98,12 +100,17 @@ export function MainNavbar() {
           <nav className="hidden items-center gap-1 md:flex">
             {navLinks.map((link) => {
               const Icon = link.icon;
+              const isActive = pathname === link.href || pathname.startsWith(link.href + "/");
               return (
                 <Link
                   key={link.href}
                   href={link.href}
+                  aria-current={isActive ? "page" : undefined}
                   className={cn(
-                    "flex items-center gap-2 rounded-lg px-4 py-2 text-sm font-medium text-muted-foreground transition-colors hover:bg-muted hover:text-foreground"
+                    "flex items-center gap-2 rounded-lg px-4 py-2 text-sm font-medium transition-colors hover:bg-muted hover:text-foreground",
+                    isActive
+                      ? "bg-muted text-foreground"
+                      : "text-muted-foreground"
                   )}
                 >
                   <Icon className="size-4" />

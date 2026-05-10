@@ -174,6 +174,7 @@ export default async function HerbDetailPage({ params }: Props) {
   const cookieStore = await cookies();
   const localeCookie = cookieStore.get("herbally-locale");
   const locale: Locale = (localeCookie?.value as Locale) || "en";
+  const baseUrl = process.env.NEXT_PUBLIC_APP_URL ?? "https://herbally.app";
 
   // Translation helper
   const t = (key: string, params?: Record<string, string | number>) =>
@@ -356,19 +357,19 @@ export default async function HerbDetailPage({ params }: Props) {
                 "@type": "ListItem",
                 position: 1,
                 name: t("herbDetailContent.breadcrumbHome"),
-                item: "https://herbally.app",
+                item: baseUrl,
               },
               {
                 "@type": "ListItem",
                 position: 2,
                 name: t("herbDetailContent.breadcrumbHerbs"),
-                item: "https://herbally.app/herbs",
+                item: `${baseUrl}/herbs`,
               },
               {
                 "@type": "ListItem",
                 position: 3,
                 name: herb.name,
-                item: `https://herbally.app/herbs/${slug}`,
+                item: `${baseUrl}/herbs/${slug}`,
               },
             ],
           }),

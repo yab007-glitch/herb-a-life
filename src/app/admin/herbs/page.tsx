@@ -82,7 +82,11 @@ export default async function AdminHerbsPage({
       <form className="mb-6 flex gap-2">
         <div className="relative flex-1 max-w-md">
           <Search className="absolute left-3 top-1/2 -translate-y-1/2 size-4 text-muted-foreground" />
+          <label htmlFor="admin-herb-search" className="sr-only">
+            Search herbs by name
+          </label>
           <input
+            id="admin-herb-search"
             type="text"
             name="q"
             defaultValue={query}

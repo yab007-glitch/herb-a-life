@@ -4,7 +4,7 @@ const STATIC_URLS = [
   "/herbs",
   "/symptoms",
   "/faq",
-  "/pharmacist",
+  "/herbalist",
   "/calculator",
 ];
 const OFFLINE_FALLBACK = "/offline.html";

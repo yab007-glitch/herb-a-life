@@ -43,11 +43,13 @@ export async function getChatSessions(): Promise<
       .limit(50);
 
     if (error) {
+      console.error("[chat.getChatSessions]", error);
       return { success: false, error: error.message };
     }
 
     return { success: true, data: (data || []) as ChatSession[] };
-  } catch {
+  } catch (error) {
+    console.error("[chat.getChatSessions]", error);
     return { success: false, error: "Failed to fetch chat sessions" };
   }
 }
@@ -76,11 +78,13 @@ export async function getChatSession(
       .single();
 
     if (error) {
+      console.error("[chat.getChatSession]", error);
       return { success: false, error: error.message };
     }
 
     return { success: true, data: data as ChatSession };
-  } catch {
+  } catch (error) {
+    console.error("[chat.getChatSession]", error);
     return { success: false, error: "Failed to fetch chat session" };
   }
 }
@@ -113,11 +117,13 @@ export async function createChatSession(
       .single();
 
     if (error) {
+      console.error("[chat.createChatSession]", error);
       return { success: false, error: error.message };
     }
 
     return { success: true, data: data as ChatSession };
-  } catch {
+  } catch (error) {
+    console.error("[chat.createChatSession]", error);
     return { success: false, error: "Failed to create chat session" };
   }
 }
@@ -172,11 +178,13 @@ export async function updateChatSession(
       .single();
 
     if (error) {
+      console.error("[chat.updateChatSession]", error);
       return { success: false, error: error.message };
     }
 
     return { success: true, data: data as ChatSession };
-  } catch {
+  } catch (error) {
+    console.error("[chat.updateChatSession]", error);
     return { success: false, error: "Failed to update chat session" };
   }
 }
@@ -204,11 +212,13 @@ export async function deleteChatSession(
       .eq("user_id", user.id);
 
     if (error) {
+      console.error("[chat.deleteChatSession]", error);
       return { success: false, error: error.message };
     }
 
     return { success: true, data: null };
-  } catch {
+  } catch (error) {
+    console.error("[chat.deleteChatSession]", error);
     return { success: false, error: "Failed to delete chat session" };
   }
 }

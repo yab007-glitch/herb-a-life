@@ -37,6 +37,7 @@ const securityHeaders = {
     "style-src 'self' 'unsafe-inline'",
     "font-src 'self' data:",
     "frame-src *.stripe.com",
+    "frame-ancestors 'none'",
   ].join("; "),
 };
 

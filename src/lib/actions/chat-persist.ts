@@ -1,6 +1,9 @@
 "use server";
 
-import { createAdminClient } from "@/lib/supabase/admin";
+import { getAnonClient } from "@/lib/supabase/anonymous";
+
+// Note: Supabase RPC functions for guest chat are SECURITY DEFINER
+// (see migration 00022), so they work with the anon key safely.
 
 export type PersistedChatSession = {
   id: string;
@@ -18,12 +21,18 @@ export type PersistedChatMessage = {
   createdAt: string;
 };
 
+function getSupabase() {
+  const supabase = getAnonClient();
+  if (!supabase) throw new Error("Supabase client not configured");
+  return supabase;
+}
+
 export async function createGuestSession(
   guestId: string,
   herbContext?: string | null
 ): Promise<PersistedChatSession | null> {
   try {
-    const supabase = createAdminClient();
+    const supabase = getSupabase();
 
     const { data, error } = await supabase.rpc("create_guest_chat_session", {
       p_guest_id: guestId,
@@ -53,7 +62,7 @@ export async function getGuestSessions(
   guestId: string
 ): Promise<PersistedChatSession[]> {
   try {
-    const supabase = createAdminClient();
+    const supabase = getSupabase();
     const { data, error } = await supabase.rpc("get_guest_chat_sessions", {
       p_guest_id: guestId,
     });
@@ -67,7 +76,8 @@ export async function getGuestSessions(
       updatedAt: s.updated_at as string,
       messages: [],
     }));
-  } catch {
+  } catch (error) {
+    console.error("[chat-persist] Get guest sessions error:", error);
     return [];
   }
 }
@@ -77,7 +87,7 @@ export async function getGuestSession(
   guestId: string
 ): Promise<PersistedChatSession | null> {
   try {
-    const supabase = createAdminClient();
+    const supabase = getSupabase();
     const { data: session, error: sessionError } = await supabase
       .from("chat_sessions")
       .select("id, title, herb_context, created_at, updated_at, guest_id")
@@ -105,7 +115,8 @@ export async function getGuestSession(
         createdAt: m.created_at as string,
       })),
     };
-  } catch {
+  } catch (error) {
+    console.error("[chat-persist] Get guest session error:", error);
     return null;
   }
 }
@@ -117,7 +128,7 @@ export async function addGuestMessage(
   guestId: string
 ): Promise<PersistedChatMessage | null> {
   try {
-    const supabase = createAdminClient();
+    const supabase = getSupabase();
 
     const { data, error } = await supabase.rpc("add_guest_chat_message", {
       p_session_id: sessionId,
@@ -148,14 +159,15 @@ export async function deleteGuestSession(
   guestId: string
 ): Promise<boolean> {
   try {
-    const supabase = createAdminClient();
+    const supabase = getSupabase();
 
     const { data, error } = await supabase.rpc("delete_guest_chat_session", {
       p_session_id: sessionId,
       p_guest_id: guestId,
     });
     return !error && !!data;
-  } catch {
+  } catch (error) {
+    console.error("[chat-persist] Delete guest session error:", error);
     return false;
   }
 }

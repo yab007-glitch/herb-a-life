@@ -2,6 +2,33 @@ import { NextResponse, type NextRequest } from "next/server";
 import { getSystemPrompt } from "@/lib/ai/system-prompt";
 import { rateLimit } from "@/lib/rate-limit";
 
+// Max request body size: 50KB (prevents memory exhaustion and excessive token usage)
+const MAX_BODY_SIZE = 50 * 1024;
+
+/**
+ * Extract the real client IP from request headers.
+ * Handles Vercel (x-vercel-forwarded-for), Render (rightmost x-forwarded-for),
+ * and Cloudflare (cf-connecting-ip).
+ */
+function getClientIP(request: NextRequest): string {
+  // Vercel: trusted forwarded-for
+  const vercelIP = request.headers.get("x-vercel-forwarded-for");
+  if (vercelIP) return vercelIP.trim();
+
+  // Cloudflare
+  const cfIP = request.headers.get("cf-connecting-ip");
+  if (cfIP) return cfIP.trim();
+
+  // Render / generic proxy: rightmost IP in x-forwarded-for
+  const forwarded = request.headers.get("x-forwarded-for");
+  if (forwarded) {
+    const ips = forwarded.split(",").map((s) => s.trim());
+    return ips[ips.length - 1] || "unknown";
+  }
+
+  return "unknown";
+}
+
 export async function POST(request: NextRequest) {
   const apiKey = process.env.OPENROUTER_API_KEY?.trim();
   const baseUrl = (
@@ -17,9 +44,20 @@ export async function POST(request: NextRequest) {
     );
   }
 
-  const ip =
-    request.headers.get("x-forwarded-for")?.split(",")[0]?.trim() ??
-    "unknown";
+  // Body size guard
+  const contentLength = parseInt(
+    request.headers.get("content-length") || "0",
+    10
+  );
+  if (contentLength > MAX_BODY_SIZE) {
+    return NextResponse.json(
+      { error: "Request body too large" },
+      { status: 413 }
+    );
+  }
+
+  // Rate limit using platform-aware IP extraction
+  const ip = getClientIP(request);
   const { success } = await rateLimit(ip, 20, 60_000);
   if (!success) {
     return NextResponse.json(
@@ -31,7 +69,12 @@ export async function POST(request: NextRequest) {
     );
   }
 
-  let body: { messages?: unknown; herbContext?: string; medications?: string[]; locale?: string };
+  let body: {
+    messages?: unknown;
+    herbContext?: string;
+    medications?: string[];
+    locale?: string;
+  };
   try {
     body = await request.json();
   } catch {
@@ -74,9 +117,7 @@ export async function POST(request: NextRequest) {
   } catch (fetchError) {
     console.error("Fetch to OpenRouter failed:", fetchError);
     return NextResponse.json(
-      {
-        error: `Fetch failed: ${fetchError instanceof Error ? fetchError.message : "Unknown"}`,
-      },
+      { error: "AI service is temporarily unavailable. Please try again." },
       { status: 500 }
     );
   }

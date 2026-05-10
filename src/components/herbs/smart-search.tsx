@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useCallback, useRef } from "react";
+import { useState, useCallback, useEffect } from "react";
 import { useRouter, useSearchParams } from "next/navigation";
 import { Search, X, Shuffle } from "lucide-react";
 import { Input } from "@/components/ui/input";
@@ -9,6 +9,7 @@ import {
   RecentSearches,
   useSaveSearch,
 } from "@/components/herbs/recent-searches";
+import { useDebounce } from "@/lib/hooks/use-debounce";
 import { cn } from "@/lib/utils";
 import { useI18n } from "@/components/i18n/i18n-provider";
 
@@ -24,7 +25,9 @@ export function SmartSearch({ defaultValue = "", category }: SmartSearchProps) {
   const [query, setQuery] = useState(defaultValue);
   const [isSearching, setIsSearching] = useState(false);
   const saveSearch = useSaveSearch();
-  const timeoutRef = useRef<number | null>(null);
+
+  // Debounce the query value using the project's useDebounce hook
+  const debouncedQuery = useDebounce(query, 300);
 
   const handleSearch = useCallback(
     (value: string) => {
@@ -48,27 +51,22 @@ export function SmartSearch({ defaultValue = "", category }: SmartSearchProps) {
     [category, router, searchParams, saveSearch]
   );
 
+  // Trigger search when debounced query changes (skip initial defaultValue)
+  useEffect(() => {
+    if (debouncedQuery && debouncedQuery !== defaultValue) {
+      handleSearch(debouncedQuery);
+    }
+  }, [debouncedQuery]); // eslint-disable-line react-hooks/exhaustive-deps
+
   const handleChange = useCallback(
     (e: React.ChangeEvent<HTMLInputElement>) => {
-      const value = e.target.value;
-      setQuery(value);
-
-      if (timeoutRef.current) {
-        clearTimeout(timeoutRef.current);
-      }
-
-      timeoutRef.current = window.setTimeout(() => {
-        handleSearch(value);
-      }, 300);
+      setQuery(e.target.value);
     },
-    [handleSearch]
+    []
   );
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-    if (timeoutRef.current) {
-      clearTimeout(timeoutRef.current);
-    }
     handleSearch(query);
   };
 
@@ -124,7 +122,8 @@ export function SmartSearch({ defaultValue = "", category }: SmartSearchProps) {
                   router.push(`/herbs/${data.slug}`);
                 }
               }
-            } catch {
+            } catch (error) {
+              console.error("[smart-search] Random herb error:", error);
               router.push("/herbs");
             }
           }}

@@ -20,12 +20,14 @@ async function getLocale(): Promise<string> {
   try {
     const store = await cookies();
     return store.get("herbally-locale")?.value === "fr" ? "fr" : "en";
-  } catch {
+  } catch (error) {
+    console.error("[herbs.getLocale]", error);
     return "en";
   }
 }
 
 const ITEMS_PER_PAGE = 20;
+const MAX_QUERY_LENGTH = 200;
 
 export async function getHerbs(params: {
   query?: string;
@@ -48,7 +50,7 @@ export async function getHerbs(params: {
       .range(from, to);
 
     if (params.query) {
-      const q = params.query.trim();
+      const q = params.query.trim().slice(0, MAX_QUERY_LENGTH);
       const words = q.split(/\s+/).filter(Boolean);
       if (words.length > 0) {
         const expandedKeywords = expandQueryToKeywords(q);
@@ -118,6 +120,7 @@ export async function getHerbs(params: {
     const { data, count, error } = await query;
 
     if (error) {
+      console.error("[herbs.getHerbs]", error);
       return { success: false, error: error.message };
     }
 
@@ -132,7 +135,8 @@ export async function getHerbs(params: {
         total: count || 0,
       },
     };
-  } catch {
+  } catch (error) {
+    console.error("[herbs.getHerbs]", error);
     return { success: false, error: "Failed to fetch herbs" };
   }
 }
@@ -151,6 +155,7 @@ export async function getHerbBySlug(
       .single();
 
     if (error) {
+      console.error("[herbs.getHerbBySlug]", error);
       return { success: false, error: error.message };
     }
 
@@ -166,7 +171,8 @@ export async function getHerbBySlug(
         drug_interactions: interactions,
       } as HerbWithInteractions,
     };
-  } catch {
+  } catch (error) {
+    console.error("[herbs.getHerbBySlug]", error);
     return { success: false, error: "Failed to fetch herb" };
   }
 }
@@ -181,6 +187,7 @@ export async function getHerbCategories() {
       .order("sort_order", { ascending: true });
 
     if (error) {
+      console.error("[herbs.getHerbCategories]", error);
       return { success: false, error: error.message };
     }
 
@@ -193,11 +200,16 @@ export async function getHerbCategories() {
       ),
     }));
     return { success: true, data: localized };
-  } catch {
+  } catch (error) {
+    console.error("[herbs.getHerbCategories]", error);
     return { success: false, error: "Failed to fetch categories" };
   }
 }
 
+/**
+ * Get herb counts for multiple symptoms in a single batched query.
+ * Avoids N+1 by combining all symptom searches into one ILIKE query.
+ */
 export async function getSymptomCounts(
   symptoms: string[]
 ): Promise<ActionResponse<Record<string, number>>> {
@@ -205,19 +217,37 @@ export async function getSymptomCounts(
     const supabase = await createClient();
     const counts: Record<string, number> = {};
 
-    await Promise.all(
-      symptoms.map(async (symptom) => {
-        const { count } = await supabase
-          .from("herbs")
-          .select("id", { count: "exact", head: true })
-          .eq("is_published", true)
-          .or(`name.ilike.%${symptom}%,description.ilike.%${symptom}%`);
-        counts[symptom] = count ?? 0;
-      })
-    );
+    // Build a single OR condition for all symptoms
+    const conditions = symptoms
+      .map((s) => `name.ilike.%${s}%,description.ilike.%${s}%`)
+      .join(",");
+
+    const { data, error } = await supabase
+      .from("herbs")
+      .select("name, description")
+      .eq("is_published", true)
+      .or(conditions)
+      .limit(1000);
+
+    if (error) {
+      console.error("[herbs.getSymptomCounts]", error);
+      return { success: false, error: error.message };
+    }
+
+    // Count matches per symptom from the single result set
+    for (const symptom of symptoms) {
+      const lower = symptom.toLowerCase();
+      counts[symptom] =
+        data?.filter(
+          (h) =>
+            h.name?.toLowerCase().includes(lower) ||
+            h.description?.toLowerCase().includes(lower)
+        ).length ?? 0;
+    }
 
     return { success: true, data: counts };
-  } catch {
+  } catch (error) {
+    console.error("[herbs.getSymptomCounts]", error);
     return { success: false, error: "Failed to fetch symptom counts" };
   }
 }
@@ -227,8 +257,9 @@ export async function searchHerbs(
 ): Promise<ActionResponse<Herb[]>> {
   try {
     const supabase = await createClient();
+    const safeTerm = term.trim().slice(0, MAX_QUERY_LENGTH);
 
-    const expandedKeywords = expandQueryToKeywords(term);
+    const expandedKeywords = expandQueryToKeywords(safeTerm);
     const { data: keywordResults } = await supabase
       .from("herbs")
       .select("id, name, slug, scientific_name, evidence_level")
@@ -263,11 +294,12 @@ export async function searchHerbs(
       .select("id, name, slug, scientific_name, translations")
       .eq("is_published", true)
       .or(
-        `name.ilike.%${term}%,scientific_name.ilike.%${term}%,description.ilike.%${term}%`
+        `name.ilike.%${safeTerm}%,scientific_name.ilike.%${safeTerm}%,description.ilike.%${safeTerm}%`
       )
       .limit(10);
 
     if (error) {
+      console.error("[herbs.searchHerbs]", error);
       return { success: false, error: error.message };
     }
 
@@ -275,7 +307,8 @@ export async function searchHerbs(
       success: true,
       data: (data || []).map((h) => localizeHerb(h as Herb, locale)) as Herb[],
     };
-  } catch {
+  } catch (error) {
+    console.error("[herbs.searchHerbs]", error);
     return { success: false, error: "Failed to search herbs" };
   }
 }
