@@ -25,7 +25,9 @@ export default function GlobalError({
         <AlertTriangle className="h-8 w-8 text-destructive" />
       </div>
       <div className="space-y-2">
-        <h2 className="text-2xl font-semibold">{t("errors.somethingWentWrong")}</h2>
+        <h2 className="text-2xl font-semibold">
+          {t("errors.somethingWentWrong")}
+        </h2>
         <p className="text-muted-foreground max-w-md">
           {t("errors.unexpectedError")}
         </p>

@@ -7,7 +7,7 @@ import { useI18n } from "@/components/i18n/i18n-provider";
 
 export default function NotFound() {
   const { t } = useI18n();
-  
+
   return (
     <div className="flex min-h-[60vh] flex-col items-center justify-center px-4 py-12 text-center">
       <div className="mb-6 flex size-20 items-center justify-center rounded-full bg-muted">

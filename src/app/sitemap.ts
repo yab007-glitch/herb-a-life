@@ -1,17 +1,10 @@
 import type { MetadataRoute } from "next";
-import { createClient } from "@supabase/supabase-js";
+import { getAnonClient } from "@/lib/supabase/anonymous";
 
-// Use anon client for sitemap (no cookies, no auth needed)
-function getAnonClient() {
-  const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL;
-  const supabaseKey = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY;
-
-  if (!supabaseUrl || !supabaseKey) {
-    return null;
-  }
-
-  return createClient(supabaseUrl, supabaseKey);
-}
+// Snapshot of last modification time for static pages.
+// Using a stable date prevents misleading Google into thinking
+// static content changes every hour (sitemap revalidate = 3600).
+const STATIC_PAGE_MODIFIED = new Date();
 
 export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   const baseUrl = process.env.NEXT_PUBLIC_APP_URL ?? "https://herbally.app";
@@ -20,79 +13,106 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   const staticPages: MetadataRoute.Sitemap = [
     {
       url: baseUrl,
-      lastModified: new Date(),
+      lastModified: STATIC_PAGE_MODIFIED,
       changeFrequency: "daily",
       priority: 1.0,
     },
     {
       url: `${baseUrl}/herbs`,
-      lastModified: new Date(),
+      lastModified: STATIC_PAGE_MODIFIED,
       changeFrequency: "daily",
       priority: 0.9,
     },
     {
       url: `${baseUrl}/symptoms`,
-      lastModified: new Date(),
+      lastModified: STATIC_PAGE_MODIFIED,
       changeFrequency: "weekly",
       priority: 0.9,
     },
-    ...(["anxiety", "sleep", "inflammation", "digestion", "blood-pressure", "immune", "headache", "liver", "skin", "menstrual", "menopause", "cold", "joint", "diabetes", "cholesterol", "depression", "focus", "nausea", "constipation", "nerve", "circulation", "allergy", "cough", "wound", "acne", "hormonal"].map((s) => ({
+    ...[
+      "anxiety",
+      "sleep",
+      "inflammation",
+      "digestion",
+      "blood-pressure",
+      "immune",
+      "headache",
+      "liver",
+      "skin",
+      "menstrual",
+      "menopause",
+      "cold",
+      "joint",
+      "diabetes",
+      "cholesterol",
+      "depression",
+      "focus",
+      "nausea",
+      "constipation",
+      "nerve",
+      "circulation",
+      "allergy",
+      "cough",
+      "wound",
+      "acne",
+      "hormonal",
+    ].map((s) => ({
       url: `${baseUrl}/symptoms/${s}`,
-      lastModified: new Date(),
+      lastModified: STATIC_PAGE_MODIFIED,
       changeFrequency: "weekly" as const,
       priority: 0.8,
-    }))),
+    })),
     {
       url: `${baseUrl}/faq`,
-      lastModified: new Date(),
+      lastModified: STATIC_PAGE_MODIFIED,
       changeFrequency: "monthly",
       priority: 0.8,
     },
     {
       url: `${baseUrl}/calculator`,
-      lastModified: new Date(),
+      lastModified: STATIC_PAGE_MODIFIED,
       changeFrequency: "weekly",
       priority: 0.8,
     },
     {
       url: `${baseUrl}/herbalist`,
-      lastModified: new Date(),
+      lastModified: STATIC_PAGE_MODIFIED,
       changeFrequency: "weekly",
       priority: 0.8,
     },
     {
       url: `${baseUrl}/about`,
-      lastModified: new Date(),
+      lastModified: STATIC_PAGE_MODIFIED,
       changeFrequency: "monthly",
       priority: 0.5,
     },
     {
       url: `${baseUrl}/donate`,
-      lastModified: new Date(),
+      lastModified: STATIC_PAGE_MODIFIED,
       changeFrequency: "monthly",
       priority: 0.4,
     },
     {
       url: `${baseUrl}/methodology`,
-      lastModified: new Date(),
+      lastModified: STATIC_PAGE_MODIFIED,
       changeFrequency: "monthly",
       priority: 0.9,
     },
     {
       url: `${baseUrl}/disclaimer`,
-      lastModified: new Date(),
+      lastModified: STATIC_PAGE_MODIFIED,
       changeFrequency: "yearly",
       priority: 0.3,
     },
     {
       url: `${baseUrl}/privacy`,
-      lastModified: new Date(),
+      lastModified: STATIC_PAGE_MODIFIED,
       changeFrequency: "yearly",
       priority: 0.3,
     },
     {
       url: `${baseUrl}/terms`,
-      lastModified: new Date(),
+      lastModified: STATIC_PAGE_MODIFIED,
       changeFrequency: "yearly",
       priority: 0.3,
     },
@@ -128,7 +148,7 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     const categoryPages: MetadataRoute.Sitemap = (categories ?? []).map(
       (cat) => ({
         url: `${baseUrl}/herbs?category=${cat.slug}`,
-        lastModified: new Date(),
+        lastModified: STATIC_PAGE_MODIFIED,
         changeFrequency: "weekly" as const,
         priority: 0.6,
       })

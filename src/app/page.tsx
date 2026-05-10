@@ -68,9 +68,18 @@ export default function LandingPage() {
 
       <main id="main-content" tabIndex={-1} className="flex-1">
         {/* Hero Section */}
-        <section aria-labelledby="hero-heading" className="relative min-h-[90vh] overflow-hidden hero-gradient">
-          <div className="absolute inset-0 dot-pattern opacity-50" aria-hidden="true" />
-          <div className="absolute -top-40 right-0 size-[600px] rounded-full bg-primary/10 blur-3xl motion-safe:animate-pulse-glow" aria-hidden="true" />
+        <section
+          aria-labelledby="hero-heading"
+          className="relative min-h-[90vh] overflow-hidden hero-gradient"
+        >
+          <div
+            className="absolute inset-0 dot-pattern opacity-50"
+            aria-hidden="true"
+          />
+          <div
+            className="absolute -top-40 right-0 size-[600px] rounded-full bg-primary/10 blur-3xl motion-safe:animate-pulse-glow"
+            aria-hidden="true"
+          />
           <div
             className="absolute -bottom-20 left-0 size-[500px] rounded-full bg-cyan-500/10 blur-3xl motion-safe:animate-pulse-glow"
             style={{ animationDelay: "2s" }}
@@ -89,7 +98,10 @@ export default function LandingPage() {
                 <span>{t("home.hero.badge")}</span>
               </div>
 
-              <h1 id="hero-heading" className="mx-auto max-w-4xl text-4xl font-bold tracking-tight text-foreground sm:text-5xl md:text-6xl lg:text-7xl">
+              <h1
+                id="hero-heading"
+                className="mx-auto max-w-4xl text-4xl font-bold tracking-tight text-foreground sm:text-5xl md:text-6xl lg:text-7xl"
+              >
                 {t("home.hero.title")}
               </h1>
 
@@ -143,9 +155,14 @@ export default function LandingPage() {
         </section>
 
         {/* Stats Section */}
-        <section aria-labelledby="stats-heading" className="border-y bg-muted/30 px-4 py-12 sm:px-6 lg:px-8">
+        <section
+          aria-labelledby="stats-heading"
+          className="border-y bg-muted/30 px-4 py-12 sm:px-6 lg:px-8"
+        >
           <div className="mx-auto max-w-5xl">
-            <h2 id="stats-heading" className="sr-only">{t("home.stats.heading")}</h2>
+            <h2 id="stats-heading" className="sr-only">
+              {t("home.stats.heading")}
+            </h2>
             <div className="grid grid-cols-1 gap-8 sm:grid-cols-3">
               {stats.map((stat) => {
                 const Icon = stat.icon;
@@ -173,10 +190,16 @@ export default function LandingPage() {
         </section>
 
         {/* Features Section */}
-        <section aria-labelledby="features-heading" className="px-4 py-20 sm:px-6 lg:px-8">
+        <section
+          aria-labelledby="features-heading"
+          className="px-4 py-20 sm:px-6 lg:px-8"
+        >
           <div className="mx-auto max-w-7xl">
             <div className="mb-16 text-center">
-              <h2 id="features-heading" className="text-3xl font-bold tracking-tight text-foreground sm:text-4xl">
+              <h2
+                id="features-heading"
+                className="text-3xl font-bold tracking-tight text-foreground sm:text-4xl"
+              >
                 {t("home.features.title")}
               </h2>
               <p className="mx-auto mt-4 max-w-2xl text-lg text-muted-foreground">
@@ -217,18 +240,33 @@ export default function LandingPage() {
         </section>
 
         {/* CTA Section */}
-        <section aria-labelledby="cta-heading" className="px-4 py-20 sm:px-6 lg:px-8">
+        <section
+          aria-labelledby="cta-heading"
+          className="px-4 py-20 sm:px-6 lg:px-8"
+        >
           <div className="mx-auto max-w-4xl">
             <Card className="relative overflow-hidden border-primary/20">
-              <div className="absolute inset-0 bg-gradient-to-br from-primary/5 via-transparent to-cyan-500/5" aria-hidden="true" />
-              <div className="absolute -right-20 -top-20 size-64 rounded-full bg-primary/10 blur-3xl" aria-hidden="true" />
-              <div className="absolute -bottom-20 -left-20 size-64 rounded-full bg-cyan-500/10 blur-3xl" aria-hidden="true" />
+              <div
+                className="absolute inset-0 bg-gradient-to-br from-primary/5 via-transparent to-cyan-500/5"
+                aria-hidden="true"
+              />
+              <div
+                className="absolute -right-20 -top-20 size-64 rounded-full bg-primary/10 blur-3xl"
+                aria-hidden="true"
+              />
+              <div
+                className="absolute -bottom-20 -left-20 size-64 rounded-full bg-cyan-500/10 blur-3xl"
+                aria-hidden="true"
+              />
 
               <CardContent className="relative p-8 text-center sm:p-12">
                 <div className="mb-4 inline-flex size-16 items-center justify-center rounded-full bg-primary/10 text-primary">
                   <Leaf className="size-8" />
                 </div>
-                <h2 id="cta-heading" className="mb-4 text-2xl font-bold text-foreground sm:text-3xl">
+                <h2
+                  id="cta-heading"
+                  className="mb-4 text-2xl font-bold text-foreground sm:text-3xl"
+                >
                   {t("home.cta.title")}
                 </h2>
                 <p className="mx-auto mb-8 max-w-xl text-muted-foreground">

@@ -2,7 +2,16 @@
 
 import Link from "next/link";
 import { useState } from "react";
-import { Leaf, Menu, Heart, Sparkles, Globe, Moon, Sun, Monitor } from "lucide-react";
+import {
+  Leaf,
+  Menu,
+  Heart,
+  Sparkles,
+  Globe,
+  Moon,
+  Sun,
+  Monitor,
+} from "lucide-react";
 import {
   Sheet,
   SheetTrigger,
@@ -38,7 +47,8 @@ function applyMobileTheme(theme: Theme) {
   const root = document.documentElement;
   root.classList.remove("light", "dark");
   if (theme === "system") {
-    const systemTheme = window.matchMedia("(prefers-color-scheme: dark)").matches
+    const systemTheme = window.matchMedia("(prefers-color-scheme: dark)")
+      .matches
       ? "dark"
       : "light";
     root.classList.add(systemTheme);
@@ -70,7 +80,11 @@ export function MarketingNavbar() {
       <header className="sticky top-0 z-50 w-full border-b/50 bg-background/80 backdrop-blur-lg">
         <div className="mx-auto flex h-16 max-w-7xl items-center justify-between px-4 sm:px-6 lg:px-8">
           {/* LOW-5: Logo link with aria-label */}
-          <Link href="/" className="flex items-center gap-2.5 group" aria-label="HerbAlly home">
+          <Link
+            href="/"
+            className="flex items-center gap-2.5 group"
+            aria-label="HerbAlly home"
+          >
             <div className="flex size-9 items-center justify-center rounded-lg bg-gradient-to-br from-primary to-teal-600 text-white shadow-sm transition-transform group-hover:scale-105">
               <Leaf className="size-5" />
             </div>
@@ -80,7 +94,10 @@ export function MarketingNavbar() {
           </Link>
 
           {/* Desktop Nav — LOW-2: aria-label */}
-          <nav aria-label="Main navigation" className="hidden items-center gap-1 md:flex">
+          <nav
+            aria-label="Main navigation"
+            className="hidden items-center gap-1 md:flex"
+          >
             {navLinks.map((link) => (
               <Link
                 key={link.href}
@@ -148,7 +165,9 @@ export function MarketingNavbar() {
                     className="flex w-full items-center gap-3 rounded-lg px-4 py-3 text-sm font-medium text-muted-foreground transition-colors hover:bg-muted hover:text-foreground"
                   >
                     <Globe className="size-4" />
-                    <span className="flex-1 text-left">{t("common.language")}</span>
+                    <span className="flex-1 text-left">
+                      {t("common.language")}
+                    </span>
                     {currentLang && (
                       <span className="flex items-center gap-1.5 text-xs text-muted-foreground">
                         <span aria-hidden="true">{currentLang.flag}</span>
@@ -159,7 +178,9 @@ export function MarketingNavbar() {
 
                   {/* Mobile theme toggle */}
                   <div className="flex items-center gap-2 px-4 py-2">
-                    <span className="text-sm text-muted-foreground">{t("common.theme")}</span>
+                    <span className="text-sm text-muted-foreground">
+                      {t("common.theme")}
+                    </span>
                     <div className="ml-auto flex items-center gap-1 rounded-lg border p-1">
                       {(["light", "dark", "system"] as Theme[]).map((th) => {
                         const Icon = getMobileThemeIcon(th);

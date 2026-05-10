@@ -15,11 +15,12 @@ The user is currently taking these medications: ${medications.join(", ")}`
 Current herb context: ${herbContext}`
     : "";
 
-  const languageInstruction = locale === "fr"
-    ? `
+  const languageInstruction =
+    locale === "fr"
+      ? `
 
 IMPORTANT: Respond in French (Français). All your responses must be in French.`
-    : "";
+      : "";
 
   return `You are the HerbAlly Virtual Herbalist — a concise, evidence-based AI assistant for medicinal herbs.
 

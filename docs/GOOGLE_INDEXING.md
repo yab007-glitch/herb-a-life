@@ -5,6 +5,7 @@ This guide will help you get HerbAlly indexed by Google and other search engines
 ## Step 1: Google Search Console Setup
 
 ### 1.1 Add Property
+
 1. Go to [Google Search Console](https://search.google.com/search-console)
 2. Click **"Add Property"** or **"Add a Resource"**
 3. Enter: `herbally.app`
@@ -13,6 +14,7 @@ This guide will help you get HerbAlly indexed by Google and other search engines
 ### 1.2 Verify Ownership (Choose ONE method)
 
 #### Option A: DNS Verification (Recommended)
+
 1. In Search Console, select **"DNS record"** verification
 2. Copy the TXT record value (looks like: `google-site-verification=AbCdEfGhIjK...`)
 3. Go to your domain registrar (where you bought herbally.app)
@@ -26,6 +28,7 @@ This guide will help you get HerbAlly indexed by Google and other search engines
 7. Return to Search Console and click **"Verify"**
 
 #### Option B: HTML File Verification
+
 1. In Search Console, select **"Upload an HTML file"**
 2. Download the verification file (e.g., `google1234567890abcdef.html`)
 3. Place it in: `/public/google1234567890abcdef.html`
@@ -34,6 +37,7 @@ This guide will help you get HerbAlly indexed by Google and other search engines
 6. Return to Search Console and click **"Verify"**
 
 #### Option C: HTML Meta Tag
+
 1. In Search Console, select **"HTML tag"**
 2. Copy the content value (e.g., `AbCdEfGhIjKlMnOp...`)
 3. Edit `src/app/layout.tsx`:
@@ -46,12 +50,14 @@ This guide will help you get HerbAlly indexed by Google and other search engines
 5. Return to Search Console and click **"Verify"**
 
 ### 1.3 Submit Sitemap
+
 1. In Search Console, go to **Sitemaps** (left sidebar)
 2. Enter: `sitemap.xml`
 3. Click **Submit**
 4. Wait for "Success" confirmation
 
 ### 1.4 Request Indexing for Key Pages
+
 1. Go to **URL Inspection** (top search bar)
 2. Enter these URLs one by one:
    - `https://herbally.app`
@@ -72,11 +78,13 @@ This guide will help you get HerbAlly indexed by Google and other search engines
 ## Step 2: Bing Webmaster Tools
 
 ### 2.1 Add Site
+
 1. Go to [Bing Webmaster Tools](https://www.bing.com/webmasters)
 2. Sign in with Microsoft account or Google account
 3. Add site: `herbally.app`
 
 ### 2.2 Verify Ownership
+
 1. Choose **"Meta tag"** verification
 2. Copy the verification code
 3. Edit `src/app/layout.tsx`:
@@ -88,6 +96,7 @@ This guide will help you get HerbAlly indexed by Google and other search engines
 4. Deploy and verify
 
 ### 2.3 Submit Sitemap
+
 1. Go to **Sitemaps**
 2. Add: `https://herbally.app/sitemap.xml`
 
@@ -109,16 +118,18 @@ We've set up IndexNow support. To activate:
 ## Step 4: Monitor Progress
 
 ### Google Search Console
+
 - Check **Coverage** report weekly
 - Look for errors or warnings
 - Monitor **Performance** for impressions/clicks
 
 ### Expected Timeline
-| Time | What to Expect |
-|------|---------------|
-| 24-48h | Homepage indexed |
-| 3-7 days | Main pages indexed |
-| 1-4 weeks | All herbs indexed |
+
+| Time      | What to Expect           |
+| --------- | ------------------------ |
+| 24-48h    | Homepage indexed         |
+| 3-7 days  | Main pages indexed       |
+| 1-4 weeks | All herbs indexed        |
 | 2-8 weeks | Ranking starts appearing |
 
 ---

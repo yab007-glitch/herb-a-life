@@ -33,18 +33,25 @@ export function localizeHerb<T extends Herb>(herb: T, locale: string): T {
     name: t.name || herb.name,
     common_names: t.common_names?.length ? t.common_names : herb.common_names,
     description: t.description || herb.description,
-    traditional_uses: t.traditional_uses?.length ? t.traditional_uses : herb.traditional_uses,
+    traditional_uses: t.traditional_uses?.length
+      ? t.traditional_uses
+      : herb.traditional_uses,
     modern_uses: t.modern_uses?.length ? t.modern_uses : herb.modern_uses,
     dosage_adult: t.dosage_adult || herb.dosage_adult,
     dosage_child: t.dosage_child || herb.dosage_child,
     preparation_notes: t.preparation_notes || herb.preparation_notes,
-    contraindications: t.contraindications?.length ? t.contraindications : herb.contraindications,
+    contraindications: t.contraindications?.length
+      ? t.contraindications
+      : herb.contraindications,
     side_effects: t.side_effects?.length ? t.side_effects : herb.side_effects,
   };
 }
 
 /** Overlay French translation onto a drug interaction. */
-export function localizeInteraction(ix: DrugInteraction, locale: string): DrugInteraction {
+export function localizeInteraction(
+  ix: DrugInteraction,
+  locale: string
+): DrugInteraction {
   if (locale !== "fr") return ix;
   const t = fr<InteractionFr>(ix.translations);
   if (!t) return ix;
@@ -56,7 +63,10 @@ export function localizeInteraction(ix: DrugInteraction, locale: string): DrugIn
 }
 
 /** Return French category name when available. */
-export function localizeCategoryName(cat: HerbCategory & { name_fr?: string | null }, locale: string): string {
+export function localizeCategoryName(
+  cat: HerbCategory & { name_fr?: string | null },
+  locale: string
+): string {
   if (locale !== "fr") return cat.name;
   return cat.name_fr || cat.name;
 }

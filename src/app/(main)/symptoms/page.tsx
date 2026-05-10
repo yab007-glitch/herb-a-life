@@ -1,6 +1,15 @@
 import type { Metadata } from "next";
 import Link from "next/link";
-import { AlertTriangle, Brain, Flame, Heart, Leaf, Moon, Shield, Stethoscope } from "lucide-react";
+import {
+  AlertTriangle,
+  Brain,
+  Flame,
+  Heart,
+  Leaf,
+  Moon,
+  Shield,
+  Stethoscope,
+} from "lucide-react";
 import { Card, CardContent } from "@/components/ui/card";
 import { cookies } from "next/headers";
 import { getServerTranslation, type Locale } from "@/lib/i18n/server";
@@ -23,7 +32,11 @@ export const metadata: Metadata = {
 };
 
 const categoryConfig = [
-  { key: "mental", icon: Brain, color: "text-purple-600 dark:text-purple-400", bgColor: "bg-purple-100 dark:bg-purple-900/30",
+  {
+    key: "mental",
+    icon: Brain,
+    color: "text-purple-600 dark:text-purple-400",
+    bgColor: "bg-purple-100 dark:bg-purple-900/30",
     symptoms: [
       { subkey: "anxiety", query: "anxiety" },
       { subkey: "depression", query: "depression" },
@@ -31,7 +44,11 @@ const categoryConfig = [
       { subkey: "focus", query: "focus" },
     ],
   },
-  { key: "pain", icon: Flame, color: "text-red-600 dark:text-red-400", bgColor: "bg-red-100 dark:bg-red-900/30",
+  {
+    key: "pain",
+    icon: Flame,
+    color: "text-red-600 dark:text-red-400",
+    bgColor: "bg-red-100 dark:bg-red-900/30",
     symptoms: [
       { subkey: "inflammation", query: "inflammation" },
       { subkey: "joint", query: "joint" },
@@ -39,7 +56,11 @@ const categoryConfig = [
       { subkey: "nerve", query: "nerve" },
     ],
   },
-  { key: "digestive", icon: Leaf, color: "text-green-600 dark:text-green-400", bgColor: "bg-green-100 dark:bg-green-900/30",
+  {
+    key: "digestive",
+    icon: Leaf,
+    color: "text-green-600 dark:text-green-400",
+    bgColor: "bg-green-100 dark:bg-green-900/30",
     symptoms: [
       { subkey: "indigestion", query: "digestion" },
       { subkey: "nausea", query: "nausea" },
@@ -47,14 +68,22 @@ const categoryConfig = [
       { subkey: "liver", query: "liver" },
     ],
   },
-  { key: "heart", icon: Heart, color: "text-rose-600 dark:text-rose-400", bgColor: "bg-rose-100 dark:bg-rose-900/30",
+  {
+    key: "heart",
+    icon: Heart,
+    color: "text-rose-600 dark:text-rose-400",
+    bgColor: "bg-rose-100 dark:bg-rose-900/30",
     symptoms: [
       { subkey: "bloodPressure", query: "blood-pressure" },
       { subkey: "cholesterol", query: "cholesterol" },
       { subkey: "circulation", query: "circulation" },
     ],
   },
-  { key: "immune", icon: Shield, color: "text-blue-600 dark:text-blue-400", bgColor: "bg-blue-100 dark:bg-blue-900/30",
+  {
+    key: "immune",
+    icon: Shield,
+    color: "text-blue-600 dark:text-blue-400",
+    bgColor: "bg-blue-100 dark:bg-blue-900/30",
     symptoms: [
       { subkey: "cold", query: "cold" },
       { subkey: "cough", query: "cough" },
@@ -62,14 +91,22 @@ const categoryConfig = [
       { subkey: "immuneSupport", query: "immune" },
     ],
   },
-  { key: "womens", icon: Moon, color: "text-pink-600 dark:text-pink-400", bgColor: "bg-pink-100 dark:bg-pink-900/30",
+  {
+    key: "womens",
+    icon: Moon,
+    color: "text-pink-600 dark:text-pink-400",
+    bgColor: "bg-pink-100 dark:bg-pink-900/30",
     symptoms: [
       { subkey: "menstrual", query: "menstrual" },
       { subkey: "menopause", query: "menopause" },
       { subkey: "hormonal", query: "hormonal" },
     ],
   },
-  { key: "skin", icon: Stethoscope, color: "text-amber-600 dark:text-amber-400", bgColor: "bg-amber-100 dark:bg-amber-900/30",
+  {
+    key: "skin",
+    icon: Stethoscope,
+    color: "text-amber-600 dark:text-amber-400",
+    bgColor: "bg-amber-100 dark:bg-amber-900/30",
     symptoms: [
       { subkey: "eczema", query: "skin" },
       { subkey: "wound", query: "wound" },
@@ -112,9 +149,7 @@ export default async function SymptomsPage() {
           <AlertTriangle className="size-5 shrink-0 text-amber-600 dark:text-amber-400" />
           <div className="text-sm text-amber-800 dark:text-amber-200">
             <p className="font-semibold">{t("symptomsPage.disclaimerTitle")}</p>
-            <p className="mt-1">
-              {t("symptomsPage.disclaimerText")}
-            </p>
+            <p className="mt-1">{t("symptomsPage.disclaimerText")}</p>
           </div>
         </div>
       </div>
@@ -126,10 +161,14 @@ export default async function SymptomsPage() {
           return (
             <section key={category.key}>
               <div className="mb-4 flex items-center gap-3">
-                <div className={`inline-flex size-10 items-center justify-center rounded-lg ${category.bgColor}`}>
+                <div
+                  className={`inline-flex size-10 items-center justify-center rounded-lg ${category.bgColor}`}
+                >
                   <CategoryIcon className={`size-5 ${category.color}`} />
                 </div>
-                <h2 className="text-2xl font-bold text-foreground">{category.title}</h2>
+                <h2 className="text-2xl font-bold text-foreground">
+                  {category.title}
+                </h2>
               </div>
               <div className="grid gap-4 sm:grid-cols-2">
                 {category.symptoms.map((symptom) => (
@@ -161,7 +200,9 @@ export default async function SymptomsPage() {
 
       {/* Bottom CTA */}
       <div className="mt-12 rounded-lg border bg-muted/50 p-6 text-center">
-        <h2 className="text-xl font-bold text-foreground">{t("symptomsPage.notSureTitle")}</h2>
+        <h2 className="text-xl font-bold text-foreground">
+          {t("symptomsPage.notSureTitle")}
+        </h2>
         <p className="mt-2 text-muted-foreground">
           {t("symptomsPage.notSureDesc")}
         </p>

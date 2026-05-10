@@ -5,13 +5,13 @@ let stripeInstance: Stripe | null = null;
 
 function getStripe(): Stripe | null {
   if (stripeInstance) return stripeInstance;
-  
+
   const key = process.env.STRIPE_SECRET_KEY;
   if (!key) {
     console.error("STRIPE_SECRET_KEY is not configured");
     return null;
   }
-  
+
   try {
     stripeInstance = new Stripe(key);
     return stripeInstance;
@@ -23,7 +23,7 @@ function getStripe(): Stripe | null {
 
 export async function POST(req: NextRequest) {
   const stripe = getStripe();
-  
+
   // Check if Stripe is configured
   if (!stripe) {
     return NextResponse.json(
@@ -44,7 +44,7 @@ export async function POST(req: NextRequest) {
     ); // in cents
 
     const appUrl = process.env.NEXT_PUBLIC_APP_URL || "https://herbally.app";
-    
+
     console.log("Creating Stripe checkout session:", {
       appUrl,
       successUrl: `${appUrl}/donate?success=true`,

@@ -174,7 +174,8 @@ export default async function AboutPage() {
           <p>{t("aboutContent.freeText1")}</p>
           <p>{t("aboutContent.freeText2")}</p>
           <p>
-            {t("aboutContent.freeText3").split("making a donation").length > 1 || locale === "en" ? (
+            {t("aboutContent.freeText3").split("making a donation").length >
+              1 || locale === "en" ? (
               <>
                 {locale === "en" ? (
                   <>
@@ -201,14 +202,22 @@ export default async function AboutPage() {
               </>
             ) : (
               <>
-                {t("aboutContent.freeText3").split(t("aboutContent.freeLink"))[0]}
+                {
+                  t("aboutContent.freeText3").split(
+                    t("aboutContent.freeLink")
+                  )[0]
+                }
                 <a
                   href="/donate"
                   className="font-medium text-primary underline hover:no-underline"
                 >
                   {t("aboutContent.freeLink")}
                 </a>
-                {t("aboutContent.freeText3").split(t("aboutContent.freeLink"))[1]}
+                {
+                  t("aboutContent.freeText3").split(
+                    t("aboutContent.freeLink")
+                  )[1]
+                }
               </>
             )}
           </p>
@@ -220,9 +229,7 @@ export default async function AboutPage() {
         <h2 className="mb-4 text-2xl font-bold text-foreground">
           {t("aboutContent.team.title")}
         </h2>
-        <p className="text-muted-foreground">
-          {t("aboutContent.team.text")}
-        </p>
+        <p className="text-muted-foreground">{t("aboutContent.team.text")}</p>
       </section>
     </div>
   );

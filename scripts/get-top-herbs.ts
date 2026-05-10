@@ -8,7 +8,9 @@ async function getTopHerbs() {
 
   const { data: herbs, error } = await supabase
     .from("herbs")
-    .select("id, name, slug, scientific_name, evidence_level, modern_uses, traditional_uses, active_compounds, description, citations")
+    .select(
+      "id, name, slug, scientific_name, evidence_level, modern_uses, traditional_uses, active_compounds, description, citations"
+    )
     .eq("is_published", true)
     .order("name", { ascending: true });
 
@@ -20,16 +22,22 @@ async function getTopHerbs() {
   // Score each herb
   const scored = herbs.map((herb) => {
     const evidenceScore =
-      herb.evidence_level === "A" ? 4 :
-      herb.evidence_level === "B" ? 3 :
-      herb.evidence_level === "C" ? 2 : 1;
-    
-    const useCount = (herb.modern_uses?.length || 0) + (herb.traditional_uses?.length || 0);
+      herb.evidence_level === "A"
+        ? 4
+        : herb.evidence_level === "B"
+          ? 3
+          : herb.evidence_level === "C"
+            ? 2
+            : 1;
+
+    const useCount =
+      (herb.modern_uses?.length || 0) + (herb.traditional_uses?.length || 0);
     const hasCitations = herb.citations?.length > 0 ? 1 : 0;
     const hasCompounds = herb.active_compounds?.length > 0 ? 1 : 0;
-    
-    const priorityScore = evidenceScore * 15 + useCount + hasCitations * 10 + hasCompounds * 5;
-    
+
+    const priorityScore =
+      evidenceScore * 15 + useCount + hasCitations * 10 + hasCompounds * 5;
+
     return {
       name: herb.name,
       slug: herb.slug,
@@ -41,13 +49,15 @@ async function getTopHerbs() {
 
   // Sort by priority score descending
   scored.sort((a, b) => b.priority_score - a.priority_score);
-  
+
   // Output top 120
   const top120 = scored.slice(0, 120);
-  
+
   console.log("export const TOP_120_HERBS = [");
   top120.forEach((h) => {
-    console.log(`  { slug: "${h.slug}", name: "${h.name}", evidence: "${h.evidence_level}", score: ${h.priority_score} },`);
+    console.log(
+      `  { slug: "${h.slug}", name: "${h.name}", evidence: "${h.evidence_level}", score: ${h.priority_score} },`
+    );
   });
   console.log("];");
 }

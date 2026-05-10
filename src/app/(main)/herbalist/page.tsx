@@ -3,7 +3,7 @@
  * The AI chatbot (Virtual Herbalist) should be accessible to all visitors
  * without requiring a login, as per the public-only nature of the app.
  */
-export const dynamic = 'force-dynamic';
+export const dynamic = "force-dynamic";
 
 import type { Metadata } from "next";
 import { cookies } from "next/headers";
@@ -15,7 +15,8 @@ import { getServerTranslation, type Locale } from "@/lib/i18n/server";
 
 export const metadata: Metadata = {
   title: "HerbAlly - Virtual Herbalist",
-  description: "Ask our AI herbalist about herb safety, drug interactions, and dosage.",
+  description:
+    "Ask our AI herbalist about herb safety, drug interactions, and dosage.",
   alternates: {
     canonical: `${process.env.NEXT_PUBLIC_APP_URL ?? "https://herbally.app"}/herbalist`,
   },
@@ -30,7 +31,8 @@ export default async function PharmacistPage({
   const cookieStore = await cookies();
   const localeCookie = cookieStore.get("herbally-locale");
   const locale: Locale = (localeCookie?.value as Locale) || "en";
-  const t = (key: string, p?: Record<string, string | number>) => getServerTranslation(locale, key, p);
+  const t = (key: string, p?: Record<string, string | number>) =>
+    getServerTranslation(locale, key, p);
 
   let herbContext: string | null = null;
   let autoQuery: string | null = null;
@@ -46,7 +48,10 @@ export default async function PharmacistPage({
       const h = result.data;
       herbName = h.name;
       herbContext = `${h.name} (${h.scientific_name}): ${h.description}. Traditional uses: ${h.traditional_uses?.join(", ")}. Contraindications: ${h.contraindications?.join(", ")}. Side effects: ${h.side_effects?.join(", ")}.`;
-      autoQuery = t("herbalistPage.herbAutoQuery", { name: h.name, scientific: h.scientific_name });
+      autoQuery = t("herbalistPage.herbAutoQuery", {
+        name: h.name,
+        scientific: h.scientific_name,
+      });
     }
   }
 
@@ -66,7 +71,8 @@ export default async function PharmacistPage({
       <SafetyAlert severity="critical" title={t("herbalistPage.safetyTitle")}>
         <div className="space-y-2">
           <p>
-            <strong>{t("herbalistPage.safetyNotMedical")}</strong> {t("herbalistPage.safetyDisclaimer")}
+            <strong>{t("herbalistPage.safetyNotMedical")}</strong>{" "}
+            {t("herbalistPage.safetyDisclaimer")}
           </p>
           <ul className="list-disc list-inside space-y-1 ml-4">
             <li>{t("herbalistPage.safetyConsult")}</li>
@@ -86,7 +92,9 @@ export default async function PharmacistPage({
           <div className="flex items-start gap-3">
             <Info className="size-5 text-primary mt-0.5" />
             <div>
-              <p className="font-medium text-foreground">{t("herbalistPage.askingAbout", { name: herbName })}</p>
+              <p className="font-medium text-foreground">
+                {t("herbalistPage.askingAbout", { name: herbName })}
+              </p>
               <p className="text-sm text-muted-foreground">
                 {t("herbalistPage.askingAboutDesc")}
               </p>
@@ -95,11 +103,17 @@ export default async function PharmacistPage({
         </div>
       )}
 
-      <ChatInterface herbContext={herbContext} autoQuery={autoQuery} locale={locale} />
+      <ChatInterface
+        herbContext={herbContext}
+        autoQuery={autoQuery}
+        locale={locale}
+      />
 
       {/* Trust signals footer */}
       <div className="rounded-lg border p-4 text-sm text-muted-foreground">
-        <p className="font-medium text-foreground mb-1">{t("herbalistPage.aboutTitle")}</p>
+        <p className="font-medium text-foreground mb-1">
+          {t("herbalistPage.aboutTitle")}
+        </p>
         <ul className="space-y-1">
           <li>• {t("herbalistPage.aboutProvider")}</li>
           <li>• {t("herbalistPage.aboutSources")}</li>

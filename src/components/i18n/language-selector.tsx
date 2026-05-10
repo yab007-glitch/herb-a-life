@@ -43,7 +43,9 @@ export function LanguageSelector() {
             onClick={() => setLocale(lang.code)}
             className={lang.code === locale ? "bg-muted/50 font-medium" : ""}
           >
-            <span className="mr-2 text-base" aria-hidden="true">{lang.flag}</span>
+            <span className="mr-2 text-base" aria-hidden="true">
+              {lang.flag}
+            </span>
             {lang.nativeName}
             <span className="ml-auto text-xs text-muted-foreground">
               {lang.name}

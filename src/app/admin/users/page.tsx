@@ -20,9 +20,7 @@ export default async function AdminUsersPage() {
     const supabase = createAdminClient();
 
     const [countResult, dataResult] = await Promise.all([
-      supabase
-        .from("profiles")
-        .select("id", { count: "exact", head: true }),
+      supabase.from("profiles").select("id", { count: "exact", head: true }),
       supabase
         .from("profiles")
         .select("id, email, full_name, role, created_at")

@@ -149,9 +149,7 @@ export function DoseCalculatorForm({ prefill }: { prefill?: PrefillData }) {
             <Calculator className="size-5 text-primary" />
             {t("calculatorForm.calculatedDose")}
           </CardTitle>
-          <CardDescription>
-            {t("calculator.description")}
-          </CardDescription>
+          <CardDescription>{t("calculator.description")}</CardDescription>
         </CardHeader>
         <CardContent className="space-y-6">
           {/* Prefill Context Banner */}
@@ -161,16 +159,20 @@ export function DoseCalculatorForm({ prefill }: { prefill?: PrefillData }) {
                 <Leaf className="mt-0.5 size-5 shrink-0 text-green-600" />
                 <div className="space-y-1 text-sm">
                   <p className="font-medium text-green-900 dark:text-green-100">
-                    {t("calculatorForm.prefillContext", { name: prefill.herbName })}
+                    {t("calculatorForm.prefillContext", {
+                      name: prefill.herbName,
+                    })}
                   </p>
                   {prefill.dosageAdultRaw && (
                     <p className="text-green-700 dark:text-green-300">
-                      {t("calculatorForm.standardAdultDose")}: {prefill.dosageAdultRaw}
+                      {t("calculatorForm.standardAdultDose")}:{" "}
+                      {prefill.dosageAdultRaw}
                     </p>
                   )}
                   {prefill.dosageChildRaw && (
                     <p className="text-green-700 dark:text-green-300">
-                      {t("calculatorForm.referenceChildDose")}: {prefill.dosageChildRaw}
+                      {t("calculatorForm.referenceChildDose")}:{" "}
+                      {prefill.dosageChildRaw}
                     </p>
                   )}
                   {prefill.dosageForms.length > 0 && (
@@ -205,7 +207,9 @@ export function DoseCalculatorForm({ prefill }: { prefill?: PrefillData }) {
           {/* Adult Dose + Unit */}
           <div className="grid gap-4 sm:grid-cols-[1fr_auto]">
             <div className="space-y-2">
-              <Label htmlFor="adult-dose">{t("calculatorForm.adultDose")}</Label>
+              <Label htmlFor="adult-dose">
+                {t("calculatorForm.adultDose")}
+              </Label>
               <Input
                 id="adult-dose"
                 type="number"
@@ -242,12 +246,20 @@ export function DoseCalculatorForm({ prefill }: { prefill?: PrefillData }) {
           <div className="space-y-2">
             <div className="flex items-center justify-between">
               <Label htmlFor="patient-age">
-                {t("calculatorForm.childAge")} ({useMonths ? t("calculatorForm.months").toLowerCase() : t("calculatorForm.years").toLowerCase()})
+                {t("calculatorForm.childAge")} (
+                {useMonths
+                  ? t("calculatorForm.months").toLowerCase()
+                  : t("calculatorForm.years").toLowerCase()}
+                )
               </Label>
               <div className="flex items-center gap-2 text-sm">
-                <span className="text-muted-foreground">{t("calculatorForm.years")}</span>
+                <span className="text-muted-foreground">
+                  {t("calculatorForm.years")}
+                </span>
                 <Switch checked={useMonths} onCheckedChange={setUseMonths} />
-                <span className="text-muted-foreground">{t("calculatorForm.months")}</span>
+                <span className="text-muted-foreground">
+                  {t("calculatorForm.months")}
+                </span>
               </div>
             </div>
             <Input
@@ -292,7 +304,10 @@ export function DoseCalculatorForm({ prefill }: { prefill?: PrefillData }) {
           <div className="space-y-2">
             <Label htmlFor="patient-height">
               {t("calculatorForm.heightCm")}
-              <span className="text-muted-foreground"> — {t("calculatorForm.optionalForBsa")}</span>
+              <span className="text-muted-foreground">
+                {" "}
+                — {t("calculatorForm.optionalForBsa")}
+              </span>
             </Label>
             <Input
               id="patient-height"
@@ -357,7 +372,9 @@ export function DoseCalculatorForm({ prefill }: { prefill?: PrefillData }) {
         {result ? (
           <Card className="border-primary/20 bg-gradient-to-br from-primary/5 to-green-50 dark:to-green-950/20 animate-message-in">
             <CardHeader>
-              <CardTitle className="text-primary">{t("calculatorForm.calculatedDose")}</CardTitle>
+              <CardTitle className="text-primary">
+                {t("calculatorForm.calculatedDose")}
+              </CardTitle>
             </CardHeader>
             <CardContent className="space-y-4">
               <div className="text-center">

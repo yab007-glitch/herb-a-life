@@ -3,17 +3,19 @@ import { generateMonograph } from "../src/lib/data/generate-monograph";
 
 /**
  * Batch monograph generator
- * 
+ *
  * Generates monographs for ALL published herbs that don't already have one.
  * Uses the auto-generator to create structured content from DB data.
- * 
+ *
  * Usage: NEXT_PUBLIC_SUPABASE_URL=... SUPABASE_SERVICE_ROLE_KEY=... npx tsx scripts/batch-generate-monographs.ts [batch-size]
  */
 
 const BATCH_SIZE = parseInt(process.argv[2] || "100", 10);
 
 const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL!;
-const supabaseKey = process.env.SUPABASE_SERVICE_ROLE_KEY || process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!;
+const supabaseKey =
+  process.env.SUPABASE_SERVICE_ROLE_KEY ||
+  process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!;
 
 if (!supabaseUrl || !supabaseKey) {
   console.error("Missing Supabase credentials");
@@ -54,11 +56,11 @@ async function getExistingMonographSlugs(): Promise<Set<string>> {
       .range(offset, offset + batchSize - 1);
 
     if (error || !data || data.length === 0) break;
-    
+
     for (const row of data) {
       slugs.add(row.herb_slug);
     }
-    
+
     if (data.length < batchSize) break;
     offset += batchSize;
   }
@@ -74,15 +76,17 @@ async function getAllPublishedHerbs(): Promise<Herb[]> {
   while (true) {
     const { data, error } = await supabase
       .from("herbs")
-      .select("id, slug, name, scientific_name, description, traditional_uses, modern_uses, active_compounds, evidence_level, contraindications, side_effects, dosage_adult, pregnancy_safe, nursing_safe, citations")
+      .select(
+        "id, slug, name, scientific_name, description, traditional_uses, modern_uses, active_compounds, evidence_level, contraindications, side_effects, dosage_adult, pregnancy_safe, nursing_safe, citations"
+      )
       .eq("is_published", true)
       .order("evidence_level", { ascending: true })
       .range(offset, offset + batchSize - 1);
 
     if (error || !data || data.length === 0) break;
-    
+
     herbs.push(...(data as Herb[]));
-    
+
     if (data.length < batchSize) break;
     offset += batchSize;
   }
@@ -105,7 +109,7 @@ async function main() {
   console.log(`   Found ${allHerbs.length} published herbs\n`);
 
   // Filter to herbs without monographs
-  const herbsToProcess = allHerbs.filter(h => !existingSlugs.has(h.slug));
+  const herbsToProcess = allHerbs.filter((h) => !existingSlugs.has(h.slug));
   console.log(`   ${herbsToProcess.length} herbs need monographs\n`);
 
   if (herbsToProcess.length === 0) {
@@ -124,9 +128,9 @@ async function main() {
   for (let i = 0; i < batch.length; i++) {
     const herb = batch[i];
     const progress = `[${i + 1}/${batch.length}]`;
-    
+
     process.stdout.write(`${progress} ${herb.slug}... `);
-    
+
     try {
       // Generate monograph
       const monograph = generateMonograph({
@@ -154,14 +158,14 @@ async function main() {
       }
 
       // Determine status based on data quality
-      const hasGoodData = 
-        (herb.evidence_level && ['A', 'B'].includes(herb.evidence_level)) ||
-        ((herb.modern_uses?.length || 0) + (herb.traditional_uses?.length || 0) > 3);
+      const hasGoodData =
+        (herb.evidence_level && ["A", "B"].includes(herb.evidence_level)) ||
+        (herb.modern_uses?.length || 0) + (herb.traditional_uses?.length || 0) >
+          3;
 
       // Store in database
-      const { error } = await supabase
-        .from("herb_monographs")
-        .upsert({
+      const { error } = await supabase.from("herb_monographs").upsert(
+        {
           herb_id: herb.id,
           herb_slug: herb.slug,
           summary: monograph.summary,
@@ -175,7 +179,9 @@ async function main() {
           generation_method: "auto-generated",
           reviewed_by: null,
           reviewer_credentials: null,
-        }, { onConflict: "herb_slug" });
+        },
+        { onConflict: "herb_slug" }
+      );
 
       if (error) {
         console.log(`❌ ${error.message}`);
@@ -191,7 +197,7 @@ async function main() {
 
     // Small delay to avoid rate limiting
     if (i % 50 === 0 && i > 0) {
-      await new Promise(resolve => setTimeout(resolve, 200));
+      await new Promise((resolve) => setTimeout(resolve, 200));
     }
   }
 
@@ -200,10 +206,12 @@ async function main() {
   console.log(`   Failed: ${failed}`);
   console.log(`   Skipped: ${skipped}`);
   console.log(`   Total: ${batch.length}`);
-  
+
   const remaining = herbsToProcess.length - batch.length;
   console.log(`\n📝 Remaining herbs: ${remaining}`);
-  console.log(`   Run again with batch size ${remaining} to process all remaining\n`);
+  console.log(
+    `   Run again with batch size ${remaining} to process all remaining\n`
+  );
 }
 
 main().catch(console.error);

@@ -1,4 +1,5 @@
 # HerbAlly Founder Memo
+
 ## From 6.8/10 to 8.5/10: Execution Roadmap
 
 **Date:** April 11, 2026  
@@ -12,6 +13,7 @@
 HerbAlly has **8.5/10 potential** but currently scores **6.8/10**. The gap isn't feature breadth—it's **credibility infrastructure**.
 
 Users comparing HerbAlly to NCCIH HerbList will choose HerbAlly for tools (calculator, AI), but they'll **distrust it for safety decisions** without:
+
 1. Visible evidence grades
 2. Source citations
 3. Prominent warnings
@@ -28,6 +30,7 @@ Users comparing HerbAlly to NCCIH HerbList will choose HerbAlly for tools (calcu
 **Goal:** Remove all "why shouldn't I trust this?" friction
 
 ### Day 1-2: Safety & Warnings
+
 - [ ] **Move drug interaction warnings above fold**
   - Current: Buried in tabs/footer
   - Fix: Alert banner under herb name (red/orange severity badges)
@@ -38,6 +41,7 @@ Users comparing HerbAlly to NCCIH HerbList will choose HerbAlly for tools (calcu
   - Fix: Dedicated warning box with icon
 
 ### Day 3-4: Evidence Infrastructure
+
 - [ ] **Add evidence grade badges (A/B/C/D)**
   - A = Strong clinical evidence (RCTs)
   - B = Moderate evidence (observational)
@@ -49,6 +53,7 @@ Users comparing HerbAlly to NCCIH HerbList will choose HerbAlly for tools (calcu
   - Fix: "Reviewed March 2026 by [Herbalist Name], [Credentials]"
 
 ### Day 5-7: AI Transparency
+
 - [ ] **Add source citations to AI chat**
   - Current: No grounding shown
   - Fix: "Based on WHO monograph [link]" or "Per PMC study PMID:12345"
@@ -64,6 +69,7 @@ Users comparing HerbAlly to NCCIH HerbList will choose HerbAlly for tools (calcu
 **Goal:** Make the journey from symptom → safe herb choice frictionless
 
 ### Week 2: Navigation
+
 - [ ] **Symptom-first search**
   - Current: Must know herb names
   - Fix: "I have..." dropdown (anxiety, insomnia, inflammation) → herb recommendations
@@ -81,6 +87,7 @@ Users comparing HerbAlly to NCCIH HerbList will choose HerbAlly for tools (calcu
   - Internal linking for SEO + discovery
 
 ### Week 3: Audience Segmentation
+
 - [ ] **User type toggle** (consumer / practitioner / herbalist)
   - Consumers: Simple language, big warnings
   - Practitioners: Detailed interactions, dosages
@@ -96,6 +103,7 @@ Users comparing HerbAlly to NCCIH HerbList will choose HerbAlly for tools (calcu
 **Goal:** Capture search traffic and become reference-worthy
 
 ### Month 2: SEO Expansion
+
 - [ ] **Symptom landing pages**
   - "Herbs for anxiety"
   - "Herbs for inflammation"
@@ -111,6 +119,7 @@ Users comparing HerbAlly to NCCIH HerbList will choose HerbAlly for tools (calcu
   - Link interaction checker
 
 ### Month 3: Advanced Features
+
 - [ ] **Herb comparison tool**
   - Compare 2-3 herbs side-by-side
 
@@ -128,25 +137,25 @@ Users comparing HerbAlly to NCCIH HerbList will choose HerbAlly for tools (calcu
 
 ## Success Metrics
 
-| Metric | Current | 30 Days | 90 Days |
-|--------|---------|---------|---------|
-| Trust score (user survey) | — | 7/10 | 8.5/10 |
-| Herb pages with evidence grades | 0% | 100% | 100% |
-| AI responses with citations | 0% | 80% | 100% |
-| Symptom landing pages | 0 | 10 | 50 |
-| Organic traffic | — | +20% | +100% |
-| Time to find herb for symptom | — | <30 sec | <20 sec |
+| Metric                          | Current | 30 Days | 90 Days |
+| ------------------------------- | ------- | ------- | ------- |
+| Trust score (user survey)       | —       | 7/10    | 8.5/10  |
+| Herb pages with evidence grades | 0%      | 100%    | 100%    |
+| AI responses with citations     | 0%      | 80%     | 100%    |
+| Symptom landing pages           | 0       | 10      | 50      |
+| Organic traffic                 | —       | +20%    | +100%   |
+| Time to find herb for symptom   | —       | <30 sec | <20 sec |
 
 ---
 
 ## Risk Mitigation
 
-| Risk | Mitigation |
-|------|------------|
-| AI gives bad advice | Add prominent limitations; require "consult practitioner" disclaimer |
-| Herb-drug interaction missed | Cross-reference multiple databases; show "unknown" when uncertain |
-| Outdated information | Monthly review cycle; "last updated" dates everywhere |
-| Regulatory scrutiny | No treatment claims; educational purpose only; strong disclaimers |
+| Risk                         | Mitigation                                                           |
+| ---------------------------- | -------------------------------------------------------------------- |
+| AI gives bad advice          | Add prominent limitations; require "consult practitioner" disclaimer |
+| Herb-drug interaction missed | Cross-reference multiple databases; show "unknown" when uncertain    |
+| Outdated information         | Monthly review cycle; "last updated" dates everywhere                |
+| Regulatory scrutiny          | No treatment claims; educational purpose only; strong disclaimers    |
 
 ---
 

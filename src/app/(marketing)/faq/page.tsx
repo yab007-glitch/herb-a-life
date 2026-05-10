@@ -1,6 +1,13 @@
 import type { Metadata } from "next";
 import Link from "next/link";
-import { Leaf, Stethoscope, Calculator, AlertTriangle, Shield, MessageCircle } from "lucide-react";
+import {
+  Leaf,
+  Stethoscope,
+  Calculator,
+  AlertTriangle,
+  Shield,
+  MessageCircle,
+} from "lucide-react";
 import { Card, CardContent } from "@/components/ui/card";
 import { cookies } from "next/headers";
 import { getServerTranslation, type Locale } from "@/lib/i18n/server";

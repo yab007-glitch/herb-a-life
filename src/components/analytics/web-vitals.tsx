@@ -24,7 +24,8 @@ function sendToAnalytics(metric: Metric) {
     // Add page context
     pathname: window.location.pathname,
     // Add device info
-    effectiveType: (navigator as NavigatorWithConnection).connection?.effectiveType,
+    effectiveType: (navigator as NavigatorWithConnection).connection
+      ?.effectiveType,
     deviceMemory: (navigator as NavigatorWithMemory).deviceMemory,
     // Add timestamp
     timestamp: Date.now(),

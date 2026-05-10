@@ -1,11 +1,13 @@
 # Medical Reviewer Outreach Strategy
 
 ## Goal
+
 Secure a named MD with herbal medicine credentials to officially review HerbAlly content. This is the #1 trust multiplier for the site.
 
 ## Target Priority
 
 ### Tier 1 (Reach out first)
+
 1. **Dr. Aviva Romm, MD** - Yale-trained OB/GYN, midwife, herbalist
    - Email: info@avivaromm.com (foundation) or via Yale Medicine
    - Website: https://avivaromm.com
@@ -19,6 +21,7 @@ Secure a named MD with herbal medicine credentials to officially review HerbAlly
    - Approach: Highlight nonprofit/charitable angle, free educational resource
 
 ### Tier 2
+
 3. **Dr. Andrew Weil, MD** - Arizona Center for Integrative Medicine
    - Website: https://www.drweil.com
    - Why: Most famous integrative MD globally
@@ -30,6 +33,7 @@ Secure a named MD with herbal medicine credentials to officially review HerbAlly
    - Approach: Digital health innovation angle
 
 ### Tier 3
+
 5. **Dr. Chun-Su Yuan, MD PhD** - University of Chicago Tang Center
    - Why: Herb-drug interaction research authority
    - Approach: Emphasize safety database rigor
@@ -72,12 +76,14 @@ P.S. - The site is live now, and we'd love your feedback even if you can't join 
 ```
 
 ## Follow-up Strategy
+
 - Day 1: Initial email
 - Day 7: Follow-up if no response
 - Day 14: Final follow-up with specific ask (15-min call)
 - Day 30: LinkedIn connection + soft pitch
 
 ## Success Metrics
+
 - 1 named MD on board = Trust score 9.5 → 10
 - 3+ MDs on advisory board = Best-in-class credibility
 - Annual review commitment = Sustainable credibility

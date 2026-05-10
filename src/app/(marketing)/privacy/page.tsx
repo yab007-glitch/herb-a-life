@@ -45,9 +45,7 @@ export default async function PrivacyPage() {
           <h2 className="mb-3 text-lg font-semibold text-foreground">
             {t("privacy.overview.title")}
           </h2>
-          <p>
-            {t("privacy.overview.text")}
-          </p>
+          <p>{t("privacy.overview.text")}</p>
         </section>
 
         <section>
@@ -57,11 +55,19 @@ export default async function PrivacyPage() {
           <p>{t("privacy.infoWeCollect.text")}</p>
           <ul className="mt-2 list-inside list-disc space-y-1">
             <li>
-              <strong>{locale === "fr" ? "Messages de discussion :" : "Chat messages:"}</strong>{" "}
+              <strong>
+                {locale === "fr"
+                  ? "Messages de discussion :"
+                  : "Chat messages:"}
+              </strong>{" "}
               {t("privacy.infoWeCollect.chatMessages")}
             </li>
             <li>
-              <strong>{locale === "fr" ? "Analytique d\u2019utilisation :" : "Usage analytics:"}</strong>{" "}
+              <strong>
+                {locale === "fr"
+                  ? "Analytique d\u2019utilisation :"
+                  : "Usage analytics:"}
+              </strong>{" "}
               {t("privacy.infoWeCollect.analytics")}
             </li>
             <li>
@@ -69,9 +75,7 @@ export default async function PrivacyPage() {
               {t("privacy.infoWeCollect.cookies")}
             </li>
           </ul>
-          <p className="mt-3">
-            {t("privacy.infoWeCollect.notCollect")}
-          </p>
+          <p className="mt-3">{t("privacy.infoWeCollect.notCollect")}</p>
         </section>
 
         <section>
@@ -106,18 +110,14 @@ export default async function PrivacyPage() {
           <ul className="mt-2 list-inside list-disc space-y-1">
             <li>{t("privacy.cookiesSection.localeCookie")}</li>
           </ul>
-          <p className="mt-3">
-            {t("privacy.cookiesSection.noTracking")}
-          </p>
+          <p className="mt-3">{t("privacy.cookiesSection.noTracking")}</p>
         </section>
 
         <section>
           <h2 className="mb-3 text-lg font-semibold text-foreground">
             {t("privacy.dataRetention.title")}
           </h2>
-          <p>
-            {t("privacy.dataRetention.text")}
-          </p>
+          <p>{t("privacy.dataRetention.text")}</p>
         </section>
 
         <section>
@@ -136,27 +136,21 @@ export default async function PrivacyPage() {
           <h2 className="mb-3 text-lg font-semibold text-foreground">
             {t("privacy.security.title")}
           </h2>
-          <p>
-            {t("privacy.security.text")}
-          </p>
+          <p>{t("privacy.security.text")}</p>
         </section>
 
         <section>
           <h2 className="mb-3 text-lg font-semibold text-foreground">
             {t("privacy.changes.title")}
           </h2>
-          <p>
-            {t("privacy.changes.text")}
-          </p>
+          <p>{t("privacy.changes.text")}</p>
         </section>
 
         <section>
           <h2 className="mb-3 text-lg font-semibold text-foreground">
             {t("privacy.contact.title")}
           </h2>
-          <p>
-            {t("privacy.contact.text")}
-          </p>
+          <p>{t("privacy.contact.text")}</p>
         </section>
       </div>
     </div>

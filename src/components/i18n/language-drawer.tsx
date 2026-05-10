@@ -90,9 +90,7 @@ export function LanguageDrawer({ open, onOpenChange }: LanguageDrawerProps) {
                     >
                       {lang.nativeName}
                     </p>
-                    <p className="text-sm text-muted-foreground">
-                      {lang.name}
-                    </p>
+                    <p className="text-sm text-muted-foreground">{lang.name}</p>
                   </div>
                   {isActive && (
                     <div className="flex size-8 items-center justify-center rounded-full bg-primary text-primary-foreground">

@@ -78,10 +78,7 @@ export default async function AdminInteractionsPage() {
                 </thead>
                 <tbody>
                   {interactions.map((interaction) => (
-                    <tr
-                      key={interaction.id}
-                      className="border-b last:border-0"
-                    >
+                    <tr key={interaction.id} className="border-b last:border-0">
                       <td className="px-4 py-3 font-medium">
                         {interaction.herb_name}
                       </td>

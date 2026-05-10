@@ -57,7 +57,9 @@ function applySecurityHeaders(response: NextResponse): NextResponse {
  * Parse Accept-Language header and detect if French is the preferred language.
  * Returns "fr" if French is preferred, null otherwise.
  */
-function detectLocaleFromAcceptLanguage(acceptLanguage: string | null): string | null {
+function detectLocaleFromAcceptLanguage(
+  acceptLanguage: string | null
+): string | null {
   if (!acceptLanguage) return null;
 
   // Parse "fr-FR,fr;q=0.9,en;q=0.8" -> extract language tags in order of preference
@@ -113,7 +115,7 @@ export async function middleware(request: NextRequest) {
       path.endsWith(".xml") ||
       path.endsWith(".txt") ||
       path.endsWith(".json");
-    
+
     if (likelyPublicPath) {
       return applySecurityHeaders(supabaseResponse);
     }

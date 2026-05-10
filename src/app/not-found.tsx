@@ -32,7 +32,9 @@ export default async function NotFound() {
           <ArrowLeft className="mr-2 h-4 w-4" />
           {t("notFound.goHome")}
         </Button>
-        <Button render={<Link href="/herbs" />}>{t("notFound.browseHerbs")}</Button>
+        <Button render={<Link href="/herbs" />}>
+          {t("notFound.browseHerbs")}
+        </Button>
       </div>
     </div>
   );

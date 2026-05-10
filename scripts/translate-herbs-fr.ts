@@ -24,27 +24,41 @@ import { createClient } from "@supabase/supabase-js";
 import * as dotenv from "dotenv";
 import * as path from "path";
 
-dotenv.config({ path: path.join(process.cwd(), ".env.local"), override: false });
+dotenv.config({
+  path: path.join(process.cwd(), ".env.local"),
+  override: false,
+});
 
 const SUPABASE_URL = process.env.NEXT_PUBLIC_SUPABASE_URL ?? "";
 const SERVICE_KEY = process.env.SUPABASE_SERVICE_ROLE_KEY ?? "";
 const OPENROUTER_KEY = (process.env.OPENROUTER_API_KEY ?? "").trim();
-const BASE_URL = (process.env.OPENROUTER_BASE_URL ?? "https://openrouter.ai/api/v1").trim();
+const BASE_URL = (
+  process.env.OPENROUTER_BASE_URL ?? "https://openrouter.ai/api/v1"
+).trim();
 const MODEL = (process.env.OPENROUTER_MODEL ?? "openrouter/auto").trim();
 
 // Tuning: 3 concurrent workers × ~3.5s delay = ~51 req/min (under 20/min per-key limit for paid, safe for free)
-const HERBS_PER_CALL = 5;       // herbs packed into one API call
-const CONCURRENCY = 3;          // parallel API requests
-const CALL_DELAY = 3500;        // ms between calls per worker
-const IX_PER_CALL = 10;         // interactions per API call
+const HERBS_PER_CALL = 5; // herbs packed into one API call
+const CONCURRENCY = 3; // parallel API requests
+const CALL_DELAY = 3500; // ms between calls per worker
+const IX_PER_CALL = 10; // interactions per API call
 const MAX_RETRIES = 3;
-const RETRY_WAIT = 65000;       // ms to wait on 429
+const RETRY_WAIT = 65000; // ms to wait on 429
 
 // ── Validation ───────────────────────────────────────────────────────────────
 
-if (!SUPABASE_URL) { console.error("Missing NEXT_PUBLIC_SUPABASE_URL"); process.exit(1); }
-if (!SERVICE_KEY) { console.error("Missing SUPABASE_SERVICE_ROLE_KEY"); process.exit(1); }
-if (!OPENROUTER_KEY) { console.error("Missing OPENROUTER_API_KEY"); process.exit(1); }
+if (!SUPABASE_URL) {
+  console.error("Missing NEXT_PUBLIC_SUPABASE_URL");
+  process.exit(1);
+}
+if (!SERVICE_KEY) {
+  console.error("Missing SUPABASE_SERVICE_ROLE_KEY");
+  process.exit(1);
+}
+if (!OPENROUTER_KEY) {
+  console.error("Missing OPENROUTER_API_KEY");
+  process.exit(1);
+}
 
 const supabase = createClient(SUPABASE_URL, SERVICE_KEY, {
   auth: { persistSession: false },
@@ -86,7 +100,9 @@ async function translateJSON(input: object, attempt = 1): Promise<object> {
   });
 
   if (response.status === 429 && attempt <= MAX_RETRIES) {
-    console.log(`    Rate limited — waiting ${RETRY_WAIT / 1000}s (retry ${attempt}/${MAX_RETRIES})`);
+    console.log(
+      `    Rate limited — waiting ${RETRY_WAIT / 1000}s (retry ${attempt}/${MAX_RETRIES})`
+    );
     await sleep(RETRY_WAIT);
     return translateJSON(input, attempt + 1);
   }
@@ -98,7 +114,10 @@ async function translateJSON(input: object, attempt = 1): Promise<object> {
 
   const result = await response.json();
   const raw = (result.choices?.[0]?.message?.content ?? "").trim();
-  const clean = raw.replace(/^```json\s*/i, "").replace(/\s*```$/i, "").trim();
+  const clean = raw
+    .replace(/^```json\s*/i, "")
+    .replace(/\s*```$/i, "")
+    .trim();
 
   try {
     return JSON.parse(clean);
@@ -111,7 +130,10 @@ async function translateJSON(input: object, attempt = 1): Promise<object> {
 
 type Task<T> = () => Promise<T>;
 
-async function runConcurrent<T>(tasks: Task<T>[], concurrency: number): Promise<T[]> {
+async function runConcurrent<T>(
+  tasks: Task<T>[],
+  concurrency: number
+): Promise<T[]> {
   const results: T[] = [];
   let index = 0;
 
@@ -122,7 +144,10 @@ async function runConcurrent<T>(tasks: Task<T>[], concurrency: number): Promise<
     }
   }
 
-  const workers = Array.from({ length: Math.min(concurrency, tasks.length) }, () => worker());
+  const workers = Array.from(
+    { length: Math.min(concurrency, tasks.length) },
+    () => worker()
+  );
   await Promise.all(workers);
   return results;
 }
@@ -137,21 +162,30 @@ async function translateCategories() {
     .select("id, name, description")
     .is("name_fr", null);
 
-  if (error) { console.error("  Error:", error.message); return; }
-  if (!cats?.length) { console.log("  All categories already translated"); return; }
+  if (error) {
+    console.error("  Error:", error.message);
+    return;
+  }
+  if (!cats?.length) {
+    console.log("  All categories already translated");
+    return;
+  }
 
   console.log(`  ${cats.length} untranslated categories`);
 
   for (const cat of cats) {
     try {
-      const translated = await translateJSON({
+      const translated = (await translateJSON({
         name: cat.name,
         description: cat.description ?? "",
-      }) as { name: string; description: string };
+      })) as { name: string; description: string };
 
       await supabase
         .from("herb_categories")
-        .update({ name_fr: translated.name, description_fr: translated.description })
+        .update({
+          name_fr: translated.name,
+          description_fr: translated.description,
+        })
         .eq("id", cat.id);
 
       console.log(`  ${cat.name} -> ${translated.name}`);
@@ -192,8 +226,14 @@ async function translateHerbs() {
     .eq("is_published", true)
     .order("name");
 
-  if (error) { console.error("  Fetch error:", error.message); return; }
-  if (!allHerbs?.length) { console.log("  No herbs found"); return; }
+  if (error) {
+    console.error("  Fetch error:", error.message);
+    return;
+  }
+  if (!allHerbs?.length) {
+    console.log("  No herbs found");
+    return;
+  }
 
   // Filter to untranslated only
   const herbs = (allHerbs as HerbRow[]).filter(
@@ -202,9 +242,14 @@ async function translateHerbs() {
 
   const total = allHerbs.length;
   const skipped = total - herbs.length;
-  console.log(`  Total: ${total}, already translated: ${skipped}, remaining: ${herbs.length}`);
+  console.log(
+    `  Total: ${total}, already translated: ${skipped}, remaining: ${herbs.length}`
+  );
 
-  if (!herbs.length) { console.log("  All herbs already translated"); return; }
+  if (!herbs.length) {
+    console.log("  All herbs already translated");
+    return;
+  }
 
   // Split into batches of HERBS_PER_CALL
   const batches: HerbRow[][] = [];
@@ -212,7 +257,9 @@ async function translateHerbs() {
     batches.push(herbs.slice(i, i + HERBS_PER_CALL));
   }
 
-  console.log(`  ${batches.length} API calls needed (${HERBS_PER_CALL} herbs/call, ${CONCURRENCY} concurrent)`);
+  console.log(
+    `  ${batches.length} API calls needed (${HERBS_PER_CALL} herbs/call, ${CONCURRENCY} concurrent)`
+  );
 
   let translated = 0;
   let errors = 0;
@@ -239,7 +286,7 @@ async function translateHerbs() {
         };
       }
 
-      const result = await translateJSON(input) as Record<string, object>;
+      const result = (await translateJSON(input)) as Record<string, object>;
 
       // Save each herb's translation
       for (let i = 0; i < batch.length; i++) {
@@ -270,7 +317,9 @@ async function translateHerbs() {
       const rate = translated / (elapsed / 60);
       const remaining = herbs.length - translated - errors;
       const eta = rate > 0 ? Math.round(remaining / rate) : "?";
-      console.log(`  [${pct}%] ${translated}/${herbs.length} done (batch ${batchIdx + 1}/${batches.length}, ${Math.round(rate)}/min, ~${eta}min left)`);
+      console.log(
+        `  [${pct}%] ${translated}/${herbs.length} done (batch ${batchIdx + 1}/${batches.length}, ${Math.round(rate)}/min, ~${eta}min left)`
+      );
 
       await sleep(CALL_DELAY);
     } catch (e) {
@@ -303,7 +352,10 @@ async function translateHerbs() {
           errors--; // undo the batch error count
           await sleep(CALL_DELAY);
         } catch (e2) {
-          console.error(`  Fallback error ${herb.name}:`, (e2 as Error).message);
+          console.error(
+            `  Fallback error ${herb.name}:`,
+            (e2 as Error).message
+          );
           await sleep(CALL_DELAY);
         }
       }
@@ -313,7 +365,9 @@ async function translateHerbs() {
   await runConcurrent(tasks, CONCURRENCY);
 
   const elapsed = Math.round((Date.now() - startTime) / 1000);
-  console.log(`  Herbs done: ${translated} translated, ${skipped} already done, ${errors} errors (${elapsed}s)`);
+  console.log(
+    `  Herbs done: ${translated} translated, ${skipped} already done, ${errors} errors (${elapsed}s)`
+  );
 }
 
 // ── 3. Drug interactions (batched + concurrent) ──────────────────────────────
@@ -341,18 +395,28 @@ async function translateInteractions() {
       .order("drug_name")
       .range(offset, offset + pageSize - 1);
 
-    if (error) { console.error("  Fetch error:", error.message); break; }
+    if (error) {
+      console.error("  Fetch error:", error.message);
+      break;
+    }
     if (!data?.length) break;
     allIxs = allIxs.concat(data as IxRow[]);
     if (data.length < pageSize) break;
     offset += pageSize;
   }
 
-  const ixs = allIxs.filter((ix) => !(ix.translations as Record<string, unknown> | null)?.fr);
+  const ixs = allIxs.filter(
+    (ix) => !(ix.translations as Record<string, unknown> | null)?.fr
+  );
   const skipped = allIxs.length - ixs.length;
-  console.log(`  Total: ${allIxs.length}, already translated: ${skipped}, remaining: ${ixs.length}`);
+  console.log(
+    `  Total: ${allIxs.length}, already translated: ${skipped}, remaining: ${ixs.length}`
+  );
 
-  if (!ixs.length) { console.log("  All interactions already translated"); return; }
+  if (!ixs.length) {
+    console.log("  All interactions already translated");
+    return;
+  }
 
   // Batch interactions
   const batches: IxRow[][] = [];
@@ -360,7 +424,9 @@ async function translateInteractions() {
     batches.push(ixs.slice(i, i + IX_PER_CALL));
   }
 
-  console.log(`  ${batches.length} API calls needed (${IX_PER_CALL} interactions/call, ${CONCURRENCY} concurrent)`);
+  console.log(
+    `  ${batches.length} API calls needed (${IX_PER_CALL} interactions/call, ${CONCURRENCY} concurrent)`
+  );
 
   let translated = 0;
   let errors = 0;
@@ -376,12 +442,15 @@ async function translateInteractions() {
         };
       }
 
-      const result = await translateJSON(input) as Record<string, object>;
+      const result = (await translateJSON(input)) as Record<string, object>;
 
       for (let i = 0; i < batch.length; i++) {
         const ix = batch[i];
         const fr = result[`ix_${i}`];
-        if (!fr) { errors++; continue; }
+        if (!fr) {
+          errors++;
+          continue;
+        }
 
         const existing = ix.translations ?? {};
         const { error: upErr } = await supabase
@@ -389,12 +458,18 @@ async function translateInteractions() {
           .update({ translations: { ...existing, fr } })
           .eq("id", ix.id);
 
-        if (upErr) { errors++; } else { translated++; }
+        if (upErr) {
+          errors++;
+        } else {
+          translated++;
+        }
       }
 
       if (batchIdx % 5 === 0 || batchIdx === batches.length - 1) {
         const pct = Math.round((translated / ixs.length) * 100);
-        console.log(`  [${pct}%] ${translated}/${ixs.length} interactions (batch ${batchIdx + 1}/${batches.length})`);
+        console.log(
+          `  [${pct}%] ${translated}/${ixs.length} interactions (batch ${batchIdx + 1}/${batches.length})`
+        );
       }
 
       await sleep(CALL_DELAY);
@@ -408,7 +483,9 @@ async function translateInteractions() {
   await runConcurrent(tasks, CONCURRENCY);
 
   const elapsed = Math.round((Date.now() - startTime) / 1000);
-  console.log(`  Interactions done: ${translated} translated, ${skipped} already done, ${errors} errors (${elapsed}s)`);
+  console.log(
+    `  Interactions done: ${translated} translated, ${skipped} already done, ${errors} errors (${elapsed}s)`
+  );
 }
 
 // ── Main ──────────────────────────────────────────────────────────────────────
@@ -417,14 +494,18 @@ async function main() {
   console.log("HerbAlly — French Translation Script (Fast)");
   console.log(`  Model     : ${MODEL}`);
   console.log(`  Supabase  : ${SUPABASE_URL}`);
-  console.log(`  Batch size: ${HERBS_PER_CALL} herbs/call, ${IX_PER_CALL} interactions/call`);
+  console.log(
+    `  Batch size: ${HERBS_PER_CALL} herbs/call, ${IX_PER_CALL} interactions/call`
+  );
   console.log(`  Concurrency: ${CONCURRENCY} parallel requests`);
 
   await translateCategories();
   await translateHerbs();
   await translateInteractions();
 
-  console.log("\nAll done! Run again anytime to translate newly added content.");
+  console.log(
+    "\nAll done! Run again anytime to translate newly added content."
+  );
 }
 
 main().catch((e) => {

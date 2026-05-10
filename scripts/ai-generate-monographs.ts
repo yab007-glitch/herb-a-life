@@ -4,17 +4,19 @@ import type { Monograph } from "../src/lib/data/monographs";
 
 /**
  * AI-Enhanced Monograph Generator
- * 
+ *
  * Uses glm-5 to generate high-quality monographs for priority herbs.
  * Falls back to standard auto-generation for herbs with sparse data.
- * 
+ *
  * Usage: npx tsx scripts/ai-generate-monographs.ts [limit]
  */
 
 const LIMIT = parseInt(process.argv[2] || "10", 10);
 
 const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL!;
-const supabaseKey = process.env.SUPABASE_SERVICE_ROLE_KEY || process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!;
+const supabaseKey =
+  process.env.SUPABASE_SERVICE_ROLE_KEY ||
+  process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!;
 const ollamaUrl = process.env.OLLAMA_BASE_URL || "https://ollama.com/api";
 
 if (!supabaseUrl || !supabaseKey) {
@@ -112,25 +114,38 @@ IMPORTANT:
 JSON output only, no markdown formatting:`;
 }
 
-function parseMonographResponse(response: string, herb: Herb): Monograph | null {
+function parseMonographResponse(
+  response: string,
+  herb: Herb
+): Monograph | null {
   try {
     // Extract JSON from response
     const jsonMatch = response.match(/\{[\s\S]*\}/);
     if (!jsonMatch) return null;
-    
+
     const parsed = JSON.parse(jsonMatch[0]);
-    
+
     return {
       slug: herb.slug,
-      summary: parsed.summary || `${herb.name} is a medicinal herb with traditional and modern uses.`,
-      mechanism: parsed.mechanism || `The mechanism involves ${herb.active_compounds?.[0] || "various compounds"}.`,
+      summary:
+        parsed.summary ||
+        `${herb.name} is a medicinal herb with traditional and modern uses.`,
+      mechanism:
+        parsed.mechanism ||
+        `The mechanism involves ${herb.active_compounds?.[0] || "various compounds"}.`,
       claims: Array.isArray(parsed.claims) ? parsed.claims : [],
       safetyNotes: Array.isArray(parsed.safetyNotes) ? parsed.safetyNotes : [],
-      drugInteractions: Array.isArray(parsed.drugInteractions) ? parsed.drugInteractions : [],
-      pregnancyCategory: ["safe", "caution", "unsafe", "insufficient"].includes(parsed.pregnancyCategory) 
-        ? parsed.pregnancyCategory 
+      drugInteractions: Array.isArray(parsed.drugInteractions)
+        ? parsed.drugInteractions
+        : [],
+      pregnancyCategory: ["safe", "caution", "unsafe", "insufficient"].includes(
+        parsed.pregnancyCategory
+      )
+        ? parsed.pregnancyCategory
         : "insufficient",
-      keyCitations: Array.isArray(parsed.keyCitations) ? parsed.keyCitations : [],
+      keyCitations: Array.isArray(parsed.keyCitations)
+        ? parsed.keyCitations
+        : [],
     };
   } catch (error) {
     console.error("Failed to parse monograph:", error);
@@ -141,7 +156,8 @@ function parseMonographResponse(response: string, herb: Herb): Monograph | null 
 async function getHighPriorityHerbs(limit: number): Promise<Herb[]> {
   const { data: herbs, error } = await supabase
     .from("herbs")
-    .select(`
+    .select(
+      `
       id,
       slug,
       name,
@@ -157,15 +173,25 @@ async function getHighPriorityHerbs(limit: number): Promise<Herb[]> {
       pregnancy_safe,
       nursing_safe,
       citations
-    `)
+    `
+    )
     .eq("is_published", true)
     .eq("evidence_level", "A")
     // Exclude herbs that already have premium monographs
-    .not("slug", "in", "(\"turmeric\",\"ashwagandha\",\"ginger\",\"chamomile\",\"echinacea\",\"valerian-root\",\"milk-thistle\",\"ginkgo\",\"st-johns-wort\",\"garlic\",\"saw-palmetto\",\"cranberry\",\"rhodiola\",\"green-tea\",\"peppermint\",\"lavender\",\"elderberry\",\"siberian-ginseng\",\"hawthorn\",\"dandelion\")")
+    .not(
+      "slug",
+      "in",
+      '("turmeric","ashwagandha","ginger","chamomile","echinacea","valerian-root","milk-thistle","ginkgo","st-johns-wort","garlic","saw-palmetto","cranberry","rhodiola","green-tea","peppermint","lavender","elderberry","siberian-ginseng","hawthorn","dandelion")'
+    )
     // Exclude herbs that already have AI-generated monographs
-    .not("id", "in", (
-      supabase.from("herb_monographs").select("herb_id").eq("generation_method", "ai-assisted")
-    ))
+    .not(
+      "id",
+      "in",
+      supabase
+        .from("herb_monographs")
+        .select("herb_id")
+        .eq("generation_method", "ai-assisted")
+    )
     .order("name")
     .limit(limit);
 
@@ -177,25 +203,26 @@ async function getHighPriorityHerbs(limit: number): Promise<Herb[]> {
   return herbs || [];
 }
 
-async function storeMonograph(herb: Herb, monograph: Monograph): Promise<boolean> {
-  const { error } = await supabase
-    .from("herb_monographs")
-    .insert({
-      herb_id: herb.id,
-      herb_slug: herb.slug,
-      summary: monograph.summary,
-      mechanism: monograph.mechanism,
-      claims: monograph.claims,
-      safety_notes: monograph.safetyNotes,
-      drug_interactions: monograph.drugInteractions,
-      pregnancy_category: monograph.pregnancyCategory,
-      key_citations: monograph.keyCitations,
-      status: "published",
-      generation_method: "ai-assisted",
-      reviewed_by: "AI (glm-5) - Awaiting human review",
-      reviewer_credentials: "AI herbalist",
-      last_reviewed_at: new Date().toISOString(),
-    });
+async function storeMonograph(
+  herb: Herb,
+  monograph: Monograph
+): Promise<boolean> {
+  const { error } = await supabase.from("herb_monographs").insert({
+    herb_id: herb.id,
+    herb_slug: herb.slug,
+    summary: monograph.summary,
+    mechanism: monograph.mechanism,
+    claims: monograph.claims,
+    safety_notes: monograph.safetyNotes,
+    drug_interactions: monograph.drugInteractions,
+    pregnancy_category: monograph.pregnancyCategory,
+    key_citations: monograph.keyCitations,
+    status: "published",
+    generation_method: "ai-assisted",
+    reviewed_by: "AI (glm-5) - Awaiting human review",
+    reviewer_credentials: "AI herbalist",
+    last_reviewed_at: new Date().toISOString(),
+  });
 
   if (error) {
     console.error("Error storing monograph:", error);
@@ -212,7 +239,7 @@ async function main() {
 
   // Get high-priority herbs
   const herbs = await getHighPriorityHerbs(LIMIT);
-  
+
   if (herbs.length === 0) {
     console.log("✅ No high-priority herbs need AI generation");
     process.exit(0);
@@ -225,8 +252,10 @@ async function main() {
 
   for (let i = 0; i < herbs.length; i++) {
     const herb = herbs[i];
-    console.log(`[${i + 1}/${herbs.length}] ${herb.name} (${herb.scientific_name})`);
-    
+    console.log(
+      `[${i + 1}/${herbs.length}] ${herb.name} (${herb.scientific_name})`
+    );
+
     // Check for hand-written monograph first
     const existing = getMonograph(herb.slug);
     if (existing) {
@@ -236,11 +265,11 @@ async function main() {
 
     // Build prompt
     const prompt = buildPrompt(herb);
-    
+
     // Call Ollama
     process.stdout.write("   🔄 Calling glm-5... ");
     const response = await callOllama(prompt);
-    
+
     if (!response) {
       console.log("❌ API error\n");
       failed++;
@@ -249,7 +278,7 @@ async function main() {
 
     // Parse response
     const monograph = parseMonographResponse(response, herb);
-    
+
     if (!monograph) {
       console.log("❌ Parse error\n");
       failed++;
@@ -259,7 +288,7 @@ async function main() {
     // Store in database
     process.stdout.write("💾 Storing... ");
     const stored = await storeMonograph(herb, monograph);
-    
+
     if (stored) {
       console.log("✅\n");
       success++;
@@ -269,13 +298,15 @@ async function main() {
     }
 
     // Rate limiting
-    await new Promise(resolve => setTimeout(resolve, 500));
+    await new Promise((resolve) => setTimeout(resolve, 500));
   }
 
   console.log(`\n📊 AI Generation Complete`);
   console.log(`   Success: ${success}`);
   console.log(`   Failed: ${failed}`);
-  console.log(`\n⚠️  Note: AI-generated monographs should be reviewed by a human before finalizing`);
+  console.log(
+    `\n⚠️  Note: AI-generated monographs should be reviewed by a human before finalizing`
+  );
 }
 
 main().catch(console.error);

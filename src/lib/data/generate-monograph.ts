@@ -30,11 +30,18 @@ export function generateMonograph(herb: {
 
   // Auto-generate from DB data
   const displayName = herb.name || herb.scientific_name;
-  const evidence = (herb.evidence_level?.toUpperCase() || "C") as "A" | "B" | "C" | "D" | "trad";
+  const evidence = (herb.evidence_level?.toUpperCase() || "C") as
+    | "A"
+    | "B"
+    | "C"
+    | "D"
+    | "trad";
 
   // Build clinical summary
-  const useCount = (herb.modern_uses?.length || 0) + (herb.traditional_uses?.length || 0);
-  const compoundStr = herb.active_compounds?.slice(0, 3).join(", ") || "various active compounds";
+  const useCount =
+    (herb.modern_uses?.length || 0) + (herb.traditional_uses?.length || 0);
+  const compoundStr =
+    herb.active_compounds?.slice(0, 3).join(", ") || "various active compounds";
 
   const summary = `${herb.description || `${displayName} is a medicinal herb with ${useCount} documented traditional and modern uses.`} Key active compounds include ${compoundStr}.`;
 
@@ -49,9 +56,11 @@ export function generateMonograph(herb: {
 
   // Determine pregnancy category
   const pregnancyCategory: Monograph["pregnancyCategory"] =
-    herb.pregnancy_safe === false ? "unsafe" :
-    herb.pregnancy_safe === true ? "safe" :
-    "insufficient";
+    herb.pregnancy_safe === false
+      ? "unsafe"
+      : herb.pregnancy_safe === true
+        ? "safe"
+        : "insufficient";
 
   // Build drug interactions
   const drugInteractions = buildDrugInteractions(herb.contraindications || []);
@@ -104,35 +113,72 @@ function buildMechanism(herb: {
   if (useStr.includes("antioxidant")) {
     mechanismHints.push("provides free radical scavenging activity");
   }
-  if (useStr.includes("anxiety") || useStr.includes("calm") || useStr.includes("sedative") || useStr.includes("sleep")) {
+  if (
+    useStr.includes("anxiety") ||
+    useStr.includes("calm") ||
+    useStr.includes("sedative") ||
+    useStr.includes("sleep")
+  ) {
     mechanismHints.push("influences GABAergic neurotransmission");
   }
-  if (useStr.includes("antimicrobial") || useStr.includes("antibacterial") || useStr.includes("antiviral")) {
-    mechanismHints.push("disrupts microbial cell membranes and inhibits pathogen growth");
+  if (
+    useStr.includes("antimicrobial") ||
+    useStr.includes("antibacterial") ||
+    useStr.includes("antiviral")
+  ) {
+    mechanismHints.push(
+      "disrupts microbial cell membranes and inhibits pathogen growth"
+    );
   }
-  if (useStr.includes("digestion") || useStr.includes("digestive") || useStr.includes("stomach")) {
-    mechanismHints.push("stimulates digestive enzyme secretion and GI motility");
+  if (
+    useStr.includes("digestion") ||
+    useStr.includes("digestive") ||
+    useStr.includes("stomach")
+  ) {
+    mechanismHints.push(
+      "stimulates digestive enzyme secretion and GI motility"
+    );
   }
   if (useStr.includes("liver") || useStr.includes("hepatoprotect")) {
-    mechanismHints.push("stabilizes hepatocyte membranes and supports liver regeneration");
+    mechanismHints.push(
+      "stabilizes hepatocyte membranes and supports liver regeneration"
+    );
   }
   if (useStr.includes("immune")) {
-    mechanismHints.push("modulates immune cell activity and cytokine production");
+    mechanismHints.push(
+      "modulates immune cell activity and cytokine production"
+    );
   }
   if (useStr.includes("pain") || useStr.includes("analgesic")) {
-    mechanismHints.push("acts on pain pathways via anti-inflammatory and neuroactive effects");
+    mechanismHints.push(
+      "acts on pain pathways via anti-inflammatory and neuroactive effects"
+    );
   }
-  if (useStr.includes("blood sugar") || useStr.includes("diabetes") || useStr.includes("hypoglycemic")) {
+  if (
+    useStr.includes("blood sugar") ||
+    useStr.includes("diabetes") ||
+    useStr.includes("hypoglycemic")
+  ) {
     mechanismHints.push("improves insulin sensitivity and glucose metabolism");
   }
-  if (useStr.includes("cardiovascular") || useStr.includes("blood pressure") || useStr.includes("cholesterol")) {
-    mechanismHints.push("supports cardiovascular function through lipid metabolism and vasodilation");
+  if (
+    useStr.includes("cardiovascular") ||
+    useStr.includes("blood pressure") ||
+    useStr.includes("cholesterol")
+  ) {
+    mechanismHints.push(
+      "supports cardiovascular function through lipid metabolism and vasodilation"
+    );
   }
   if (useStr.includes("adaptogen") || useStr.includes("stress")) {
-    mechanismHints.push("regulates the hypothalamic-pituitary-adrenal (HPA) axis");
+    mechanismHints.push(
+      "regulates the hypothalamic-pituitary-adrenal (HPA) axis"
+    );
   }
   if (useStr.includes("skin") || useStr.includes("wound")) {
-    mechanismHints.push("promotes tissue regeneration and modulates local inflammation");
+    mechanismHints.push(
+      "promotes tissue regeneration and modulates local inflammation"
+    );
   }
 
   if (mechanismHints.length > 0) {
@@ -151,7 +197,12 @@ function buildClaims(herb: {
   name: string;
 }): Monograph["claims"] {
   const claims: Monograph["claims"] = [];
-  const eLevel = (herb.evidence_level?.toUpperCase() || "C") as "A" | "B" | "C" | "D" | "trad";
+  const eLevel = (herb.evidence_level?.toUpperCase() || "C") as
+    | "A"
+    | "B"
+    | "C"
+    | "D"
+    | "trad";
 
   // Modern uses get higher evidence grade
   const modernUses = herb.modern_uses || [];
@@ -190,14 +241,24 @@ function gradeClaim(
 
   if (claimIndex < topCutoff) {
     const level = herbLevel.toUpperCase();
-    if (level === "A" || level === "B" || level === "C" || level === "D" || level === "TRAD") {
+    if (
+      level === "A" ||
+      level === "B" ||
+      level === "C" ||
+      level === "D" ||
+      level === "TRAD"
+    ) {
       return level === "TRAD" ? "trad" : level;
     }
     return "C";
   }
 
   const downgrade: Record<string, "A" | "B" | "C" | "D" | "trad"> = {
-    A: "B", B: "C", C: "trad", D: "trad", TRAD: "trad",
+    A: "B",
+    B: "C",
+    C: "trad",
+    D: "trad",
+    TRAD: "trad",
   };
   const level = herbLevel.toUpperCase();
   return downgrade[level] || "trad";
@@ -294,33 +355,84 @@ function buildSafetyNotes(herb: {
   }
 
   if (notes.length === 0) {
-    notes.push(`Consult a healthcare provider before using ${herb.name}, especially if taking medications.`);
+    notes.push(
+      `Consult a healthcare provider before using ${herb.name}, especially if taking medications.`
+    );
   }
 
   return notes;
 }
 
-function buildDrugInteractions(contraindications: string[]): Monograph["drugInteractions"] {
+function buildDrugInteractions(
+  contraindications: string[]
+): Monograph["drugInteractions"] {
   const interactions: Monograph["drugInteractions"] = [];
 
   // Parse contraindications for drug mentions
-  const drugPatterns: Record<string, { drugs: string[]; severity: "mild" | "moderate" | "severe" | "contraindicated"; detail: string }> = {
-    "warfarin": { drugs: ["Warfarin", "Coumadin"], severity: "moderate", detail: "May increase bleeding risk; requires INR monitoring" },
-    "anticoagulant": { drugs: ["Anticoagulants", "Blood thinners"], severity: "moderate", detail: "May increase bleeding risk" },
-    "aspirin": { drugs: ["Aspirin", "NSAIDs"], severity: "mild", detail: "May increase bleeding risk at high doses" },
-    "blood pressure": { drugs: ["Antihypertensives"], severity: "moderate", detail: "May enhance hypotensive effects" },
-    "diabetes": { drugs: ["Antidiabetic medications"], severity: "moderate", detail: "May affect blood glucose levels" },
-    "sedative": { drugs: ["Sedatives", "CNS depressants"], severity: "moderate", detail: "May enhance sedative effects" },
-    "antidepressant": { drugs: ["Antidepressants", "MAOIs"], severity: "severe", detail: "Risk of serotonin syndrome or altered drug metabolism" },
-    "immunosuppressant": { drugs: ["Immunosuppressants"], severity: "moderate", detail: "May interfere with immune modulation" },
-    "hormone": { drugs: ["Hormone replacement therapy", "Oral contraceptives"], severity: "moderate", detail: "May affect hormone levels" },
+  const drugPatterns: Record<
+    string,
+    {
+      drugs: string[];
+      severity: "mild" | "moderate" | "severe" | "contraindicated";
+      detail: string;
+    }
+  > = {
+    warfarin: {
+      drugs: ["Warfarin", "Coumadin"],
+      severity: "moderate",
+      detail: "May increase bleeding risk; requires INR monitoring",
+    },
+    anticoagulant: {
+      drugs: ["Anticoagulants", "Blood thinners"],
+      severity: "moderate",
+      detail: "May increase bleeding risk",
+    },
+    aspirin: {
+      drugs: ["Aspirin", "NSAIDs"],
+      severity: "mild",
+      detail: "May increase bleeding risk at high doses",
+    },
+    "blood pressure": {
+      drugs: ["Antihypertensives"],
+      severity: "moderate",
+      detail: "May enhance hypotensive effects",
+    },
+    diabetes: {
+      drugs: ["Antidiabetic medications"],
+      severity: "moderate",
+      detail: "May affect blood glucose levels",
+    },
+    sedative: {
+      drugs: ["Sedatives", "CNS depressants"],
+      severity: "moderate",
+      detail: "May enhance sedative effects",
+    },
+    antidepressant: {
+      drugs: ["Antidepressants", "MAOIs"],
+      severity: "severe",
+      detail: "Risk of serotonin syndrome or altered drug metabolism",
+    },
+    immunosuppressant: {
+      drugs: ["Immunosuppressants"],
+      severity: "moderate",
+      detail: "May interfere with immune modulation",
+    },
+    hormone: {
+      drugs: ["Hormone replacement therapy", "Oral contraceptives"],
+      severity: "moderate",
+      detail: "May affect hormone levels",
+    },
   };
 
   for (const [pattern, data] of Object.entries(drugPatterns)) {
     if (contraindications.some((c) => c.toLowerCase().includes(pattern))) {
       data.drugs.forEach((drug) => {
         if (!interactions.some((i) => i.drug === drug)) {
-          interactions.push({ drug, severity: data.severity, detail: data.detail });
+          interactions.push({
+            drug,
+            severity: data.severity,
+            detail: data.detail,
+          });
         }
       });
     }
@@ -333,12 +445,28 @@ function buildKeyCitations(
   citations: unknown[] | null | undefined,
   _evidence: string
 ): Monograph["keyCitations"] {
-  const baseCitations = (citations || []) as Array<{ source: string; title?: string; url?: string; year?: number; pmid?: string }>;
+  const baseCitations = (citations || []) as Array<{
+    source: string;
+    title?: string;
+    url?: string;
+    year?: number;
+    pmid?: string;
+  }>;
 
   // Ensure we have standard references
   const standardRefs: Monograph["keyCitations"] = [
-    { source: "WHO", title: "WHO Monographs on Selected Medicinal Plants", url: "https://www.who.int/publications/i/item/9241545378", year: 2009 },
-    { source: "NCCIH", title: "Herbs at a Glance", url: "https://www.nccih.nih.gov/health/herbsataglance.htm", year: 2024 },
+    {
+      source: "WHO",
+      title: "WHO Monographs on Selected Medicinal Plants",
+      url: "https://www.who.int/publications/i/item/9241545378",
+      year: 2009,
+    },
+    {
+      source: "NCCIH",
+      title: "Herbs at a Glance",
+      url: "https://www.nccih.nih.gov/health/herbsataglance.htm",
+      year: 2024,
+    },
   ];
 
   return [

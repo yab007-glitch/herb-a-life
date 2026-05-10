@@ -56,15 +56,21 @@ export function MissionModal({ open, onOpenChange }: MissionModalProps) {
           <div className="grid grid-cols-3 gap-3">
             <div className="flex flex-col items-center gap-1.5 rounded-lg bg-muted/50 p-3 text-center">
               <Leaf className="h-5 w-5 text-primary" />
-              <span className="text-xs font-medium">{t("mission.herbsCount")}</span>
+              <span className="text-xs font-medium">
+                {t("mission.herbsCount")}
+              </span>
             </div>
             <div className="flex flex-col items-center gap-1.5 rounded-lg bg-muted/50 p-3 text-center">
               <Sparkles className="h-5 w-5 text-primary" />
-              <span className="text-xs font-medium">{t("mission.aiHerbalist")}</span>
+              <span className="text-xs font-medium">
+                {t("mission.aiHerbalist")}
+              </span>
             </div>
             <div className="flex flex-col items-center gap-1.5 rounded-lg bg-muted/50 p-3 text-center">
               <Globe className="h-5 w-5 text-primary" />
-              <span className="text-xs font-medium">{t("mission.freeForever")}</span>
+              <span className="text-xs font-medium">
+                {t("mission.freeForever")}
+              </span>
             </div>
           </div>
 

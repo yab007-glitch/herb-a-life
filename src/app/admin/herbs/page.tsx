@@ -110,12 +110,8 @@ export default async function AdminHerbsPage({
                     <th className="px-4 py-3 text-left font-medium">
                       Evidence
                     </th>
-                    <th className="px-4 py-3 text-left font-medium">
-                      Status
-                    </th>
-                    <th className="px-4 py-3 text-left font-medium">
-                      Actions
-                    </th>
+                    <th className="px-4 py-3 text-left font-medium">Status</th>
+                    <th className="px-4 py-3 text-left font-medium">Actions</th>
                   </tr>
                 </thead>
                 <tbody>

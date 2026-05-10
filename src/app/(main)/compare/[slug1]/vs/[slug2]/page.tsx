@@ -61,7 +61,8 @@ export default async function ComparePage({ params }: Props) {
   const cookieStore = await cookies();
   const localeCookie = cookieStore.get("herbally-locale");
   const locale: Locale = (localeCookie?.value as Locale) || "en";
-  const t = (key: string, p?: Record<string, string | number>) => getServerTranslation(locale, key, p);
+  const t = (key: string, p?: Record<string, string | number>) =>
+    getServerTranslation(locale, key, p);
 
   const [resultA, resultB] = await Promise.all([
     getHerbBySlug(slug1),
@@ -86,9 +87,7 @@ export default async function ComparePage({ params }: Props) {
         <h1 className="mt-4 text-3xl font-bold tracking-tight text-foreground">
           {t("compare.title", { name1: herbA.name, name2: herbB.name })}
         </h1>
-        <p className="mt-1 text-muted-foreground">
-          {t("compare.subtitle")}
-        </p>
+        <p className="mt-1 text-muted-foreground">{t("compare.subtitle")}</p>
       </div>
 
       {/* Names */}
@@ -96,35 +95,75 @@ export default async function ComparePage({ params }: Props) {
         <div className="font-medium text-foreground">{t("compare.herb")}</div>
         <div>
           <h2 className="text-xl font-bold text-foreground">{herbA.name}</h2>
-          <p className="text-sm italic text-muted-foreground">{herbA.scientific_name}</p>
+          <p className="text-sm italic text-muted-foreground">
+            {herbA.scientific_name}
+          </p>
           <div className="mt-2 flex flex-wrap gap-1.5">
-            <Badge variant="secondary">{herbA.herb_categories?.name || t("herbDetail.uncategorized")}</Badge>
-            <EvidenceGrade level={(herbA.evidence_level as "A" | "B" | "C" | "D" | "trad") || "C"} showLabel={false} />
+            <Badge variant="secondary">
+              {herbA.herb_categories?.name || t("herbDetail.uncategorized")}
+            </Badge>
+            <EvidenceGrade
+              level={
+                (herbA.evidence_level as "A" | "B" | "C" | "D" | "trad") || "C"
+              }
+              showLabel={false}
+            />
           </div>
         </div>
         <div>
           <h2 className="text-xl font-bold text-foreground">{herbB.name}</h2>
-          <p className="text-sm italic text-muted-foreground">{herbB.scientific_name}</p>
+          <p className="text-sm italic text-muted-foreground">
+            {herbB.scientific_name}
+          </p>
           <div className="mt-2 flex flex-wrap gap-1.5">
-            <Badge variant="secondary">{herbB.herb_categories?.name || t("herbDetail.uncategorized")}</Badge>
-            <EvidenceGrade level={(herbB.evidence_level as "A" | "B" | "C" | "D" | "trad") || "C"} showLabel={false} />
+            <Badge variant="secondary">
+              {herbB.herb_categories?.name || t("herbDetail.uncategorized")}
+            </Badge>
+            <EvidenceGrade
+              level={
+                (herbB.evidence_level as "A" | "B" | "C" | "D" | "trad") || "C"
+              }
+              showLabel={false}
+            />
           </div>
         </div>
       </div>
 
       {/* Safety Warnings */}
-      {(!herbA.pregnancy_safe || !herbB.pregnancy_safe || !herbA.nursing_safe || !herbB.nursing_safe) && (
-        <SafetyAlert severity="critical" title={`⚠️ ${t("compare.pregnancyWarnings")}`}>
+      {(!herbA.pregnancy_safe ||
+        !herbB.pregnancy_safe ||
+        !herbA.nursing_safe ||
+        !herbB.nursing_safe) && (
+        <SafetyAlert
+          severity="critical"
+          title={`⚠️ ${t("compare.pregnancyWarnings")}`}
+        >
           <div className="grid grid-cols-2 gap-4">
             <div>
               <p className="font-medium">{herbA.name}</p>
-              <p>{herbA.pregnancy_safe ? `✅ ${t("compare.safeInPregnancy")}` : `❌ ${t("compare.notRecommendedPregnancy")}`}</p>
-              <p>{herbA.nursing_safe ? `✅ ${t("compare.safeNursing")}` : `❌ ${t("compare.notRecommendedNursing")}`}</p>
+              <p>
+                {herbA.pregnancy_safe
+                  ? `✅ ${t("compare.safeInPregnancy")}`
+                  : `❌ ${t("compare.notRecommendedPregnancy")}`}
+              </p>
+              <p>
+                {herbA.nursing_safe
+                  ? `✅ ${t("compare.safeNursing")}`
+                  : `❌ ${t("compare.notRecommendedNursing")}`}
+              </p>
             </div>
             <div>
               <p className="font-medium">{herbB.name}</p>
-              <p>{herbB.pregnancy_safe ? `✅ ${t("compare.safeInPregnancy")}` : `❌ ${t("compare.notRecommendedPregnancy")}`}</p>
-              <p>{herbB.nursing_safe ? `✅ ${t("compare.safeNursing")}` : `❌ ${t("compare.notRecommendedNursing")}`}</p>
+              <p>
+                {herbB.pregnancy_safe
+                  ? `✅ ${t("compare.safeInPregnancy")}`
+                  : `❌ ${t("compare.notRecommendedPregnancy")}`}
+              </p>
+              <p>
+                {herbB.nursing_safe
+                  ? `✅ ${t("compare.safeNursing")}`
+                  : `❌ ${t("compare.notRecommendedNursing")}`}
+              </p>
             </div>
           </div>
         </SafetyAlert>
@@ -134,44 +173,96 @@ export default async function ComparePage({ params }: Props) {
       <Card>
         <CardContent className="p-6">
           <div className="grid grid-cols-[1fr_2fr_2fr] gap-4 border-b py-3 text-sm">
-            <div className="font-medium text-foreground">{t("compare.description")}</div>
-            <div className="text-muted-foreground">{herbA.description || "—"}</div>
-            <div className="text-muted-foreground">{herbB.description || "—"}</div>
+            <div className="font-medium text-foreground">
+              {t("compare.description")}
+            </div>
+            <div className="text-muted-foreground">
+              {herbA.description || "—"}
+            </div>
+            <div className="text-muted-foreground">
+              {herbB.description || "—"}
+            </div>
           </div>
           <div className="grid grid-cols-[1fr_2fr_2fr] gap-4 border-b py-3 text-sm">
-            <div className="font-medium text-foreground">{t("compare.activeCompounds")}</div>
-            <div className="text-muted-foreground">{herbA.active_compounds?.join(", ") || "—"}</div>
-            <div className="text-muted-foreground">{herbB.active_compounds?.join(", ") || "—"}</div>
+            <div className="font-medium text-foreground">
+              {t("compare.activeCompounds")}
+            </div>
+            <div className="text-muted-foreground">
+              {herbA.active_compounds?.join(", ") || "—"}
+            </div>
+            <div className="text-muted-foreground">
+              {herbB.active_compounds?.join(", ") || "—"}
+            </div>
           </div>
           <div className="grid grid-cols-[1fr_2fr_2fr] gap-4 border-b py-3 text-sm">
-            <div className="font-medium text-foreground">{t("compare.traditionalUses")}</div>
-            <div className="text-muted-foreground">{herbA.traditional_uses?.join(", ") || "—"}</div>
-            <div className="text-muted-foreground">{herbB.traditional_uses?.join(", ") || "—"}</div>
+            <div className="font-medium text-foreground">
+              {t("compare.traditionalUses")}
+            </div>
+            <div className="text-muted-foreground">
+              {herbA.traditional_uses?.join(", ") || "—"}
+            </div>
+            <div className="text-muted-foreground">
+              {herbB.traditional_uses?.join(", ") || "—"}
+            </div>
           </div>
           <div className="grid grid-cols-[1fr_2fr_2fr] gap-4 border-b py-3 text-sm">
-            <div className="font-medium text-foreground">{t("compare.modernUses")}</div>
-            <div className="text-muted-foreground">{herbA.modern_uses?.join(", ") || "—"}</div>
-            <div className="text-muted-foreground">{herbB.modern_uses?.join(", ") || "—"}</div>
+            <div className="font-medium text-foreground">
+              {t("compare.modernUses")}
+            </div>
+            <div className="text-muted-foreground">
+              {herbA.modern_uses?.join(", ") || "—"}
+            </div>
+            <div className="text-muted-foreground">
+              {herbB.modern_uses?.join(", ") || "—"}
+            </div>
           </div>
           <div className="grid grid-cols-[1fr_2fr_2fr] gap-4 border-b py-3 text-sm">
-            <div className="font-medium text-foreground">{t("compare.adultDosage")}</div>
-            <div className="text-muted-foreground">{herbA.dosage_adult || "—"}</div>
-            <div className="text-muted-foreground">{herbB.dosage_adult || "—"}</div>
+            <div className="font-medium text-foreground">
+              {t("compare.adultDosage")}
+            </div>
+            <div className="text-muted-foreground">
+              {herbA.dosage_adult || "—"}
+            </div>
+            <div className="text-muted-foreground">
+              {herbB.dosage_adult || "—"}
+            </div>
           </div>
           <div className="grid grid-cols-[1fr_2fr_2fr] gap-4 border-b py-3 text-sm">
-            <div className="font-medium text-foreground">{t("compare.contraindications")}</div>
-            <div className="text-muted-foreground">{herbA.contraindications?.join(", ") || "—"}</div>
-            <div className="text-muted-foreground">{herbB.contraindications?.join(", ") || "—"}</div>
+            <div className="font-medium text-foreground">
+              {t("compare.contraindications")}
+            </div>
+            <div className="text-muted-foreground">
+              {herbA.contraindications?.join(", ") || "—"}
+            </div>
+            <div className="text-muted-foreground">
+              {herbB.contraindications?.join(", ") || "—"}
+            </div>
           </div>
           <div className="grid grid-cols-[1fr_2fr_2fr] gap-4 border-b py-3 text-sm">
-            <div className="font-medium text-foreground">{t("compare.sideEffects")}</div>
-            <div className="text-muted-foreground">{herbA.side_effects?.join(", ") || "—"}</div>
-            <div className="text-muted-foreground">{herbB.side_effects?.join(", ") || "—"}</div>
+            <div className="font-medium text-foreground">
+              {t("compare.sideEffects")}
+            </div>
+            <div className="text-muted-foreground">
+              {herbA.side_effects?.join(", ") || "—"}
+            </div>
+            <div className="text-muted-foreground">
+              {herbB.side_effects?.join(", ") || "—"}
+            </div>
           </div>
           <div className="grid grid-cols-[1fr_2fr_2fr] gap-4 py-3 text-sm">
-            <div className="font-medium text-foreground">{t("compare.drugInteractions")}</div>
-            <div className="text-muted-foreground">{t("compare.knownInteractions", { count: (herbA.drug_interactions || []).length })}</div>
-            <div className="text-muted-foreground">{t("compare.knownInteractions", { count: (herbB.drug_interactions || []).length })}</div>
+            <div className="font-medium text-foreground">
+              {t("compare.drugInteractions")}
+            </div>
+            <div className="text-muted-foreground">
+              {t("compare.knownInteractions", {
+                count: (herbA.drug_interactions || []).length,
+              })}
+            </div>
+            <div className="text-muted-foreground">
+              {t("compare.knownInteractions", {
+                count: (herbB.drug_interactions || []).length,
+              })}
+            </div>
           </div>
         </CardContent>
       </Card>
@@ -180,7 +271,12 @@ export default async function ComparePage({ params }: Props) {
       <SourceAttribution
         reviewedBy={t("herbDetailContent.editorialTeam")}
         reviewerCredentials={t("herbDetailContent.editorialCredentials")}
-        sources={[t("herbDetailContent.sources.who"), t("herbDetailContent.sources.nccih"), t("herbDetailContent.sources.pubmed"), t("herbDetailContent.sources.commissionE")]}
+        sources={[
+          t("herbDetailContent.sources.who"),
+          t("herbDetailContent.sources.nccih"),
+          t("herbDetailContent.sources.pubmed"),
+          t("herbDetailContent.sources.commissionE"),
+        ]}
       />
 
       {/* CTA */}

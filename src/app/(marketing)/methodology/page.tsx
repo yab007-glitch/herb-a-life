@@ -95,10 +95,7 @@ export default async function MethodologyPage() {
                 {section.content.split("\n\n").map((paragraph, i) => {
                   if (paragraph.startsWith("**")) {
                     return (
-                      <h3
-                        key={i}
-                        className="text-lg font-semibold mt-6 mb-3"
-                      >
+                      <h3 key={i} className="text-lg font-semibold mt-6 mb-3">
                         {paragraph.replace(/\*\*/g, "")}
                       </h3>
                     );

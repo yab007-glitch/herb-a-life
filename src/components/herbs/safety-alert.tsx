@@ -35,7 +35,12 @@ const severityConfig = {
   },
 };
 
-export function SafetyAlert({ severity, title, children, className }: SafetyAlertProps) {
+export function SafetyAlert({
+  severity,
+  title,
+  children,
+  className,
+}: SafetyAlertProps) {
   const config = severityConfig[severity];
   const Icon = config.icon;
 
@@ -83,7 +88,11 @@ export function InteractionAlert({
 
   if (interactionCount === 0) {
     return (
-      <SafetyAlert severity="info" title={t("safety.noInteractionsTitle")} className={className}>
+      <SafetyAlert
+        severity="info"
+        title={t("safety.noInteractionsTitle")}
+        className={className}
+      >
         {t("safety.noInteractionsMsg")}
       </SafetyAlert>
     );
@@ -97,13 +106,22 @@ export function InteractionAlert({
   const severity = hasSevere ? "critical" : hasModerate ? "warning" : "info";
 
   return (
-    <SafetyAlert severity={severity} title={interactionCount === 1 ? t("safety.interactionCountTitle", { count: interactionCount }) : t("safety.interactionCountTitlePlural", { count: interactionCount })} className={className}>
+    <SafetyAlert
+      severity={severity}
+      title={
+        interactionCount === 1
+          ? t("safety.interactionCountTitle", { count: interactionCount })
+          : t("safety.interactionCountTitlePlural", { count: interactionCount })
+      }
+      className={className}
+    >
       <div className="space-y-2">
         {severityCounts && (
           <div className="flex flex-wrap gap-2 text-xs">
             {(severityCounts.contraindicated || 0) > 0 && (
               <span className="rounded bg-red-100 px-1.5 py-0.5 font-medium text-red-800 dark:bg-red-900/50 dark:text-red-200">
-                {severityCounts.contraindicated} {t("safety.severityContraindicated")}
+                {severityCounts.contraindicated}{" "}
+                {t("safety.severityContraindicated")}
               </span>
             )}
             {(severityCounts.severe || 0) > 0 && (
@@ -123,9 +141,7 @@ export function InteractionAlert({
             )}
           </div>
         )}
-        <p>
-          {t("safety.interactionMessage")}
-        </p>
+        <p>{t("safety.interactionMessage")}</p>
       </div>
     </SafetyAlert>
   );
@@ -149,21 +165,25 @@ export function PregnancyAlert({
 
   if (pregnancySafe && nursingSafe) {
     return (
-      <SafetyAlert severity="info" title={t("safety.pregnancySafetyTitle")} className={className}>
+      <SafetyAlert
+        severity="info"
+        title={t("safety.pregnancySafetyTitle")}
+        className={className}
+      >
         {t("safety.pregnancySafeMsg", { level: evidenceLevel })}
       </SafetyAlert>
     );
   }
 
   return (
-    <SafetyAlert severity="critical" title={`⚠️ ${t("safety.notSafeTitle")}`} className={className}>
+    <SafetyAlert
+      severity="critical"
+      title={`⚠️ ${t("safety.notSafeTitle")}`}
+      className={className}
+    >
       <div className="space-y-2">
-        {!pregnancySafe && (
-          <p>{t("safety.notPregnancyMsg")}</p>
-        )}
-        {!nursingSafe && (
-          <p>{t("safety.notNursingMsg")}</p>
-        )}
+        {!pregnancySafe && <p>{t("safety.notPregnancyMsg")}</p>}
+        {!nursingSafe && <p>{t("safety.notNursingMsg")}</p>}
         <p className="font-medium">{t("safety.consultProvider")}</p>
       </div>
     </SafetyAlert>

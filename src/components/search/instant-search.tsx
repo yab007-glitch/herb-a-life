@@ -24,10 +24,7 @@ interface InstantSearchProps {
   className?: string;
 }
 
-export function InstantSearch({
-  placeholder,
-  className,
-}: InstantSearchProps) {
+export function InstantSearch({ placeholder, className }: InstantSearchProps) {
   const { t } = useI18n();
   const resolvedPlaceholder = placeholder || t("search.placeholder");
   const [query, setQuery] = useState("");
@@ -68,7 +65,10 @@ export function InstantSearch({
   // Close on click outside
   useEffect(() => {
     function handleClickOutside(event: MouseEvent) {
-      if (containerRef.current && !containerRef.current.contains(event.target as Node)) {
+      if (
+        containerRef.current &&
+        !containerRef.current.contains(event.target as Node)
+      ) {
         setIsOpen(false);
       }
     }
@@ -80,9 +80,7 @@ export function InstantSearch({
   const handleKeyDown = (e: React.KeyboardEvent) => {
     if (e.key === "ArrowDown") {
       e.preventDefault();
-      setSelectedIndex((prev) =>
-        prev < results.length - 1 ? prev + 1 : prev
-      );
+      setSelectedIndex((prev) => (prev < results.length - 1 ? prev + 1 : prev));
     } else if (e.key === "ArrowUp") {
       e.preventDefault();
       setSelectedIndex((prev) => (prev > -1 ? prev - 1 : prev));
@@ -163,7 +161,9 @@ export function InstantSearch({
                     <div className="flex items-center gap-2">
                       <span className="font-medium truncate">{herb.name}</span>
                       <EvidenceGrade
-                        level={herb.evidence_level as "A" | "B" | "C" | "D" | "trad"}
+                        level={
+                          herb.evidence_level as "A" | "B" | "C" | "D" | "trad"
+                        }
                         showLabel={false}
                       />
                     </div>
@@ -173,7 +173,11 @@ export function InstantSearch({
                     {herb.traditional_uses?.length > 0 && (
                       <div className="mt-1 flex flex-wrap gap-1">
                         {herb.traditional_uses.slice(0, 3).map((use) => (
-                          <Badge key={use} variant="outline" className="text-xs">
+                          <Badge
+                            key={use}
+                            variant="outline"
+                            className="text-xs"
+                          >
                             {use}
                           </Badge>
                         ))}

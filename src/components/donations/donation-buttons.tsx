@@ -88,7 +88,9 @@ export function DonationButtons() {
                 <p className="text-3xl font-bold text-foreground">
                   ${tier.amount}
                 </p>
-                <p className="font-medium text-foreground mt-1">{t(tier.labelKey)}</p>
+                <p className="font-medium text-foreground mt-1">
+                  {t(tier.labelKey)}
+                </p>
                 <p className="text-sm text-muted-foreground mt-1">
                   {t(tier.descKey)}
                 </p>

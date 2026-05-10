@@ -53,8 +53,10 @@ export async function GET() {
   // Check OpenRouter API by making a lightweight models request
   try {
     const openrouterKey = process.env.OPENROUTER_API_KEY?.trim();
-    const openrouterBaseUrl = (process.env.OPENROUTER_BASE_URL || "https://openrouter.ai/api/v1").trim();
-    
+    const openrouterBaseUrl = (
+      process.env.OPENROUTER_BASE_URL || "https://openrouter.ai/api/v1"
+    ).trim();
+
     if (!openrouterKey || openrouterKey.startsWith("sk-or-v1-REPLACE")) {
       checks.ai = {
         status: "unconfigured",
@@ -68,7 +70,7 @@ export async function GET() {
         signal: AbortSignal.timeout(5000),
       });
       const aiLatency = Date.now() - aiStart;
-      
+
       if (aiResponse.ok) {
         checks.ai = { status: "healthy", latency: aiLatency };
       } else {

@@ -6,13 +6,14 @@ import { HerbCard } from "@/components/herbs/herb-card";
 import { SmartSearch } from "@/components/herbs/smart-search";
 import { SurpriseMeButton } from "@/components/herbs/surprise-me-button";
 import { EmptyState } from "@/components/shared/empty-state";
-import {
-  getHerbs,
-  getHerbCategories,
-} from "@/lib/actions/herbs";
+import { getHerbs, getHerbCategories } from "@/lib/actions/herbs";
 import { Flame, Stethoscope } from "lucide-react";
 import Script from "next/script";
-import { getServerTranslation, getServerPluralTranslation, type Locale } from "@/lib/i18n/server";
+import {
+  getServerTranslation,
+  getServerPluralTranslation,
+  type Locale,
+} from "@/lib/i18n/server";
 import { cookies } from "next/headers";
 
 export const metadata: Metadata = {
@@ -73,8 +74,11 @@ export default async function HerbsPage({
   const locale = await getLocale();
   const t = (key: string, params?: Record<string, string | number>) =>
     getServerTranslation(locale, key, params);
-  const tPlural = (key: string, count: number, params?: Record<string, string | number>) =>
-    getServerPluralTranslation(locale, key, count, params);
+  const tPlural = (
+    key: string,
+    count: number,
+    params?: Record<string, string | number>
+  ) => getServerPluralTranslation(locale, key, count, params);
 
   const [herbsResult, categoriesResult] = await Promise.all([
     getHerbs({ query, category, page }),
@@ -113,7 +117,9 @@ export default async function HerbsPage({
         <div className="rounded-lg border border-primary/20 bg-primary/5 p-4">
           <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
             <div>
-              <h2 className="font-semibold text-foreground">{t("herbs.dontKnowWhichHerb")}</h2>
+              <h2 className="font-semibold text-foreground">
+                {t("herbs.dontKnowWhichHerb")}
+              </h2>
               <p className="text-sm text-muted-foreground">
                 {t("herbs.dontKnowDesc")}
               </p>
@@ -212,7 +218,9 @@ export default async function HerbsPage({
         <div className="space-y-6">
           <EmptyState
             variant="search"
-            title={query ? t("herbs.noHerbsQuery", { query }) : t("herbs.noResults")}
+            title={
+              query ? t("herbs.noHerbsQuery", { query }) : t("herbs.noResults")
+            }
             description={t("herbs.trySearching")}
             action={{ label: t("herbs.browseAll"), href: "/herbs" }}
           />
@@ -248,7 +256,8 @@ export default async function HerbsPage({
             {t("herbs.pagination.previous")}
           </Button>
           <span className="text-sm text-muted-foreground">
-            {t("herbs.pagination.page")} {page} {t("herbs.pagination.of")} {totalPages}
+            {t("herbs.pagination.page")} {page} {t("herbs.pagination.of")}{" "}
+            {totalPages}
           </span>
           <Button
             variant="outline"

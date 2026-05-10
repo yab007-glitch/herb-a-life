@@ -48,7 +48,7 @@ export function ChatInterface({
 }) {
   const { locale: i18nLocale, t } = useI18n();
   const locale = localeProp || i18nLocale;
-  
+
   function createInitialMessage(): Message {
     return {
       role: "assistant",
@@ -57,7 +57,7 @@ export function ChatInterface({
       timestamp: new Date().toISOString(),
     };
   }
-  
+
   const [messages, setMessages] = useState<Message[]>(() => [
     createInitialMessage(),
   ]);
@@ -86,24 +86,26 @@ export function ChatInterface({
   useEffect(() => {
     async function loadSession() {
       if (!sessionId) return;
-      
+
       // Try server persistence first (using guest ID)
       if (guestId) {
         const serverSession = await getGuestSession(sessionId, guestId);
         if (serverSession && serverSession.messages.length > 0) {
-          setMessages(serverSession.messages
-            .filter((m) => m.role === "user" || m.role === "assistant")
-            .map((m) => ({
-            role: m.role as "user" | "assistant",
-            content: m.content,
-            id: m.id,
-            timestamp: m.createdAt,
-          })));
+          setMessages(
+            serverSession.messages
+              .filter((m) => m.role === "user" || m.role === "assistant")
+              .map((m) => ({
+                role: m.role as "user" | "assistant",
+                content: m.content,
+                id: m.id,
+                timestamp: m.createdAt,
+              }))
+          );
           setCurrentSessionId(sessionId);
           return;
         }
       }
-      
+
       // Fall back to localStorage
       const localSession = getChatSession(sessionId);
       if (localSession) {
@@ -144,13 +146,21 @@ export function ChatInterface({
 
         // Try guest persistence (no auth required)
         if (!currentSessionId) {
-          const session = await createGuestSession(guestId, herbContext || undefined);
+          const session = await createGuestSession(
+            guestId,
+            herbContext || undefined
+          );
           if (session) {
             setCurrentSessionId(session.id);
             // Add all messages
             for (const msg of msgs) {
               if (msg.role === "user" || msg.role === "assistant") {
-                await addGuestMessage(session.id, msg.role, msg.content, guestId);
+                await addGuestMessage(
+                  session.id,
+                  msg.role,
+                  msg.content,
+                  guestId
+                );
               }
             }
           } else {
@@ -161,13 +171,26 @@ export function ChatInterface({
           }
         } else {
           // Update existing session
-          const serverSession = await getGuestSession(currentSessionId, guestId);
+          const serverSession = await getGuestSession(
+            currentSessionId,
+            guestId
+          );
           if (serverSession) {
             // Only add new messages (compare by content)
-            const existingContent = new Set(serverSession.messages.map((m) => m.content));
+            const existingContent = new Set(
+              serverSession.messages.map((m) => m.content)
+            );
             for (const msg of msgs) {
-              if (!existingContent.has(msg.content) && (msg.role === "user" || msg.role === "assistant")) {
-                await addGuestMessage(currentSessionId, msg.role, msg.content, guestId);
+              if (
+                !existingContent.has(msg.content) &&
+                (msg.role === "user" || msg.role === "assistant")
+              ) {
+                await addGuestMessage(
+                  currentSessionId,
+                  msg.role,
+                  msg.content,
+                  guestId
+                );
               }
             }
           } else {
@@ -540,7 +563,9 @@ export function ChatInterface({
               onClick={toggleVoice}
               className="shrink-0 md:hidden"
               aria-label={
-                isListening ? t("pharmacist.voiceStop") : t("pharmacist.voiceStart")
+                isListening
+                  ? t("pharmacist.voiceStop")
+                  : t("pharmacist.voiceStart")
               }
             >
               {isListening ? (
@@ -560,7 +585,9 @@ export function ChatInterface({
           </Button>
         </form>
         {isSaving && (
-          <p className="mt-1 text-xs text-muted-foreground">{t("pharmacist.saving")}</p>
+          <p className="mt-1 text-xs text-muted-foreground">
+            {t("pharmacist.saving")}
+          </p>
         )}
       </div>
     </div>

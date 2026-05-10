@@ -22,7 +22,8 @@ export function WebVitalsDebug() {
     };
 
     window.addEventListener("web-vital", handleVital as EventListener);
-    return () => window.removeEventListener("web-vital", handleVital as EventListener);
+    return () =>
+      window.removeEventListener("web-vital", handleVital as EventListener);
   }, []);
 
   if (process.env.NODE_ENV === "production" || vitals.length === 0) {
@@ -35,10 +36,21 @@ export function WebVitalsDebug() {
       <div className="space-y-1">
         {vitals.map((vital, i) => (
           <div key={i} className="flex justify-between">
-            <span className={vital.rating === "good" ? "text-green-400" : vital.rating === "poor" ? "text-red-400" : "text-yellow-400"}>
+            <span
+              className={
+                vital.rating === "good"
+                  ? "text-green-400"
+                  : vital.rating === "poor"
+                    ? "text-red-400"
+                    : "text-yellow-400"
+              }
+            >
               {vital.name}
             </span>
-            <span>{Math.round(vital.value)}{vital.name === "CLS" ? "" : "ms"}</span>
+            <span>
+              {Math.round(vital.value)}
+              {vital.name === "CLS" ? "" : "ms"}
+            </span>
           </div>
         ))}
       </div>

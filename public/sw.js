@@ -1,5 +1,12 @@
 const CACHE_NAME = "herbally-v2";
-const STATIC_URLS = ["/", "/herbs", "/symptoms", "/faq", "/pharmacist", "/calculator"];
+const STATIC_URLS = [
+  "/",
+  "/herbs",
+  "/symptoms",
+  "/faq",
+  "/pharmacist",
+  "/calculator",
+];
 const OFFLINE_FALLBACK = "/offline.html";
 
 // Stale-while-revalidate for herb pages, network-first for everything else
@@ -34,7 +41,11 @@ self.addEventListener("fetch", (event) => {
   const url = new URL(event.request.url);
 
   // Skip API calls, auth, and external requests
-  if (url.pathname.startsWith("/api/") || url.pathname.startsWith("/auth/") || url.origin !== self.location.origin) {
+  if (
+    url.pathname.startsWith("/api/") ||
+    url.pathname.startsWith("/auth/") ||
+    url.origin !== self.location.origin
+  ) {
     return;
   }
 

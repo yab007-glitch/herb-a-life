@@ -8,15 +8,16 @@
 
 ## Executive Summary
 
-| Category | Status | Risk Level |
-|----------|--------|------------|
-| **Security Posture** | ⚠️ MODERATE | Medium |
-| **Code Quality** | ✅ GOOD | Low |
-| **Infrastructure** | ✅ HEALTHY | Low |
-| **Dependencies** | ⚠️ REQUIRES ATTENTION | Medium |
-| **Overall** | ⚠️ IMPROVEMENTS NEEDED | Medium |
+| Category             | Status                 | Risk Level |
+| -------------------- | ---------------------- | ---------- |
+| **Security Posture** | ⚠️ MODERATE            | Medium     |
+| **Code Quality**     | ✅ GOOD                | Low        |
+| **Infrastructure**   | ✅ HEALTHY             | Low        |
+| **Dependencies**     | ⚠️ REQUIRES ATTENTION  | Medium     |
+| **Overall**          | ⚠️ IMPROVEMENTS NEEDED | Medium     |
 
 **Key Findings:**
+
 - 3 dependency vulnerabilities (1 high, 2 moderate) - **Immediate action required**
 - XSS patterns present in SEO components (acceptable use case)
 - Live site is healthy with all core services operational
@@ -29,11 +30,11 @@
 
 ### 1.1 Dependency Vulnerabilities (HIGH PRIORITY)
 
-| Package | Severity | CVE | Issue | Fix Status |
-|---------|----------|-----|-------|------------|
-| `vite` | 🔴 **HIGH** | CVE-2025-XXXX | Path traversal & arbitrary file read | Available |
-| `hono` | 🟡 MODERATE | CVE-2025-XXXX | Cookie validation bypass | Available |
-| `@hono/node-server` | 🟡 MODERATE | CVE-2025-XXXX | Middleware bypass via path traversal | Available |
+| Package             | Severity    | CVE           | Issue                                | Fix Status |
+| ------------------- | ----------- | ------------- | ------------------------------------ | ---------- |
+| `vite`              | 🔴 **HIGH** | CVE-2025-XXXX | Path traversal & arbitrary file read | Available  |
+| `hono`              | 🟡 MODERATE | CVE-2025-XXXX | Cookie validation bypass             | Available  |
+| `@hono/node-server` | 🟡 MODERATE | CVE-2025-XXXX | Middleware bypass via path traversal | Available  |
 
 **Recommendation:** Run `npm audit fix` immediately or update packages manually.
 
@@ -42,7 +43,7 @@
 Three instances of `dangerouslySetInnerHTML` were detected, all for JSON-LD structured data in SEO components:
 
 - `src/components/seo/herb-schema.tsx:103`
-- `src/components/seo/organization-schema.tsx:36`  
+- `src/components/seo/organization-schema.tsx:36`
 - `src/app/(main)/herbs/page.tsx:109`
 
 **Risk Assessment:** LOW - These are for Google structured data and use statically generated content from the database, not user input.
@@ -51,22 +52,22 @@ Three instances of `dangerouslySetInnerHTML` were detected, all for JSON-LD stru
 
 ### 1.3 Security Headers ✅
 
-| Header | Status | Value |
-|--------|--------|-------|
-| X-Frame-Options | ✅ Set | DENY |
-| X-Content-Type-Options | ✅ Set | nosniff |
-| Content-Security-Policy | ✅ Set | Comprehensive policy including Stripe domains |
-| Referrer-Policy | ✅ Set | strict-origin-when-cross-origin |
-| Strict-Transport-Security | ✅ Set | max-age=63072000 (production) |
-| Permissions-Policy | ✅ Set | camera=(), microphone=(), geolocation=() |
+| Header                    | Status | Value                                         |
+| ------------------------- | ------ | --------------------------------------------- |
+| X-Frame-Options           | ✅ Set | DENY                                          |
+| X-Content-Type-Options    | ✅ Set | nosniff                                       |
+| Content-Security-Policy   | ✅ Set | Comprehensive policy including Stripe domains |
+| Referrer-Policy           | ✅ Set | strict-origin-when-cross-origin               |
+| Strict-Transport-Security | ✅ Set | max-age=63072000 (production)                 |
+| Permissions-Policy        | ✅ Set | camera=(), microphone=(), geolocation=()      |
 
 ### 1.4 Secrets & Configuration
 
-| Check | Status | Notes |
-|-------|--------|-------|
-| Hardcoded credentials | ✅ None found | - |
-| .env committed | ✅ No secrets committed | .env.example only |
-| Console logging | ⚠️ Partial | API key prefixes logged in chat route (non-critical) |
+| Check                 | Status                  | Notes                                                |
+| --------------------- | ----------------------- | ---------------------------------------------------- |
+| Hardcoded credentials | ✅ None found           | -                                                    |
+| .env committed        | ✅ No secrets committed | .env.example only                                    |
+| Console logging       | ⚠️ Partial              | API key prefixes logged in chat route (non-critical) |
 
 **Finding:** In `src/app/api/chat/route.ts` lines 12-17, API key prefixes are logged to console. This is low-risk but should be removed in production.
 
@@ -87,20 +88,24 @@ Three instances of `dangerouslySetInnerHTML` were detected, all for JSON-LD stru
     "environment": { "status": "healthy" },
     "ai": { "status": "healthy" },
     "stripe": { "status": "healthy" },
-    "rateLimit": { "status": "healthy", "backend": "upstash", "configured": true }
+    "rateLimit": {
+      "status": "healthy",
+      "backend": "upstash",
+      "configured": true
+    }
   }
 }
 ```
 
 ### 2.2 Page Performance
 
-| Page | Load Time | Status |
-|------|-----------|--------|
-| Homepage | 1.4s | ✅ Excellent |
-| Herbs Listing | 3.6s | ✅ Good |
-| Calculator | 3.2s | ✅ Good |
-| Pharmacist (AI Chat) | 1.1s | ✅ Excellent |
-| Legal Pages | 2.1s avg | ✅ Good |
+| Page                 | Load Time | Status       |
+| -------------------- | --------- | ------------ |
+| Homepage             | 1.4s      | ✅ Excellent |
+| Herbs Listing        | 3.6s      | ✅ Good      |
+| Calculator           | 3.2s      | ✅ Good      |
+| Pharmacist (AI Chat) | 1.1s      | ✅ Excellent |
+| Legal Pages          | 2.1s avg  | ✅ Good      |
 
 ### 2.3 Core Web Vitals (Estimated)
 
@@ -121,12 +126,13 @@ Three instances of `dangerouslySetInnerHTML` were detected, all for JSON-LD stru
 
 ### 3.1 ESLint Results
 
-| Severity | Count | Description |
-|----------|-------|-------------|
-| Error | 2 | setState in useEffect (React 19 warnings) |
-| Warning | 2 | `any` type, unused variable |
+| Severity | Count | Description                               |
+| -------- | ----- | ----------------------------------------- |
+| Error    | 2     | setState in useEffect (React 19 warnings) |
+| Warning  | 2     | `any` type, unused variable               |
 
 **Files with issues:**
+
 - `src/components/i18n/i18n-provider.tsx:39` - setState in effect
 - `src/components/shared/animated-counter.tsx:82` - setState in effect
 
@@ -140,10 +146,10 @@ Three instances of `dangerouslySetInnerHTML` were detected, all for JSON-LD stru
 
 ### 3.3 Test Coverage
 
-| Test File | Tests | Status |
-|-----------|-------|--------|
-| `rate-limit.test.ts` | 3 | ✅ PASS |
-| `dosage-calculations.test.ts` | 19 | ✅ PASS |
+| Test File                     | Tests | Status  |
+| ----------------------------- | ----- | ------- |
+| `rate-limit.test.ts`          | 3     | ✅ PASS |
+| `dosage-calculations.test.ts` | 19    | ✅ PASS |
 
 ---
 
@@ -151,17 +157,17 @@ Three instances of `dangerouslySetInnerHTML` were detected, all for JSON-LD stru
 
 ### 4.1 Architecture Overview
 
-| Component | Technology | Status |
-|-----------|------------|--------|
-| Framework | Next.js 16.2.1 | ✅ Current |
-| Runtime | React 19.2.4 | ✅ Current |
-| Database | Supabase (PostgreSQL) | ✅ Healthy |
-| Auth | Supabase Auth | ✅ Configured |
-| AI Service | OpenRouter + Ollama | ✅ Operational |
-| Payments | Stripe | ✅ Operational |
-| Rate Limiting | Upstash Redis | ✅ Configured |
-| Styling | Tailwind CSS 4 | ✅ Modern |
-| Hosting | Vercel | ✅ Live |
+| Component     | Technology            | Status         |
+| ------------- | --------------------- | -------------- |
+| Framework     | Next.js 16.2.1        | ✅ Current     |
+| Runtime       | React 19.2.4          | ✅ Current     |
+| Database      | Supabase (PostgreSQL) | ✅ Healthy     |
+| Auth          | Supabase Auth         | ✅ Configured  |
+| AI Service    | OpenRouter + Ollama   | ✅ Operational |
+| Payments      | Stripe                | ✅ Operational |
+| Rate Limiting | Upstash Redis         | ✅ Configured  |
+| Styling       | Tailwind CSS 4        | ✅ Modern      |
+| Hosting       | Vercel                | ✅ Live        |
 
 ### 4.2 Database Security
 
@@ -172,12 +178,12 @@ Three instances of `dangerouslySetInnerHTML` were detected, all for JSON-LD stru
 
 ### 4.3 Authentication & Authorization
 
-| Feature | Status | Implementation |
-|---------|--------|----------------|
-| Session management | ✅ | Supabase SSR with cookie-based sessions |
-| Public routes | ✅ | Configured in middleware.ts |
-| Admin routes protection | ✅ | Database role check |
-| Rate limiting | ✅ | 20 req/min per IP |
+| Feature                 | Status | Implementation                          |
+| ----------------------- | ------ | --------------------------------------- |
+| Session management      | ✅     | Supabase SSR with cookie-based sessions |
+| Public routes           | ✅     | Configured in middleware.ts             |
+| Admin routes protection | ✅     | Database role check                     |
+| Rate limiting           | ✅     | 20 req/min per IP                       |
 
 ---
 
@@ -223,13 +229,13 @@ Three instances of `dangerouslySetInnerHTML` were detected, all for JSON-LD stru
 
 ### Current Status: ✅ LIVE ON VERCEL
 
-| Check | Status | Evidence |
-|-------|--------|----------|
-| DNS | ✅ | herbally.app resolves |
-| HTTPS | ✅ | SSL certificate valid |
-| Health endpoint | ✅ | /api/health returns 200 |
-| Sitemap | ✅ | /sitemap.xml accessible |
-| Security headers | ✅ | All headers present |
+| Check            | Status | Evidence                |
+| ---------------- | ------ | ----------------------- |
+| DNS              | ✅     | herbally.app resolves   |
+| HTTPS            | ✅     | SSL certificate valid   |
+| Health endpoint  | ✅     | /api/health returns 200 |
+| Sitemap          | ✅     | /sitemap.xml accessible |
+| Security headers | ✅     | All headers present     |
 
 ---
 
@@ -270,6 +276,7 @@ npm audit fix
 ### CVE Details
 
 #### 1. Vite Path Traversal (CVE-2025-XXXX)
+
 - **CVSS Score:** HIGH
 - **Affected:** vite@7.0.0 - 7.3.1
 - **Description:** Arbitrary file read via dev server WebSocket
@@ -277,6 +284,7 @@ npm audit fix
 - **Fix:** Update to vite@^7.3.2
 
 #### 2. Hono Cookie Issues (CVE-2025-XXXX)
+
 - **CVSS Score:** MODERATE
 - **Affected:** hono@<=4.12.11
 - **Description:** Cookie validation bypass and path traversal

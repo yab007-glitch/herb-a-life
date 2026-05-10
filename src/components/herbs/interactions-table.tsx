@@ -54,7 +54,8 @@ export function InteractionsTable({
       <div className="mb-4 flex flex-wrap gap-2">
         {severityCounts.contraindicated > 0 && (
           <span className="inline-flex items-center rounded-full bg-red-100 px-2.5 py-0.5 text-xs font-medium text-red-800 dark:bg-red-900/30 dark:text-red-300">
-            {severityCounts.contraindicated} {t("interactions.severity.contraindicated")}
+            {severityCounts.contraindicated}{" "}
+            {t("interactions.severity.contraindicated")}
           </span>
         )}
         {severityCounts.severe > 0 && (
@@ -128,7 +129,9 @@ export function InteractionsTable({
             ) : (
               <>
                 <ChevronDown className="size-4" />
-                {t("interactions.showMore", { count: interactions.length - INITIAL_COUNT })}
+                {t("interactions.showMore", {
+                  count: interactions.length - INITIAL_COUNT,
+                })}
               </>
             )}
           </Button>

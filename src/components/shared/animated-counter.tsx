@@ -67,7 +67,7 @@ export function AnimatedCounter({ value, className }: AnimatedCounterProps) {
 
   // Use useSyncExternalStore for hydration-safe mounting detection
   const [hasMounted, setHasMounted] = useState(false);
-  
+
   useEffect(() => {
     // Schedule state update for next tick to avoid sync setState warning
     const timeoutId = setTimeout(() => setHasMounted(true), 0);

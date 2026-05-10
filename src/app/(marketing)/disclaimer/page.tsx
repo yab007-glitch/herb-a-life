@@ -31,9 +31,7 @@ export default async function DisclaimerPage() {
         <h1 className="text-3xl font-bold tracking-tight text-foreground">
           {t("disclaimer.title")}
         </h1>
-        <p className="mt-2 text-muted-foreground">
-          {t("disclaimer.text")}
-        </p>
+        <p className="mt-2 text-muted-foreground">{t("disclaimer.text")}</p>
       </div>
 
       <div className="prose prose-sm max-w-none dark:prose-invert">

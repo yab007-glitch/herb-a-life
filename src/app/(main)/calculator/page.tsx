@@ -72,9 +72,7 @@ export default async function CalculatorPage({
         <h1 className="text-3xl font-bold tracking-tight text-foreground">
           {t("calculator.title")}
         </h1>
-        <p className="mt-2 text-muted-foreground">
-          {t("calculator.subtitle")}
-        </p>
+        <p className="mt-2 text-muted-foreground">{t("calculator.subtitle")}</p>
       </div>
       <DoseCalculatorForm prefill={prefill} />
     </div>

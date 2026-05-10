@@ -14,10 +14,10 @@ Supabase projects on the **Pro plan and above** include automated backups with p
 
 ### Backup Schedule
 
-| Plan | Backup Frequency | Retention |
-|------|-----------------|-----------|
-| Pro | Daily full backup + 2-minute WAL archival | 7 days of PITR |
-| Team | Daily full backup + 2-minute WAL archival | 14 days of PITR |
+| Plan       | Backup Frequency                          | Retention       |
+| ---------- | ----------------------------------------- | --------------- |
+| Pro        | Daily full backup + 2-minute WAL archival | 7 days of PITR  |
+| Team       | Daily full backup + 2-minute WAL archival | 14 days of PITR |
 | Enterprise | Daily full backup + 1-minute WAL archival | 30 days of PITR |
 
 **HerbAlly is currently on the Pro plan** — 7-day PITR is active.
@@ -25,11 +25,13 @@ Supabase projects on the **Pro plan and above** include automated backups with p
 ### How to Perform a Manual Backup
 
 Via Supabase Dashboard:
+
 1. Go to [Database > Backups](https://supabase.com/dashboard/project/pnvltmyixympgammxvoo/database/backups)
 2. Click **"Trigger a new backup"** (pre-deployment, before schema changes)
 3. Download the backup as a `.sql` file
 
 Via Supabase CLI:
+
 ```bash
 # Full database dump (excludes auth schema)
 supabase db dump --linked --file ./backups/herbally-$(date +%Y-%m-%d).sql
@@ -42,12 +44,14 @@ supabase db dump --linked --file ./backups/herbally-full-$(date +%Y-%m-%d).sql \
 ### Recovery Procedure
 
 #### Restore from PITR (within 7 days)
+
 1. Go to [Database > Backups](https://supabase.com/dashboard/project/pnvltmyixympgammxvoo/database/backups)
 2. Click **"Restore"** on the target backup
 3. Select a point in time (within 2-minute granularity)
 4. Confirm restoration — a new database instance is created
 
 #### Restore from SQL dump
+
 ```bash
 # Restore to a new Supabase project
 psql "$NEW_DATABASE_URL" < ./backups/herbally-2026-04-26.sql
@@ -67,10 +71,12 @@ This applies all migrations in order, creating the full schema without data.
 ## Automated Backup Recommendations
 
 ### Pre-Deployment
+
 - Run `supabase db dump` in CI before deploying schema changes
 - Store the dump in a secure cloud storage bucket (e.g., S3, R2)
 
 ### Monitoring
+
 - Set up a cron job or GitHub Action to email backup status weekly
 - Verify backup integrity by restoring to a staging environment quarterly
 

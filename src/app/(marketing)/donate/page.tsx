@@ -142,7 +142,9 @@ export default async function DonatePage({
       {/* Donation Buttons */}
       <div className="space-y-4">
         <div className="text-center">
-          <h2 className="text-2xl font-bold">{t("donateContent.chooseImpact")}</h2>
+          <h2 className="text-2xl font-bold">
+            {t("donateContent.chooseImpact")}
+          </h2>
           <p className="text-muted-foreground mt-1">
             {t("donateContent.everyDonation")}
           </p>
@@ -191,8 +193,12 @@ export default async function DonatePage({
             })}
           </div>
           <div className="mt-4 flex items-center justify-between rounded-lg bg-muted px-4 py-3 text-sm">
-            <span className="font-medium">{t("donateContent.estimatedCosts")}</span>
-            <span className="font-bold text-lg text-primary">{t("donateContent.monthlyCost")}</span>
+            <span className="font-medium">
+              {t("donateContent.estimatedCosts")}
+            </span>
+            <span className="font-bold text-lg text-primary">
+              {t("donateContent.monthlyCost")}
+            </span>
           </div>
         </CardContent>
       </Card>
@@ -209,8 +215,12 @@ export default async function DonatePage({
                 <p className="text-sm italic text-muted-foreground">
                   &ldquo;{testimonial.quote}&rdquo;
                 </p>
-                <p className="mt-3 text-sm font-medium">— {testimonial.author}</p>
-                <p className="text-xs text-muted-foreground">{testimonial.location}</p>
+                <p className="mt-3 text-sm font-medium">
+                  — {testimonial.author}
+                </p>
+                <p className="text-xs text-muted-foreground">
+                  {testimonial.location}
+                </p>
               </CardContent>
             </Card>
           ))}
@@ -229,28 +239,36 @@ export default async function DonatePage({
           <div className="flex items-start gap-3">
             <CheckCircle className="size-5 text-emerald-600 shrink-0 mt-0.5" />
             <p>
-              <strong className="text-foreground">{t("donateContent.noAds")}</strong>{" "}
+              <strong className="text-foreground">
+                {t("donateContent.noAds")}
+              </strong>{" "}
               {t("donateContent.noAdsDesc")}
             </p>
           </div>
           <div className="flex items-start gap-3">
             <CheckCircle className="size-5 text-emerald-600 shrink-0 mt-0.5" />
             <p>
-              <strong className="text-foreground">{t("donateContent.noPremium")}</strong>{" "}
+              <strong className="text-foreground">
+                {t("donateContent.noPremium")}
+              </strong>{" "}
               {t("donateContent.noPremiumDesc")}
             </p>
           </div>
           <div className="flex items-start gap-3">
             <CheckCircle className="size-5 text-emerald-600 shrink-0 mt-0.5" />
             <p>
-              <strong className="text-foreground">{t("donateContent.noDataSelling")}</strong>{" "}
+              <strong className="text-foreground">
+                {t("donateContent.noDataSelling")}
+              </strong>{" "}
               {t("donateContent.noDataSellingDesc")}
             </p>
           </div>
           <div className="flex items-start gap-3">
             <CheckCircle className="size-5 text-emerald-600 shrink-0 mt-0.5" />
             <p>
-              <strong className="text-foreground">{t("donateContent.openCosts")}</strong>{" "}
+              <strong className="text-foreground">
+                {t("donateContent.openCosts")}
+              </strong>{" "}
               {t("donateContent.openCostsDesc")}
             </p>
           </div>

@@ -31,9 +31,7 @@ export default async function AdminOverviewPage() {
         supabase
           .from("drug_interactions")
           .select("id", { count: "exact", head: true }),
-        supabase
-          .from("profiles")
-          .select("id", { count: "exact", head: true }),
+        supabase.from("profiles").select("id", { count: "exact", head: true }),
         supabase
           .from("interaction_checks")
           .select("id", { count: "exact", head: true }),

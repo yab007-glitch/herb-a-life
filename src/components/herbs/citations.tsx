@@ -18,12 +18,12 @@ interface CitationsListProps {
 }
 
 const sourceIcons: Record<string, React.ReactNode> = {
-  "WHO": <Globe className="size-3" />,
-  "PubMed": <FileText className="size-3" />,
+  WHO: <Globe className="size-3" />,
+  PubMed: <FileText className="size-3" />,
   "Commission E": <BookOpen className="size-3" />,
-  "NCCIH": <Globe className="size-3" />,
-  "EMA": <Globe className="size-3" />,
-  "default": <BookOpen className="size-3" />,
+  NCCIH: <Globe className="size-3" />,
+  EMA: <Globe className="size-3" />,
+  default: <BookOpen className="size-3" />,
 };
 
 export function CitationsList({ citations, className }: CitationsListProps) {
@@ -42,18 +42,25 @@ export function CitationsList({ citations, className }: CitationsListProps) {
       {citations.map((citation, index) => {
         const icon = sourceIcons[citation.source] || sourceIcons.default;
         const hasUrl = citation.url || citation.pmid;
-        const linkUrl = citation.url || (citation.pmid ? `https://pubmed.ncbi.nlm.nih.gov/${citation.pmid}/` : null);
-        
+        const linkUrl =
+          citation.url ||
+          (citation.pmid
+            ? `https://pubmed.ncbi.nlm.nih.gov/${citation.pmid}/`
+            : null);
+
         return (
           <li key={index} className="flex items-start gap-2 text-sm">
-            <span className="mt-0.5 shrink-0 text-muted-foreground">{icon}</span>
+            <span className="mt-0.5 shrink-0 text-muted-foreground">
+              {icon}
+            </span>
             <div className="flex-1">
               <span className="font-medium">{citation.source}</span>
-              {citation.title && (
-                <>{" "}· {citation.title}</>
-              )}
+              {citation.title && <> · {citation.title}</>}
               {citation.year && (
-                <span className="text-muted-foreground">{" "}({citation.year})</span>
+                <span className="text-muted-foreground">
+                  {" "}
+                  ({citation.year})
+                </span>
               )}
               {hasUrl && linkUrl && (
                 <a
@@ -74,9 +81,14 @@ export function CitationsList({ citations, className }: CitationsListProps) {
 }
 
 // Component for a single inline citation
-export function InlineCitation({ source, url, pmid }: Omit<Citation, 'year' | 'title'>) {
-  const linkUrl = url || (pmid ? `https://pubmed.ncbi.nlm.nih.gov/${pmid}/` : null);
-  
+export function InlineCitation({
+  source,
+  url,
+  pmid,
+}: Omit<Citation, "year" | "title">) {
+  const linkUrl =
+    url || (pmid ? `https://pubmed.ncbi.nlm.nih.gov/${pmid}/` : null);
+
   if (!linkUrl) {
     return <span className="text-muted-foreground">[{source}]</span>;
   }
@@ -117,24 +129,32 @@ export function SourceAttribution({
       <div className="flex flex-wrap items-center gap-x-4 gap-y-2">
         {reviewedBy && (
           <div>
-            <span className="text-muted-foreground">{t("citations.reviewedBy")}</span>
+            <span className="text-muted-foreground">
+              {t("citations.reviewedBy")}
+            </span>
             <span className="font-medium">{reviewedBy}</span>
             {reviewerCredentials && (
-              <span className="text-muted-foreground">, {reviewerCredentials}</span>
+              <span className="text-muted-foreground">
+                , {reviewerCredentials}
+              </span>
             )}
           </div>
         )}
         {lastReviewed && (
           <div>
-            <span className="text-muted-foreground">{t("citations.lastUpdated")}</span>
+            <span className="text-muted-foreground">
+              {t("citations.lastUpdated")}
+            </span>
             <span className="font-medium">{lastReviewed}</span>
           </div>
         )}
       </div>
-      
+
       {sources && sources.length > 0 && (
         <div className="mt-2 pt-2 border-t">
-          <span className="text-muted-foreground">{t("citations.sources")}</span>
+          <span className="text-muted-foreground">
+            {t("citations.sources")}
+          </span>
           <span className="text-muted-foreground">{sources.join(" · ")}</span>
         </div>
       )}

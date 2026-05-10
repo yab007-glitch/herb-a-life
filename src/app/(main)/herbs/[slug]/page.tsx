@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import Link from "next/link";
 import { notFound } from "next/navigation";
+import { after } from "next/server";
 import { cookies } from "next/headers";
 import {
   ArrowLeft,
@@ -27,33 +28,29 @@ import {
 } from "@/components/ui/card";
 import { Separator } from "@/components/ui/separator";
 import { HerbSafetyBadges } from "@/components/herbs/herb-safety-badges";
-import { InteractionsTable, type Interaction } from "@/components/herbs/interactions-table";
+import {
+  InteractionsTable,
+  type Interaction,
+} from "@/components/herbs/interactions-table";
 import { CopyLinkButton } from "@/components/herbs/copy-link-button";
 import { HerbSchema } from "@/components/seo/herb-schema";
 import { HerbFAQSchema } from "@/components/seo/herb-faq-schema";
 import { EvidenceGrade } from "@/components/herbs/evidence-grade";
-import { SafetyAlert, InteractionAlert, PregnancyAlert } from "@/components/herbs/safety-alert";
+import {
+  SafetyAlert,
+  InteractionAlert,
+  PregnancyAlert,
+} from "@/components/herbs/safety-alert";
 import { CitationsList, SourceAttribution } from "@/components/herbs/citations";
 import { generateMonograph } from "@/lib/data/generate-monograph";
 import { getComparisonHerbs } from "@/lib/data/comparisons";
 import type { Monograph } from "@/lib/data/monographs";
 import { getHerbBySlug } from "@/lib/actions/herbs";
-import { createClient } from "@supabase/supabase-js";
+import { getAnonClient } from "@/lib/supabase/anonymous";
 import { getServerTranslation, type Locale } from "@/lib/i18n/server";
 
-// Use anon client for static generation (no cookies)
-function getAnonClient() {
-  const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL;
-  const supabaseKey = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY;
-
-  if (!supabaseUrl || !supabaseKey) {
-    return null;
-  }
-
-  return createClient(supabaseUrl, supabaseKey);
-}
-
-// Generate static pages for popular herbs (first 100 alphabetically)
+// Generate static pages for popular herbs at build time.
+// Herbs beyond this count are served via ISR (revalidate = 3600).
 export async function generateStaticParams() {
   try {
     const supabase = getAnonClient();
@@ -64,7 +61,7 @@ export async function generateStaticParams() {
       .select("slug")
       .eq("is_published", true)
       .order("name", { ascending: true })
-      .limit(100);
+      .limit(500);
 
     return (herbs ?? []).map((herb) => ({ slug: herb.slug }));
   } catch {
@@ -85,7 +82,7 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   }
   const herb = result.data;
   const baseUrl = process.env.NEXT_PUBLIC_APP_URL ?? "https://herbally.app";
-  
+
   const keywords = [
     herb.name,
     herb.scientific_name,
@@ -133,8 +130,11 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
 }
 
 // Map DB evidence_level to EvidenceLevel type
-function getEvidenceLevel(level: string | null | undefined): "A" | "B" | "C" | "D" | "trad" {
-  if (level && ["A", "B", "C", "D", "trad"].includes(level)) return level as "A" | "B" | "C" | "D" | "trad";
+function getEvidenceLevel(
+  level: string | null | undefined
+): "A" | "B" | "C" | "D" | "trad" {
+  if (level && ["A", "B", "C", "D", "trad"].includes(level))
+    return level as "A" | "B" | "C" | "D" | "trad";
   return "C";
 }
 
@@ -146,7 +146,10 @@ interface CitationData {
   pmid?: string;
 }
 
-function formatCitations(citations: CitationData[] | null | undefined, t: (key: string, params?: Record<string, string | number>) => string): CitationData[] {
+function formatCitations(
+  citations: CitationData[] | null | undefined,
+  t: (key: string, params?: Record<string, string | number>) => string
+): CitationData[] {
   if (!citations || citations.length === 0) {
     return [
       {
@@ -173,13 +176,23 @@ export default async function HerbDetailPage({ params }: Props) {
   const locale: Locale = (localeCookie?.value as Locale) || "en";
 
   // Translation helper
-  const t = (key: string, params?: Record<string, string | number>) => getServerTranslation(locale, key, params);
+  const t = (key: string, params?: Record<string, string | number>) =>
+    getServerTranslation(locale, key, params);
 
   if (!result.success || !result.data) {
     notFound();
   }
 
   const herb = result.data;
+
+  // Defer view count increment so it doesn't block the response
+  after(async () => {
+    const supabase = getAnonClient();
+    if (supabase && herb.id) {
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+      await (supabase.rpc as any)("increment_herb_view", { herb_id: herb.id });
+    }
+  });
 
   // Try DB monograph first, then fall back to generated monograph
   let monograph: Monograph | null = null;
@@ -188,7 +201,9 @@ export default async function HerbDetailPage({ params }: Props) {
     try {
       const { data: dbMonograph } = await supabase
         .from("herb_monographs")
-        .select("summary, mechanism, claims, safety_notes, drug_interactions, pregnancy_category, key_citations, status")
+        .select(
+          "summary, mechanism, claims, safety_notes, drug_interactions, pregnancy_category, key_citations, status"
+        )
         .eq("herb_slug", slug)
         .eq("status", "published")
         .single();
@@ -219,38 +234,60 @@ export default async function HerbDetailPage({ params }: Props) {
 
   const category = herb.herb_categories?.name || t("herbDetail.uncategorized");
   const interactions = (herb.drug_interactions || []) as Interaction[];
-  
+
   const severityCounts = {
-    contraindicated: interactions.filter((i: DrugInteraction) => i.severity === "contraindicated").length,
-    severe: interactions.filter((i: DrugInteraction) => i.severity === "severe").length,
-    moderate: interactions.filter((i: DrugInteraction) => i.severity === "moderate").length,
-    mild: interactions.filter((i: DrugInteraction) => i.severity === "mild").length,
+    contraindicated: interactions.filter(
+      (i: DrugInteraction) => i.severity === "contraindicated"
+    ).length,
+    severe: interactions.filter((i: DrugInteraction) => i.severity === "severe")
+      .length,
+    moderate: interactions.filter(
+      (i: DrugInteraction) => i.severity === "moderate"
+    ).length,
+    mild: interactions.filter((i: DrugInteraction) => i.severity === "mild")
+      .length,
   };
-  
+
   const evidenceLevel = getEvidenceLevel(herb.evidence_level);
-  const citations = formatCitations(herb.citations as unknown as CitationData[] | null, t);
-  const lastReviewed = herb.last_reviewed 
-    ? new Date(herb.last_reviewed).toLocaleDateString(locale === "fr" ? "fr-FR" : "en-US", {
-        month: "long",
-        year: "numeric",
-      })
-    : herb.updated_at 
-    ? new Date(herb.updated_at).toLocaleDateString(locale === "fr" ? "fr-FR" : "en-US", {
-        month: "long",
-        year: "numeric",
-      })
-    : undefined;
+  const citations = formatCitations(
+    herb.citations as unknown as CitationData[] | null,
+    t
+  );
+  const lastReviewed = herb.last_reviewed
+    ? new Date(herb.last_reviewed).toLocaleDateString(
+        locale === "fr" ? "fr-FR" : "en-US",
+        {
+          month: "long",
+          year: "numeric",
+        }
+      )
+    : herb.updated_at
+      ? new Date(herb.updated_at).toLocaleDateString(
+          locale === "fr" ? "fr-FR" : "en-US",
+          {
+            month: "long",
+            year: "numeric",
+          }
+        )
+      : undefined;
   const reviewedBy = herb.reviewed_by || t("herbDetailContent.editorialTeam");
-  const reviewerCredentials = herb.reviewer_credentials || t("herbDetailContent.editorialCredentials");
+  const reviewerCredentials =
+    herb.reviewer_credentials || t("herbDetailContent.editorialCredentials");
 
   // Fetch related herbs using smart comparison logic (same category only)
-  let relatedHerbs: Array<{ name: string; slug: string; scientific_name: string }> = [];
+  let relatedHerbs: Array<{
+    name: string;
+    slug: string;
+    scientific_name: string;
+  }> = [];
   try {
     const supabaseClient = getAnonClient();
     if (supabaseClient) {
       let relatedQuery = supabaseClient
         .from("herbs")
-        .select("name, slug, scientific_name, symptom_keywords, traditional_uses")
+        .select(
+          "name, slug, scientific_name, symptom_keywords, traditional_uses"
+        )
         .eq("is_published", true);
 
       if (herb.category_id) {
@@ -274,7 +311,11 @@ export default async function HerbDetailPage({ params }: Props) {
         herbName={herb.name}
         scientificName={herb.scientific_name}
         uses={[...(herb.traditional_uses || []), ...(herb.modern_uses || [])]}
-        safetyNotes={monograph?.safetyNotes?.join(". ") || herb.side_effects?.join(". ") || ""}
+        safetyNotes={
+          monograph?.safetyNotes?.join(". ") ||
+          herb.side_effects?.join(". ") ||
+          ""
+        }
         pregnancyCategory={monograph?.pregnancyCategory || "insufficient"}
         drugInteractions={interactions.length}
       />
@@ -289,7 +330,10 @@ export default async function HerbDetailPage({ params }: Props) {
           </li>
           <li aria-hidden="true">/</li>
           <li>
-            <Link href="/herbs" className="hover:text-foreground transition-colors">
+            <Link
+              href="/herbs"
+              className="hover:text-foreground transition-colors"
+            >
               {t("herbDetailContent.breadcrumbHerbs")}
             </Link>
           </li>
@@ -378,7 +422,7 @@ export default async function HerbDetailPage({ params }: Props) {
         />
       )}
 
-      <InteractionAlert 
+      <InteractionAlert
         interactionCount={interactions.length}
         severityCounts={severityCounts}
       />
@@ -393,13 +437,17 @@ export default async function HerbDetailPage({ params }: Props) {
         </p>
         {monograph && (
           <div className="mt-4 rounded-lg border border-primary/20 bg-primary/5 p-4">
-            <h3 className="font-semibold text-foreground">{t("herbDetail.clinicalSummary")}</h3>
+            <h3 className="font-semibold text-foreground">
+              {t("herbDetail.clinicalSummary")}
+            </h3>
             <p className="mt-1 text-sm leading-relaxed text-muted-foreground">
               {monograph.summary}
             </p>
             {monograph.mechanism && (
               <>
-                <h4 className="mt-3 font-medium text-foreground">{t("herbDetail.mechanismOfAction")}</h4>
+                <h4 className="mt-3 font-medium text-foreground">
+                  {t("herbDetail.mechanismOfAction")}
+                </h4>
                 <p className="mt-1 text-sm leading-relaxed text-muted-foreground">
                   {monograph.mechanism}
                 </p>
@@ -428,10 +476,15 @@ export default async function HerbDetailPage({ params }: Props) {
                   <div className="flex-1">
                     <p className="font-medium text-foreground">{claim.claim}</p>
                     {claim.note && (
-                      <p className="mt-0.5 text-xs text-muted-foreground">{claim.note}</p>
+                      <p className="mt-0.5 text-xs text-muted-foreground">
+                        {claim.note}
+                      </p>
                     )}
                   </div>
-                  <EvidenceGrade level={claim.evidence as "A" | "B" | "C" | "D" | "trad"} showLabel={false} />
+                  <EvidenceGrade
+                    level={claim.evidence as "A" | "B" | "C" | "D" | "trad"}
+                    showLabel={false}
+                  />
                 </div>
               ))}
             </div>
@@ -528,7 +581,9 @@ export default async function HerbDetailPage({ params }: Props) {
           <dl className="grid gap-4 sm:grid-cols-2">
             {herb.dosage_forms && herb.dosage_forms.length > 0 && (
               <div>
-                <dt className="text-sm font-medium text-foreground">{t("herbDetail.forms")}</dt>
+                <dt className="text-sm font-medium text-foreground">
+                  {t("herbDetail.forms")}
+                </dt>
                 <dd className="text-sm capitalize text-muted-foreground">
                   {herb.dosage_forms.join(", ")}
                 </dd>
@@ -612,15 +667,15 @@ export default async function HerbDetailPage({ params }: Props) {
                 {t("herbDetail.contraindicationsLabel")}
               </h3>
               <ul className="space-y-1">
-              {herb.contraindications.map((c: string) => (
-                <li
-                  key={c}
-                  className="flex items-start gap-2 text-sm text-muted-foreground"
-                >
-                  <span className="mt-1.5 size-1.5 shrink-0 rounded-full bg-red-500" />
-                  {c}
-                </li>
-              ))}
+                {herb.contraindications.map((c: string) => (
+                  <li
+                    key={c}
+                    className="flex items-start gap-2 text-sm text-muted-foreground"
+                  >
+                    <span className="mt-1.5 size-1.5 shrink-0 rounded-full bg-red-500" />
+                    {c}
+                  </li>
+                ))}
               </ul>
             </div>
           )}
@@ -662,13 +717,21 @@ export default async function HerbDetailPage({ params }: Props) {
         reviewedBy={reviewedBy}
         reviewerCredentials={reviewerCredentials}
         lastReviewed={lastReviewed}
-        sources={[t("herbDetailContent.sources.who"), t("herbDetailContent.sources.nccih"), t("herbDetailContent.sources.pubmed"), t("herbDetailContent.sources.commissionE")]}
+        sources={[
+          t("herbDetailContent.sources.who"),
+          t("herbDetailContent.sources.nccih"),
+          t("herbDetailContent.sources.pubmed"),
+          t("herbDetailContent.sources.commissionE"),
+        ]}
       />
 
       {/* Related Herbs */}
       {relatedHerbs.length > 0 && (
         <section aria-labelledby="related-herbs-heading">
-          <h2 id="related-herbs-heading" className="mb-4 text-xl font-semibold text-foreground">
+          <h2
+            id="related-herbs-heading"
+            className="mb-4 text-xl font-semibold text-foreground"
+          >
             {t("herbDetail.relatedHerbs")}
           </h2>
           <div className="grid gap-3 sm:grid-cols-2 lg:grid-cols-3">
@@ -706,7 +769,9 @@ export default async function HerbDetailPage({ params }: Props) {
         {relatedHerbs.length > 0 && (
           <Button
             variant="outline"
-            render={<Link href={`/compare/${slug}/vs/${relatedHerbs[0].slug}`} />}
+            render={
+              <Link href={`/compare/${slug}/vs/${relatedHerbs[0].slug}`} />
+            }
           >
             <GitCompare className="size-4" />
             {t("herbDetail.compareTo", { name: relatedHerbs[0].name })}

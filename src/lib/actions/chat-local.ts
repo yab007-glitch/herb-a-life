@@ -33,7 +33,10 @@ function saveSessions(sessions: ChatSession[]) {
   try {
     // Keep only the most recent sessions
     const trimmed = sessions
-      .sort((a, b) => new Date(b.updated_at).getTime() - new Date(a.updated_at).getTime())
+      .sort(
+        (a, b) =>
+          new Date(b.updated_at).getTime() - new Date(a.updated_at).getTime()
+      )
       .slice(0, MAX_SESSIONS);
     localStorage.setItem(STORAGE_KEY, JSON.stringify(trimmed));
   } catch {

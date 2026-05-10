@@ -1,32 +1,35 @@
 import { NextRequest, NextResponse } from "next/server";
 import { createClient } from "@supabase/supabase-js";
+import { z } from "zod/v4";
 
 // Core Web Vitals endpoint for real user monitoring
 // Stores metrics in Supabase for analysis
 
-interface WebVitalsPayload {
-  name: string;
-  value: number;
-  rating: "good" | "needs-improvement" | "poor";
-  delta: number;
-  id: string;
-  pathname: string;
-  effectiveType?: string;
-  deviceMemory?: number;
-  timestamp: number;
-}
+const webVitalsSchema = z.object({
+  name: z.string(),
+  value: z.number(),
+  rating: z.enum(["good", "needs-improvement", "poor"]),
+  delta: z.number(),
+  id: z.string(),
+  pathname: z.string(),
+  effectiveType: z.string().optional(),
+  deviceMemory: z.number().optional(),
+  timestamp: z.number(),
+});
 
 export async function POST(request: NextRequest) {
   try {
-    const body: WebVitalsPayload = await request.json();
+    const raw = await request.json();
 
-    // Validate required fields
-    if (!body.name || typeof body.value !== "number" || !body.pathname) {
+    const parsed = webVitalsSchema.safeParse(raw);
+    if (!parsed.success) {
       return NextResponse.json(
-        { error: "Missing required fields" },
+        { error: "Validation failed", details: parsed.error.issues },
         { status: 400 }
       );
     }
+
+    const body = parsed.data;
 
     // Store in Supabase if configured
     const supabaseUrl = process.env.SUPABASE_SERVICE_ROLE_KEY

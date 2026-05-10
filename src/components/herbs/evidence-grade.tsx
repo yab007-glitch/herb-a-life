@@ -19,14 +19,17 @@ interface EvidenceGradeProps {
   showLabel?: boolean;
 }
 
-const evidenceConfig: Record<EvidenceLevel, {
-  labelKey: string;
-  shortDescKey: string;
-  fullDescKey: string;
-  color: string;
-  bgColor: string;
-  icon: React.ReactNode;
-}> = {
+const evidenceConfig: Record<
+  EvidenceLevel,
+  {
+    labelKey: string;
+    shortDescKey: string;
+    fullDescKey: string;
+    color: string;
+    bgColor: string;
+    icon: React.ReactNode;
+  }
+> = {
   A: {
     labelKey: "evidence.A.label",
     shortDescKey: "evidence.A.shortDesc",
@@ -69,7 +72,11 @@ const evidenceConfig: Record<EvidenceLevel, {
   },
 };
 
-export function EvidenceGrade({ level, className, showLabel = true }: EvidenceGradeProps) {
+export function EvidenceGrade({
+  level,
+  className,
+  showLabel = true,
+}: EvidenceGradeProps) {
   const { t } = useI18n();
   const config = evidenceConfig[level] || evidenceConfig.C;
 
@@ -86,16 +93,22 @@ export function EvidenceGrade({ level, className, showLabel = true }: EvidenceGr
             )}
           >
             {config.icon}
-            <span>{t("evidence.prefix")} {level}</span>
+            <span>
+              {t("evidence.prefix")} {level}
+            </span>
             {showLabel && (
-              <span className="hidden sm:inline">- {t(config.shortDescKey)}</span>
+              <span className="hidden sm:inline">
+                - {t(config.shortDescKey)}
+              </span>
             )}
           </div>
         </TooltipTrigger>
         <TooltipContent side="bottom" className="max-w-xs">
           <div className="space-y-1">
             <p className="font-semibold">{t(config.labelKey)}</p>
-            <p className="text-xs text-muted-foreground">{t(config.fullDescKey)}</p>
+            <p className="text-xs text-muted-foreground">
+              {t(config.fullDescKey)}
+            </p>
           </div>
         </TooltipContent>
       </Tooltip>
@@ -105,15 +118,11 @@ export function EvidenceGrade({ level, className, showLabel = true }: EvidenceGr
 
 export function EvidenceGradeBadge({ level }: { level: EvidenceLevel }) {
   const config = evidenceConfig[level] || evidenceConfig.C;
-  
+
   return (
     <Badge
       variant="outline"
-      className={cn(
-        "gap-1 font-medium",
-        config.bgColor,
-        config.color
-      )}
+      className={cn("gap-1 font-medium", config.bgColor, config.color)}
     >
       {config.icon}
       {level}

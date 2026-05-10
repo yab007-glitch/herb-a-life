@@ -42,10 +42,17 @@ export function MarketingFooter() {
   return (
     <footer className="border-t bg-muted/30">
       <div className="mx-auto max-w-7xl px-4 py-12 sm:px-6 lg:px-8">
-        <nav aria-label="Footer navigation" className="grid gap-8 sm:grid-cols-2 lg:grid-cols-4">
+        <nav
+          aria-label="Footer navigation"
+          className="grid gap-8 sm:grid-cols-2 lg:grid-cols-4"
+        >
           {/* Brand */}
           <div className="lg:col-span-2">
-            <Link href="/" className="flex items-center gap-2.5" aria-label="HerbAlly home">
+            <Link
+              href="/"
+              className="flex items-center gap-2.5"
+              aria-label="HerbAlly home"
+            >
               <div className="flex size-9 items-center justify-center rounded-lg bg-gradient-to-br from-primary to-teal-600 text-white">
                 <Leaf className="size-5" />
               </div>

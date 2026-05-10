@@ -8,18 +8,19 @@
 
 ## Executive Summary
 
-| Category | Grade | Risk | Priority |
-|----------|-------|------|----------|
-| Security | B+ | Medium | Fix dependency CVEs |
-| UX/UI (Mobile) | C+ | High | Language selector missing on mobile |
-| UX/UI (Desktop) | B+ | Low | Minor touch target issues |
-| i18n | B | Medium | Limited language coverage, no pluralization |
-| Performance | B | Medium | No virtualization, over-fetching related herbs |
-| Accessibility | B+ | Low | Good semantics, minor motion/color issues |
-| Code Quality | A- | Low | Clean TypeScript, few lint overrides |
-| Architecture | B+ | Low | Solid patterns, some coupling |
+| Category        | Grade | Risk   | Priority                                       |
+| --------------- | ----- | ------ | ---------------------------------------------- |
+| Security        | B+    | Medium | Fix dependency CVEs                            |
+| UX/UI (Mobile)  | C+    | High   | Language selector missing on mobile            |
+| UX/UI (Desktop) | B+    | Low    | Minor touch target issues                      |
+| i18n            | B     | Medium | Limited language coverage, no pluralization    |
+| Performance     | B     | Medium | No virtualization, over-fetching related herbs |
+| Accessibility   | B+    | Low    | Good semantics, minor motion/color issues      |
+| Code Quality    | A-    | Low    | Clean TypeScript, few lint overrides           |
+| Architecture    | B+    | Low    | Solid patterns, some coupling                  |
 
 **Top 5 Actions:**
+
 1. Add language selector to mobile navigation (critical i18n gap)
 2. Update `vite` and `hono` dependencies (CVE-2025-XXXX)
 3. Fix related-herbs over-fetching on herb detail pages
@@ -268,10 +269,10 @@ let value: any = dict;
 
 ### 7.1 Dependency Vulnerabilities (Confirmed)
 
-| Package | Severity | Action |
-|---------|----------|--------|
-| `vite` | HIGH | Update to 7.3.2+ |
-| `hono` | MODERATE | Update to 4.12.12+ |
+| Package             | Severity | Action             |
+| ------------------- | -------- | ------------------ |
+| `vite`              | HIGH     | Update to 7.3.2+   |
+| `hono`              | MODERATE | Update to 4.12.12+ |
 | `@hono/node-server` | MODERATE | Update to 1.19.13+ |
 
 ### 7.2 XSS via dangerouslySetInnerHTML (Acceptable)
@@ -314,4 +315,4 @@ Comprehensive CSP, HSTS, X-Frame-Options, Permissions-Policy. Well configured.
 
 ---
 
-*End of Audit Report*
+_End of Audit Report_
