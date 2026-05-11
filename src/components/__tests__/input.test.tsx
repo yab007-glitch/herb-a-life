@@ -9,9 +9,10 @@ describe('Input Component', () => {
   });
 
   it('forwards ref correctly', () => {
-    const ref = { current: null };
-    render(<Input ref={ref as any} />);
-    expect(ref.current).toBeInstanceOf<HTMLInputElement>(HTMLInputElement);
+    const ref = { current: null as HTMLInputElement | null };
+    render(<Input ref={ref} data-testid="ref-input" />);
+    expect(ref.current).toBeInstanceOf(HTMLInputElement);
+    expect(screen.getByTestId('ref-input')).toBe(ref.current);
   });
 
   it('handles value changes', () => {

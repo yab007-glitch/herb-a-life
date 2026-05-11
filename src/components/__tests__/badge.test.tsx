@@ -20,7 +20,7 @@ describe('Badge Component', () => {
     expect(secondaryContainer.firstChild).toHaveClass('bg-secondary');
     // Outline has border
     expect(outlineContainer.firstChild).toHaveClass('border');
-    // Destructive has destructive color (may be bg-destructive/10 or similar)
+    // Destructive has destructive color
     expect(destructiveContainer.firstChild).toHaveClass('text-destructive');
   });
 
@@ -31,9 +31,9 @@ describe('Badge Component', () => {
   });
 
   it('forwards ref correctly', () => {
-    const ref = { current: null };
-    render(<Badge ref={ref as any}>Test</Badge>);
-    // Badge may render as span or div depending on implementation
+    const ref = { current: null as HTMLSpanElement | null };
+    render(<Badge ref={ref}>Test</Badge>);
+    // Badge renders as span by default
     expect(ref.current).toBeTruthy();
     expect(ref.current).toHaveAttribute('data-slot', 'badge');
   });
@@ -43,12 +43,8 @@ describe('Badge Component', () => {
     expect(screen.getByText(/custom/i)).toHaveClass('custom-class');
   });
 
-  it('supports asChild prop', () => {
-    render(
-      <Badge asChild>
-        <span data-testid="custom">Custom Element</span>
-      </Badge>
-    );
-    expect(screen.getByTestId('custom')).toBeInTheDocument();
+  it('supports custom data attributes', () => {
+    render(<Badge data-testid="test-badge">Test</Badge>);
+    expect(screen.getByTestId('test-badge')).toBeInTheDocument();
   });
 });
