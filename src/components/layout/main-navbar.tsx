@@ -100,7 +100,8 @@ export function MainNavbar() {
           <nav className="hidden items-center gap-1 md:flex">
             {navLinks.map((link) => {
               const Icon = link.icon;
-              const isActive = pathname === link.href || pathname.startsWith(link.href + "/");
+              const isActive =
+                pathname === link.href || pathname.startsWith(link.href + "/");
               return (
                 <Link
                   key={link.href}

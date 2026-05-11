@@ -216,8 +216,10 @@ export default async function HerbDetailPage({ params }: Props) {
           mechanism: dbMonograph.mechanism,
           claims: dbMonograph.claims as Monograph["claims"],
           safetyNotes: dbMonograph.safety_notes as Monograph["safetyNotes"],
-          drugInteractions: dbMonograph.drug_interactions as Monograph["drugInteractions"],
-          pregnancyCategory: dbMonograph.pregnancy_category as Monograph["pregnancyCategory"],
+          drugInteractions:
+            dbMonograph.drug_interactions as Monograph["drugInteractions"],
+          pregnancyCategory:
+            dbMonograph.pregnancy_category as Monograph["pregnancyCategory"],
           keyCitations: dbMonograph.key_citations as Monograph["keyCitations"],
         };
       }

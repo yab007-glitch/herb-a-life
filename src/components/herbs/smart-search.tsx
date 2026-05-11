@@ -10,7 +10,6 @@ import {
   useSaveSearch,
 } from "@/components/herbs/recent-searches";
 import { useDebounce } from "@/lib/hooks/use-debounce";
-import { cn } from "@/lib/utils";
 import { useI18n } from "@/components/i18n/i18n-provider";
 
 interface SmartSearchProps {
@@ -23,13 +22,13 @@ export function SmartSearch({ defaultValue = "", category }: SmartSearchProps) {
   const router = useRouter();
   const searchParams = useSearchParams();
   const [query, setQuery] = useState(defaultValue);
-  const [isSearching, setIsSearching] = useState(false);
   const saveSearch = useSaveSearch();
 
   // Debounce the query value using the project's useDebounce hook
   const debouncedQuery = useDebounce(query, 300);
 
-  const handleSearch = useCallback(
+  // Build search URL - extracted to avoid recreating in effect
+  const buildSearchUrl = useCallback(
     (value: string) => {
       const params = new URLSearchParams(searchParams.toString());
       const trimmed = value.trim();
@@ -45,18 +44,18 @@ export function SmartSearch({ defaultValue = "", category }: SmartSearchProps) {
         params.set("category", category);
       }
 
-      setIsSearching(true);
-      router.push(`/herbs?${params.toString()}`);
+      return `/herbs?${params.toString()}`;
     },
-    [category, router, searchParams, saveSearch]
+    [category, searchParams, saveSearch]
   );
 
-  // Trigger search when debounced query changes (skip initial defaultValue)
+  // Update URL when debounced query changes (skip initial defaultValue)
   useEffect(() => {
     if (debouncedQuery && debouncedQuery !== defaultValue) {
-      handleSearch(debouncedQuery);
+      const url = buildSearchUrl(debouncedQuery);
+      router.push(url);
     }
-  }, [debouncedQuery]); // eslint-disable-line react-hooks/exhaustive-deps
+  }, [debouncedQuery, defaultValue, buildSearchUrl, router]);
 
   const handleChange = useCallback(
     (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -67,7 +66,8 @@ export function SmartSearch({ defaultValue = "", category }: SmartSearchProps) {
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-    handleSearch(query);
+    const url = buildSearchUrl(query);
+    router.push(url);
   };
 
   const handleClear = () => {
@@ -90,10 +90,7 @@ export function SmartSearch({ defaultValue = "", category }: SmartSearchProps) {
             placeholder={t("search.placeholder")}
             value={query}
             onChange={handleChange}
-            className={cn(
-              "h-12 pl-10 pr-10 transition-all",
-              isSearching && "animate-pulse"
-            )}
+            className="h-12 pl-10 pr-10 transition-all"
           />
           {query && (
             <button
@@ -106,8 +103,8 @@ export function SmartSearch({ defaultValue = "", category }: SmartSearchProps) {
             </button>
           )}
         </div>
-        <Button type="submit" className="h-12" disabled={isSearching}>
-          {isSearching ? t("search.searching") : t("search.search")}
+        <Button type="submit" className="h-12">
+          {t("search.search")}
         </Button>
         <Button
           type="button"
