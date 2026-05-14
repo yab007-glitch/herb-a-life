@@ -244,7 +244,12 @@
     },
     "chatError": "Échec de l'obtention de la réponse",
     "saved": "Enregistré",
-    "commandHint": "Essayez /calculator, /compare ashwagandha vs rhodiola, ou /herb curcuma"
+    "commandHint": "Essayez /calculator, /compare ashwagandha vs rhodiola, ou /herb curcuma",
+    "stop": "Arrêter",
+    "retry": "Réessayer",
+    "copied": "Copié !",
+    "copy": "Copier",
+    "regenerate": "Régénérer"
   },
   "donate": {
     "title": "Soutenir HerbAlly",

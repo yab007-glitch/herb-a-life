@@ -244,7 +244,12 @@
     },
     "chatError": "Failed to get response",
     "saved": "Saved",
-    "commandHint": "Try /calculator, /compare ashwagandha vs rhodiola, or /herb turmeric"
+    "commandHint": "Try /calculator, /compare ashwagandha vs rhodiola, or /herb turmeric",
+    "stop": "Stop",
+    "retry": "Retry",
+    "copied": "Copied!",
+    "copy": "Copy",
+    "regenerate": "Regenerate"
   },
   "donate": {
     "title": "Support HerbAlly",

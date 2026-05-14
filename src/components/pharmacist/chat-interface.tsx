@@ -15,6 +15,10 @@ import {
   Shield,
   Calculator,
   Check,
+  Square,
+  RefreshCcw,
+  Copy,
+  RotateCcw,
 } from "lucide-react";
 import ReactMarkdown from "react-markdown";
 import { Button } from "@/components/ui/button";
@@ -130,6 +134,11 @@ export function ChatInterface({
   const [showSuggestions, setShowSuggestions] = useState(true);
   const scrollRef = useRef<HTMLDivElement>(null);
   const textareaRef = useRef<HTMLTextAreaElement>(null);
+  const abortControllerRef = useRef<AbortController | null>(null);
+
+  // ─── Per-message actions state ─────────────────────────────────────
+  const [copiedId, setCopiedId] = useState<string | null>(null);
+  const [lastFailedMessage, setLastFailedMessage] = useState<string | null>(null);
 
   // ─── Init guest ID ────────────────────────────────────────────────
 
@@ -282,6 +291,9 @@ export function ChatInterface({
   async function sendMessage(text: string) {
     if (!text.trim() || isLoading) return;
 
+    // Clear any previous error state
+    setLastFailedMessage(null);
+
     // Parse smart commands before sending
     const { systemContext } = parseCommand(text);
 
@@ -298,6 +310,10 @@ export function ChatInterface({
     setShowSuggestions(false);
     setIsLoading(true);
 
+    // Create abort controller for stop-generation support
+    const controller = new AbortController();
+    abortControllerRef.current = controller;
+
     try {
       const response = await fetch("/api/chat", {
         method: "POST",
@@ -313,6 +329,7 @@ export function ChatInterface({
               : (herbContext ?? undefined),
           locale,
         }),
+        signal: controller.signal,
       });
 
       if (!response.ok || !response.body) {
@@ -351,7 +368,16 @@ export function ChatInterface({
         ...allMessages,
         { ...assistantMessage, content: accumulated },
       ]);
-    } catch {
+    } catch (err: unknown) {
+      // Don't show error if user aborted intentionally
+      if (err instanceof DOMException && err.name === "AbortError") {
+        // Stopped by user — the partial message is already in state, keep it
+        return;
+      }
+
+      // Store the failed message for retry
+      setLastFailedMessage(text.trim());
+
       setMessages((prev) => [
         ...prev,
         {
@@ -363,6 +389,68 @@ export function ChatInterface({
       ]);
     } finally {
       setIsLoading(false);
+      abortControllerRef.current = null;
+    }
+  }
+
+  // ─── Stop generation ──────────────────────────────────────────────
+
+  function stopGeneration() {
+    abortControllerRef.current?.abort();
+  }
+
+  // ─── Regenerate last response ─────────────────────────────────────
+
+  function regenerate() {
+    // Find the last user message
+    const lastUserMsg = [...messages].reverse().find((m) => m.role === "user");
+    if (!lastUserMsg) return;
+
+    // Remove the last assistant message(s) and resend
+    let lastUserIdx = -1;
+    for (let i = messages.length - 1; i >= 0; i--) {
+      if (messages[i].id === lastUserMsg.id) {
+        lastUserIdx = i;
+        break;
+      }
+    }
+
+    if (lastUserIdx >= 0) {
+      setMessages(messages.slice(0, lastUserIdx + 1));
+      // Send after a microtask so state settles
+      setTimeout(() => sendMessage(lastUserMsg.content), 0);
+    }
+  }
+
+  // ─── Retry after error ────────────────────────────────────────────
+
+  function retryFailed() {
+    if (!lastFailedMessage) return;
+    // Remove the error message (last assistant message)
+    setMessages((prev) => prev.slice(0, -1));
+    setLastFailedMessage(null);
+    setTimeout(() => sendMessage(lastFailedMessage), 0);
+  }
+
+  // ─── Copy to clipboard ────────────────────────────────────────────
+
+  async function copyToClipboard(content: string, id: string) {
+    try {
+      await navigator.clipboard.writeText(content);
+      setCopiedId(id);
+      setTimeout(() => setCopiedId(null), 2000);
+    } catch {
+      // Fallback for older browsers / non-HTTPS
+      const textarea = document.createElement("textarea");
+      textarea.value = content;
+      textarea.style.position = "fixed";
+      textarea.style.opacity = "0";
+      document.body.appendChild(textarea);
+      textarea.select();
+      document.execCommand("copy");
+      document.body.removeChild(textarea);
+      setCopiedId(id);
+      setTimeout(() => setCopiedId(null), 2000);
     }
   }
 
@@ -517,9 +605,14 @@ export function ChatInterface({
     setIsListening(true);
   }
 
-  const hasVoiceSupport =
-    typeof window !== "undefined" &&
-    ("SpeechRecognition" in window || "webkitSpeechRecognition" in window);
+  // Defer voice support detection to avoid hydration mismatch.
+  // Server always renders false; client sets true after mount.
+  const [hasVoiceSupport, setHasVoiceSupport] = useState(false);
+  useEffect(() => {
+    setHasVoiceSupport(
+      "SpeechRecognition" in window || "webkitSpeechRecognition" in window
+    );
+  }, []);
 
   // ─── Render ───────────────────────────────────────────────────────
 
@@ -577,15 +670,28 @@ export function ChatInterface({
                   )}
                 </Button>
               )}
-              <Button
-                type="submit"
-                size="icon"
-                disabled={!input.trim() || isLoading}
-                aria-label="Send message"
-                className="shadow-lg"
-              >
-                <Send className="size-4" />
-              </Button>
+              {isLoading ? (
+                <Button
+                  type="button"
+                  size="icon"
+                  variant="destructive"
+                  onClick={stopGeneration}
+                  aria-label="Stop generating"
+                  className="shadow-lg animate-pulse"
+                >
+                  <Square className="size-4" />
+                </Button>
+              ) : (
+                <Button
+                  type="submit"
+                  size="icon"
+                  disabled={!input.trim() || isLoading}
+                  aria-label="Send message"
+                  className="shadow-lg"
+                >
+                  <Send className="size-4" />
+                </Button>
+              )}
             </form>
 
             {/* Command hints */}
@@ -686,16 +792,75 @@ export function ChatInterface({
                   )}
                   <div
                     className={cn(
-                      "max-w-[80%] rounded-lg px-4 py-3 text-sm leading-relaxed",
+                      "relative max-w-[80%] rounded-lg px-4 py-3 text-sm leading-relaxed",
                       message.role === "user"
                         ? "bg-primary text-primary-foreground"
                         : "bg-muted text-foreground"
                     )}
                   >
                     {message.role === "assistant" ? (
-                      <div className="prose prose-sm max-w-none dark:prose-invert">
-                        <ReactMarkdown>{message.content}</ReactMarkdown>
-                      </div>
+                      <>
+                        {message.content === t("pharmacist.error") ? (
+                          <div className="flex flex-col gap-2">
+                            <p className="text-sm text-muted-foreground">
+                              {message.content}
+                            </p>
+                            <Button
+                              variant="outline"
+                              size="sm"
+                              onClick={retryFailed}
+                              className="w-fit gap-1.5 text-xs"
+                            >
+                              <RotateCcw className="size-3" />
+                              {t("pharmacist.retry")}
+                            </Button>
+                          </div>
+                        ) : (
+                          <>
+                            <div className="prose prose-sm max-w-none dark:prose-invert">
+                              <ReactMarkdown>{message.content}</ReactMarkdown>
+                            </div>
+                            {/* Action buttons: Copy + Regenerate */}
+                            <div className="mt-2 flex items-center gap-1 border-t pt-2 border-border/40">
+                              <Button
+                                variant="ghost"
+                                size="sm"
+                                onClick={() =>
+                                  copyToClipboard(message.content, message.id)
+                                }
+                                className="h-7 gap-1 text-xs text-muted-foreground hover:text-foreground"
+                                aria-label="Copy response"
+                              >
+                                {copiedId === message.id ? (
+                                  <>
+                                    <Check className="size-3 text-emerald-500" />
+                                    <span className="text-emerald-500">
+                                      {t("pharmacist.copied")}
+                                    </span>
+                                  </>
+                                ) : (
+                                  <>
+                                    <Copy className="size-3" />
+                                    <span>{t("pharmacist.copy")}</span>
+                                  </>
+                                )}
+                              </Button>
+                              <Button
+                                variant="ghost"
+                                size="sm"
+                                onClick={regenerate}
+                                className="h-7 gap-1 text-xs text-muted-foreground hover:text-foreground"
+                                aria-label="Regenerate response"
+                              >
+                                <RefreshCcw className="size-3" />
+                                <span className="hidden sm:inline">
+                                  {t("pharmacist.regenerate")}
+                                </span>
+                              </Button>
+                            </div>
+                          </>
+                        )}
+                      </>
                     ) : (
                       <p className="whitespace-pre-wrap">{message.content}</p>
                     )}
@@ -811,14 +976,27 @@ export function ChatInterface({
                 )}
               </Button>
             )}
-            <Button
-              type="submit"
-              size="icon"
-              disabled={!input.trim() || isLoading}
-              aria-label="Send message"
-            >
-              <Send className="size-4" />
-            </Button>
+            {isLoading ? (
+              <Button
+                type="button"
+                size="icon"
+                variant="destructive"
+                onClick={stopGeneration}
+                aria-label="Stop generating"
+                className="animate-pulse"
+              >
+                <Square className="size-4" />
+              </Button>
+            ) : (
+              <Button
+                type="submit"
+                size="icon"
+                disabled={!input.trim() || isLoading}
+                aria-label="Send message"
+              >
+                <Send className="size-4" />
+              </Button>
+            )}
           </form>
         </div>
       )}
