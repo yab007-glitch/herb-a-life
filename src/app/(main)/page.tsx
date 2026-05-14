@@ -2,7 +2,7 @@ export const dynamic = "force-dynamic";
 
 import type { Metadata } from "next";
 import { cookies } from "next/headers";
-import { Leaf, Database, Shield, TrendingUp, Info } from "lucide-react";
+import { Info } from "lucide-react";
 import { ChatInterface } from "@/components/pharmacist/chat-interface";
 import { getHerbBySlug } from "@/lib/actions/herbs";
 import { getServerTranslation, type Locale } from "@/lib/i18n/server";
@@ -15,12 +15,6 @@ export const metadata: Metadata = {
     canonical: `${process.env.NEXT_PUBLIC_APP_URL ?? "https://herbally.app"}`,
   },
 };
-
-const stats = [
-  { value: "2,700+", labelKey: "home.stats.herbs", icon: Database },
-  { value: "500+", labelKey: "home.stats.interactions", icon: Shield },
-  { value: "100%", labelKey: "home.stats.free", icon: TrendingUp },
-];
 
 export default async function HomePage({
   searchParams,
@@ -56,31 +50,17 @@ export default async function HomePage({
   }
 
   return (
-    <div className="flex flex-col h-full">
-      {/* Header */}
-      <div className="mb-8 text-center">
-        <div className="mb-4 inline-flex items-center gap-2 rounded-full border border-primary/20 bg-primary/5 px-4 py-2 text-sm font-medium text-primary backdrop-blur-sm">
-          <Leaf className="size-4" />
-          <span>{t("homeAI.badge")}</span>
-        </div>
-        <h1 className="text-3xl font-bold tracking-tight text-foreground sm:text-4xl">
-          {t("homeAI.title")}
-        </h1>
-        <p className="mx-auto mt-3 max-w-xl text-muted-foreground">
-          {t("homeAI.subtitle")}
-        </p>
-      </div>
-
-      {/* Context-specific banner when coming from herb page */}
+    <div className="flex flex-col h-[calc(100dvh-12rem)] min-h-[500px]">
+      {/* Context-specific banner when deep-linked from herb page */}
       {herbName && (
-        <div className="mb-6 rounded-lg border bg-muted/50 p-4">
+        <div className="mb-4 shrink-0 rounded-lg border bg-muted/50 p-3">
           <div className="flex items-start gap-3">
-            <Info className="size-5 text-primary mt-0.5" />
+            <Info className="size-5 text-primary mt-0.5 shrink-0" />
             <div>
-              <p className="font-medium text-foreground">
+              <p className="font-medium text-foreground text-sm">
                 {t("herbalistPage.askingAbout", { name: herbName })}
               </p>
-              <p className="text-sm text-muted-foreground">
+              <p className="text-xs text-muted-foreground">
                 {t("herbalistPage.askingAboutDesc")}
               </p>
             </div>
@@ -88,55 +68,13 @@ export default async function HomePage({
         </div>
       )}
 
-      {/* Chat Interface */}
-      <div className="flex-1">
+      {/* Chat fills all remaining space */}
+      <div className="flex-1 min-h-0">
         <ChatInterface
           herbContext={herbContext}
           autoQuery={autoQuery}
           locale={locale}
         />
-      </div>
-
-      {/* Stats Ribbon */}
-      <div className="mt-8 border-t pt-6">
-        <div className="mx-auto max-w-2xl">
-          <div className="grid grid-cols-3 gap-4 text-center">
-            {stats.map((stat) => {
-              const Icon = stat.icon;
-              return (
-                <div
-                  key={stat.labelKey}
-                  className="flex flex-col items-center gap-2"
-                >
-                  <div className="flex size-10 items-center justify-center rounded-full bg-primary/10 text-primary">
-                    <Icon className="size-5" />
-                  </div>
-                  <div>
-                    <div className="text-xl font-bold text-foreground">
-                      {stat.value}
-                    </div>
-                    <div className="text-xs text-muted-foreground">
-                      {t(stat.labelKey)}
-                    </div>
-                  </div>
-                </div>
-              );
-            })}
-          </div>
-        </div>
-      </div>
-
-      {/* Trust signals footer */}
-      <div className="mt-6 rounded-lg border p-4 text-sm text-muted-foreground">
-        <p className="font-medium text-foreground mb-1">
-          {t("herbalistPage.aboutTitle")}
-        </p>
-        <ul className="grid grid-cols-1 sm:grid-cols-2 gap-x-8 gap-y-1">
-          <li>• {t("herbalistPage.aboutProvider")}</li>
-          <li>• {t("herbalistPage.aboutSources")}</li>
-          <li>• {t("herbalistPage.aboutUpdated")}</li>
-          <li>• {t("herbalistPage.aboutNotFDA")}</li>
-        </ul>
       </div>
     </div>
   );

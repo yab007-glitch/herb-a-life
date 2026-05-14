@@ -242,7 +242,9 @@
       "sideEffects": "How can I minimize these side effects?",
       "sideEffectsInfo": "Tell me more about the side effects"
     },
-    "chatError": "Failed to get response"
+    "chatError": "Failed to get response",
+    "saved": "Saved",
+    "commandHint": "Try /calculator, /compare ashwagandha vs rhodiola, or /herb turmeric"
   },
   "donate": {
     "title": "Support HerbAlly",

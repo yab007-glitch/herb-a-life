@@ -242,7 +242,9 @@
       "sideEffects": "Comment minimiser ces effets secondaires ?",
       "sideEffectsInfo": "Parlez-moi davantage des effets secondaires"
     },
-    "chatError": "Échec de l'obtention de la réponse"
+    "chatError": "Échec de l'obtention de la réponse",
+    "saved": "Enregistré",
+    "commandHint": "Essayez /calculator, /compare ashwagandha vs rhodiola, ou /herb curcuma"
   },
   "donate": {
     "title": "Soutenir HerbAlly",
