@@ -1346,5 +1346,10 @@
   },
   "brand": {
     "full": "HerbAlly"
+  },
+  "homeAI": {
+    "badge": "AI-Powered Herbal Assistant",
+    "title": "Ask anything about herbs and natural health",
+    "subtitle": "Type your question below or tap a suggestion. Get evidence-based answers from WHO, NCCIH, and PubMed — instantly and for free."
   }
 }

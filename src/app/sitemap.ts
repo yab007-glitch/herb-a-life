@@ -74,12 +74,7 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
       changeFrequency: "weekly",
       priority: 0.8,
     },
-    {
-      url: `${baseUrl}/herbalist`,
-      lastModified: STATIC_PAGE_MODIFIED,
-      changeFrequency: "weekly",
-      priority: 0.8,
-    },
+    // /herbalist now redirects to / (chat-first homepage)
     {
       url: `${baseUrl}/about`,
       lastModified: STATIC_PAGE_MODIFIED,

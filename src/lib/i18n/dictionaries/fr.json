@@ -1346,5 +1346,10 @@
   },
   "brand": {
     "full": "HerbAlly"
+  },
+  "homeAI": {
+    "badge": "Assistant Herbaliste IA",
+    "title": "Posez vos questions sur les plantes et la santé naturelle",
+    "subtitle": "Tapez votre question ou appuyez sur une suggestion. Obtenez des réponses basées sur des preuves de l'OMS, du NCCIH et de PubMed — instantanément et gratuitement."
   }
 }

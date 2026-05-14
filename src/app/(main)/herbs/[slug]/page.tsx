@@ -764,7 +764,7 @@ export default async function HerbDetailPage({ params }: Props) {
         </Button>
         <Button
           variant="outline"
-          render={<Link href={`/herbalist?herb=${slug}`} />}
+          render={<Link href={`/?herb=${slug}`} />}
         >
           <AlertTriangle className="size-4" />
           {t("herbDetail.checkInteractions")}

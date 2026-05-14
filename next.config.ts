@@ -37,7 +37,12 @@ const nextConfig: NextConfig = {
     return [
       {
         source: "/pharmacist",
-        destination: "/herbalist",
+        destination: "/",
+        permanent: true,
+      },
+      {
+        source: "/herbalist",
+        destination: "/",
         permanent: true,
       },
     ];
