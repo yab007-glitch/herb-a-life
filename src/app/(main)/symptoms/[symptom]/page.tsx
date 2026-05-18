@@ -7,7 +7,8 @@ import { createClient } from "@supabase/supabase-js";
 import { EvidenceGrade } from "@/components/herbs/evidence-grade";
 import { SafetyAlert } from "@/components/herbs/safety-alert";
 import { cookies } from "next/headers";
-import { getServerTranslation, type Locale } from "@/lib/i18n/server";
+import { getTranslations } from "next-intl/server";
+import { type Locale } from "@/lib/i18n/config";
 
 export const revalidate = 3600;
 
@@ -369,10 +370,8 @@ export default async function SymptomDetailPage({ params }: Props) {
   const cookieStore = await cookies();
   const localeCookie = cookieStore.get("herbally-locale");
   const locale: Locale = localeCookie?.value === "fr" ? "fr" : "en";
-  const t = (key: string, params?: Record<string, string | number>) =>
-    getServerTranslation(locale, key, params);
-
-  if (!meta) {
+  const t = await getTranslations();
+if (!meta) {
     return (
       <div className="flex min-h-[60vh] flex-col items-center justify-center gap-6 px-4 text-center">
         <h2 className="text-2xl font-semibold">{t("herbDetail.notFound")}</h2>

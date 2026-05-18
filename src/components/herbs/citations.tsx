@@ -2,7 +2,7 @@
 
 import { ExternalLink, BookOpen, FileText, Globe } from "lucide-react";
 import { cn } from "@/lib/utils";
-import { useI18n } from "@/components/i18n/i18n-provider";
+import { useTranslations } from "next-intl";
 
 interface Citation {
   source: string;
@@ -27,7 +27,7 @@ const sourceIcons: Record<string, React.ReactNode> = {
 };
 
 export function CitationsList({ citations, className }: CitationsListProps) {
-  const { t } = useI18n();
+  const t = useTranslations();
 
   if (!citations || citations.length === 0) {
     return (
@@ -122,7 +122,7 @@ export function SourceAttribution({
   sources,
   className,
 }: SourceAttributionProps) {
-  const { t } = useI18n();
+  const t = useTranslations();
 
   return (
     <div className={cn("rounded-lg border bg-muted/50 p-4 text-sm", className)}>

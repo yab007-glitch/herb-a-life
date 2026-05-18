@@ -10,7 +10,8 @@ import { SourceAttribution } from "@/components/herbs/citations";
 import { getHerbBySlug } from "@/lib/actions/herbs";
 import { notFound } from "next/navigation";
 import { cookies } from "next/headers";
-import { getServerTranslation, type Locale } from "@/lib/i18n/server";
+import { getTranslations } from "next-intl/server";
+import { type Locale } from "@/lib/i18n/config";
 
 export const revalidate = 3600;
 
@@ -61,10 +62,8 @@ export default async function ComparePage({ params }: Props) {
   const cookieStore = await cookies();
   const localeCookie = cookieStore.get("herbally-locale");
   const locale: Locale = (localeCookie?.value as Locale) || "en";
-  const t = (key: string, p?: Record<string, string | number>) =>
-    getServerTranslation(locale, key, p);
-
-  const [resultA, resultB] = await Promise.all([
+  const t = await getTranslations();
+const [resultA, resultB] = await Promise.all([
     getHerbBySlug(slug1),
     getHerbBySlug(slug2),
   ]);

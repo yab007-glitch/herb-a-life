@@ -10,7 +10,8 @@ import {
 } from "lucide-react";
 import { Card, CardContent } from "@/components/ui/card";
 import { cookies } from "next/headers";
-import { getServerTranslation, type Locale } from "@/lib/i18n/server";
+import { getTranslations } from "next-intl/server";
+import { type Locale } from "@/lib/i18n/config";
 
 export const metadata: Metadata = {
   title: "Frequently Asked Questions",
@@ -70,7 +71,7 @@ export default async function FAQPage() {
   const cookieStore = await cookies();
   const localeCookie = cookieStore.get("herbally-locale");
   const locale: Locale = localeCookie?.value === "fr" ? "fr" : "en";
-  const t = (key: string) => getServerTranslation(locale, key);
+  const t = await getTranslations();
 
   const faqCategories = categoryKeys.map((catKey) => ({
     title: t(`faqContent.${catKey}`),

@@ -10,7 +10,7 @@ import {
   useSaveSearch,
 } from "@/components/herbs/recent-searches";
 import { useDebounce } from "@/lib/hooks/use-debounce";
-import { useI18n } from "@/components/i18n/i18n-provider";
+import { useTranslations } from "next-intl";
 
 interface SmartSearchProps {
   defaultValue?: string;
@@ -18,7 +18,7 @@ interface SmartSearchProps {
 }
 
 export function SmartSearch({ defaultValue = "", category }: SmartSearchProps) {
-  const { t } = useI18n();
+  const t = useTranslations();
   const router = useRouter();
   const searchParams = useSearchParams();
   const [query, setQuery] = useState(defaultValue);

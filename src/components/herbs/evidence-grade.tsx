@@ -9,7 +9,7 @@ import {
 } from "@/components/ui/tooltip";
 import { cn } from "@/lib/utils";
 import { FlaskConical, Beaker, Leaf, HelpCircle } from "lucide-react";
-import { useI18n } from "@/components/i18n/i18n-provider";
+import { useTranslations } from "next-intl";
 
 export type EvidenceLevel = "A" | "B" | "C" | "D" | "trad";
 
@@ -77,7 +77,7 @@ export function EvidenceGrade({
   className,
   showLabel = true,
 }: EvidenceGradeProps) {
-  const { t } = useI18n();
+  const t = useTranslations();
   const config = evidenceConfig[level] || evidenceConfig.C;
 
   return (

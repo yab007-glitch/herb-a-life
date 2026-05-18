@@ -2,7 +2,7 @@
 
 import { AlertTriangle, ShieldAlert, Info } from "lucide-react";
 import { cn } from "@/lib/utils";
-import { useI18n } from "@/components/i18n/i18n-provider";
+import { useTranslations } from "next-intl";
 
 interface SafetyAlertProps {
   severity: "critical" | "warning" | "info";
@@ -84,7 +84,7 @@ export function InteractionAlert({
   severityCounts,
   className,
 }: InteractionAlertProps) {
-  const { t } = useI18n();
+  const t = useTranslations();
 
   if (interactionCount === 0) {
     return (
@@ -161,7 +161,7 @@ export function PregnancyAlert({
   evidenceLevel = "limited",
   className,
 }: PregnancyAlertProps) {
-  const { t } = useI18n();
+  const t = useTranslations();
 
   if (pregnancySafe && nursingSafe) {
     return (

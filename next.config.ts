@@ -1,22 +1,22 @@
 import type { NextConfig } from "next";
 import { withSentryConfig } from "@sentry/nextjs";
 import withBundleAnalyzer from "@next/bundle-analyzer";
+import createNextIntlPlugin from "next-intl/plugin";
+
+const withNextIntl = createNextIntlPlugin("./i18n/request.ts");
 
 const bundleAnalyzer = withBundleAnalyzer({
   enabled: process.env.ANALYZE === 'true',
 });
 
 const nextConfig: NextConfig = {
-  // Enable standalone output for Docker deployment
   output: "standalone",
-  // Optimize bundle size
   experimental: {
     optimizePackageImports: ["lucide-react", "react-markdown", "date-fns"],
   },
-  // Image optimization
   images: {
     formats: ["image/avif", "image/webp"],
-    minimumCacheTTL: 60 * 60 * 24 * 30, // 30 days
+    minimumCacheTTL: 60 * 60 * 24 * 30,
     remotePatterns: [
       {
         protocol: "https",
@@ -24,11 +24,8 @@ const nextConfig: NextConfig = {
       },
     ],
   },
-  // Compression
   compress: true,
-  // Trailing slash for SEO consistency
   trailingSlash: false,
-  // Redirects for legacy routes
   async redirects() {
     return [
       {
@@ -46,10 +43,13 @@ const nextConfig: NextConfig = {
 };
 
 export default bundleAnalyzer(
-  withSentryConfig(nextConfig, {
-    org: process.env.SENTRY_ORG || "",
-    project: process.env.SENTRY_PROJECT || "",
-    authToken: process.env.SENTRY_AUTH_TOKEN,
-    silent: !process.env.SENTRY_DSN,
-  })
+  withSentryConfig(
+    withNextIntl(nextConfig),
+    {
+      org: process.env.SENTRY_ORG || "",
+      project: process.env.SENTRY_PROJECT || "",
+      authToken: process.env.SENTRY_AUTH_TOKEN,
+      silent: !process.env.SENTRY_DSN,
+    }
+  )
 );

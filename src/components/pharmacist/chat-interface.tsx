@@ -37,7 +37,8 @@ import {
 } from "@/lib/actions/chat-persist";
 import { getGuestId, setGuestId } from "@/lib/actions/guest-id";
 import type { ChatMessage } from "@/lib/actions/chat";
-import { useI18n } from "@/components/i18n/i18n-provider";
+import { useTranslations, useLocale } from "next-intl";
+import { trackEvent } from "@/lib/analytics";
 
 type Message = ChatMessage;
 
@@ -107,7 +108,8 @@ export function ChatInterface({
   locale?: string;
   sessionId?: string | null;
 }) {
-  const { locale: i18nLocale, t } = useI18n();
+  const t = useTranslations();
+  const i18nLocale = useLocale();
   const locale = localeProp || i18nLocale;
 
   function createInitialMessage(): Message {
@@ -320,6 +322,7 @@ export function ChatInterface({
     abortControllerRef.current = controller;
 
     try {
+      trackEvent("chat_message_sent");
       const response = await fetch("/api/chat", {
         method: "POST",
         headers: { "Content-Type": "application/json" },

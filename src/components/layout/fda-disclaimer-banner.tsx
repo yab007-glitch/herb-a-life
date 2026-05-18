@@ -1,10 +1,10 @@
 "use client";
 
 import { AlertCircle } from "lucide-react";
-import { useI18n } from "@/components/i18n/i18n-provider";
+import { useTranslations } from "next-intl";
 
 export function FDADisclaimerBanner() {
-  const { t } = useI18n();
+  const t = useTranslations();
 
   return (
     <div

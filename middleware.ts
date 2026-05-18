@@ -56,99 +56,66 @@ function applySecurityHeaders(response: NextResponse): NextResponse {
 
 /**
  * Parse Accept-Language header and detect if French is the preferred language.
- * Returns "fr" if French is preferred, null otherwise.
  */
 function detectLocaleFromAcceptLanguage(
   acceptLanguage: string | null
 ): string | null {
   if (!acceptLanguage) return null;
-
-  // Parse "fr-FR,fr;q=0.9,en;q=0.8" -> extract language tags in order of preference
   const entries = acceptLanguage.split(",").map((entry) => {
     const [tag] = entry.trim().split(";");
     const lang = tag.split("-")[0].toLowerCase();
     const q = parseFloat(entry.split("q=")[1]) || 1.0;
     return { lang, q };
   });
-
-  // Return "fr" if it appears before "en" (or if en is absent)
   for (const entry of entries.sort((a, b) => b.q - a.q)) {
     if (entry.lang === "fr") return "fr";
-    if (entry.lang === "en") return null; // en is default, no cookie needed
+    if (entry.lang === "en") return null;
   }
-
   return null;
 }
 
-export async function middleware(request: NextRequest) {
-  const { supabaseResponse, user, supabase } = await updateSession(request);
-  const path = request.nextUrl.pathname;
+export default async function middleware(request: NextRequest) {
+  let response = NextResponse.next({ request });
 
-  // Detect locale from Accept-Language header on first visit (no cookie yet)
-  // This prevents the flash-of-wrong-language for French visitors
-  if (!request.cookies.has("herbally-locale")) {
+  // Locale detection: set cookie for first-time visitors
+  const existingLocale = request.cookies.get("herbally-locale")?.value;
+  if (!existingLocale) {
     const detected = detectLocaleFromAcceptLanguage(
-      request.headers.get("Accept-Language")
+      request.headers.get("accept-language")
     );
     if (detected) {
-      supabaseResponse.cookies.set("herbally-locale", detected, {
+      response.cookies.set("herbally-locale", detected, {
         path: "/",
-        maxAge: 60 * 60 * 24 * 365, // 1 year
+        maxAge: 60 * 60 * 24 * 365,
+        sameSite: "lax",
       });
     }
   }
 
-  // Allow public routes and herb detail pages
-  const isPublic =
-    publicRoutes.some((route) => path === route) ||
-    path.startsWith("/auth/") ||
-    path.startsWith("/herbs/") ||
-    path.startsWith("/symptoms/") ||
-    path.startsWith("/compare/") ||
-    path.startsWith("/api/");
+  // Supabase session refresh
+  const { supabaseResponse, user } = await updateSession(request);
+  supabaseResponse.cookies.getAll().forEach((cookie) => {
+    response.cookies.set(cookie.name, cookie.value, cookie);
+  });
 
-  // For unknown public paths that aren't matched, let Next.js handle 404
-  // instead of redirecting to login
-  if (!isPublic && !user) {
-    // Check if this is a likely static/public path that should 404, not redirect
-    const likelyPublicPath =
-      path.endsWith(".webmanifest") ||
-      path.endsWith(".xml") ||
-      path.endsWith(".txt") ||
-      path.endsWith(".json");
+  // Route guards
+  const pathname = request.nextUrl.pathname;
 
-    if (likelyPublicPath) {
-      return applySecurityHeaders(supabaseResponse);
+  if (adminRoutes.some((route) => pathname.startsWith(route))) {
+    if (!user) {
+      return Response.redirect(new URL("/", request.url));
+    }
+    const role = user?.user_metadata?.role ?? "user";
+    if (role !== "admin") {
+      return Response.redirect(new URL("/", request.url));
     }
   }
 
-  if (isPublic) {
-    return applySecurityHeaders(supabaseResponse);
-  }
-
-  // All non-public routes require authentication (admin only)
-  if (!user) {
-    return NextResponse.redirect(new URL("/", request.url));
-  }
-
-  // Admin routes
-  if (adminRoutes.some((route) => path.startsWith(route))) {
-    const { data: profile } = await supabase
-      .from("profiles")
-      .select("role")
-      .eq("id", user.id)
-      .single();
-
-    if (profile?.role !== "admin") {
-      return NextResponse.redirect(new URL("/", request.url));
-    }
-  }
-
-  return applySecurityHeaders(supabaseResponse);
+  return applySecurityHeaders(response);
 }
 
 export const config = {
   matcher: [
-    "/((?!_next/static|_next/image|favicon.ico|robots.txt|sitemap.xml|.*\\.(?:svg|png|jpg|jpeg|gif|webp)$).*)",
+    "/((?!_next/static|_next/image|favicon.ico|.*\\.(?:svg|png|jpg|jpeg|gif|webp)$).*)",
   ],
 };

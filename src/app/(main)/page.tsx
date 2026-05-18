@@ -5,7 +5,8 @@ import { cookies } from "next/headers";
 import { Info } from "lucide-react";
 import { ChatInterface } from "@/components/pharmacist/chat-interface";
 import { getHerbBySlug } from "@/lib/actions/herbs";
-import { getServerTranslation, type Locale } from "@/lib/i18n/server";
+import { getTranslations } from "next-intl/server";
+import { type Locale } from "@/lib/i18n/config";
 
 export const metadata: Metadata = {
   title: "HerbAlly — Virtual Herbalist | Medicinal Herbs & Drug Interactions",
@@ -25,10 +26,8 @@ export default async function HomePage({
   const cookieStore = await cookies();
   const localeCookie = cookieStore.get("herbally-locale");
   const locale: Locale = (localeCookie?.value as Locale) || "en";
-  const t = (key: string, p?: Record<string, string | number>) =>
-    getServerTranslation(locale, key, p);
-
-  let herbContext: string | null = null;
+  const t = await getTranslations();
+let herbContext: string | null = null;
   let autoQuery: string | null = null;
   let herbName: string | null = null;
 

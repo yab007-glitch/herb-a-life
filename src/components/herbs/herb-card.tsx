@@ -1,6 +1,7 @@
 "use client";
 
 import Link from "next/link";
+import { trackEvent } from "@/lib/analytics";
 import {
   ArrowRight,
   Calculator,
@@ -17,7 +18,7 @@ import { Badge } from "@/components/ui/badge";
 import { HerbSafetyBadges } from "@/components/herbs/herb-safety-badges";
 import { HerbImage } from "@/components/herbs/herb-image";
 import { cn } from "@/lib/utils";
-import { useI18n } from "@/components/i18n/i18n-provider";
+import { useTranslations } from "next-intl";
 
 const categoryIconMap: Record<string, keyof typeof IconComponents> = {
   adaptogen: "Sprout",
@@ -73,6 +74,7 @@ interface HerbCardProps {
     traditional_uses?: string[] | null;
     herb_categories?: { name: string } | null;
     updated_at?: string;
+    image_url?: string | null;
   };
   className?: string;
 }
@@ -84,7 +86,7 @@ const safetyColorMap = {
 } as const;
 
 export function HerbCard({ herb, className }: HerbCardProps) {
-  const { t } = useI18n();
+  const t = useTranslations();
   const safetyLevel = getSafetyLevel(herb.pregnancy_safe, herb.nursing_safe);
   const CategoryIcon =
     IconComponents[getCategoryIconKey(herb.herb_categories?.name)];
@@ -100,6 +102,7 @@ export function HerbCard({ herb, className }: HerbCardProps) {
   return (
     <Link
       href={`/herbs/${herb.slug}`}
+        onClick={() => trackEvent("herb_viewed", { slug: herb.slug })}
       className="group"
       aria-label={`${herb.name}. ${t(safetyLabelKey)}`}
     >
@@ -127,6 +130,7 @@ export function HerbCard({ herb, className }: HerbCardProps) {
           <div className="flex items-start gap-4">
             <HerbImage
               name={herb.name}
+              imageUrl={herb.image_url}
               className="size-14 shrink-0 rounded-lg shadow-sm transition-all duration-300 group-hover:shadow-md group-hover:scale-105"
             />
             <div className="flex-1 min-w-0">

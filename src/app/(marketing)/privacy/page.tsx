@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import { cookies } from "next/headers";
-import { getServerTranslation, type Locale } from "@/lib/i18n/server";
+import { getTranslations } from "next-intl/server";
+import { type Locale } from "@/lib/i18n/config";
 
 export const metadata: Metadata = {
   title: "Privacy Policy",
@@ -21,7 +22,7 @@ export default async function PrivacyPage() {
   const cookieStore = await cookies();
   const localeCookie = cookieStore.get("herbally-locale");
   const locale: Locale = localeCookie?.value === "fr" ? "fr" : "en";
-  const t = (key: string) => getServerTranslation(locale, key);
+  const t = await getTranslations();
 
   const howWeUseItems = [
     t("privacy.howWeUse.items.0"),

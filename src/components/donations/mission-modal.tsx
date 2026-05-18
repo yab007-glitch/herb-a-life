@@ -10,7 +10,7 @@ import {
 } from "@/components/ui/dialog";
 import { Button } from "@/components/ui/button";
 import { Heart, Leaf, Sparkles, Globe, CheckCircle } from "lucide-react";
-import { useI18n } from "@/components/i18n/i18n-provider";
+import { useTranslations } from "next-intl";
 
 interface MissionModalProps {
   open: boolean;
@@ -18,7 +18,7 @@ interface MissionModalProps {
 }
 
 export function MissionModal({ open, onOpenChange }: MissionModalProps) {
-  const { t } = useI18n();
+  const t = useTranslations();
   const router = useRouter();
 
   const handleDonate = () => {

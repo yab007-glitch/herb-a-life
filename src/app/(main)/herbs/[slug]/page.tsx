@@ -47,7 +47,8 @@ import { getComparisonHerbs } from "@/lib/data/comparisons";
 import type { Monograph } from "@/lib/data/monographs";
 import { getHerbBySlug } from "@/lib/actions/herbs";
 import { getAnonClient } from "@/lib/supabase/anonymous";
-import { getServerTranslation, type Locale } from "@/lib/i18n/server";
+import { getTranslations } from "next-intl/server";
+import { type Locale } from "@/lib/i18n/config";
 
 // Generate static pages for popular herbs at build time.
 // Herbs beyond this count are served via ISR (revalidate = 3600).
@@ -177,10 +178,8 @@ export default async function HerbDetailPage({ params }: Props) {
   const baseUrl = process.env.NEXT_PUBLIC_APP_URL ?? "https://herbally.app";
 
   // Translation helper
-  const t = (key: string, params?: Record<string, string | number>) =>
-    getServerTranslation(locale, key, params);
-
-  if (!result.success || !result.data) {
+  const t = await getTranslations();
+if (!result.success || !result.data) {
     notFound();
   }
 

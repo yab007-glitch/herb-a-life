@@ -10,7 +10,7 @@ import {
   Stethoscope,
 } from "lucide-react";
 import { cn } from "@/lib/utils";
-import { useI18n } from "@/components/i18n/i18n-provider";
+import { useTranslations } from "next-intl";
 
 const tabs = [
   { labelKey: "mobileTabs.symptoms", href: "/symptoms", icon: Stethoscope },
@@ -35,7 +35,7 @@ function isActive(pathname: string, href: string): boolean {
 
 export function MobileTabBar() {
   const pathname = usePathname();
-  const { t } = useI18n();
+  const t = useTranslations();
 
   return (
     <nav

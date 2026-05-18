@@ -8,7 +8,7 @@ import {
   DropdownMenuItem,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
-import { useI18n } from "@/components/i18n/i18n-provider";
+import { useTranslations } from "next-intl";
 
 type Theme = "light" | "dark" | "system";
 
@@ -34,7 +34,7 @@ function applyTheme(theme: Theme) {
 }
 
 export function ThemeToggle() {
-  const { t } = useI18n();
+  const t = useTranslations();
   const [theme, setTheme] = useState<Theme>(() => {
     if (typeof window === "undefined") return "system";
     const initial = getInitialTheme();

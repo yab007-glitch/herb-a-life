@@ -1,6 +1,7 @@
 import { Card, CardContent } from "@/components/ui/card";
 import { Users } from "lucide-react";
 import { createAdminClient } from "@/lib/supabase/admin";
+import { getTranslations } from "next-intl/server";
 
 export const metadata = {
   title: "Users",

@@ -3,7 +3,7 @@
 import { useState } from "react";
 import { ChevronDown, ChevronUp } from "lucide-react";
 import { Button } from "@/components/ui/button";
-import { useI18n } from "@/components/i18n/i18n-provider";
+import { useTranslations } from "next-intl";
 import type { Interaction } from "@/lib/types/interactions";
 
 export type { Interaction };
@@ -24,7 +24,7 @@ export function InteractionsTable({
 }: {
   interactions: Interaction[];
 }) {
-  const { t } = useI18n();
+  const t = useTranslations();
   const [expanded, setExpanded] = useState(false);
 
   if (interactions.length === 0) return null;

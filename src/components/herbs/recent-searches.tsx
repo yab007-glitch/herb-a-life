@@ -4,7 +4,7 @@ import { useState, useEffect } from "react";
 import Link from "next/link";
 import { Clock, X } from "lucide-react";
 import { Badge } from "@/components/ui/badge";
-import { useI18n } from "@/components/i18n/i18n-provider";
+import { useTranslations } from "next-intl";
 
 const MAX_RECENT = 5;
 const STORAGE_KEY = "herbally-recent-searches";
@@ -12,7 +12,7 @@ const STORAGE_KEY = "herbally-recent-searches";
 export function RecentSearches() {
   const [searches, setSearches] = useState<string[]>([]);
   const [mounted, setMounted] = useState(false);
-  const { t } = useI18n();
+  const t = useTranslations();
 
   useEffect(() => {
     const loadSearches = () => {

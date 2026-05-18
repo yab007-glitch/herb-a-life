@@ -4,7 +4,6 @@ import { useEffect } from "react";
 import Link from "next/link";
 import { AlertTriangle, RotateCcw } from "lucide-react";
 import { Button } from "@/components/ui/button";
-import { useI18n } from "@/components/i18n/i18n-provider";
 
 export default function GlobalError({
   error,
@@ -13,8 +12,6 @@ export default function GlobalError({
   error: Error & { digest?: string };
   reset: () => void;
 }) {
-  const { t } = useI18n();
-
   useEffect(() => {
     console.error("[HerbAlly Error]", error);
   }, [error]);
@@ -25,20 +22,18 @@ export default function GlobalError({
         <AlertTriangle className="h-8 w-8 text-destructive" />
       </div>
       <div className="space-y-2">
-        <h2 className="text-2xl font-semibold">
-          {t("errors.somethingWentWrong")}
-        </h2>
+        <h2 className="text-2xl font-semibold">Something went wrong</h2>
         <p className="text-muted-foreground max-w-md">
-          {t("errors.unexpectedError")}
+          We encountered an unexpected error. Please try again.
         </p>
       </div>
       <div className="flex gap-3">
         <Button variant="outline" onClick={() => reset()}>
           <RotateCcw className="mr-2 h-4 w-4" />
-          {t("errors.tryAgain")}
+          Try Again
         </Button>
         <Link href="/">
-          <Button>{t("errors.goHome")}</Button>
+          <Button>Go Home</Button>
         </Link>
       </div>
     </div>

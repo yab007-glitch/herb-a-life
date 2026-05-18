@@ -3,11 +3,11 @@
 import { useState } from "react";
 import { Link2, Check } from "lucide-react";
 import { Button } from "@/components/ui/button";
-import { useI18n } from "@/components/i18n/i18n-provider";
+import { useTranslations } from "next-intl";
 
 export function CopyLinkButton() {
   const [copied, setCopied] = useState(false);
-  const { t } = useI18n();
+  const t = useTranslations();
 
   async function handleCopy() {
     try {

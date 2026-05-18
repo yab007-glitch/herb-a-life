@@ -3,10 +3,10 @@
 import Link from "next/link";
 import { AlertCircle, Home, ArrowLeft } from "lucide-react";
 import { Button } from "@/components/ui/button";
-import { useI18n } from "@/components/i18n/i18n-provider";
+import { useTranslations } from "next-intl";
 
 export default function NotFound() {
-  const { t } = useI18n();
+  const t = useTranslations();
 
   return (
     <div className="flex min-h-[60vh] flex-col items-center justify-center px-4 py-12 text-center">

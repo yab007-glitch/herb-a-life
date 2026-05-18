@@ -23,7 +23,7 @@ import { ThemeToggle } from "@/components/theme/theme-toggle";
 import { MissionModal } from "@/components/donations/mission-modal";
 import { LanguageSelector } from "@/components/i18n/language-selector";
 import { LanguageDrawer } from "@/components/i18n/language-drawer";
-import { useI18n } from "@/components/i18n/i18n-provider";
+import { useTranslations, useLocale } from "next-intl";
 import { LANGUAGES } from "@/lib/i18n/config";
 import { cn } from "@/lib/utils";
 
@@ -61,7 +61,8 @@ export function MarketingNavbar() {
   const [open, setOpen] = useState(false);
   const [showMission, setShowMission] = useState(false);
   const [showLangDrawer, setShowLangDrawer] = useState(false);
-  const { t, locale } = useI18n();
+  const t = useTranslations();
+  const locale = useLocale();
 
   const currentLang = LANGUAGES.find((l) => l.code === locale);
   const [mobileTheme, setMobileTheme] = useState<Theme>(() => {

@@ -9,12 +9,9 @@ import { EmptyState } from "@/components/shared/empty-state";
 import { getHerbs, getHerbCategories } from "@/lib/actions/herbs";
 import { Flame, Stethoscope } from "lucide-react";
 import Script from "next/script";
-import {
-  getServerTranslation,
-  getServerPluralTranslation,
-  type Locale,
-} from "@/lib/i18n/server";
+import { type Locale } from "@/lib/i18n/config";
 import { cookies } from "next/headers";
+import { getTranslations } from "next-intl/server";
 
 export const metadata: Metadata = {
   title: "HerbAlly - Medicinal Herbs",
@@ -72,15 +69,8 @@ export default async function HerbsPage({
   const category = params.category || "";
   const page = parseInt(params.page || "1", 10);
   const locale = await getLocale();
-  const t = (key: string, params?: Record<string, string | number>) =>
-    getServerTranslation(locale, key, params);
-  const tPlural = (
-    key: string,
-    count: number,
-    params?: Record<string, string | number>
-  ) => getServerPluralTranslation(locale, key, count, params);
-
-  const [herbsResult, categoriesResult] = await Promise.all([
+  const t = await getTranslations();
+const [herbsResult, categoriesResult] = await Promise.all([
     getHerbs({ query, category, page }),
     getHerbCategories(),
   ]);
@@ -203,7 +193,7 @@ export default async function HerbsPage({
       {/* Search Results Label */}
       {query && herbs.length > 0 && (
         <p className="text-sm text-muted-foreground">
-          {tPlural("herbs.resultsFound", total, { query })}
+          {t("herbs.resultsFound", { count: total, query })}
         </p>
       )}
 

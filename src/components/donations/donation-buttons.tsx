@@ -3,11 +3,12 @@
 import { useState } from "react";
 import { Heart, Coffee, Gift, Crown, Loader2 } from "lucide-react";
 import { Button } from "@/components/ui/button";
+import { trackEvent } from "@/lib/analytics";
 import { Card, CardContent } from "@/components/ui/card";
-import { useI18n } from "@/components/i18n/i18n-provider";
+import { useTranslations } from "next-intl";
 
 export function DonationButtons() {
-  const { t } = useI18n();
+  const t = useTranslations();
   const [customAmount, setCustomAmount] = useState(20);
   const [loading, setLoading] = useState<number | null>(null);
 
@@ -70,7 +71,7 @@ export function DonationButtons() {
             <Card
               key={tier.amount}
               className="group relative cursor-pointer overflow-hidden transition-all hover:scale-[1.02] hover:shadow-lg"
-              onClick={() => handleDonate(tier.amount)}
+              onClick={() => { trackEvent("donation_clicked", { amount: tier.amount }); handleDonate(tier.amount); }}
             >
               <div
                 className={`absolute inset-0 bg-gradient-to-br ${tier.color} opacity-0 transition-opacity group-hover:opacity-10`}
@@ -126,7 +127,7 @@ export function DonationButtons() {
             <Button
               size="lg"
               className="gap-2 bg-gradient-to-r from-pink-500 to-rose-600 hover:opacity-90 shadow-lg shadow-pink-500/20"
-              onClick={() => handleDonate(customAmount)}
+              onClick={() => { trackEvent("donation_clicked", { amount: customAmount }); handleDonate(customAmount); }}
               disabled={loading === customAmount}
             >
               {loading === customAmount ? (

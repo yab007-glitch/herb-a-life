@@ -3,11 +3,11 @@
 import { useRouter } from "next/navigation";
 import { Shuffle } from "lucide-react";
 import { Badge } from "@/components/ui/badge";
-import { useI18n } from "@/components/i18n/i18n-provider";
+import { useTranslations } from "next-intl";
 
 export function SurpriseMeButton({ totalHerbs }: { totalHerbs: number }) {
   const router = useRouter();
-  const { t } = useI18n();
+  const t = useTranslations();
 
   function handleSurprise() {
     const randomPage =

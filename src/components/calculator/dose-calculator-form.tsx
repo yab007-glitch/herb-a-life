@@ -27,7 +27,7 @@ import {
   lbsToKg,
   type DoseResult,
 } from "@/lib/utils/dosage-calculations";
-import { useI18n } from "@/components/i18n/i18n-provider";
+import { useTranslations } from "next-intl";
 
 const unitOptions = ["mg", "ml", "g", "drops"] as const;
 
@@ -55,7 +55,7 @@ const FORMULA_DESC_MAP: Record<FormulaKey, string> = {
 };
 
 export function DoseCalculatorForm({ prefill }: { prefill?: PrefillData }) {
-  const { t } = useI18n();
+  const t = useTranslations();
   const [herbName, setHerbName] = useState(prefill?.herbName ?? "");
   const [adultDose, setAdultDose] = useState(prefill?.adultDose ?? "");
   const [doseUnit, setDoseUnit] = useState<(typeof unitOptions)[number]>(

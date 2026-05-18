@@ -1,7 +1,8 @@
 import type { Metadata } from "next";
 import { AlertTriangle } from "lucide-react";
 import { cookies } from "next/headers";
-import { getServerTranslation, type Locale } from "@/lib/i18n/server";
+import { getTranslations } from "next-intl/server";
+import { type Locale } from "@/lib/i18n/config";
 
 export const metadata: Metadata = {
   title: "Medical Disclaimer",
@@ -20,7 +21,7 @@ export default async function DisclaimerPage() {
   const cookieStore = await cookies();
   const localeCookie = cookieStore.get("herbally-locale");
   const locale: Locale = localeCookie?.value === "fr" ? "fr" : "en";
-  const t = (key: string) => getServerTranslation(locale, key);
+  const t = await getTranslations();
 
   return (
     <div className="mx-auto max-w-3xl px-4 py-16 sm:px-6 lg:px-8">

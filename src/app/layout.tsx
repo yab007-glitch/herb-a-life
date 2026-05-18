@@ -3,11 +3,14 @@ import { cookies } from "next/headers";
 import { Geist, Geist_Mono } from "next/font/google";
 import { Toaster } from "@/components/ui/sonner";
 import { TooltipProvider } from "@/components/ui/tooltip";
-import { I18nProvider } from "@/components/i18n/i18n-provider";
+import { NextIntlClientProvider } from "next-intl";
+import { Analytics } from "@vercel/analytics/next";
 import { OrganizationSchema } from "@/components/seo/organization-schema";
 import { SWRegistration } from "@/components/shared/service-worker-registration";
 import { SkipToContent } from "@/components/shared/skip-to-content";
 import { WebVitals } from "@/components/analytics/web-vitals";
+import enDict from "@/lib/i18n/dictionaries/en.json";
+import frDict from "@/lib/i18n/dictionaries/fr.json";
 import "./globals.css";
 
 const geistSans = Geist({
@@ -79,15 +82,20 @@ export const metadata: Metadata = {
         url: "/og-image.png",
         width: 1200,
         height: 630,
-        alt: "HerbAlly - Your Trusted Guide to Medicinal Herbs",
+        alt: "HerbAlly - Medicinal Herbs Database",
       },
     ],
+    locale: "en_US",
   },
   twitter: {
     card: "summary_large_image",
     title: "HerbAlly - Your Trusted Guide to Medicinal Herbs",
     description:
       "Explore 2,700+ medicinal herbs, calculate dosages, and check drug interactions.",
+    images: ["/og-image.png"],
+  },
+  verification: {
+    google: "your-google-verification-code",
   },
 };
 
@@ -98,25 +106,25 @@ export default async function RootLayout({
 }>) {
   const cookieStore = await cookies();
   const localeCookie = cookieStore.get("herbally-locale");
-  const locale = (localeCookie?.value as "en" | "fr") || "en";
+  const locale = localeCookie?.value === "fr" ? "fr" : "en";
+  const messages = locale === "fr" ? frDict : enDict;
 
   return (
-    <html
-      lang={locale}
-      dir="ltr"
-      className={`${geistSans.variable} ${geistMono.variable} h-full antialiased`}
-    >
-      <body className="min-h-full flex flex-col">
+    <html lang={locale} className={`${geistSans.variable} ${geistMono.variable} antialiased`}>
+      <head>
         <OrganizationSchema />
-        <I18nProvider>
+      </head>
+      <body className="bg-background text-foreground">
+        <NextIntlClientProvider messages={messages} locale={locale}>
           <SkipToContent />
           <TooltipProvider>
             {children}
-            <Toaster position="top-right" richColors />
           </TooltipProvider>
-        </I18nProvider>
+          <Toaster />
+        </NextIntlClientProvider>
         <SWRegistration />
         <WebVitals />
+        <Analytics />
       </body>
     </html>
   );

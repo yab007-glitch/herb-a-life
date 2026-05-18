@@ -1,106 +1,76 @@
 "use client";
 
-import { Globe, Check, X } from "lucide-react";
+import { Globe, Check } from "lucide-react";
 import {
   Sheet,
   SheetContent,
   SheetHeader,
   SheetTitle,
+  SheetTrigger,
 } from "@/components/ui/sheet";
 import { LANGUAGES } from "@/lib/i18n/config";
-import { useI18n } from "@/components/i18n/i18n-provider";
-import { cn } from "@/lib/utils";
+import { useTranslations, useLocale } from "next-intl";
+import { useSetLocale } from "./use-set-locale";
+import { useDetectedLocale } from "./use-detected-locale";
 
 interface LanguageDrawerProps {
-  open: boolean;
-  onOpenChange: (open: boolean) => void;
+  open?: boolean;
+  onOpenChange?: (open: boolean) => void;
 }
 
 export function LanguageDrawer({ open, onOpenChange }: LanguageDrawerProps) {
-  const { t, locale, setLocale, detectedLocale } = useI18n();
-
-  function handleSelect(code: string) {
-    setLocale(code as "en" | "fr");
-    onOpenChange(false);
-  }
+  const t = useTranslations();
+  const locale = useLocale();
+  const setLocale = useSetLocale();
+  const detectedLocale = useDetectedLocale();
 
   return (
     <Sheet open={open} onOpenChange={onOpenChange}>
-      <SheetContent
-        side="bottom"
-        className="h-auto max-h-[80vh] rounded-t-2xl px-0 pb-8"
-        showCloseButton={false}
-      >
-        <SheetHeader className="px-6 pb-2">
-          <div className="flex items-center justify-between">
-            <SheetTitle className="flex items-center gap-2 text-lg">
-              <Globe className="size-5 text-primary" />
-              {t("common.language")}
-            </SheetTitle>
-            <button
-              onClick={() => onOpenChange(false)}
-              className="inline-flex size-10 items-center justify-center rounded-full text-muted-foreground transition-colors hover:bg-muted"
-              aria-label={t("common.close")}
-            >
-              <X className="size-5" />
-            </button>
-          </div>
+      <SheetTrigger className="inline-flex shrink-0 items-center justify-center gap-1.5 rounded-full h-11 min-w-11 px-2.5 hover:bg-muted hover:text-foreground transition-all outline-none focus-visible:border-ring focus-visible:ring-3 focus-visible:ring-ring/50">
+        <Globe className="size-5" />
+        <span className="text-xs font-semibold uppercase tracking-wide hidden sm:inline">
+          {locale}
+        </span>
+        <span className="sr-only">{t("common.changeLanguage")}</span>
+      </SheetTrigger>
+      <SheetContent side="bottom" className="h-auto max-h-[80vh]">
+        <SheetHeader>
+          <SheetTitle>{t("common.changeLanguage")}</SheetTitle>
         </SheetHeader>
-
-        <div className="px-4 pt-2">
-          {/* Detected language suggestion */}
+        <div className="mt-4 space-y-2">
           {detectedLocale && detectedLocale !== locale && (
-            <div className="mb-3 rounded-lg border border-primary/20 bg-primary/5 px-4 py-3">
-              <p className="text-sm text-muted-foreground">
-                {t("common.suggested")}{" "}
-                <button
-                  onClick={() => handleSelect(detectedLocale)}
-                  className="font-medium text-primary hover:underline"
-                >
-                  {LANGUAGES.find((l) => l.code === detectedLocale)?.nativeName}
-                </button>
-              </p>
+            <div className="px-2 py-1.5 text-xs text-muted-foreground border-b">
+              <span>{t("common.suggested")}</span>
+              <button
+                onClick={() => setLocale(detectedLocale)}
+                className="text-primary hover:underline font-medium"
+              >
+                {LANGUAGES.find((l) => l.code === detectedLocale)?.nativeName}
+              </button>
             </div>
           )}
-
-          {/* Language options */}
-          <div className="space-y-1">
-            {LANGUAGES.map((lang) => {
-              const isActive = lang.code === locale;
-              return (
-                <button
-                  key={lang.code}
-                  onClick={() => handleSelect(lang.code)}
-                  className={cn(
-                    "flex w-full items-center gap-4 rounded-xl px-4 py-4 text-left transition-colors",
-                    isActive
-                      ? "bg-primary/10 text-foreground"
-                      : "hover:bg-muted/50"
-                  )}
-                >
-                  <span className="text-2xl" aria-hidden="true">
-                    {lang.flag}
-                  </span>
-                  <div className="flex-1">
-                    <p
-                      className={cn(
-                        "text-base",
-                        isActive ? "font-semibold" : "font-medium"
-                      )}
-                    >
-                      {lang.nativeName}
-                    </p>
-                    <p className="text-sm text-muted-foreground">{lang.name}</p>
-                  </div>
-                  {isActive && (
-                    <div className="flex size-8 items-center justify-center rounded-full bg-primary text-primary-foreground">
-                      <Check className="size-4" />
-                    </div>
-                  )}
-                </button>
-              );
-            })}
-          </div>
+          {LANGUAGES.map((lang) => (
+            <button
+              key={lang.code}
+              onClick={() => setLocale(lang.code)}
+              className={`flex w-full items-center gap-3 rounded-lg px-3 py-2 text-left transition-colors ${
+                lang.code === locale
+                  ? "bg-muted font-medium"
+                  : "hover:bg-muted/50"
+              }`}
+            >
+              <span className="text-xl" aria-hidden="true">
+                {lang.flag}
+              </span>
+              <div className="flex-1">
+                <p className="text-sm font-medium">{lang.nativeName}</p>
+                <p className="text-xs text-muted-foreground">{lang.name}</p>
+              </div>
+              {lang.code === locale && (
+                <Check className="size-5 text-primary" />
+              )}
+            </button>
+          ))}
         </div>
       </SheetContent>
     </Sheet>

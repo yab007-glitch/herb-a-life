@@ -7,7 +7,7 @@ import { Input } from "@/components/ui/input";
 import { Badge } from "@/components/ui/badge";
 import { EvidenceGrade } from "@/components/herbs/evidence-grade";
 import { useDebounce } from "@/lib/hooks/use-debounce";
-import { useI18n } from "@/components/i18n/i18n-provider";
+import { useTranslations } from "next-intl";
 
 interface SearchResult {
   id: string;
@@ -25,7 +25,7 @@ interface InstantSearchProps {
 }
 
 export function InstantSearch({ placeholder, className }: InstantSearchProps) {
-  const { t } = useI18n();
+  const t = useTranslations();
   const resolvedPlaceholder = placeholder || t("search.placeholder");
   const [query, setQuery] = useState("");
   const [results, setResults] = useState<SearchResult[]>([]);

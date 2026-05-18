@@ -2,7 +2,7 @@
 
 import { ShieldCheck, ShieldX } from "lucide-react";
 import { cn } from "@/lib/utils";
-import { useI18n } from "@/components/i18n/i18n-provider";
+import { useTranslations } from "next-intl";
 
 interface HerbSafetyBadgesProps {
   pregnancySafe: boolean;
@@ -15,7 +15,7 @@ export function HerbSafetyBadges({
   nursingSafe,
   className,
 }: HerbSafetyBadgesProps) {
-  const { t } = useI18n();
+  const t = useTranslations();
 
   return (
     <div className={cn("flex flex-wrap gap-2", className)}>

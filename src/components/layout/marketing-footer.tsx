@@ -2,7 +2,7 @@
 
 import Link from "next/link";
 import { Leaf } from "lucide-react";
-import { useI18n } from "@/components/i18n/i18n-provider";
+import { useTranslations } from "next-intl";
 
 function FacebookIcon({ className }: { className?: string }) {
   return (
@@ -20,7 +20,7 @@ function FacebookIcon({ className }: { className?: string }) {
 }
 
 export function MarketingFooter() {
-  const { t } = useI18n();
+  const t = useTranslations();
 
   const footerLinks = {
     product: [

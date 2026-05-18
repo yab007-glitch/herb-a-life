@@ -1,9 +1,9 @@
 "use client";
 
-import { useI18n } from "@/components/i18n/i18n-provider";
+import { useTranslations } from "next-intl";
 
 export function SkipToContent() {
-  const { t } = useI18n();
+  const t = useTranslations();
   return (
     <a href="#main-content" className="skip-to-content">
       {t("common.skipToContent")}

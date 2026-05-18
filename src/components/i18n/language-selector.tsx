@@ -8,10 +8,16 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import { LANGUAGES } from "@/lib/i18n/config";
-import { useI18n } from "@/components/i18n/i18n-provider";
+import { useTranslations, useLocale } from "next-intl";
+import { useSetLocale } from "./use-set-locale";
+import { trackEvent } from "@/lib/analytics";
+import { useDetectedLocale } from "./use-detected-locale";
 
 export function LanguageSelector() {
-  const { t, locale, setLocale, detectedLocale } = useI18n();
+  const t = useTranslations();
+  const locale = useLocale();
+  const setLocale = useSetLocale();
+  const detectedLocale = useDetectedLocale();
 
   return (
     <DropdownMenu>
@@ -28,7 +34,7 @@ export function LanguageSelector() {
           <div className="px-2 py-1.5 text-xs text-muted-foreground border-b">
             <span>{t("common.suggested")}</span>
             <button
-              onClick={() => setLocale(detectedLocale)}
+              onClick={() => { trackEvent("language_changed", { locale: detectedLocale }); setLocale(detectedLocale); }}
               className="text-primary hover:underline font-medium"
             >
               {LANGUAGES.find((l) => l.code === detectedLocale)?.nativeName}
@@ -40,7 +46,7 @@ export function LanguageSelector() {
         {LANGUAGES.map((lang) => (
           <DropdownMenuItem
             key={lang.code}
-            onClick={() => setLocale(lang.code)}
+            onClick={() => { trackEvent("language_changed", { locale: lang.code }); setLocale(lang.code); }}
             className={lang.code === locale ? "bg-muted/50 font-medium" : ""}
           >
             <span className="mr-2 text-base" aria-hidden="true">

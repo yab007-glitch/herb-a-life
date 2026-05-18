@@ -5,6 +5,7 @@ interface HerbImageProps {
   name: string;
   imageUrl?: string | null;
   className?: string;
+  priority?: boolean;
 }
 
 // Generate a deterministic gradient based on herb name
@@ -35,7 +36,10 @@ function getInitials(name: string): string {
     .join("");
 }
 
-export function HerbImage({ name, imageUrl, className }: HerbImageProps) {
+export function HerbImage({ name, imageUrl, className, priority }: HerbImageProps) {
+  const gradient = getHerbGradient(name);
+  const initials = getInitials(name);
+
   if (imageUrl) {
     return (
       <div className={cn("relative overflow-hidden", className)}>
@@ -43,15 +47,13 @@ export function HerbImage({ name, imageUrl, className }: HerbImageProps) {
           src={imageUrl}
           alt={name}
           fill
+          sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
           className="object-cover"
-          sizes="(max-width: 768px) 64px, 96px"
+          priority={priority}
         />
       </div>
     );
   }
-
-  const gradient = getHerbGradient(name);
-  const initials = getInitials(name);
 
   return (
     <div
