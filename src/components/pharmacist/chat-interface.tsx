@@ -139,6 +139,8 @@ export function ChatInterface({
   // ─── Per-message actions state ─────────────────────────────────────
   const [copiedId, setCopiedId] = useState<string | null>(null);
   const [lastFailedMessage, setLastFailedMessage] = useState<string | null>(null);
+  const [retryCount, setRetryCount] = useState(0);
+  const MAX_RETRIES = 2;
 
   // ─── Init guest ID ────────────────────────────────────────────────
 
@@ -310,6 +312,9 @@ export function ChatInterface({
     setShowSuggestions(false);
     setIsLoading(true);
 
+    // Reset retry count on new message attempt
+    setRetryCount(0);
+
     // Create abort controller for stop-generation support
     const controller = new AbortController();
     abortControllerRef.current = controller;
@@ -364,6 +369,7 @@ export function ChatInterface({
         );
       }
 
+      setRetryCount(0);
       saveMessages([
         ...allMessages,
         { ...assistantMessage, content: accumulated },
@@ -375,14 +381,42 @@ export function ChatInterface({
         return;
       }
 
-      // Store the failed message for retry
+      // Automatic retry with exponential backoff for transient errors
+      if (retryCount < MAX_RETRIES) {
+        const nextRetry = retryCount + 1;
+        setRetryCount(nextRetry);
+
+        // Show retrying indicator
+        setMessages((prev) => [
+          ...prev,
+          {
+            role: "assistant",
+            content: t("pharmacist.retrying") || `Retrying (${nextRetry}/${MAX_RETRIES})...`,
+            id: makeId(),
+            timestamp: new Date().toISOString(),
+          },
+        ]);
+
+        const delay = 1000 * (nextRetry + 1); // 2s, then 3s
+        setTimeout(() => {
+          // Remove the retrying indicator before retrying
+          setMessages((prev) => prev.slice(0, -1));
+          sendMessage(text);
+        }, delay);
+        return;
+      }
+
+      // Max retries exceeded — show final error
+      setRetryCount(0);
+
+      // Store the failed message for manual retry
       setLastFailedMessage(text.trim());
 
       setMessages((prev) => [
         ...prev,
         {
           role: "assistant",
-          content: t("pharmacist.error"),
+          content: t("pharmacist.errorRetry") || t("pharmacist.error"),
           id: makeId(),
           timestamp: new Date().toISOString(),
         },

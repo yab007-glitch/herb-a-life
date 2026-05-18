@@ -5,10 +5,17 @@ import { rateLimit } from "@/lib/rate-limit";
 // Max request body size: 50KB (prevents memory exhaustion and excessive token usage)
 const MAX_BODY_SIZE = 50 * 1024;
 
+// OpenRouter fallback model chain (tried in order if primary model fails)
+const FALLBACK_MODELS = [
+  "openrouter/free",
+  "google/gemma-3-27b-it:free",
+  "meta-llama/llama-3.1-8b-instruct:free",
+];
+
 /**
  * Extract the real client IP from request headers.
- * Handles Vercel (x-vercel-forwarded-for), Render (rightmost x-forwarded-for),
- * and Cloudflare (cf-connecting-ip).
+ * Handles Vercel (x-vercel-forwarded-for), Cloudflare (cf-connecting-ip),
+ * and generic proxies (x-forwarded-for).
  */
 function getClientIP(request: NextRequest): string {
   // Vercel: trusted forwarded-for
@@ -19,7 +26,7 @@ function getClientIP(request: NextRequest): string {
   const cfIP = request.headers.get("cf-connecting-ip");
   if (cfIP) return cfIP.trim();
 
-  // Render / generic proxy: rightmost IP in x-forwarded-for
+  // Generic proxy: rightmost IP in x-forwarded-for
   const forwarded = request.headers.get("x-forwarded-for");
   if (forwarded) {
     const ips = forwarded.split(",").map((s) => s.trim());
@@ -29,12 +36,39 @@ function getClientIP(request: NextRequest): string {
   return "unknown";
 }
 
+async function tryOpenRouter(
+  baseUrl: string,
+  apiKey: string,
+  model: string,
+  chatMessages: Array<{ role: string; content: string }>
+): Promise<Response> {
+  return fetch(`${baseUrl}/chat/completions`, {
+    method: "POST",
+    headers: {
+      Authorization: `Bearer ${apiKey}`,
+      "Content-Type": "application/json",
+      "HTTP-Referer":
+        process.env.NEXT_PUBLIC_APP_URL || "https://herbally.app",
+      "X-Title": "HerbAlly",
+    },
+    body: JSON.stringify({
+      model,
+      messages: chatMessages,
+      stream: true,
+      max_tokens: 2048,
+      temperature: 0.7,
+    }),
+  });
+}
+
 export async function POST(request: NextRequest) {
   const apiKey = process.env.OPENROUTER_API_KEY?.trim();
   const baseUrl = (
     process.env.OPENROUTER_BASE_URL || "https://openrouter.ai/api/v1"
   ).trim();
-  const model = (process.env.OPENROUTER_MODEL || "openrouter/free").trim();
+  const primaryModel = (
+    process.env.OPENROUTER_MODEL || "openrouter/free"
+  ).trim();
 
   if (!apiKey) {
     console.error("OpenRouter API key not configured");
@@ -101,51 +135,69 @@ export async function POST(request: NextRequest) {
     })),
   ];
 
-  let response: Response;
-  try {
-    response = await fetch(`${baseUrl}/chat/completions`, {
-      method: "POST",
-      headers: {
-        Authorization: `Bearer ${apiKey}`,
-        "Content-Type": "application/json",
-        "HTTP-Referer":
-          process.env.NEXT_PUBLIC_APP_URL || "https://herbally.app",
-        "X-Title": "HerbAlly",
-      },
-      body: JSON.stringify({ model, messages: chatMessages, stream: true }),
-    });
-  } catch (fetchError) {
-    console.error("Fetch to OpenRouter failed:", fetchError);
-    return NextResponse.json(
-      { error: "AI service is temporarily unavailable. Please try again." },
-      { status: 500 }
-    );
+  // Try primary model first, then fallbacks
+  const modelsToTry = [primaryModel, ...FALLBACK_MODELS.filter(m => m !== primaryModel)];
+  let response: Response | null = null;
+  let lastError: { status: number; text: string } | null = null;
+
+  for (const model of modelsToTry) {
+    try {
+      response = await tryOpenRouter(baseUrl, apiKey, model, chatMessages);
+    } catch (fetchError) {
+      console.error(`Fetch to OpenRouter failed for model ${model}:`, fetchError);
+      continue;
+    }
+
+    if (response.ok) {
+      if (model !== primaryModel) {
+        console.warn(`OpenRouter fallback used: ${primaryModel} unavailable, switched to ${model}`);
+      }
+      break;
+    }
+
+    // Model not available (404/422) — try next fallback
+    const status = response.status;
+    const errorText = await response.text().catch(() => "Unknown error");
+    lastError = { status, text: errorText };
+    console.error(`OpenRouter API error for model ${model}:`, status, errorText.substring(0, 200));
+
+    if (status === 401 || status === 429) {
+      // Auth or rate limit — don't retry with other models, same key
+      break;
+    }
+    if (status >= 500) {
+      // Server error — try next fallback
+      continue;
+    }
+    if (status === 404 || status === 422) {
+      // Model not found or invalid — try next fallback
+      continue;
+    }
+    // Other 4xx — don't retry
+    break;
   }
 
-  if (!response.ok) {
-    const errorText = await response.text().catch(() => "Unknown error");
-    console.error(
-      "OpenRouter API error:",
-      response.status,
-      errorText.substring(0, 200)
-    );
+  if (!response || !response.ok) {
     let userMessage = "AI service is temporarily unavailable.";
-    if (response.status === 401) {
+    const status = lastError?.status ?? 500;
+    if (status === 401) {
       userMessage =
         "AI service is not configured. Please set a valid OPENROUTER_API_KEY.";
-    } else if (response.status === 429) {
+    } else if (status === 429) {
       userMessage = "AI service is busy. Please try again in a moment.";
+    } else if (status >= 500) {
+      userMessage = "AI service is temporarily overloaded. Please try again in a moment.";
     }
     return NextResponse.json(
       { error: userMessage },
-      { status: response.status === 429 ? 429 : 500 }
+      { status: status === 429 ? 429 : 500 }
     );
   }
 
   const encoder = new TextEncoder();
   const stream = new ReadableStream({
     start(controller) {
-      const rawReader = response.body?.getReader();
+      const rawReader = response!.body?.getReader();
       if (!rawReader) {
         controller.close();
         return;

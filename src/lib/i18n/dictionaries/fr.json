@@ -249,7 +249,9 @@
     "retry": "Réessayer",
     "copied": "Copié !",
     "copy": "Copier",
-    "regenerate": "Régénérer"
+    "regenerate": "Régénérer",
+    "retrying": "Nouvelle tentative...",
+    "errorRetry": "La connexion a échoué après 2 tentatives. Veuillez vérifier votre connexion Internet et réessayer."
   },
   "donate": {
     "title": "Soutenir HerbAlly",

@@ -47,3 +47,12 @@ next-env.d.ts
 *.pem
 *.key
 *.secret
+
+# Audit reports
+.audits/
+AUDIT_REPORT_*.md
+
+# Generated test artifacts
+playwright-report/
+test-results/
+

@@ -1,3 +1,4 @@
+import AxeBuilder from "@axe-core/playwright";
 import { test, expect } from "@playwright/test";
 
 test.describe("Homepage (Chat-First)", () => {
@@ -194,4 +195,19 @@ test.describe("Homepage (Chat-First)", () => {
       page.locator("text=What herbs help with sleep?")
     ).toBeVisible({ timeout: 5000 });
   });
+
+  test("should have no critical accessibility violations", async ({ page }) => {
+    await page.goto("/");
+
+    const accessibilityScanResults = await new AxeBuilder({ page })
+      .withTags(["wcag2a", "wcag2aa", "wcag21aa"])
+      .analyze();
+
+    const criticalViolations = accessibilityScanResults.violations.filter(
+      (v) => v.impact === "critical"
+    );
+
+    expect(criticalViolations).toHaveLength(0);
+  });
+
 });
