@@ -83,13 +83,6 @@ export async function POST(request: NextRequest) {
         const email = session.customer_details?.email || null;
         const paymentIntentId = session.payment_intent as string | null;
 
-        // Log the donation (replace with database insert)
-        console.log("Donation received:", {
-          id: donationId,
-          amount: amount / 100, // Convert from cents
-          email,
-          paymentIntentId,
-        });
 
         // Store in memory for now (replace with database)
         donationLog.push({
@@ -110,18 +103,15 @@ export async function POST(request: NextRequest) {
 
       case "checkout.session.expired": {
         const session = event.data.object as Stripe.Checkout.Session;
-        console.log("Checkout expired:", session.id);
         break;
       }
 
       case "payment_intent.payment_failed": {
         const paymentIntent = event.data.object as Stripe.PaymentIntent;
-        console.log("Payment failed:", paymentIntent.id);
         break;
       }
 
       default:
-        console.log(`Unhandled event type: ${event.type}`);
     }
 
     return NextResponse.json({ received: true });

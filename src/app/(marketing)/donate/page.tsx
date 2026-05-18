@@ -18,7 +18,8 @@ import {
   CardTitle,
   CardDescription,
 } from "@/components/ui/card";
-import { DonationButtons } from "@/components/donations/donation-buttons";
+import dynamic from "next/dynamic";
+const DonationButtons = dynamic(() => import("@/components/donations/donation-buttons").then((mod) => mod.DonationButtons));
 import { cookies } from "next/headers";
 import { getTranslations } from "next-intl/server";
 import { type Locale } from "@/lib/i18n/config";

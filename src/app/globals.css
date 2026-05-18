@@ -555,3 +555,26 @@ html.theme-transitioning *::after {
     padding-bottom: 0;
   }
 }
+
+/* Respect prefers-reduced-motion */
+@media (prefers-reduced-motion: reduce) {
+  .animate-float,
+  .animate-pulse-glow,
+  .animate-gradient,
+  .animate-shimmer,
+  .animate-float-leaf-1,
+  .animate-float-leaf-2,
+  .animate-float-leaf-3,
+  .animate-count-up,
+  .animate-typing-dot,
+  .animate-message-in,
+  .animate-pulse-attention,
+  .animate-grow-bar,
+  .animate-sparkline-grow {
+    animation: none !important;
+  }
+
+  .ripple {
+    animation: none !important;
+  }
+}

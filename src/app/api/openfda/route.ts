@@ -1,3 +1,4 @@
+import { captureException } from "@sentry/nextjs";
 import { NextResponse } from "next/server";
 
 const OPENFDA_BASE = process.env.OPENFDA_BASE_URL || "https://api.fda.gov";
@@ -25,7 +26,9 @@ export async function GET(request: Request) {
 
     const data = await res.json();
     return NextResponse.json(data);
-  } catch {
+  } catch (error) {
+    captureException(error);
+    console.error("OpenFDA API error:", error);
     return NextResponse.json({ results: [] });
   }
 }

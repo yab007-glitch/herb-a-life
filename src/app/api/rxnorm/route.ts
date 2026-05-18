@@ -1,3 +1,4 @@
+import { captureException } from "@sentry/nextjs";
 import { NextResponse, type NextRequest } from "next/server";
 import { searchDrugs } from "@/lib/utils/rxnorm-client";
 
@@ -16,7 +17,9 @@ export async function GET(request: NextRequest) {
     const results = await searchDrugs(term.trim());
 
     return NextResponse.json({ results });
-  } catch {
+  } catch (error) {
+    captureException(error);
+    console.error("RxNorm API error:", error);
     return NextResponse.json(
       { error: "Failed to search drugs" },
       { status: 500 }
