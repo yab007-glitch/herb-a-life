@@ -34,7 +34,7 @@ const navLinks = [
   { href: "/symptoms", labelKey: "nav.symptoms", icon: Stethoscope },
   { href: "/herbs", labelKey: "nav.herbs", icon: Leaf },
   { href: "/calculator", labelKey: "nav.calculator", icon: Calculator },
-  { href: "/", labelKey: "nav.herbalist", icon: MessageCircle },
+  { href: "/herbalist", labelKey: "nav.herbalist", icon: MessageCircle },
 ];
 
 type Theme = "light" | "dark" | "system";

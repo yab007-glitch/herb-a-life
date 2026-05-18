@@ -31,7 +31,7 @@ const navLinks = [
   { href: "/symptoms", labelKey: "nav.symptoms" },
   { href: "/herbs", labelKey: "nav.herbs" },
   { href: "/calculator", labelKey: "nav.calculator" },
-  { href: "/", labelKey: "nav.herbalist" },
+  { href: "/herbalist", labelKey: "nav.herbalist" },
   { href: "/about", labelKey: "nav.about" },
 ];
 

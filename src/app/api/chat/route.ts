@@ -150,7 +150,6 @@ export async function POST(request: NextRequest) {
 
     if (response.ok) {
       if (model !== primaryModel) {
-        console.warn(`OpenRouter fallback used: ${primaryModel} unavailable, switched to ${model}`);
       }
       break;
     }

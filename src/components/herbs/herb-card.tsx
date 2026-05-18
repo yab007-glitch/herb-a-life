@@ -163,7 +163,7 @@ export function HerbCard({ herb, className }: HerbCardProps) {
           </div>
 
           {/* Description */}
-          <p className="mt-3 line-clamp-2 text-sm text-muted-foreground">
+          <p className="mt-3 line-clamp-2 break-words text-sm text-muted-foreground">
             {herb.description}
           </p>
 

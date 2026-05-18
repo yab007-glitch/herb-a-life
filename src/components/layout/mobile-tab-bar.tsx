@@ -16,13 +16,13 @@ const tabs = [
   { labelKey: "mobileTabs.symptoms", href: "/symptoms", icon: Stethoscope },
   { labelKey: "mobileTabs.herbs", href: "/herbs", icon: Leaf },
   { labelKey: "mobileTabs.search", href: "/herbs?focus=search", icon: Search },
-  { labelKey: "mobileTabs.chat", href: "/", icon: MessageCircle },
+  { labelKey: "mobileTabs.chat", href: "/herbalist", icon: MessageCircle },
   { labelKey: "mobileTabs.calc", href: "/calculator", icon: Calculator },
 ] as const;
 
 function isActive(pathname: string, href: string): boolean {
   if (href === "/herbs?focus=search") {
-    return false;
+    return pathname === "/herbs";
   }
   if (href === "/herbs") {
     return pathname === "/herbs" || pathname.startsWith("/herbs/");

@@ -26,20 +26,6 @@ const nextConfig: NextConfig = {
   },
   compress: true,
   trailingSlash: false,
-  async redirects() {
-    return [
-      {
-        source: "/pharmacist",
-        destination: "/",
-        permanent: true,
-      },
-      {
-        source: "/herbalist",
-        destination: "/",
-        permanent: true,
-      },
-    ];
-  },
 };
 
 export default bundleAnalyzer(
