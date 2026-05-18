@@ -16,23 +16,28 @@ import { useDetectedLocale } from "./use-detected-locale";
 interface LanguageDrawerProps {
   open?: boolean;
   onOpenChange?: (open: boolean) => void;
+  hideTrigger?: boolean;
 }
 
-export function LanguageDrawer({ open, onOpenChange }: LanguageDrawerProps) {
+export function LanguageDrawer({ open, onOpenChange, hideTrigger }: LanguageDrawerProps) {
   const t = useTranslations();
   const locale = useLocale();
   const setLocale = useSetLocale();
   const detectedLocale = useDetectedLocale();
 
+  const trigger = (
+    <SheetTrigger className="inline-flex shrink-0 items-center justify-center gap-1.5 rounded-full h-11 min-w-11 px-2.5 hover:bg-muted hover:text-foreground transition-all outline-none focus-visible:border-ring focus-visible:ring-3 focus-visible:ring-ring/50">
+      <Globe className="size-5" />
+      <span className="text-xs font-semibold uppercase tracking-wide hidden sm:inline">
+        {locale}
+      </span>
+      <span className="sr-only">{t("common.changeLanguage")}</span>
+    </SheetTrigger>
+  );
+
   return (
     <Sheet open={open} onOpenChange={onOpenChange}>
-      <SheetTrigger className="inline-flex shrink-0 items-center justify-center gap-1.5 rounded-full h-11 min-w-11 px-2.5 hover:bg-muted hover:text-foreground transition-all outline-none focus-visible:border-ring focus-visible:ring-3 focus-visible:ring-ring/50">
-        <Globe className="size-5" />
-        <span className="text-xs font-semibold uppercase tracking-wide hidden sm:inline">
-          {locale}
-        </span>
-        <span className="sr-only">{t("common.changeLanguage")}</span>
-      </SheetTrigger>
+      {!hideTrigger && trigger}
       <SheetContent side="bottom" className="h-auto max-h-[80vh]">
         <SheetHeader>
           <SheetTitle>{t("common.changeLanguage")}</SheetTitle>

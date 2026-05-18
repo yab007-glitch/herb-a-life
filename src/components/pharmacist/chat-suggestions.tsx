@@ -1,6 +1,6 @@
 "use client";
 
-import { Moon, Shield, Heart, Calculator, Sparkles } from "lucide-react";
+import { Moon, Shield, Heart, Sparkles } from "lucide-react";
 
 interface Suggestion {
   icon: typeof Sparkles;

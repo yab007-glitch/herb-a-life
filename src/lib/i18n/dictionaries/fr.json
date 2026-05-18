@@ -311,7 +311,9 @@
     "disclaimer": "Avertissement Médical",
     "copyright": "À des fins éducatives uniquement. Pas un avis médical.",
     "madeWith": "Fait avec soin pour la communauté de la phytothérapie",
-    "followUs": "Suivez-nous"
+    "followUs": "Suivez-nous",
+    "faq": "FAQ",
+    "methodology": "Méthodologie"
   },
   "errors": {
     "404": {

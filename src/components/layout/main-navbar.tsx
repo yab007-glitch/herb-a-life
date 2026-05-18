@@ -237,7 +237,7 @@ export function MainNavbar() {
       <MissionModal open={showMission} onOpenChange={setShowMission} />
 
       {/* Language Drawer */}
-      <LanguageDrawer open={showLangDrawer} onOpenChange={setShowLangDrawer} />
+      <LanguageDrawer open={showLangDrawer} onOpenChange={setShowLangDrawer} hideTrigger />
     </>
   );
 }

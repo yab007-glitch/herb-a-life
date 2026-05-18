@@ -311,7 +311,9 @@
     "disclaimer": "Medical Disclaimer",
     "copyright": "Educational purposes only. Not medical advice.",
     "madeWith": "Made with care for the herbal community",
-    "followUs": "Follow Us"
+    "followUs": "Follow Us",
+    "faq": "FAQ",
+    "methodology": "Methodology"
   },
   "errors": {
     "404": {
